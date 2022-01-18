@@ -40,7 +40,7 @@
     },
     "extends": [
       "plugin:vue/vue3-essential",
-      "@vue/standard"
+      "@vue/airbnb"
     ],
     "parserOptions": {
       "parser": "babel-eslint"
