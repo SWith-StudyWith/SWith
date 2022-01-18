@@ -37,7 +37,7 @@ public class Chat {
 
     public void addChat(Study study) {
         if (this.study != null) {
-            this.study.getFileList().remove(this);
+            this.study.getChatList().remove(this);
         }
         this.study = study;
         study.getChatList().add(this);

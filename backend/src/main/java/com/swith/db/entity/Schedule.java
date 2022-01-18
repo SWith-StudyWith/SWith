@@ -34,7 +34,7 @@ public class Schedule {
 
     public void addSchedule(Study study) {
         if (this.study != null) {
-            this.study.getFileList().remove(this);
+            this.study.getScheduleList().remove(this);
         }
         this.study = study;
         study.getScheduleList().add(this);
