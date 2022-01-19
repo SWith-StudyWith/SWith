@@ -71,7 +71,12 @@ const routes = [
     name: 'StudyView',
     component: () => import(/* webpackChunkName: "studyview", webpackPrefetch:true  */ '../views/studies/components/StudyView.vue'),
   },
-
+  //  webRTC - screen share
+  {
+    path: '/screen',
+    name: 'Screen',
+    component: () => import(/* webpackChunkName: "main", webpackPrefetch:true  */ '../views/screen/components/Screen.vue'),
+  },
 ];
 
 const router = createRouter({
