@@ -1,9 +1,6 @@
 package com.swith.db.entity;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -11,10 +8,11 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Setter
 public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long scheduleId;
+    private Long scheduleId;
     private String content;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
@@ -24,7 +22,7 @@ public class Schedule {
     private Study study;
 
     @Builder
-    public Schedule(long scheduleId, String content, LocalDateTime startDate, LocalDateTime endDate, Study study) {
+    public Schedule(Long scheduleId, String content, LocalDateTime startDate, LocalDateTime endDate, Study study) {
         this.scheduleId = scheduleId;
         this.content = content;
         this.startDate = startDate;
@@ -32,11 +30,11 @@ public class Schedule {
         this.study = study;
     }
 
-    public void addSchedule(Study study) {
-        if (this.study != null) {
-            this.study.getScheduleList().remove(this);
-        }
-        this.study = study;
-        study.getScheduleList().add(this);
-    }
+//    public void addSchedule(Study study) {
+//        if (this.study != null) {
+//            this.study.getScheduleList().remove(this);
+//        }
+//        this.study = study;
+//        study.getScheduleList().add(this);
+//    }
 }

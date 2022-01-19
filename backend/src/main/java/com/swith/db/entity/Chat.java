@@ -1,9 +1,6 @@
 package com.swith.db.entity;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -11,10 +8,11 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Setter
 public class Chat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long chatId;
+    private Long chatId;
     private String content;
     private LocalDateTime createdAt;
 
@@ -27,7 +25,7 @@ public class Chat {
     private Study study;
 
     @Builder
-    public Chat(long chatId, String content, LocalDateTime createdAt, Member member, Study study) {
+    public Chat(Long chatId, String content, LocalDateTime createdAt, Member member, Study study) {
         this.chatId = chatId;
         this.content = content;
         this.createdAt = createdAt;
@@ -35,11 +33,11 @@ public class Chat {
         this.study = study;
     }
 
-    public void addChat(Study study) {
-        if (this.study != null) {
-            this.study.getChatList().remove(this);
-        }
-        this.study = study;
-        study.getChatList().add(this);
-    }
+//    public void addChat(Study study) {
+//        if (this.study != null) {
+//            this.study.getChatList().remove(this);
+//        }
+//        this.study = study;
+//        study.getChatList().add(this);
+//    }
 }

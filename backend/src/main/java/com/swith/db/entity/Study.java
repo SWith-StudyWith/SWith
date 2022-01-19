@@ -1,9 +1,6 @@
 package com.swith.db.entity;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -12,17 +9,18 @@ import java.util.List;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Setter
 public class Study {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long studyId;
+    private Long studyId;
     private String name;
     private String code;
     private String goal;
     private String imgUrl;
 
     @Builder
-    public Study(long studyId, String name, String code, String goal, String imgUrl) {
+    public Study(Long studyId, String name, String code, String goal, String imgUrl) {
         this.studyId = studyId;
         this.name = name;
         this.code = code;
