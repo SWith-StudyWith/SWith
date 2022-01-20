@@ -20,8 +20,7 @@ public class Study {
     private String imgUrl;
 
     @Builder
-    public Study(Long studyId, String name, String code, String goal, String imgUrl) {
-        this.studyId = studyId;
+    public Study(String name, String code, String goal, String imgUrl) {
         this.name = name;
         this.code = code;
         this.goal = goal;
