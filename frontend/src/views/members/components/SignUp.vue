@@ -152,7 +152,7 @@ export default {
         return;
       }
       state.authNumBtnAble = true;
-      this.api(`https://ce3cd3d3-5c02-45b0-8a66-e00a2824ba82.mock.pstmn.io/members/auth/email`, 'post', state.email)
+      this.api(`${process.env.VUE_APP_LOCAL_URI}/members/auth/email`, 'post', state.email)
         .then((data) => console.log(data))
         .catch((err) => console.log(err));
     };
@@ -162,7 +162,7 @@ export default {
         email: state.email,
         authNum: state.authNum,
       };
-      this.api(`https://ce3cd3d3-5c02-45b0-8a66-e00a2824ba82.mock.pstmn.io/members/auth/email/check`, 'post', payload)
+      this.api(`${process.env.VUE_APP_LOCAL_URI}/members/auth/email/check`, 'post', payload)
         .then((data) => {
           if (data.isSuccess) {
             state.isValidAuthNum = true;
@@ -180,7 +180,7 @@ export default {
         email, authNum, password, passwordConfirm, nickname,
       } = state;
       console.log(email, authNum, password, passwordConfirm, nickname);
-      this.api(`https://ce3cd3d3-5c02-45b0-8a66-e00a2824ba82.mock.pstmn.io/members`, 'post', state)
+      this.api(`${process.env.VUE_APP_LOCAL_URI}/members`, 'post', state)
         .then((res) => console.log(res))
         .catch((err) => console.log(err));
       // 메인 페이지로 라우팅
