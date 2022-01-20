@@ -75,12 +75,12 @@
       <input type="checkbox" v-model="state.isChecked">
       <div class="invalid-feedback">(필수)</div>
     </form>
-    <button class="btn btn-primary" @click="onClickSignup">회원가입</button>
-    <div class="socialLogin">
-      <button class="btn btn-primary">카카오</button>
-      <button class="btn btn-primary">구글</button>
+    <button class="btn btn-primary btn-lg col-12" @click="onClickSignup">회원가입</button>
+    <div class="socialLogin mt-2">
+      <button class="btn btn-primary col-6">카카오</button>
+      <button class="btn btn-primary col-6">구글</button>
     </div>
-    <div>
+    <div class="text-center">
       <span>이미 회원이신가요?</span>
       <router-link :to="{ name: 'Login' }">로그인</router-link>
     </div>
