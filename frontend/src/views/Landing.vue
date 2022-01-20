@@ -151,6 +151,7 @@ section{
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
+  margin-top: 200px;
 }
 .section3{
   height: 700px;
