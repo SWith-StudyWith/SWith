@@ -1,0 +1,22 @@
+{
+  "studies": [
+    {
+    "studyName": "토익 만점 맞기 !!!! ",
+    "studyCode": "code123",
+    "studyGoal": "토익 900점 이상",
+    "studyImage": "https://images.unsplash.com/photo-1536329583941-14287ec6fc4e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
+    },
+    {
+    "studyName": "하자 있는 알고하자",
+    "studyCode": "algohaja",
+    "studyGoal": "1일 1커밋",
+    "studyImage": "https://images.unsplash.com/photo-1510070112810-d4e9a46d9e91?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1469&q=80"
+    },
+    {
+    "studyName": "vue3로 todo 앱 만들기",
+    "studyCode": "vue3todo",
+    "studyGoal": "composition API 사용해서 to-do list 만들어 보기",
+    "studyImage": "https://images.unsplash.com/photo-1523289333742-be1143f6b766?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
+    }
+  ]
+}
