@@ -22,8 +22,7 @@ public class MemberStudy {
     private Study study;
 
     @Builder
-    public MemberStudy(Long memberStudyId, Member member, Study study) {
-        this.memberStudyId = memberStudyId;
+    public MemberStudy(Member member, Study study) {
         this.member = member;
         this.study = study;
     }

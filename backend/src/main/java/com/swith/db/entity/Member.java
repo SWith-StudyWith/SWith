@@ -3,6 +3,10 @@ package com.swith.db.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -10,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Setter
@@ -25,9 +30,11 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Role role;
     private String goal;
+    @CreatedDate
     private LocalDateTime createdAt;
+    @LastModifiedDate
     private LocalDateTime updatedAt;
-    private LocalDateTime deletedAt;
+    private String isDeleted;
 
     @JsonIgnore
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -38,10 +45,9 @@ public class Member {
     }
 
     @Builder
-    public Member(Long memberId, String kakaoId, String googleId, String email, String nickname, String imgUrl,
-                  Role role, String goal, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt,
+    public Member(String kakaoId, String googleId, String email, String nickname, String imgUrl,
+                  Role role, String goal, LocalDateTime createdAt, LocalDateTime updatedAt, String isDeleted,
                   String password) {
-        this.memberId = memberId;
         this.kakaoId = kakaoId;
         this.googleId = googleId;
         this.email = email;
@@ -51,7 +57,7 @@ public class Member {
         this.goal = goal;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.deletedAt = deletedAt;
+        this.isDeleted = isDeleted;
         this.password = password;
     }
 

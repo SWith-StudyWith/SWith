@@ -1,11 +1,13 @@
 package com.swith.db.entity;
 
 import lombok.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Setter
@@ -22,8 +24,7 @@ public class Schedule {
     private Study study;
 
     @Builder
-    public Schedule(Long scheduleId, String content, LocalDateTime startDate, LocalDateTime endDate, Study study) {
-        this.scheduleId = scheduleId;
+    public Schedule(String content, LocalDateTime startDate, LocalDateTime endDate, Study study) {
         this.content = content;
         this.startDate = startDate;
         this.endDate = endDate;
