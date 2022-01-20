@@ -1,38 +1,19 @@
 <template>
   <nav id="nav">
-    <section id='logo'>
-      <img
-        id='logo-icon'
-        src="@/assets/SWith_logo.png"
-        alt="로고"
-        @click="$router.push({name: 'Main'})"
-      >
-      <div class="slogan-box">
-        <!-- <router-link
-          id="logo-text square"
-          class='text-hover'
-          :to="{ name: 'Main' }">
-          Square 4 Us
-        </router-link>
-        <a class="slogan" @click="$router.push({name: 'Main'})">we link the world</a> -->
-      </div>
+    <section id="logo">
+        <router-link class="navbar-brand" to="/">
+        <img src="@/assets/SWith_logo.png" alt="" height="50"/>
+      </router-link>
     </section>
-    <section v-if='isLogin' id='nav-list'>
-      <router-link :to="{ name: 'Landing' }">랜딩으로가</router-link>
-      <router-link :to="{ name: 'MyPage' }">마이페이지</router-link>
-<!--
-      <router-link :to="{ name: 'Tutorial' }">Tutorial</router-link>
-      <router-link :to="{ name: 'StudyList' }">Study</router-link>
-      <MyStudy v-if='myStudies.length' :myStudies='myStudies'/>
-      <router-link :to="{ name: 'User' }">User</router-link>
-      <router-link :to="{ name: 'StudyReport' }">Report</router-link>
-      <Logout/>
--->
-    </section>
-    <section v-else id='nav-list'>
-      <!-- <Login/> -->
-      <router-link :to="{ name: 'SignUp' }">회원가입</router-link>
-      <router-link :to="{ name: 'Login' }">로그인</router-link>
+    <section id="nav-list">
+      <router-link :to="{ name: 'SignUp' }">
+        <button class="btn btn-primary">회원가입</button>
+      </router-link>
+      <router-link :to="{ name: 'Login' }">
+        <button class="btn btn-primary">
+          로그인
+        </button>
+      </router-link>
     </section>
   </nav>
 </template>
@@ -59,9 +40,13 @@ export default {
   user-select:none;
   z-index: 1;
 }
-#logo, #nav-list {
+#nav-list {
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  padding-left: 20;
+}
+button {
+  margin: 0px 0px 10px 10px;
 }
 </style>
