@@ -102,6 +102,7 @@
 import axios from 'axios';
 import { reactive, computed } from 'vue';
 import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 import NavBar from '../../common/Navbar.vue';
 
 export default {
@@ -110,6 +111,7 @@ export default {
     NavBar,
   },
   setup() {
+    const store = useStore()
     const state = reactive({
       emailForm: null,
       authNumForm: null,
@@ -165,7 +167,7 @@ export default {
       }
       state.authNumBtnAble = true;
       this.api(`${process.env.VUE_APP_LOCAL_URI}/members/auth/email`, 'post', { email: state.email })
-        .then((data) => console.log(data))
+        .then((res) => console.log(res.data))
         .catch((err) => console.log(err));
     };
 
@@ -199,9 +201,9 @@ export default {
         passwordConfirm: state.passwordConfirm,
         nickname: state.nickname,
       }
-      this.api(`${process.env.VUE_APP_LOCAL_URI}/members`, 'post', payload)
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err));
+      store.dispatch('requestSignup', payload)
+        .then((res => console.log(res.data)))
+        .catch((err) => console.log(err))
       router.push({ name: 'Main' })
     };
 
