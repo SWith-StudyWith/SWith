@@ -43,6 +43,7 @@
 import axios from 'axios';
 import { reactive, computed } from 'vue';
 import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 import NavBar from '../../common/Navbar.vue';
 
 export default {
@@ -50,7 +51,9 @@ export default {
   components: {
     NavBar,
   },
+
   setup() {
+    const store = useStore();
     const state = reactive({
       emailForm: null,
       passwordForm: null,
@@ -68,18 +71,6 @@ export default {
       }),
     });
 
-    async function api (url, method, data) {
-      const options = {
-        method,
-        url,
-        data,
-        headers: {
-          'content-type': 'application/json',
-        }
-      }
-      return axios(options)
-    }
-
     const router = useRouter();
     const onClickLogin = function (e) {
       e.preventDefault();
@@ -90,13 +81,18 @@ export default {
         email: state.email,
         password: state.password,
       }
-      this.api(`${process.env.VUE_APP_LOCAL_URI}/members/login`, 'post', payload)
-        .then((res) => {
-          console.log(res)
-          console.log(res.data.token)
+      store.dispatch('requestLogin', payload)
+        .then(res => {
+          console.log(res.data)
+          return store.dispatch('requestMember', res.data)
         })
-        .catch((err) => console.log(err));
-      router.push({ name: 'Main' })
+        .then(res => {
+          console.log(res.data)
+          store.commit('setUser', res.data)
+        })
+        .catch(err => console.log(err))
+
+      // router.push({ name: 'Main' })
     };
 
     const checkEmail = function (email) {
@@ -116,7 +112,7 @@ export default {
     };
 
     return {
-      state, api, checkEmail, onClickLogin,
+      state, checkEmail, onClickLogin,
     };
   },
   created() {},
