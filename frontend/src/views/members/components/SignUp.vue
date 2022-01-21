@@ -1,5 +1,5 @@
 <template>
-  <!-- <nav-bar></nav-bar> -->
+  <nav-bar></nav-bar>
   <div class="container">
     <h1 class="form-title">회원가입</h1>
     <div class="row">
@@ -93,13 +93,12 @@
 import axios from 'axios';
 import { reactive, computed } from 'vue';
 import { useRouter } from 'vue-router';
-
-// import { NavBar } from '../../components/NavBar.vue'
+import NavBar from '../../common/Navbar.vue';
 
 export default {
   name: '',
   components: {
-    // NavBar,
+    NavBar,
   },
   setup() {
     const state = reactive({
@@ -145,10 +144,9 @@ export default {
         data,
         headers: {
           'content-type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
         }
       }
-      return axios(options).catch((e) => console.log(e)).data
+      return axios(options)
     }
 
     const onClickSendCode = function (e) {
@@ -158,7 +156,8 @@ export default {
       }
       state.authNumBtnAble = true;
       console.log(state.email)
-      this.api(`${process.env.VUE_APP_LOCAL_URI}/members/auth/email`, 'post', state.email)
+
+      this.api(`${process.env.VUE_APP_LOCAL_URI}/members/auth/email`, 'post', { email: state.email })
         .then((data) => console.log(data))
         .catch((err) => console.log(err));
     };
@@ -170,10 +169,12 @@ export default {
         authNum: state.authNum,
       };
       this.api(`${process.env.VUE_APP_LOCAL_URI}/members/auth/email/check`, 'post', payload)
-        .then((data) => {
-          if (data.isSuccess) {
-            state.isValidAuthNum = true;
+        .then((res) => {
+          console.log(res.data)
+          if(res.data.isSuccess) {
+            state.isValidAuthNum = true
           }
+          console.log(res)
         })
         .catch((err) => console.log(err));
     };
