@@ -1,5 +1,5 @@
 <template>
-  <!-- <nav-bar></nav-bar> -->
+  <nav-bar></nav-bar>
   <div class="container">
     <h1 class="form-title">회원가입</h1>
     <div class="row">
@@ -93,13 +93,12 @@
 import axios from 'axios';
 import { reactive, computed } from 'vue';
 import { useRouter } from 'vue-router';
-
-// import { NavBar } from '../../components/NavBar.vue'
+import NavBar from '../../common/Navbar.vue';
 
 export default {
   name: '',
   components: {
-    // NavBar,
+    NavBar,
   },
   setup() {
     const state = reactive({
@@ -137,53 +136,65 @@ export default {
       }),
       isChecked: false,
     });
+
     async function api (url, method, data) {
-      return (await axios({
+      const options = {
         method,
         url,
         data,
-      }).catch((e) => {
-        console.log(e);
-      })).data;
+        headers: {
+          'content-type': 'application/json',
+        }
+      }
+      return axios(options)
     }
+
     const onClickSendCode = function (e) {
       e.preventDefault();
       if (!state.isValidEmail) {
         return;
       }
       state.authNumBtnAble = true;
-      this.api(`/${process.env.VUE_APP_LOCAL_URI}/members/auth/email`, 'post', state.email)
+      console.log(state.email)
+
+      this.api(`${process.env.VUE_APP_LOCAL_URI}/members/auth/email`, 'post', { email: state.email })
         .then((data) => console.log(data))
         .catch((err) => console.log(err));
     };
+
     const onClickConfirmAuthNum = function (e) {
       e.preventDefault();
       const payload = {
         email: state.email,
         authNum: state.authNum,
       };
-      this.api(`/${process.env.VUE_APP_LOCAL_URI}/members/auth/email/check`, 'post', payload)
-        .then((data) => {
-          if (data.isSuccess) {
-            state.isValidAuthNum = true;
+      this.api(`${process.env.VUE_APP_LOCAL_URI}/members/auth/email/check`, 'post', payload)
+        .then((res) => {
+          console.log(res.data)
+          if(res.data.isSuccess) {
+            state.isValidAuthNum = true
           }
+          console.log(res)
         })
         .catch((err) => console.log(err));
     };
+
     const router = useRouter();
     const onClickSignup = function (e) {
       e.preventDefault();
       if (!state.isValidAuthNum || !state.isValidEmail || !state.isValidPassword || !state.isValidPasswordConfirm || !state.isValidNickname || !state.isChecked){
         return;
       }
-      const {
-        email, authNum, password, passwordConfirm, nickname,
-      } = state;
-      console.log(email, authNum, password, passwordConfirm, nickname);
-      this.api(`/${process.env.VUE_APP_LOCAL_URI}/members`, 'post', state)
+      const payload = {
+        email: state.email,
+        authNum: state.authNum,
+        password: state.password,
+        passwordConfirm: state.passwordConfirm,
+        nickname: state.nickname,
+      }
+      this.api(`${process.env.VUE_APP_LOCAL_URI}/members`, 'post', payload)
         .then((res) => console.log(res))
         .catch((err) => console.log(err));
-      // 메인 페이지로 라우팅
       router.push({ name: 'Main' })
     };
 
