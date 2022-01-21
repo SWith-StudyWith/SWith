@@ -1,12 +1,29 @@
 <template>
   <div class="home">
-    <h1>Home</h1>
-    <div v-if="error">{{ error }}</div>
-    <div v-if="studies.length">
-      <StudyList :studies="studies" />
-    </div>
-    <div v-else>Loading...</div>
-
+    <header class="header">
+      <div class="container d-flex justify-content-center">
+        <div class="row justify-content-between align-items-center">
+          <div class="col-3">
+            <img src="@/assets/img/Saly-40.png" alt="">
+          </div>
+          <div class="col-6">
+            <p class="fw-bold" style="font-size:44px">내가 참여한 스터디</p>
+          </div>
+          <div class="col-3">
+            <img src="@/assets/img/Saly-25-1.png" alt="">
+          </div>
+        </div>
+      </div>
+    </header>
+    <section>
+      <div class="container">
+        <div v-if="error">{{ error }}</div>
+        <div v-if="studies.length">
+          <StudyList :studies="studies" />
+        </div>
+        <div v-else>Loading...</div>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -39,3 +56,15 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+
+.header{
+  background-color: #FFF4CF;
+}
+
+.header .container{
+  height: 351px;
+}
+
+</style>
