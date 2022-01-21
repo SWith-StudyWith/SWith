@@ -137,32 +137,39 @@ export default {
       }),
       isChecked: false,
     });
+
     async function api (url, method, data) {
-      return (await axios({
+      const options = {
         method,
         url,
         data,
-      }).catch((e) => {
-        console.log(e);
-      })).data;
+        headers: {
+          'content-type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        }
+      }
+      return axios(options).catch((e) => console.log(e)).data
     }
+
     const onClickSendCode = function (e) {
       e.preventDefault();
       if (!state.isValidEmail) {
         return;
       }
       state.authNumBtnAble = true;
-      this.api(`/${process.env.VUE_APP_LOCAL_URI}/members/auth/email`, 'post', state.email)
+      console.log(state.email)
+      this.api(`${process.env.VUE_APP_LOCAL_URI}/members/auth/email`, 'post', state.email)
         .then((data) => console.log(data))
         .catch((err) => console.log(err));
     };
+
     const onClickConfirmAuthNum = function (e) {
       e.preventDefault();
       const payload = {
         email: state.email,
         authNum: state.authNum,
       };
-      this.api(`/${process.env.VUE_APP_LOCAL_URI}/members/auth/email/check`, 'post', payload)
+      this.api(`${process.env.VUE_APP_LOCAL_URI}/members/auth/email/check`, 'post', payload)
         .then((data) => {
           if (data.isSuccess) {
             state.isValidAuthNum = true;
@@ -170,20 +177,23 @@ export default {
         })
         .catch((err) => console.log(err));
     };
+
     const router = useRouter();
     const onClickSignup = function (e) {
       e.preventDefault();
       if (!state.isValidAuthNum || !state.isValidEmail || !state.isValidPassword || !state.isValidPasswordConfirm || !state.isValidNickname || !state.isChecked){
         return;
       }
-      const {
-        email, authNum, password, passwordConfirm, nickname,
-      } = state;
-      console.log(email, authNum, password, passwordConfirm, nickname);
-      this.api(`/${process.env.VUE_APP_LOCAL_URI}/members`, 'post', state)
+      const payload = {
+        email: state.email,
+        authNum: state.authNum,
+        password: state.password,
+        passwordConfirm: state.passwordConfirm,
+        nickname: state.nickname,
+      }
+      this.api(`${process.env.VUE_APP_LOCAL_URI}/members`, 'post', payload)
         .then((res) => console.log(res))
         .catch((err) => console.log(err));
-      // 메인 페이지로 라우팅
       router.push({ name: 'Main' })
     };
 
