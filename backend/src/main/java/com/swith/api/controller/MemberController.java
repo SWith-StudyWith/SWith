@@ -3,12 +3,12 @@ package com.swith.api.controller;
 import com.swith.api.request.MemberReq;
 import com.swith.api.request.MemberSignupReq;
 import com.swith.api.service.MemberService;
-import com.swith.common.jwt.JwtFilter;
 import com.swith.common.jwt.TokenProvider;
+import com.swith.common.response.AccessToken;
+import com.swith.common.response.BaseDataResponse;
 import com.swith.common.response.BaseResponse;
 import com.swith.db.entity.Member;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -51,17 +51,20 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<BaseResponse> loginMember(@RequestBody MemberReq memberInfo) {
+    public ResponseEntity<BaseDataResponse<AccessToken>> loginMember(@RequestBody MemberReq memberInfo) {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(memberInfo.getEmail(), memberInfo.getPassword());
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = tokenProvider.createToken(authentication);
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer" + jwt);
-        return ResponseEntity.status(200).headers(httpHeaders)
-                .body(new BaseResponse(true, 200, "로그인 성공"));
+//        HttpHeaders httpHeaders = new HttpHeaders();
+//        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, jwt);
+//        return ResponseEntity.status(200).headers(httpHeaders)
+//                .body(new BaseResponse(true, 200, "로그인 성공"));
+        BaseDataResponse<AccessToken> token = new BaseDataResponse<AccessToken>(true, 200,
+                "로그인 성공", new AccessToken(jwt));
+        return ResponseEntity.status(200).body(token);
     }
 
 
