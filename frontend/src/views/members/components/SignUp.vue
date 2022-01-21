@@ -1,89 +1,98 @@
 <template>
-  <nav-bar></nav-bar>
+  <!-- <nav-bar></nav-bar> -->
   <div class="container">
     <h1 class="form-title">회원가입</h1>
     <div class="row">
       <div class="offset-4 col-4">
         <form
-      class="email-form row"
-      :class="{ valid: state.isValidEmail, invalid: !state.isValidEmail }"
-    >
-      <label for="email" class="form-label" >이메일</label>
-      <div class="col-9">
-        <input class="form-control" id="email" type="email"
-          v-model="state.email" required autofocus>
-      </div>
-      <div class="col-3">
-        <button class="btn btn-primary"
-          style="width:100%"
-          :disabled="!state.isValidEmail" @click="onClickSendCode">이메일 인증</button>
-      </div>
-      <div class="invalid-feedback">유효하지 않은 이메일입니다.</div>
-    </form>
-    <form
-      class="authnum-form row"
-      :class="{ valid: state.isValidAuthNum, invalid: !state.isValidAuthNum }"
-    >
-      <label for="authNum" class="form-label">인증 번호</label>
-      <div class="col-9">
-        <input class="form-control" id="authNum" type="text"
-          v-model="state.authNum" required>
-      </div>
-      <div class="col-3">
-        <button
-          class="btn btn-primary"
-          style="width:100%"
-          :disabled="!state.authNumBtnAble"
-          @click="onClickConfirmAuthNum"
-        >인증 확인</button>
-      </div>
-      <div class="invalid-feedback">인증 확인이 필요합니다.</div>
-    </form>
-    <form
-      class="password-form"
-      :class="{ valid: state.isValidPassword, invalid: !state.isValidPassword }"
-    >
-      <label for="password" class="form-label">비밀번호</label>
-      <input class="form-control" type="password" id="password"
-        v-model="state.password" required>
-      <div class="invalid-feedback">유효하지 않은 비밀번호입니다.</div>
-    </form>
-    <form
-      class="passwordConfirm-form"
-      :class="{ valid: state.isValidPasswordConfirm, invalid: !state.isValidPasswordConfirm }"
-    >
-      <label for="passwordConfirm" class="form-label">비밀번호 확인</label>
-      <input class="form-control" type="password" id="passwordConfirm"
-        v-model="state.passwordConfirm" required>
-      <div class="invalid-feedback">비밀번호와 일치하지 않습니다.</div>
-      <div class="valid-feedback">비밀번호와 일치합니다.</div>
-    </form>
-    <form
-      class="nickname-form"
-      :class="{ valid: state.isValidNickname, invalid: !state.isValidNickname }"
-    >
-      <label for="nickname" class="form-label">닉네임</label>
-      <input class="form-control" type="text" id="nickname"
-        v-model="state.nickname" required>
-      <div class="invalid-feedback">유효하지 않은 닉네임입니다.</div>
-    </form>
-    <form
-      class="terms-form"
-      :class="{ valid: state.isChecked, invalid: !state.isChecked }"
-    >
-      <label for="">이용 약관</label>
-      <input type="checkbox" v-model="state.isChecked">
-      <div class="invalid-feedback">(필수)</div>
-    </form>
-    <button class="btn btn-primary btn-lg col-12" @click="onClickSignup">회원가입</button>
-    <div class="socialLogin mt-2">
-      <button class="btn btn-primary col-6">카카오</button>
-      <button class="btn btn-primary col-6">구글</button>
-    </div>
-    <div class="text-center">
-      <span>이미 회원이신가요?</span>
-      <router-link :to="{ name: 'Login' }">로그인</router-link>
-    </div>
+          class="email-form row"
+          :class="{ valid: state.isValidEmail, invalid: !state.isValidEmail }"
+          @submit.prevent
+        >
+          <label for="email" class="form-label">이메일</label>
+          <div class="col-9">
+            <input class="form-control" id="email" type="email"
+              v-model="state.email" required autofocus
+              :disabled="state.isValidAuthNum"
+            >
+          </div>
+          <div class="col-3">
+            <button class="btn btn-primary"
+              style="width:100%"
+              :disabled="!state.isValidEmail || state.isValidAuthNum" @click="onClickSendCode"
+            >
+              이메일 인증
+            </button>
+          </div>
+          <div class="invalid-feedback">유효하지 않은 이메일입니다.</div>
+        </form>
+        <form
+          class="authnum-form row"
+          :class="{ valid: state.isValidAuthNum, invalid: !state.isValidAuthNum }"
+          @submit.prevent
+          v-if="!state.isValidAuthNum"
+        >
+          <label for="authNum" class="form-label">인증 번호</label>
+          <div class="col-9">
+            <input class="form-control" id="authNum" type="text" v-model="state.authNum" required>
+          </div>
+          <div class="col-3">
+            <button
+              class="btn btn-primary"
+              style="width:100%"
+              :disabled="!state.authNumBtnAble"
+              @click="onClickConfirmAuthNum"
+            >인증 확인</button>
+          </div>
+          <div class="invalid-feedback">인증 확인이 필요합니다.</div>
+        </form>
+        <form
+          class="password-form"
+          :class="{ valid: state.isValidPassword, invalid: !state.isValidPassword }"
+          @submit.prevent
+        >
+          <label for="password" class="form-label">비밀번호</label>
+          <input class="form-control" type="password" id="password" v-model="state.password" required>
+          <div class="invalid-feedback">유효하지 않은 비밀번호입니다.</div>
+        </form>
+        <form
+          class="passwordConfirm-form"
+          :class="{ valid: state.isValidPasswordConfirm, invalid: !state.isValidPasswordConfirm }"
+          @submit.prevent
+        >
+          <label for="passwordConfirm" class="form-label">비밀번호 확인</label>
+          <input class="form-control" type="password" id="passwordConfirm" v-model="state.passwordConfirm" required>
+          <div class="invalid-feedback">비밀번호와 일치하지 않습니다.</div>
+          <div class="valid-feedback">비밀번호와 일치합니다.</div>
+        </form>
+        <form
+          class="nickname-form"
+          :class="{ valid: state.isValidNickname, invalid: !state.isValidNickname }"
+          @submit.prevent
+        >
+          <label for="nickname" class="form-label">닉네임</label>
+          <input class="form-control" type="text" id="nickname"
+            v-model="state.nickname" required>
+          <div class="invalid-feedback">유효하지 않은 닉네임입니다.</div>
+        </form>
+        <form
+          class="terms-form"
+          :class="{ valid: state.isChecked, invalid: !state.isChecked }"
+          @submit.prevent
+        >
+          <label for="">이용 약관</label>
+          <input type="checkbox" v-model="state.isChecked">
+          <div class="invalid-feedback">(필수)</div>
+        </form>
+        <button class="btn btn-primary btn-lg col-12" @click="onClickSignup">회원가입</button>
+        <div class="socialLogin mt-2">
+          <button class="btn btn-primary col-6">카카오</button>
+          <button class="btn btn-primary col-6">구글</button>
+        </div>
+        <div class="text-center">
+          <span>이미 회원이신가요?</span>
+          <router-link :to="{ name: 'Login' }">로그인</router-link>
+        </div>
       </div>
     </div>
   </div>
@@ -155,8 +164,6 @@ export default {
         return;
       }
       state.authNumBtnAble = true;
-      console.log(state.email)
-
       this.api(`${process.env.VUE_APP_LOCAL_URI}/members/auth/email`, 'post', { email: state.email })
         .then((data) => console.log(data))
         .catch((err) => console.log(err));
