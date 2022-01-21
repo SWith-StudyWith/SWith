@@ -71,7 +71,11 @@ const routes = [
     name: 'StudyView',
     component: () => import(/* webpackChunkName: "studyview", webpackPrefetch:true  */ '../views/studies/components/StudyView.vue'),
   },
-
+  {
+    path: '/footer',
+    name: 'Footer',
+    component: () => import(/* webpackChunkName: "footer" */ '../views/common/Footer.vue'),
+  },
 ];
 
 const router = createRouter({
