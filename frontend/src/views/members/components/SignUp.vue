@@ -80,8 +80,12 @@
           :class="{ valid: state.isChecked, invalid: !state.isChecked }"
           @submit.prevent
         >
-          <label for="">이용 약관</label>
           <input type="checkbox" v-model="state.isChecked">
+          <span> SWith
+            <span class="text-decoration-underline terms" data-bs-toggle="modal" data-bs-target="#signupTermModal">
+              이용 약관 및 개인정보 취급방침
+            </span>
+            에 대한 내용을 모두 확인하였으며, 이에 동의합니다.</span>
           <div class="invalid-feedback">(필수)</div>
         </form>
         <button class="btn btn-primary btn-lg col-12" @click="onClickSignup">회원가입</button>
@@ -96,6 +100,7 @@
       </div>
     </div>
   </div>
+  <sign-up-term></sign-up-term>
 </template>
 <script>
 /* eslint-disable */
@@ -104,11 +109,13 @@ import { reactive, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import NavBar from '../../common/Navbar.vue';
+import SignUpTerm from './SignUpTerm.vue';
 
 export default {
   name: '',
   components: {
     NavBar,
+    SignUpTerm
   },
   setup() {
     const store = useStore()
@@ -196,15 +203,13 @@ export default {
       }
       const payload = {
         email: state.email,
-        authNum: state.authNum,
         password: state.password,
-        passwordConfirm: state.passwordConfirm,
-        nickname: state.nickname,
       }
+
       this.api(`${process.env.VUE_APP_LOCAL_URI}/members`, 'post', payload)
         .then((res) => console.log(res))
         .catch((err) => console.log(err));
-      router.push({ name: 'Main' })
+      // router.push({ name: 'Main' })
     };
 
     const checkEmail = function (email) {
@@ -251,12 +256,10 @@ export default {
 h1 {
   text-align: center;
 }
-
 .btn {
   text-align: center;
   font-size: 0.7rem;
 }
-
 .invalid input {
   border: red solid 1px;
 }
@@ -274,5 +277,9 @@ h1 {
 }
 .valid .valid-feedback {
   display: block;
+}
+.terms:hover {
+  cursor: pointer;
+  font-weight: bold;
 }
 </style>
