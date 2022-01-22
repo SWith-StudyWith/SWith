@@ -108,11 +108,21 @@
         <!-- Terms of Use //  !state.ischecked=='' && -->
         <form
           class="terms-form"
-          :class="{ valid: state.isChecked, invalid: !state.isChecked }"
+          :class="{ valid: state.isChecked, invalid:
+          !state.isChecked }"
           @submit.prevent
         >
-          <label for="">이용 약관 <p style="color:green;">(필수)</p></label>
           <input type="checkbox" v-model="state.isChecked">
+          <span style="color:green;"> (필수)</span>
+          <span> SWith
+          <span class="text-decoration-underline terms" data-bs-toggle="modal"
+                data-bs-target="#signupTermModal">
+                이용 약관 및 개인정보 취급방침
+          </span>
+              에 대한 내용을 모두 확인하였으며, 이에 동의합니다.</span>
+          <!-- <div class="invalid-feedback">(필수)</div> -->
+          <!-- <label for="">이용 약관 <p style="color:green;">(필수)</p></label> -->
+          <!-- <input type="checkbox" v-model="state.isChecked"> -->
           <div class="invalid-feedback">SWith 이용약관과 개인정보 수집 및 이용에 대한 안내 모두 동의해주세요.</div>
         </form>
 
