@@ -37,7 +37,7 @@ export default {
 };
 </script>
 
-<style scopend>
+<style scoped>
 * {
   text-align: left;
 }
