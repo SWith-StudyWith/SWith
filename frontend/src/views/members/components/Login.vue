@@ -31,8 +31,9 @@
           <button class="btn btn-primary col-6">카카오</button>
           <button class="btn btn-primary col-6">구글</button>
         </div>
-        <div class="text-center">
-          <router-link :to="{ name: 'FindPassword', }">비밀번호 찾기</router-link>
+        <div class="container2 text-center">
+          <router-link :to="{ name: 'FindPassword' }">비밀번호 찾기</router-link>
+          <span> </span>
           <router-link :to="{ name: 'SignUp' }">회원가입</router-link>
         </div>
       </div>
@@ -151,5 +152,9 @@ h1 {
 }
 .valid .valid-feedback {
   display: block;
+}
+.container2 {
+  display: flex;
+  justify-content: space-evenly;
 }
 </style>
