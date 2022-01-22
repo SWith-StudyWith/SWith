@@ -135,13 +135,18 @@
       </div>
     </div>
   </section>
+  <Footer/>
 </template>
 
 <script>
 import 'animate.css';
+import Footer from '@/views/common/Footer.vue';
 
 export default {
   name: 'Landing',
+  components: {
+    Footer,
+  },
 };
 </script>
 
