@@ -6,16 +6,10 @@ export function requestLogin ({ state }, payload) {
   return $axios.post(url, payload)
 }
 
-export function requestSignup ({ state }, payload) {
-  console.log('Signup!', state, payload)
-  const url = `${process.env.VUE_APP_LOCAL_URI}/members/signup`
-  return $axios.post(url, payload)
-}
-
 export function requestMember ({ state }, payload) {
   console.log('Member!', state, payload)
   const url = `${process.env.VUE_APP_LOCAL_URI}/members`
-  const accessToken = payload.accessToken
+  const accessToken = payload.data.accessToken
   const headers = {
     Authorization: `Bearer ${accessToken}`
   }

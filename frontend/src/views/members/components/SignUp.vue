@@ -201,9 +201,9 @@ export default {
         passwordConfirm: state.passwordConfirm,
         nickname: state.nickname,
       }
-      store.dispatch('requestSignup', payload)
-        .then((res => console.log(res.data)))
-        .catch((err) => console.log(err))
+      this.api(`${process.env.VUE_APP_LOCAL_URI}/members`, 'post', payload)
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
       router.push({ name: 'Main' })
     };
 
