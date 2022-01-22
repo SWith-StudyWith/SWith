@@ -6,5 +6,5 @@ const user = {
 };
 
 export default {
-  user: user,
- };
+  user,
+};
