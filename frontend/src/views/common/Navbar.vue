@@ -24,7 +24,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 #nav{
   top: 0;
   position: sticky;
