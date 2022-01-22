@@ -1,10 +1,11 @@
 <template>
-<navbar/>
+  <navbar/>
   <div class="container">
     <h1 class="form-title">회원가입</h1>
     <div class="row">
       <div class="offset-4 col-4">
-        <input/>
+
+        <!-- Email -->
         <form
           class="email-form row"
           :class="{
@@ -24,13 +25,14 @@
               style="width:100%"
               :disabled="!state.isValidEmail || state.isValidAuthNum "
               @click="onClickSendCode"
-            >
-              이메일 인증
+            >이메일 인증
             </button>
           </div>
           <div v-if="!state.isValidEmail && !state.email == '' "
           class="invalid-feedback">유효하지 않은 이메일입니다.</div>
         </form>
+
+        <!-- Certification Number -->
         <form
           class="authnum-form row"
           :class="{ valid: state.isValidAuthNum,
@@ -52,6 +54,8 @@
           </div>
           <div class="invalid-feedback">인증 확인이 필요합니다.</div>
         </form>
+
+        <!-- Password -->
         <form
           class="password-form"
           :class="{ valid: state.isValidPassword,
@@ -68,6 +72,8 @@
           >
           <div class="invalid-feedback">유효하지 않은 비밀번호입니다.</div>
         </form>
+
+        <!-- Password Confirm -->
         <form
           class="passwordConfirm-form"
           :class="{ valid: state.isValidPasswordConfirm,
@@ -85,6 +91,8 @@
           <div class="invalid-feedback">비밀번호와 일치하지 않습니다.</div>
           <div class="valid-feedback">비밀번호와 일치합니다.</div>
         </form>
+
+        <!-- Nickname -->
         <form
           class="nickname-form"
           :class="{ valid: state.isValidNickname,
@@ -96,6 +104,8 @@
             v-model="state.nickname" required>
           <div class="invalid-feedback">유효하지 않은 닉네임입니다.</div>
         </form>
+
+        <!-- Terms of Use //  !state.ischecked=='' && -->
         <form
           class="terms-form"
           :class="{ valid: state.isChecked, invalid: !state.isChecked }"
@@ -105,6 +115,8 @@
           <input type="checkbox" v-model="state.isChecked">
           <div class="invalid-feedback">SWith 이용약관과 개인정보 수집 및 이용에 대한 안내 모두 동의해주세요.</div>
         </form>
+
+        <!-- SignUp Btn -->
         <button class="btn btn-primary btn-lg col-12" @click="onClickSignup">회원가입</button>
         <div class="socialLogin mt-2">
           <button class="btn btn-primary col-6">카카오</button>
@@ -150,6 +162,7 @@ export default {
       password: '',
       passwordConfirm: '',
       nickname: '',
+      // checked: ''
       authNumBtnAble: false,
       isValidAuthNum: false,
       isValidEmail: computed(() => {
@@ -173,6 +186,11 @@ export default {
         } return false;
       }),
       isChecked: false,
+      // isChecked: computed(() => {
+      //   if (state.isChecked && checkTerms(state.isChecked)) {
+      //     return true;
+      //   } return false;
+      // }),
     });
 
     async function api (url, method, data) {
@@ -251,7 +269,12 @@ export default {
       if (nickname.length >= 2 && nickname.length <= 16) {
         return true;
       } return false;
-    }
+    };
+    // const checkTerms = function (checked) {
+    //   if (checked) {
+    //     return true;
+    //   } return false;
+    // };
     return {
       state, api, onClickSendCode, onClickSignup, checkEmail, onClickConfirmAuthNum,
     };
