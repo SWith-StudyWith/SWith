@@ -1,34 +1,40 @@
 <template>
-  <!-- <nav-bar></nav-bar> -->
+<navbar/>
   <div class="container">
     <h1 class="form-title">회원가입</h1>
     <div class="row">
       <div class="offset-4 col-4">
+        <input/>
         <form
           class="email-form row"
-          :class="{ valid: state.isValidEmail, invalid: !state.isValidEmail }"
+          :class="{
+          valid: state.isValidEmail, invalid: !state.email=='' && !state.isValidEmail }"
           @submit.prevent
         >
           <label for="email" class="form-label">이메일</label>
           <div class="col-9">
             <input class="form-control" id="email" type="email"
-              v-model="state.email" required autofocus
+              v-model="state.email"
               :disabled="state.isValidAuthNum"
+              required
             >
           </div>
           <div class="col-3">
             <button class="btn btn-primary"
               style="width:100%"
-              :disabled="!state.isValidEmail || state.isValidAuthNum" @click="onClickSendCode"
+              :disabled="!state.isValidEmail || state.isValidAuthNum "
+              @click="onClickSendCode"
             >
               이메일 인증
             </button>
           </div>
-          <div class="invalid-feedback">유효하지 않은 이메일입니다.</div>
+          <div v-if="!state.isValidEmail && !state.email == '' "
+          class="invalid-feedback">유효하지 않은 이메일입니다.</div>
         </form>
         <form
           class="authnum-form row"
-          :class="{ valid: state.isValidAuthNum, invalid: !state.isValidAuthNum }"
+          :class="{ valid: state.isValidAuthNum,
+          invalid: !state.authNum=='' && !state.isValidAuthNum }"
           @submit.prevent
           v-if="!state.isValidAuthNum"
         >
@@ -48,26 +54,41 @@
         </form>
         <form
           class="password-form"
-          :class="{ valid: state.isValidPassword, invalid: !state.isValidPassword }"
+          :class="{ valid: state.isValidPassword,
+          invalid: !state.password=='' && !state.isValidPassword }"
           @submit.prevent
         >
           <label for="password" class="form-label">비밀번호</label>
-          <input class="form-control" type="password" id="password" v-model="state.password" required>
+          <input
+            class="form-control"
+            type="password"
+            id="password"
+            v-model="state.password"
+            required
+          >
           <div class="invalid-feedback">유효하지 않은 비밀번호입니다.</div>
         </form>
         <form
           class="passwordConfirm-form"
-          :class="{ valid: state.isValidPasswordConfirm, invalid: !state.isValidPasswordConfirm }"
+          :class="{ valid: state.isValidPasswordConfirm,
+          invalid: !state.passwordConfirm =='' && !state.isValidPasswordConfirm }"
           @submit.prevent
         >
           <label for="passwordConfirm" class="form-label">비밀번호 확인</label>
-          <input class="form-control" type="password" id="passwordConfirm" v-model="state.passwordConfirm" required>
+          <input
+            class="form-control"
+            type="password"
+            id="passwordConfirm"
+            v-model="state.passwordConfirm"
+            required
+          >
           <div class="invalid-feedback">비밀번호와 일치하지 않습니다.</div>
           <div class="valid-feedback">비밀번호와 일치합니다.</div>
         </form>
         <form
           class="nickname-form"
-          :class="{ valid: state.isValidNickname, invalid: !state.isValidNickname }"
+          :class="{ valid: state.isValidNickname,
+          invalid: !state.nickname =='' && !state.isValidNickname }"
           @submit.prevent
         >
           <label for="nickname" class="form-label">닉네임</label>
@@ -80,9 +101,9 @@
           :class="{ valid: state.isChecked, invalid: !state.isChecked }"
           @submit.prevent
         >
-          <label for="">이용 약관</label>
+          <label for="">이용 약관 <p style="color:green;">(필수)</p></label>
           <input type="checkbox" v-model="state.isChecked">
-          <div class="invalid-feedback">(필수)</div>
+          <div class="invalid-feedback">SWith 이용약관과 개인정보 수집 및 이용에 대한 안내 모두 동의해주세요.</div>
         </form>
         <button class="btn btn-primary btn-lg col-12" @click="onClickSignup">회원가입</button>
         <div class="socialLogin mt-2">
@@ -96,6 +117,7 @@
       </div>
     </div>
   </div>
+  <Footer/>
 </template>
 <script>
 /* eslint-disable */
@@ -103,12 +125,14 @@ import axios from 'axios';
 import { reactive, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
-import NavBar from '../../common/Navbar.vue';
+import Navbar from '../../common/Navbar.vue';
+import Footer from '../../common/Footer.vue';
 
 export default {
   name: '',
   components: {
-    NavBar,
+    Navbar,
+    Footer,
   },
   setup() {
     const store = useStore()
@@ -126,7 +150,7 @@ export default {
       authNumBtnAble: false,
       isValidAuthNum: false,
       isValidEmail: computed(() => {
-        if (state.email && checkEmail(state.email)) {
+        if ( state.email && checkEmail(state.email)) {
           return true;
         } return false;
       }),
@@ -256,7 +280,13 @@ h1 {
   text-align: center;
   font-size: 0.7rem;
 }
-
+/* .default{
+  border : 0px;
+} */
+/* .valid input {
+  background-color: #f4f5f4;
+  border:0px;
+} */
 .invalid input {
   border: red solid 1px;
 }
