@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/members/auth")
+@RequestMapping("/api/members/auth")
 public class AuthMailController {
 
     @Autowired
