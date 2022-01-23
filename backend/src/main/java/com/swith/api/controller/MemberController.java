@@ -8,6 +8,7 @@ import com.swith.common.response.AccessToken;
 import com.swith.common.response.BaseDataResponse;
 import com.swith.common.response.BaseResponse;
 import com.swith.db.entity.Member;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 @RequestMapping("/members")
 public class MemberController {
@@ -33,6 +35,7 @@ public class MemberController {
 
     @PostMapping()
     public ResponseEntity<BaseResponse> signupMember(@RequestBody MemberSignupReq memberInfo) {
+        log.debug("signupMember - {}", memberInfo.toString());
         // 해당 email의 회원이 이미 존재
         if (memberService.getMemberByEmail(memberInfo.getEmail()) != null) {
             return ResponseEntity.status(200).body(new BaseResponse(false, 400, "이미 존재하는 회원"));
@@ -40,8 +43,7 @@ public class MemberController {
         // 회원가입
         Member member = memberService.insertMember(Member.builder().kakaoId(memberInfo.getKakaoId())
                 .googleId(memberInfo.getGoogleId()).email(memberInfo.getEmail()).password(memberInfo.getPassword())
-                .nickname(memberInfo.getNickname()).role(Member.Role.MEMBER).goal(memberInfo.getGoal())
-                .isDeleted("N").build());
+                .nickname(memberInfo.getNickname()).role(Member.Role.MEMBER).isDeleted("N").build());
         // 회원가입 실패
         if (member == null) {
             return ResponseEntity.status(200).body(new BaseResponse(false, 404, "회원가입 실패"));
@@ -52,6 +54,7 @@ public class MemberController {
 
     @PostMapping("/login")
     public ResponseEntity<BaseDataResponse<AccessToken>> loginMember(@RequestBody MemberReq memberInfo) {
+        log.debug("loginMember - {}", memberInfo.toString());
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(memberInfo.getEmail(), memberInfo.getPassword());
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
