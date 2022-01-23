@@ -130,7 +130,9 @@
         <!-- SignUp Btn -->
         <button class="btn btn-primary btn-lg col-12" @click="onClickSignup">회원가입</button>
         <div class="socialLogin mt-2">
-          <button class="btn btn-primary col-6">카카오</button>
+          <a :href="KAKAO_AUTH_CODE_URL">
+            <button class="btn btn-primary col-6" @click="onClickKakaoLogin">카카오</button>
+          </a>
           <button class="btn btn-primary col-6">구글</button>
         </div>
         <div class="text-center">
@@ -146,6 +148,7 @@
 <script>
 /* eslint-disable */
 import { sendEmail, checkEmail, signup } from '@/api/user';
+import { KAKAO_GET_AUTH_CODE_URL } from '@/api/kauth';
 import { reactive, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
@@ -165,6 +168,7 @@ export default {
   },
   setup() {
     const store = useStore()
+    const KAKAO_AUTH_CODE_URL = KAKAO_GET_AUTH_CODE_URL;
     const state = reactive({
       emailForm: null,
       authNumForm: null,
@@ -273,7 +277,7 @@ export default {
     //   } return false;
     // };
     return {
-      state, onClickSendCode, onClickSignup, onClickConfirmAuthNum,
+      state, onClickSendCode, onClickSignup, onClickConfirmAuthNum, KAKAO_AUTH_CODE_URL
     };
   },
   created() {},

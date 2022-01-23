@@ -36,10 +36,20 @@ function getUserInfo(success, fail) {
     .then(success)
     .catch(fail)
 }
+function loginKakao(payload, success, fail) {
+  userInstance
+    .post(`/api/members/login/kakao`, {
+      params: { code: payload }
+     })
+    .then(success)
+    .catch(fail)
+}
+
 export {
   signup,
   sendEmail,
   checkEmail,
   login,
-  getUserInfo
+  getUserInfo,
+  loginKakao
 }
