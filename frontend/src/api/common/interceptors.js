@@ -4,8 +4,8 @@ function setInterceptors(instance) {
   // 요청 인터셉터 추가
   instance.interceptors.request.use(
     function (config) {
-      if (store.state.user.authToken) {
-        config.headers.Authorization = `Bearer ${store.state.user.authToken}`
+      if (store.state.user.userInfo.accessToken) {
+        config.headers.Authorization = `Bearer ${store.state.user.userInfo.accessToken}`
       }
       return config;
     },

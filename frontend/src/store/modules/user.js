@@ -1,15 +1,7 @@
-<<<<<<< HEAD
-import { login, getUserInfo, loginKakao } from '../../api/user';
-=======
-import { login, getUserInfo, putMypage, updateUserInfo } from '../../api/user';
->>>>>>> develop
+import { login, getUserInfo, loginKakao, updateUserInfo } from '../../api/user';
 
 const state = () => ({
-  userInfo: {
-    // email : "ssafy@ssafy.com",
-    // nickname : "ssafy",
-    // goal : "내 꿈은 해적왕"
-  },
+  userInfo: {},
 });
 
 const getters = {};
@@ -21,7 +13,7 @@ const actions = {
         commit('SET_USER_INFO', res.data.data);
       },
       (err) => {
-        alert('서버가 아파요.')
+        alert('서버가 아파요!')
       }
     )
   },
@@ -42,7 +34,6 @@ const actions = {
     loginKakao(
       payload,
       (res) => {
-        console.log(res.data)
         localStorage.setItem('accessToken', res.data.data.accessToken)
         dispatch('GET_USER_INFO')
       },
@@ -65,20 +56,16 @@ const actions = {
 
 const mutations = {
   SET_USER_INFO(state, payload) {
-<<<<<<< HEAD
-    state.user.email = payload.email;
-    state.user.nickname = payload.nickname;
-    state.user.goal = payload.goal;
+    state.userInfo.email = payload.email;
+    state.userInfo.nickname = payload.nickname;
+    state.userInfo.goal = payload.goal;
   },
   SET_USER_ACCESS_TOKEN(state, payload) {
-    state.user.accessToken = payload
-=======
-    state.userInfo = payload;
+    state.userInfo.accessToken = payload
   },
   UPDATE_USER_INFO(state, payload) {
     state.userInfo.nickname = payload.user.nickname
     state.userInfo.goal = payload.user.goal
->>>>>>> develop
   }
 };
 
