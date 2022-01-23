@@ -1,5 +1,6 @@
 <template>
   <navbar/>
+  <Test/>
   <div class="container">
     <h1 class="form-title">회원가입</h1>
     <div class="row">
@@ -151,6 +152,8 @@ import { useStore } from 'vuex';
 import SignUpTerm from './SignUpTerm.vue';
 import Navbar from '../../common/Navbar.vue';
 import Footer from '../../common/Footer.vue';
+import Test from '@/components/test.vue';
+
 
 export default {
   name: '',
@@ -158,6 +161,7 @@ export default {
     SignUpTerm,
     Navbar,
     Footer,
+    Test,
   },
   setup() {
     const store = useStore()
