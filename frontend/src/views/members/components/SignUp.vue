@@ -287,7 +287,7 @@ export default {
         return;
       }
       signup(
-        { email: state.email, password: state.password, },
+        { email: state.email, password: state.password, nickname: state.nickname },
         (res) => {console.log(res)},
         () => {alert('서버가 아파요.')}
       )
