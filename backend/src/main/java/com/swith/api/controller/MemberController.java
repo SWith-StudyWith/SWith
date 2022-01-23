@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping("/members")
+@RequestMapping("/api/members")
 public class MemberController {
     @Autowired
     MemberService memberService;

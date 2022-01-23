@@ -55,7 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeHttpRequests()    // HttpServletRequest에 따라 접근을 제한
 //                .antMatchers("").hasRole("")  role에 따라 해당 url 접근을 허용
 //                .mvcMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Preflight Request 허용
-                .antMatchers("/members", "/members/login", "/members/auth/email", "/members/auth/email/check").permitAll()  // 해당 url 접근을 모두 허용
+                .antMatchers("/api/members", "/api/members/login", "/api/members/auth/email", "/api/members/auth/email/check").permitAll()  // 해당 url 접근을 모두 허용
                 .anyRequest().authenticated()
 
                 .and()
