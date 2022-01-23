@@ -1,29 +1,27 @@
 <template>
   <div class="home">
+    <Navbar />
     <header class="header">
       <MainHeader />
     </header>
     <section>
-      <div class="container">
-        <div v-if="error">{{ error }}</div>
-        <div v-if="studies.length">
-          <StudyList :studies="studies" />
-        </div>
-        <div v-else>Loading...</div>
-      </div>
+        <StudyList :studies="studies" />
     </section>
+    <Footer />
   </div>
 </template>
 
 <script>
 import { ref } from 'vue';
-import StudyList from './components/StudyList.vue';
-import MainHeader from './components/MainHeader.vue';
 import axios from 'axios';
+import Navbar from '../../common/Navbar.vue';
+import MainHeader from './MainHeader.vue';
+import StudyList from './StudyList.vue';
+import Footer from '../../common/Footer.vue';
 
 export default {
   name: 'Home',
-  components: { StudyList, MainHeader },
+  components: { Navbar, MainHeader, StudyList, Footer },
   setup() {
     const studies = ref([]);
     const error = ref(null);
@@ -31,13 +29,20 @@ export default {
     const load = () => {
       axios.get('https://d82e66db-a86a-4041-9f92-ecedba015b47.mock.pstmn.io/studies')
       // axios.get(`VUE_APP_LOCAL_URI/studies`)
-        .then((res) => studies.value = res.data.data.studies )
+        .then((res) => studies.value = res.data.data.studies)
         .catch((err) => console.log(err))
-    }
+    };
 
-    load()
+    load();
 
     return { studies, error };
   },
 };
 </script>
+
+<style scoped>
+.spinner-border{
+  margin-top: 200px;
+  margin-bottom: 200px;
+}
+</style>
