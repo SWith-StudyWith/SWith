@@ -17,8 +17,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
-
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)  // method security 설정
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -57,7 +55,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeHttpRequests()    // HttpServletRequest에 따라 접근을 제한
 //                .antMatchers("").hasRole("")  role에 따라 해당 url 접근을 허용
-                .antMatchers("/members", "/members/login", "/members/auth/email", "/members/auth/email/check", "/members/auth/email/password").permitAll()  // 해당 url 접근을 모두 허용
+//                .mvcMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Preflight Request 허용
+                .antMatchers("/api/members", "/api/members/login", "/api/members/auth/email", "/api/members/auth/email/check", "/api/members/auth/email/password").permitAll()  // 해당 url 접근을 모두 허용
                 .anyRequest().authenticated()
 
                 .and()

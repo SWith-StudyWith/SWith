@@ -7,8 +7,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class MemberSignupReq extends MemberReq{
-    private String kakaoId;
-    private String googleId;
+public class MemberInfoReq {
     private String nickname;
+    private String goal;
 }

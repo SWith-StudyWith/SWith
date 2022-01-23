@@ -3,6 +3,8 @@ package com.swith.api.service;
 import com.swith.api.request.AuthMailReq;
 import com.swith.common.util.MailUtil;
 import com.swith.db.entity.AuthMail;
+import com.swith.api.request.MemberInfoReq;
+import com.swith.common.util.SecurityUtil;
 import com.swith.db.entity.Member;
 import com.swith.db.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,4 +86,27 @@ public class MemberServiceImpl implements MemberService {
         }
         return str;
     }
+
+    public Member getMemberByAuthentication() {
+        return memberRepository.findByEmail(SecurityUtil.getCurrentUsername().orElse(null)).orElse(null);
+    }
+
+    @Override
+    public Member updateMember(Member member, MemberInfoReq memberInfoReq) {
+        member.setNickname(memberInfoReq.getNickname());
+        member.setGoal(memberInfoReq.getGoal());
+        return memberRepository.save(member);
+    }
+
+    @Override
+    public Member updateMemberPassword(Member member, String password) {
+        member.setPassword(passwordEncoder.encode(member.getPassword()));
+        return memberRepository.save(member);
+    }
+
+    @Override
+    public void deleteMember(Member member) {
+        memberRepository.delete(member);
+    }
+
 }
