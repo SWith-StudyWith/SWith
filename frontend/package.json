@@ -16,6 +16,7 @@
     "json-server": "^0.17.0",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
+    "vue3-google-oauth2": "^1.0.6",
     "vuex": "^4.0.0-0"
   },
   "devDependencies": {
