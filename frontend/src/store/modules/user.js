@@ -1,4 +1,4 @@
-import { login, getUserInfo } from '../../api/user';
+import { login, getUserInfo, loginKakao } from '../../api/user';
 
 const state = () => ({
   user: {},
@@ -17,23 +17,40 @@ const actions = {
       }
     )
   },
-  LOGIN({ dispatch }, payload) {
+  LOGIN({ dispatch, commit }, payload) {
     login(
       payload,
       (res) => {
+        localStorage.setItem('accessToken', res.data.data.accessToken)
+        commit('SET_USER_ACCESS_TOKEN', res.data.data.accessToken)
         dispatch('GET_USER_INFO')
-        localStorage.setItem('accessToken', res.data.accessToken)
       },
       (err) => {
         alert('서버가 아파요.')
       }
+    )
+  },
+  LOGIN_KAKAO({ dispatch }, payload) {
+    loginKakao(
+      payload,
+      (res) => {
+        console.log(res.data)
+        localStorage.setItem('accessToken', res.data.data.accessToken)
+        dispatch('GET_USER_INFO')
+      },
+      (err) => {console.log(err)}
     )
   }
 };
 
 const mutations = {
   SET_USER_INFO(state, payload) {
-    state.user = payload;
+    state.user.email = payload.email;
+    state.user.nickname = payload.nickname;
+    state.user.goal = payload.goal;
+  },
+  SET_USER_ACCESS_TOKEN(state, payload) {
+    state.user.accessToken = payload
   }
 };
 
