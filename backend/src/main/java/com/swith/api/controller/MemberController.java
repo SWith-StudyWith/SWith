@@ -1,14 +1,10 @@
 package com.swith.api.controller;
 
-import com.swith.api.request.MemberInfoReq;
-import com.swith.api.request.MemberReq;
-import com.swith.api.request.MemberSignupReq;
+import com.swith.api.request.*;
 import com.swith.api.service.MemberService;
 import com.swith.common.jwt.TokenProvider;
-import com.swith.common.response.AccessToken;
 import com.swith.common.response.BaseDataResponse;
 import com.swith.common.response.BaseResponse;
-import com.swith.common.response.MemberInfo;
 import com.swith.db.entity.Member;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,8 +50,9 @@ public class MemberController {
     @PostMapping("/login")
     public ResponseEntity<BaseDataResponse<AccessToken>> loginMember(@RequestBody MemberReq memberReq) {
         log.debug("loginMember - {}", memberReq.toString());
+        Member member = memberService.getMemberByEmail(memberReq.getEmail());
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(memberReq.getEmail(), memberReq.getPassword());
+                new UsernamePasswordAuthenticationToken(member.getMemberId(), memberReq.getPassword());
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = tokenProvider.createToken(authentication);

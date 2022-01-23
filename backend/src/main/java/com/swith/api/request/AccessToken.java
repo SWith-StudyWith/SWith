@@ -1,4 +1,4 @@
-package com.swith.common.response;
+package com.swith.api.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
