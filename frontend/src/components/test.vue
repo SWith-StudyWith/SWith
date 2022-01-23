@@ -1,7 +1,9 @@
 <template>
   <section class="test">
-    <div v-on:click="GoogleLoginBtn">구글 OAuth2 연동</div>
-    <div id="my-signin2" style="display: none"></div>
+    <button id="my-signin2"
+    class="btn btn-primary btn-lg col-12" @click="GoogleLoginBtn">구글 OAuth2 연동</button>
+    <!-- <div v-on:click="GoogleLoginBtn">구글 OAuth2 연동</div> -->
+    <!-- <div id="my-signin2" style="display: none"></div> -->
   </section>
 </template>
 
