@@ -1,5 +1,5 @@
 <template>
-  <!-- <nav-bar></nav-bar> -->
+  <Navbar />
   <div class="container">
     <h1 class="form-title">로그인</h1>
     <div class="row">
@@ -22,7 +22,8 @@
           @submit.prevent
         >
           <label for="password" class="form-label">비밀번호</label>
-          <input class="form-control" type="password" id="password" v-model="state.password" required>
+          <input class="form-control" type="password"
+            id="password" v-model="state.password" required>
           <div class="invalid-feedback">유효하지 않은 비밀번호입니다.</div>
         </form>
         <button class="btn btn-primary btn-lg col-12" @click="onClickLogin">로그인</button>
@@ -30,13 +31,15 @@
           <button class="btn btn-primary col-6">카카오</button>
           <button class="btn btn-primary col-6">구글</button>
         </div>
-        <div class="text-center">
-          <router-link :to="{ name: 'FindPassword', }">비밀번호 찾기</router-link>
+        <div class="container2 text-center">
+          <router-link :to="{ name: 'FindPassword' }">비밀번호 찾기</router-link>
+          <span> </span>
           <router-link :to="{ name: 'SignUp' }">회원가입</router-link>
         </div>
       </div>
     </div>
   </div>
+  <Footer />
 </template>
 <script>
 /* eslint-disable */
@@ -44,11 +47,13 @@ import { reactive, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import Navbar from '../../common/Navbar.vue';
+import Footer from '../../common/Footer.vue';
 
 export default {
   name: '',
   components: {
     Navbar,
+    Footer,
   },
   setup() {
     const store = useStore();
@@ -131,5 +136,9 @@ h1 {
 }
 .valid .valid-feedback {
   display: block;
+}
+.container2 {
+  display: flex;
+  justify-content: space-evenly;
 }
 </style>
