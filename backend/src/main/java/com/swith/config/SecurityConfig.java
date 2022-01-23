@@ -1,5 +1,6 @@
 package com.swith.config;
 
+//import com.swith.common.auth.CustomOAuth2UserService;
 import com.swith.common.jwt.JwtAccessDeniedHandler;
 import com.swith.common.jwt.JwtAuthenticationEntryPoint;
 import com.swith.common.jwt.JwtSecurityConfig;
@@ -56,7 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeHttpRequests()    // HttpServletRequest에 따라 접근을 제한
 //                .antMatchers("").hasRole("")  role에 따라 해당 url 접근을 허용
-                .antMatchers("/members", "/members/login", "/members/auth/email", "/members/auth/email/check").permitAll()  // 해당 url 접근을 모두 허용
+                .antMatchers("/members", "/members/login", "/members/auth/email", "/members/auth/email/check", "/members/auth/email/password").permitAll()  // 해당 url 접근을 모두 허용
                 .anyRequest().authenticated()
 
                 .and()
