@@ -4,12 +4,12 @@
       <div class="carousel-item main1 active">
           <img class="d-inline-block" src="@/assets/img/main1.png">
       </div>
-      <div class="carousel-item main2">
+      <!-- <div class="carousel-item main2">
           <img class="d-inline-block" src="@/assets/img/main2.png">
       </div>
       <div class="carousel-item main3">
           <img class="d-inline-block" src="@/assets/img/main3.png">
-      </div>
+      </div> -->
       </div>
     </div>
 </template>

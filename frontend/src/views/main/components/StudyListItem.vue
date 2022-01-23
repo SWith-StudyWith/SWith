@@ -1,7 +1,7 @@
 <template>
   <!-- <router-link :to="{ name: 'StudyView', params: { id: study.studyCode }}"> -->
   <div>
-    <div class="card col-4">
+    <div class="card">
       <img :src="study.studyImage" class="card-img-top" alt="...">
       <div class="card-body">
         <h5 class="card-title">{{ study.studyName }}</h5>
@@ -22,7 +22,6 @@ export default {
 
 .card {
   width: 100%;
-  /* display: inline-flex; */
 }
 
 .card-body{
