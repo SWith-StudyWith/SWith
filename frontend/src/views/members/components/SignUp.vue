@@ -1,107 +1,213 @@
 <template>
-  <!-- <nav-bar></nav-bar> -->
+  <navbar/>
+  <Test/>
   <div class="container">
     <h1 class="form-title">회원가입</h1>
     <div class="row">
       <div class="offset-4 col-4">
+
+        <!-- Email -->
         <form
-      class="email-form row"
-      :class="{ valid: state.isValidEmail, invalid: !state.isValidEmail }"
-    >
-      <label for="email" class="form-label" >이메일</label>
-      <div class="col-9">
-        <input class="form-control" id="email" type="email"
-          v-model="state.email" required autofocus>
-      </div>
-      <div class="col-3">
-        <button class="btn btn-primary"
-          style="width:100%"
-          :disabled="!state.isValidEmail" @click="onClickSendCode">이메일 인증</button>
-      </div>
-      <div class="invalid-feedback">유효하지 않은 이메일입니다.</div>
-    </form>
-    <form
-      class="authnum-form row"
-      :class="{ valid: state.isValidAuthNum, invalid: !state.isValidAuthNum }"
-    >
-      <label for="authNum" class="form-label">인증 번호</label>
-      <div class="col-9">
-        <input class="form-control" id="authNum" type="text"
-          v-model="state.authNum" required>
-      </div>
-      <div class="col-3">
-        <button
-          class="btn btn-primary"
-          style="width:100%"
-          :disabled="!state.authNumBtnAble"
-          @click="onClickConfirmAuthNum"
-        >인증 확인</button>
-      </div>
-      <div class="invalid-feedback">인증 확인이 필요합니다.</div>
-    </form>
-    <form
-      class="password-form"
-      :class="{ valid: state.isValidPassword, invalid: !state.isValidPassword }"
-    >
-      <label for="password" class="form-label">비밀번호</label>
-      <input class="form-control" type="password" id="password"
-        v-model="state.password" required>
-      <div class="invalid-feedback">유효하지 않은 비밀번호입니다.</div>
-    </form>
-    <form
-      class="passwordConfirm-form"
-      :class="{ valid: state.isValidPasswordConfirm, invalid: !state.isValidPasswordConfirm }"
-    >
-      <label for="passwordConfirm" class="form-label">비밀번호 확인</label>
-      <input class="form-control" type="password" id="passwordConfirm"
-        v-model="state.passwordConfirm" required>
-      <div class="invalid-feedback">비밀번호와 일치하지 않습니다.</div>
-      <div class="valid-feedback">비밀번호와 일치합니다.</div>
-    </form>
-    <form
-      class="nickname-form"
-      :class="{ valid: state.isValidNickname, invalid: !state.isValidNickname }"
-    >
-      <label for="nickname" class="form-label">닉네임</label>
-      <input class="form-control" type="text" id="nickname"
-        v-model="state.nickname" required>
-      <div class="invalid-feedback">유효하지 않은 닉네임입니다.</div>
-    </form>
-    <form
-      class="terms-form"
-      :class="{ valid: state.isChecked, invalid: !state.isChecked }"
-    >
-      <label for="">이용 약관</label>
-      <input type="checkbox" v-model="state.isChecked">
-      <div class="invalid-feedback">(필수)</div>
-    </form>
-    <button class="btn btn-primary btn-lg col-12" @click="onClickSignup">회원가입</button>
-    <div class="socialLogin mt-2">
-      <button class="btn btn-primary col-6">카카오</button>
-      <button class="btn btn-primary col-6">구글</button>
-    </div>
-    <div class="text-center">
-      <span>이미 회원이신가요?</span>
-      <router-link :to="{ name: 'Login' }">로그인</router-link>
-    </div>
+          class="email-form row"
+          :class="{
+          valid: state.isValidEmail, invalid: !state.email=='' && !state.isValidEmail }"
+          @submit.prevent
+        >
+          <label for="email" class="form-label">이메일</label>
+          <div class="col-9">
+            <input class="form-control" id="email" type="email"
+              v-model="state.email"
+              :disabled="state.isValidAuthNum"
+              required
+            >
+          </div>
+          <div class="col-3">
+            <button class="btn btn-primary"
+              style="width:100%"
+              :disabled="!state.isValidEmail || state.isValidAuthNum "
+              @click="onClickSendCode"
+            >이메일 인증
+            </button>
+          </div>
+          <div v-if="!state.isValidEmail && !state.email == '' "
+          class="invalid-feedback">유효하지 않은 이메일입니다.</div>
+        </form>
+
+        <!-- Certification Number -->
+        <form
+          class="authnum-form row"
+          :class="{ valid: state.isValidAuthNum,
+          invalid: !state.authNum=='' && !state.isValidAuthNum }"
+          @submit.prevent
+          v-if="!state.isValidAuthNum"
+        >
+          <label for="authNum" class="form-label">인증 번호</label>
+          <div class="col-9">
+            <input class="form-control" id="authNum" type="text" v-model="state.authNum" required>
+          </div>
+          <div class="col-3">
+            <button
+              class="btn btn-primary"
+              style="width:100%"
+              :disabled="!state.authNumBtnAble"
+              @click="onClickConfirmAuthNum"
+            >인증 확인</button>
+          </div>
+          <div class="invalid-feedback">인증 확인이 필요합니다.</div>
+        </form>
+
+        <!-- Password -->
+        <form
+          class="password-form"
+          :class="{ valid: state.isValidPassword,
+          invalid: !state.password=='' && !state.isValidPassword }"
+          @submit.prevent
+        >
+          <label for="password" class="form-label">비밀번호</label>
+          <input
+            class="form-control"
+            type="password"
+            id="password"
+            v-model="state.password"
+            required
+          >
+          <div class="invalid-feedback">유효하지 않은 비밀번호입니다.</div>
+        </form>
+
+        <!-- Password Confirm -->
+        <form
+          class="passwordConfirm-form"
+          :class="{ valid: state.isValidPasswordConfirm,
+          invalid: !state.passwordConfirm =='' && !state.isValidPasswordConfirm }"
+          @submit.prevent
+        >
+          <label for="passwordConfirm" class="form-label">비밀번호 확인</label>
+          <input
+            class="form-control"
+            type="password"
+            id="passwordConfirm"
+            v-model="state.passwordConfirm"
+            required
+          >
+          <div class="invalid-feedback">비밀번호와 일치하지 않습니다.</div>
+          <div class="valid-feedback">비밀번호와 일치합니다.</div>
+        </form>
+
+        <!-- Nickname -->
+        <form
+          class="nickname-form"
+          :class="{ valid: state.isValidNickname,
+          invalid: !state.nickname =='' && !state.isValidNickname }"
+          @submit.prevent
+        >
+          <label for="nickname" class="form-label">닉네임</label>
+          <input class="form-control" type="text" id="nickname"
+            v-model="state.nickname" required>
+          <div class="invalid-feedback">유효하지 않은 닉네임입니다.</div>
+        </form>
+
+        <!-- Terms of Use //  !state.ischecked=='' && -->
+        <form
+          class="terms-form"
+          :class="{ valid: state.isChecked, invalid:
+          !state.isChecked }"
+          @submit.prevent
+        >
+          <input type="checkbox" v-model="state.isChecked">
+          <span style="color:green;"> (필수)</span>
+          <span> SWith
+          <span class="text-decoration-underline terms" data-bs-toggle="modal"
+                data-bs-target="#signupTermModal">
+                이용 약관 및 개인정보 취급방침
+          </span>
+              에 대한 내용을 모두 확인하였으며, 이에 동의합니다.</span>
+          <!-- <div class="invalid-feedback">(필수)</div> -->
+          <!-- <label for="">이용 약관 <p style="color:green;">(필수)</p></label> -->
+          <!-- <input type="checkbox" v-model="state.isChecked"> -->
+          <div class="invalid-feedback">SWith 이용약관과 개인정보 수집 및 이용에 대한 안내 모두 동의해주세요.</div>
+        </form>
+
+        <!-- SignUp Btn -->
+        <button class="btn btn-primary btn-lg col-12" @click="onClickSignup">회원가입</button>
+        <div class="socialLogin mt-2">
+          <button class="btn btn-primary col-6">카카오</button>
+          <button class="btn btn-primary col-6">구글</button>
+        </div>
+        <div class="text-center">
+          <span>이미 회원이신가요?</span>
+          <router-link :to="{ name: 'Login' }">로그인</router-link>
+        </div>
+
+        <!-- google-oauth2 -->
+        <!-- <section class="test">
+          <div v-on:click="GoogleLoginBtn" style="cursor:pointer;">구글 OAuth2 연동</div>
+          <div id="my-signin2" style="display: none; cursor:pointer;"></div>
+        </section> -->
+        <button id="my-signin2"
+          class="btn btn-primary btn-lg col-12" @click="GoogleLoginBtn">구글 OAuth2 연동
+        </button>
       </div>
     </div>
   </div>
+  <sign-up-term></sign-up-term>
+
+  <Footer/>
 </template>
 <script>
 /* eslint-disable */
-import axios from 'axios';
+import { sendEmail, checkEmail, signup } from '@/api/user';
 import { reactive, computed } from 'vue';
 import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
+import SignUpTerm from './SignUpTerm.vue';
+import Navbar from '../../common/Navbar.vue';
+import Footer from '../../common/Footer.vue';
+import Test from '@/components/test.vue';
 
-// import { NavBar } from '../../components/NavBar.vue'
 
 export default {
-  name: '',
+
   components: {
-    // NavBar,
+    SignUpTerm,
+    Navbar,
+    Footer,
+    Test,
+  },
+  methods: {
+    GoogleLoginBtn() {
+      const self = this;
+
+      window.gapi.signin2.render('my-signin2', {
+        scope: 'profile email',
+        width: 240,
+        height: 50,
+        longtitle: true,
+        theme: 'dark',
+        onsuccess: this.GoogleLoginSuccess,
+        onfailure: this.GoogleLoginFailure,
+      });
+
+      setTimeout(() => {
+        if (!self.googleLoginCheck) {
+          const auth = window.gapi.auth2.getAuthInstance();
+          auth.isSignedIn.get();
+          document.querySelector('.abcRioButton').click();
+        }
+      }, 1500);
+    },
+    async GoogleLoginSuccess(googleUser) {
+      const googleEmail = googleUser.getBasicProfile().getEmail();
+      if (googleEmail !== 'undefined') {
+        console.log(googleEmail);
+      }
+    },
+    // 구글 로그인 콜백함수 (실패)
+    GoogleLoginFailure(error) {
+      console.log(error);
+    },
   },
   setup() {
+    const store = useStore()
     const state = reactive({
       emailForm: null,
       authNumForm: null,
@@ -113,15 +219,16 @@ export default {
       password: '',
       passwordConfirm: '',
       nickname: '',
+      // checked: ''
       authNumBtnAble: false,
       isValidAuthNum: false,
       isValidEmail: computed(() => {
-        if (state.email && checkEmail(state.email)) {
+        if (state.email && validateEmail(state.email)) {
           return true;
         } return false;
       }),
       isValidPassword: computed(() => {
-        if (state.password && checkPassword(state.password)) {
+        if (state.password && validatePassword(state.password)) {
           return true;
         } return false;
       }),
@@ -131,68 +238,64 @@ export default {
         } return false;
       }),
       isValidNickname: computed(() => {
-        if (state.nickname && checkNickname(state.nickname)) {
+        if (state.nickname && validateNickname(state.nickname)) {
           return true;
         } return false;
       }),
       isChecked: false,
+      // isChecked: computed(() => {
+      //   if (state.isChecked && checkTerms(state.isChecked)) {
+      //     return true;
+      //   } return false;
+      // }),
     });
-    async function api (url, method, data) {
-      return (await axios({
-        method,
-        url,
-        data,
-      }).catch((e) => {
-        console.log(e);
-      })).data;
-    }
+
     const onClickSendCode = function (e) {
       e.preventDefault();
       if (!state.isValidEmail) {
         return;
       }
       state.authNumBtnAble = true;
-      this.api(`/${process.env.VUE_APP_LOCAL_URI}/members/auth/email`, 'post', state.email)
-        .then((data) => console.log(data))
-        .catch((err) => console.log(err));
-    };
+      sendEmail(
+        { email: state.email },
+        () => {alert('이메일을 전송했습니다.')},
+        () => {alert('이메일 전송 실패')}
+      )
+    }
     const onClickConfirmAuthNum = function (e) {
       e.preventDefault();
-      const payload = {
-        email: state.email,
-        authNum: state.authNum,
-      };
-      this.api(`/${process.env.VUE_APP_LOCAL_URI}/members/auth/email/check`, 'post', payload)
-        .then((data) => {
-          if (data.isSuccess) {
+      checkEmail(
+        { email: state.email, authNum: state.authNum },
+        (res) => {
+          console.log(res)
+          if(res.data.isSuccess) {
             state.isValidAuthNum = true;
           }
-        })
-        .catch((err) => console.log(err));
+        },
+        () => {alert('서버가 아파요')}
+      )
     };
+
     const router = useRouter();
     const onClickSignup = function (e) {
       e.preventDefault();
       if (!state.isValidAuthNum || !state.isValidEmail || !state.isValidPassword || !state.isValidPasswordConfirm || !state.isValidNickname || !state.isChecked){
         return;
       }
-      const {
-        email, authNum, password, passwordConfirm, nickname,
-      } = state;
-      console.log(email, authNum, password, passwordConfirm, nickname);
-      this.api(`/${process.env.VUE_APP_LOCAL_URI}/members`, 'post', state)
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err));
-      // 메인 페이지로 라우팅
-      router.push({ name: 'Main' })
+      signup(
+        { email: state.email, password: state.password, },
+        (res) => {console.log(res)},
+        () => {alert('서버가 아파요.')}
+      )
+      router.push({ name: 'Login' })
     };
 
-    const checkEmail = function (email) {
+    const validateEmail = function (email) {
       const re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
       return re.test(email);
     };
 
-    const checkPassword = function (password) {
+    const validatePassword = function (password) {
       const numberChar = /[0-9]/;
       const specialChar = /[`~!@#$%^&*\\\'\";:\/?]/;
       const alphabetChar = /[a-zA-Z]/;
@@ -202,13 +305,18 @@ export default {
         }
       } return false;
     };
-    const checkNickname = function (nickname) {
+    const validateNickname = function (nickname) {
       if (nickname.length >= 2 && nickname.length <= 16) {
         return true;
       } return false;
-    }
+    };
+    // const checkTerms = function (checked) {
+    //   if (checked) {
+    //     return true;
+    //   } return false;
+    // };
     return {
-      state, api, onClickSendCode, onClickSignup, checkEmail, onClickConfirmAuthNum,
+      state, onClickSendCode, onClickSignup, onClickConfirmAuthNum,
     };
   },
   created() {},
@@ -231,12 +339,10 @@ export default {
 h1 {
   text-align: center;
 }
-
 .btn {
   text-align: center;
   font-size: 0.7rem;
 }
-
 .invalid input {
   border: red solid 1px;
 }
@@ -254,5 +360,9 @@ h1 {
 }
 .valid .valid-feedback {
   display: block;
+}
+.terms:hover {
+  cursor: pointer;
+  font-weight: bold;
 }
 </style>

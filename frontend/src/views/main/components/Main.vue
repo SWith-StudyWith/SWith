@@ -1,41 +1,48 @@
 <template>
   <div class="home">
-    <h1>Home</h1>
-    <div v-if="error">{{ error }}</div>
-    <div v-if="studies.length">
-      <StudyList :studies="studies" />
-    </div>
-    <div v-else>Loading...</div>
-
+    <Navbar />
+    <header class="header">
+      <MainHeader />
+    </header>
+    <section>
+        <StudyList :studies="studies" />
+    </section>
+    <Footer />
   </div>
 </template>
 
 <script>
 import { ref } from 'vue';
+import axios from 'axios';
+import Navbar from '../../common/Navbar.vue';
+import MainHeader from './MainHeader.vue';
 import StudyList from './StudyList.vue';
+import Footer from '../../common/Footer.vue';
 
 export default {
   name: 'Home',
-  components: { StudyList },
+  components: { Navbar, MainHeader, StudyList, Footer },
   setup() {
     const studies = ref([]);
     const error = ref(null);
 
-    const load = async () => {
-      try {
-        const data = await fetch('http://localhost:3000/studies');
-        // console.log(data)
-        if (!data.ok) { // data.ok가 false인 경우 = error인 경우
-          throw Error('no data available');
-        }
-        studies.value = await data.json();
-      } catch (err) {
-        error.value = err.message; // const error 값을 throw한 message로 업뎃
-        console.log(error.value);
-      }
+    const load = () => {
+      axios.get('https://d82e66db-a86a-4041-9f92-ecedba015b47.mock.pstmn.io/studies')
+      // axios.get(`VUE_APP_LOCAL_URI/studies`)
+        .then((res) => studies.value = res.data.data.studies)
+        .catch((err) => console.log(err))
     };
+
     load();
+
     return { studies, error };
   },
 };
 </script>
+
+<style scoped>
+.spinner-border{
+  margin-top: 200px;
+  margin-bottom: 200px;
+}
+</style>

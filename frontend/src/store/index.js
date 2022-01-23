@@ -1,15 +1,12 @@
-// Vuex 조립
-import state from './state';
-import * as getters from './getters';
-import * as mutations from './mutations';
-import * as actions from './actions';
+import { createStore } from 'vuex';
 
-const root = {
-  namespaced: true,
-  state,
-  getters,
-  mutations,
-  actions,
-};
+// 모듈 import
+import user from './modules/user';
 
-export default root;
+const store = createStore({
+  modules: {
+    user,
+  },
+});
+
+export default store;

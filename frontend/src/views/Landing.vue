@@ -135,17 +135,22 @@
       </div>
     </div>
   </section>
+  <Footer/>
 </template>
 
 <script>
 import 'animate.css';
+import Footer from '@/views/common/Footer.vue';
 
 export default {
   name: 'Landing',
+  components: {
+    Footer,
+  },
 };
 </script>
 
-<style>
+<style scoped>
 section{
   margin-bottom: 150px;
 }

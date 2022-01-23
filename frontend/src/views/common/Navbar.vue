@@ -24,21 +24,24 @@ export default {
 };
 </script>
 
-<style>
-#nav{
+<style scoped>
+#nav {
   top: 0;
   position: sticky;
-  /* background-color: var(--headerBackground); */
-  /* color: var(--textColor); */
+  background-color: #FFE4DE;
   display: flex;
   justify-content: space-between;
   padding: 25px;
-  height: 100px;
+  height: 88px;
   min-width: 900px;
   box-sizing: border-box;
-  /* vertical-align: middle; */
-  user-select:none;
+  user-select: none;
   z-index: 1;
+  /* vertical-align: middle; */
+  /* background-color: #FFF7F6; */
+  /* opacity: 0.5; */
+  /* background-color: var(--headerBackground); */
+  /* color: var(--textColor); */
 }
 #nav-list {
   display: flex;
