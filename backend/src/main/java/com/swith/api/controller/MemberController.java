@@ -1,7 +1,10 @@
 package com.swith.api.controller;
 
+import com.swith.api.request.AuthMailReq;
 import com.swith.api.request.MemberReq;
 import com.swith.api.request.MemberSignupReq;
+import com.swith.api.request.PasswordFindReq;
+import com.swith.api.service.AuthMailService;
 import com.swith.api.service.MemberService;
 import com.swith.common.jwt.TokenProvider;
 import com.swith.common.response.AccessToken;
@@ -67,5 +70,14 @@ public class MemberController {
         return ResponseEntity.status(200).body(token);
     }
 
+    @PostMapping("/auth/email/password")
+    public ResponseEntity<BaseResponse> findPassword(@RequestBody PasswordFindReq passwordFindReq) {
+        if (memberService.getMemberByEmail(passwordFindReq.getEmail()) == null) {
+            return ResponseEntity.status(200).body(new BaseResponse(false, 400, "가입된 이메일 내역 없음"));
+        }
+
+        memberService.findPassword(passwordFindReq.getEmail());
+        return ResponseEntity.status(200).body(new BaseResponse(true, 200, "임시 비밀번호 전송 성공"));
+    }
 
 }
