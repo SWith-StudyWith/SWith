@@ -8,13 +8,15 @@
       <div class="row d-flex justify-content-center">
         <div class="col-4">
           <section>
-            <img :src="state.defaultImage" class="profileImage">
+            <img :src="state.defaultImage" class="defaultImage">
             <form>
               <div>
-                <input @change='onInputImage()' class="uploadImage" ref="serveyImage" type="file" accept="image/*">
+                <input @change='onInputImage()' class="form-control" ref="serveyImage" type="file" accept="image/*">
               </div>
               <p class="col-8 d-inline-flex" style="">{{ state.email }}</p>
-              <button type="button" class="btn btn-primary col-4">비밀번호 변경</button>
+              <router-link to="/members/changepassword">
+                <button type="button" class="btn btn-primary col-4">비밀번호 변경</button>
+              </router-link>
               <div class="mb-3">
                 <label for="nickname" class="form-label">닉네임</label>
                 <input type="text" class="form-control" id="nickname" v-model="state.nickname">
@@ -23,7 +25,7 @@
                 <label for="goal" class="form-label">나의 목표</label>
                 <textarea class="form-control form-goal" id="goal" rows="3" v-model="state.goal"></textarea>
               </div>
-              <button type="button" class="btn btn-primary col-12 btn-save">변경 사항 저장</button>
+              <button @click="onClickUpdateMypage" class="btn btn-primary col-12 btn-save">변경 사항 저장</button>
             </form>
           </section>
         </div>
@@ -34,8 +36,9 @@
 </template>
 
 <script>
-import { reactive, ref } from 'vue';
-// import { userStore } from 'vuex';
+import { reactive, computed } from 'vue';
+import { useStore } from 'vuex';
+// import { updateMypage } from '@/api/user'
 import Navbar from '@/views/common/Navbar.vue';
 import Footer from '@/views/common/Footer.vue';
 
@@ -43,25 +46,25 @@ export default {
   name: '',
   components: { Navbar, Footer },
   setup() {
-    // const store = userStore();
+    const store = useStore();
     const state = reactive({
-      // email: store.email,
-      // nickname: store.nickname
-      // goal: store.goal,
-      email: 'ssafy@ssafy.com',
-      goal: '토익 990점',
-      nickname: '발챙이',
+      email: computed(() => store.state),
+      nickname: computed(() => store.state.user.userinfo.nickname),
+      goal: computed(() => store.state.user.userinfo.goal),
       defaultImage: require('@/assets/img/profile1.png'),
       image: ''
     });
 
     const onInputImage = function (e) {
-      this.state.profileImage = this.$refs.serveyImage.files
-      console.log("this.state.profileImage")
+      this.state.image = this.$refs.serveyImage.files
+      console.log("this.state.image")
     }
-
+    const onClickUpdateMypage = function (e) {
+      e.preventDefault();
+      store.dispatch('updateMypage', { nickname: this.state.user.nickname, goal: this.state.user.goal })
+    }
     return {
-      state, onInputImage,
+      state, onInputImage, onClickUpdateMypage
     }
   },
   created() {},
@@ -98,7 +101,7 @@ button {
 .btn-save{
   margin-bottom: 106px;
 }
-.profileImage{
+.defaultImage{
   margin-bottom: 32px;
 }
 .uploadImage{

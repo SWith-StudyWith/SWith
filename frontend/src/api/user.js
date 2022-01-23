@@ -36,10 +36,18 @@ function getUserInfo(success, fail) {
     .then(success)
     .catch(fail)
 }
+// 마이페이지 수정
+function updateUserInfo(payload, success, fail) {
+  userInstance
+    .put(`/api/members`, payload)
+    .then(success)
+    .catch(fail)
+}
 export {
   signup,
   sendEmail,
   checkEmail,
   login,
-  getUserInfo
+  getUserInfo,
+  updateUserInfo,
 }
