@@ -1,7 +1,11 @@
-import { login, getUserInfo } from '../../api/user';
+import { login, getUserInfo, putMypage, updateUserInfo } from '../../api/user';
 
 const state = () => ({
-  user: {},
+  userInfo: {
+    // email : "ssafy@ssafy.com",
+    // nickname : "ssafy",
+    // goal : "내 꿈은 해적왕"
+  },
 });
 
 const getters = {};
@@ -28,12 +32,28 @@ const actions = {
         alert('서버가 아파요.')
       }
     )
+  },
+  UPDATE_USER_INFO({ dispatch, commit }, payload) {
+    updateUserInfo(
+      payload,
+      (res) => {
+        dispatch('GET_USER_INFO')
+        commit('UPDATE_MYPAGE', res.data.data);
+      },
+      (err) => {
+        alert('서버가 아파유.')
+      }
+    )
   }
 };
 
 const mutations = {
   SET_USER_INFO(state, payload) {
-    state.user = payload;
+    state.userInfo = payload;
+  },
+  UPDATE_USER_INFO(state, payload) {
+    state.userInfo.nickname = payload.user.nickname
+    state.userInfo.goal = payload.user.goal
   }
 };
 
