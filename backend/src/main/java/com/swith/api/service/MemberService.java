@@ -9,4 +9,5 @@ public interface MemberService {
     Member getMemberByKakaoId(String kakaoId);
     Member getMemberByGoogleId(String googleId);
     Member getMemberByNickname(String nickname);
+    Member getMemberByAuthentication();
 }

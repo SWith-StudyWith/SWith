@@ -1,5 +1,6 @@
 package com.swith.api.service;
 
+import com.swith.common.util.SecurityUtil;
 import com.swith.db.entity.Member;
 import com.swith.db.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,4 +46,10 @@ public class MemberServiceImpl implements MemberService {
     public Member getMemberByNickname(String nickname) {
         return memberRepository.findByNickname(nickname).orElse(null);
     }
+
+    @Override
+    public Member getMemberByAuthentication() {
+        return memberRepository.findByEmail(SecurityUtil.getCurrentUsername().orElse(null)).orElse(null);
+    }
+
 }

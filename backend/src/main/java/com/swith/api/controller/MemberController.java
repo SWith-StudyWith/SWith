@@ -7,6 +7,7 @@ import com.swith.common.jwt.TokenProvider;
 import com.swith.common.response.AccessToken;
 import com.swith.common.response.BaseDataResponse;
 import com.swith.common.response.BaseResponse;
+import com.swith.common.response.MemberInfo;
 import com.swith.db.entity.Member;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +16,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -68,6 +66,22 @@ public class MemberController {
         BaseDataResponse<AccessToken> token = new BaseDataResponse<AccessToken>(true, 200,
                 "로그인 성공", new AccessToken(jwt));
         return ResponseEntity.status(200).body(token);
+    }
+
+    @GetMapping
+    public ResponseEntity<BaseDataResponse<MemberInfo>> getMember() {
+        log.debug("getMember");
+        Member member = memberService.getMemberByAuthentication();
+        BaseDataResponse<MemberInfo> memberInfo;
+        // 회원 정보 조회 실패
+        if (member == null) {
+            memberInfo = new BaseDataResponse<MemberInfo>(false, 404, "회원 정보 조회 실패", null);
+            return ResponseEntity.status(200).body(memberInfo);
+        }
+        // 회원 정보 조회 성공
+        memberInfo = new BaseDataResponse<MemberInfo>(true, 200, "회원 정보 조회 성공",
+                new MemberInfo(member.getEmail(), member.getNickname(), member.getGoal()));
+        return ResponseEntity.status(200).body(memberInfo);
     }
 
 
