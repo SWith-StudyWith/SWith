@@ -144,7 +144,7 @@
 </template>
 <script>
 /* eslint-disable */
-import axios from 'axios';
+import { sendEmail, checkEmail, signup } from '@/api/user';
 import { reactive, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
@@ -176,12 +176,12 @@ export default {
       authNumBtnAble: false,
       isValidAuthNum: false,
       isValidEmail: computed(() => {
-        if ( state.email && checkEmail(state.email)) {
+        if (state.email && validateEmail(state.email)) {
           return true;
         } return false;
       }),
       isValidPassword: computed(() => {
-        if (state.password && checkPassword(state.password)) {
+        if (state.password && validatePassword(state.password)) {
           return true;
         } return false;
       }),
@@ -191,7 +191,7 @@ export default {
         } return false;
       }),
       isValidNickname: computed(() => {
-        if (state.nickname && checkNickname(state.nickname)) {
+        if (state.nickname && validateNickname(state.nickname)) {
           return true;
         } return false;
       }),
@@ -203,44 +203,30 @@ export default {
       // }),
     });
 
-    async function api (url, method, data) {
-      const options = {
-        method,
-        url,
-        data,
-        headers: {
-          'content-type': 'application/json',
-        }
-      }
-      return axios(options)
-    }
-
     const onClickSendCode = function (e) {
       e.preventDefault();
       if (!state.isValidEmail) {
         return;
       }
       state.authNumBtnAble = true;
-      this.api(`${process.env.VUE_APP_LOCAL_URI}/members/auth/email`, 'post', { email: state.email })
-        .then((res) => console.log(res.data))
-        .catch((err) => console.log(err));
-    };
-
+      sendEmail(
+        { email: state.email },
+        () => {alert('이메일을 전송했습니다.')},
+        () => {alert('이메일 전송 실패')}
+      )
+    }
     const onClickConfirmAuthNum = function (e) {
       e.preventDefault();
-      const payload = {
-        email: state.email,
-        authNum: state.authNum,
-      };
-      this.api(`${process.env.VUE_APP_LOCAL_URI}/members/auth/email/check`, 'post', payload)
-        .then((res) => {
-          console.log(res.data)
-          if(res.data.isSuccess) {
-            state.isValidAuthNum = true
-          }
+      checkEmail(
+        { email: state.email, authNum: state.authNum },
+        (res) => {
           console.log(res)
-        })
-        .catch((err) => console.log(err));
+          if(res.data.isSuccess) {
+            state.isValidAuthNum = true;
+          }
+        },
+        () => {alert('서버가 아파요')}
+      )
     };
 
     const router = useRouter();
@@ -249,23 +235,20 @@ export default {
       if (!state.isValidAuthNum || !state.isValidEmail || !state.isValidPassword || !state.isValidPasswordConfirm || !state.isValidNickname || !state.isChecked){
         return;
       }
-      const payload = {
-        email: state.email,
-        password: state.password,
-      }
-
-      this.api(`${process.env.VUE_APP_LOCAL_URI}/members`, 'post', payload)
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err));
-      // router.push({ name: 'Main' })
+      signup(
+        { email: state.email, password: state.password, },
+        (res) => {console.log(res)},
+        () => {alert('서버가 아파요.')}
+      )
+      router.push({ name: 'Login' })
     };
 
-    const checkEmail = function (email) {
+    const validateEmail = function (email) {
       const re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
       return re.test(email);
     };
 
-    const checkPassword = function (password) {
+    const validatePassword = function (password) {
       const numberChar = /[0-9]/;
       const specialChar = /[`~!@#$%^&*\\\'\";:\/?]/;
       const alphabetChar = /[a-zA-Z]/;
@@ -275,7 +258,7 @@ export default {
         }
       } return false;
     };
-    const checkNickname = function (nickname) {
+    const validateNickname = function (nickname) {
       if (nickname.length >= 2 && nickname.length <= 16) {
         return true;
       } return false;
@@ -286,7 +269,7 @@ export default {
     //   } return false;
     // };
     return {
-      state, api, onClickSendCode, onClickSignup, checkEmail, onClickConfirmAuthNum,
+      state, onClickSendCode, onClickSignup, onClickConfirmAuthNum,
     };
   },
   created() {},

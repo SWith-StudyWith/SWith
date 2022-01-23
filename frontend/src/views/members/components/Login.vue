@@ -43,7 +43,6 @@
 </template>
 <script>
 /* eslint-disable */
-import axios from 'axios';
 import { reactive, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
@@ -56,7 +55,6 @@ export default {
     Navbar,
     Footer,
   },
-
   setup() {
     const store = useStore();
     const state = reactive({
@@ -65,12 +63,12 @@ export default {
       email: '',
       password: '',
       isValidEmail: computed(() => {
-        if (state.email && checkEmail(state.email)) {
+        if (state.email && validEmail(state.email)) {
           return true;
         } return false;
       }),
       isValidPassword: computed(() => {
-        if (state.password && checkPassword(state.password)) {
+        if (state.password && validPassword(state.password)) {
           return true;
         } return false;
       }),
@@ -82,30 +80,16 @@ export default {
       if (!state.isValidEmail || !state.isValidPassword ){
         return;
       }
-      const payload = {
-        email: state.email,
-        password: state.password,
-      }
-      store.dispatch('requestLogin', payload)
-        .then(res => {
-          console.log(res.data)
-          return store.dispatch('requestMember', res.data)
-        })
-        .then(res => {
-          console.log(res.data)
-          store.commit('setUser', res.data)
-        })
-        .catch(err => console.log(err))
-
+      store.dispatch('LOGIN', { email: state.email, password: state.password })
       // router.push({ name: 'Main' })
     };
 
-    const checkEmail = function (email) {
+    const validEmail = function (email) {
       const re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
       return re.test(email);
     };
 
-    const checkPassword = function (password) {
+    const validPassword = function (password) {
       const numberChar = /[0-9]/;
       const specialChar = /[`~!@#$%^&*\\\'\";:\/?]/;
       const alphabetChar = /[a-zA-Z]/;
@@ -117,7 +101,7 @@ export default {
     };
 
     return {
-      state, checkEmail, onClickLogin,
+      state, onClickLogin,
     };
   },
   created() {},

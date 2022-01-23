@@ -1,19 +1,7 @@
 <template>
   <div class="home">
     <header class="header">
-      <div class="container d-flex justify-content-center">
-        <div class="row justify-content-between align-items-center">
-          <div class="col-3">
-            <img src="@/assets/img/Saly-40.png" alt="">
-          </div>
-          <div class="col-6">
-            <p class="fw-bold" style="font-size:44px">내가 참여한 스터디</p>
-          </div>
-          <div class="col-3">
-            <img src="@/assets/img/Saly-25-1.png" alt="">
-          </div>
-        </div>
-      </div>
+      <MainHeader />
     </header>
     <section>
       <div class="container">
@@ -29,42 +17,27 @@
 
 <script>
 import { ref } from 'vue';
-import StudyList from './StudyList.vue';
+import StudyList from './components/StudyList.vue';
+import MainHeader from './components/MainHeader.vue';
+import axios from 'axios';
 
 export default {
   name: 'Home',
-  components: { StudyList },
+  components: { StudyList, MainHeader },
   setup() {
     const studies = ref([]);
     const error = ref(null);
 
-    const load = async () => {
-      try {
-        const data = await fetch('http://localhost:3000/studies');
-        // console.log(data)
-        if (!data.ok) { // data.ok가 false인 경우 = error인 경우
-          throw Error('no data available');
-        }
-        studies.value = await data.json();
-      } catch (err) {
-        error.value = err.message; // const error 값을 throw한 message로 업뎃
-        console.log(error.value);
-      }
-    };
-    load();
+    const load = () => {
+      axios.get('https://d82e66db-a86a-4041-9f92-ecedba015b47.mock.pstmn.io/studies')
+      // axios.get(`VUE_APP_LOCAL_URI/studies`)
+        .then((res) => studies.value = res.data.data.studies )
+        .catch((err) => console.log(err))
+    }
+
+    load()
+
     return { studies, error };
   },
 };
 </script>
-
-<style scoped>
-
-.header{
-  background-color: #FFF4CF;
-}
-
-.header .container{
-  height: 351px;
-}
-
-</style>
