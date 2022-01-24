@@ -28,7 +28,7 @@
         </form>
         <button class="btn btn-primary btn-lg col-12" @click="onClickLogin">로그인</button>
         <div class="socialLogin mt-2">
-          <button class="btn btn-primary col-6">카카오</button>
+          <KakaoLoginBtn/>
           <button class="btn btn-primary col-6">구글</button>
         </div>
         <div class="container2 text-center">
@@ -48,12 +48,14 @@ import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import Navbar from '../../common/Navbar.vue';
 import Footer from '../../common/Footer.vue';
+import KakaoLoginBtn from '@/views/members/components/KakaoLoginBtn.vue'
 
 export default {
   name: '',
   components: {
     Navbar,
     Footer,
+    KakaoLoginBtn
   },
   setup() {
     const store = useStore();
