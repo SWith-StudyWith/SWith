@@ -52,26 +52,26 @@ export default {
       nickname: computed(() => store.state.user.userinfo.nickname),
       goal: computed(() => store.state.user.userinfo.goal),
       defaultImage: require('@/assets/img/profile1.png'),
-      image: ''
+      image: '',
     });
 
-    const onInputImage = function (e) {
-      this.state.image = this.$refs.serveyImage.files
-      console.log("this.state.image")
-    }
+    const onInputImage = function () {
+      this.state.image = this.$refs.serveyImage.files;
+      console.log('this.state.image');
+    };
     const onClickUpdateMypage = function (e) {
       e.preventDefault();
-      store.dispatch('updateMypage', { nickname: this.state.user.nickname, goal: this.state.user.goal })
-    }
+      store.dispatch('updateMypage', { nickname: this.state.user.nickname, goal: this.state.user.goal });
+    };
     return {
-      state, onInputImage, onClickUpdateMypage
-    }
+      state, onInputImage, onClickUpdateMypage,
+    };
   },
   created() {},
   mounted() {},
   unmounted() {},
-  methods: {}
-}
+  methods: {},
+};
 </script>
 
 <style scoped>
