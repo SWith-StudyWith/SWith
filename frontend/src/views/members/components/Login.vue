@@ -31,6 +31,16 @@
           <button class="btn btn-primary col-6">카카오</button>
           <button class="btn btn-primary col-6">구글</button>
         </div>
+        <!-- google oauth2 -->
+        <!-- <div class="g-signin2" data-onsuccess="onSignIn"></div> -->
+        <div>
+          GOOGLE User INFO : {{ state.googleUser }}<p/>
+          <div id="my-signin2" class="btn btn-primary btn-lg col-12" @click="GoogleLoginBtn"></div>
+          <div id="my-signin2"></div><p/>
+          <div class="g-signin2" data-onsuccess="onSignIn"></div>
+          <button @click="authInst">signout</button>
+        </div>
+        <!-- find-password / sign-up -->
         <div class="container2 text-center">
           <router-link :to="{ name: 'FindPassword' }">비밀번호 찾기</router-link>
           <span> </span>
@@ -58,6 +68,7 @@ export default {
   setup() {
     const store = useStore();
     const state = reactive({
+      googleUser: null,
       emailForm: null,
       passwordForm: null,
       email: '',
@@ -100,14 +111,48 @@ export default {
       } return false;
     };
 
+  // const signout = () => {
+  //   const authInst = window.gapi.auth2.getAuthInstance();
+  //   authInst.signOut().then(() => {
+  //       // eslint-disable-next-line
+  //   console.log('User Signed Out!!!');
+  //   });
+  // };
+  // const googleUser = null;
+  const onSuccess = (googleUser) => {
+      // eslint-disable-next-line
+      console.log(googleUser);
+      state.googleUser = googleUser.getBasicProfile();
+  };
+  const onFailure = (error) => {
+      // eslint-disable-next-line
+      console.log(error);
+  };
+  const signout = () => {
+    const authInst = window.gapi.auth2.getAuthInstance();
+    authInst.signOut().then(() => {
+      // eslint-disable-next-line
+      console.log('User Signed Out!!!');
+    });
+  };
+
     return {
-      state, onClickLogin,
+      state, onClickLogin, onSuccess, onFailure, signout,
     };
   },
   created() {},
   mounted() {
     this.state.emailForm = document.querySelector('.email-form');
     this.state.passwordForm = document.querySelector('.password-form');
+    window.gapi.signin2.render('my-signin2', {
+      scope: 'profile email',
+      width: 240,
+      height: 50,
+      longtitle: true,
+      theme: 'dark',
+      onsuccess: this.onSuccess,
+      onfailure: this.onFailure,
+    });
   },
   unmounted() {},
   methods: {
