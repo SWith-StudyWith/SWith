@@ -247,11 +247,6 @@ export default {
         } return false;
       }),
       isChecked: false,
-      // isChecked: computed(() => {
-      //   if (state.isChecked && checkTerms(state.isChecked)) {
-      //     return true;
-      //   } return false;
-      // }),
     });
 
     const onClickSendCode = function (e) {
@@ -262,8 +257,21 @@ export default {
       state.authNumBtnAble = true;
       sendEmail(
         { email: state.email },
-        () => {alert('이메일을 전송했습니다.')},
-        () => {alert('이메일 전송 실패')}
+        (res) => {
+          console.log(res.data)
+          switch (res.data.code) {
+            case 400:
+              alert('이미 가입된 이메일입니다.')
+              break;
+            case 200:
+              alert('인증번호가 담긴 이메일을 전송했습니다.')
+              break;
+          }
+        },
+        (err) => {
+          console.log(err)
+          alert('서버가 아파요.')
+        }
       )
     }
     const onClickConfirmAuthNum = function (e) {
@@ -271,12 +279,22 @@ export default {
       checkEmail(
         { email: state.email, authNum: state.authNum },
         (res) => {
-          console.log(res)
-          if(res.data.isSuccess) {
-            state.isValidAuthNum = true;
+          console.log(res.data)
+          switch (res.data.code) {
+            case 200:
+              state.isValidAuthNum = true;
+              alert('이메일 인증 성공!');
+              break;
+            case 409:
+              state.isValidAuthNum = false;
+              alert('인증번호가 맞지 않습니다.');
+              break;
           }
         },
-        () => {alert('서버가 아파요')}
+        (err) => {
+          console.log(err)
+          alert('서버가 아파요')
+        }
       )
     };
 
@@ -288,8 +306,24 @@ export default {
       }
       signup(
         { email: state.email, password: state.password, nickname: state.nickname },
-        (res) => {console.log(res)},
-        () => {alert('서버가 아파요.')}
+        (res) => {
+          console.log(res.data)
+          switch (res.data.code) {
+            case 200:
+              alert('회원가입 성공!')
+              break;
+            case 400:
+              alert('이미 존재하는 회원입니다.')
+              break;
+            case 404:
+              alert('회원가입 실패...')
+              break;
+          }
+        },
+        (err) => {
+          console.log(err)
+          alert('서버가 아파요.')
+        }
       )
       router.push({ name: 'Login' })
     };
