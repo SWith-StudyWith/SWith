@@ -1,8 +1,8 @@
 <template>
   <nav id="nav">
-    <section id="logo">
+    <section class="align-text-center d-inline-block ">
         <router-link class="navbar-brand" to="/">
-        <img src="@/assets/SWith_logo.png" alt="" height="50"/>
+        <img src="@/assets/SWith_logo2.png" alt="" height="75"/>
       </router-link>
     </section>
     <section id="nav-list">
@@ -10,7 +10,7 @@
         <button class="btn btn-primary">회원가입</button>
       </router-link>
       <router-link :to="{ name: 'Login' }">
-        <button class="btn btn-primary">
+        <button class="btn btn-success" style="color:white">
           로그인
         </button>
       </router-link>
@@ -28,11 +28,13 @@ export default {
 #nav {
   top: 0;
   position: sticky;
-  background-color: #FFE4DE;
+  background-color: #FFF7F6;
   display: flex;
   justify-content: space-between;
-  padding: 25px;
-  height: 88px;
+  padding: 0px 80px;
+  text-align: center;
+  align-content: center;
+  height: 75px;
   min-width: 900px;
   box-sizing: border-box;
   user-select: none;
@@ -47,9 +49,10 @@ export default {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  padding-left: 20;
 }
 button {
-  margin: 0px 0px 10px 10px;
+  margin: 0px 0px 0px 20px;
+  width: 102px;
 }
+
 </style>
