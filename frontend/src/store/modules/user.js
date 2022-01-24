@@ -1,4 +1,5 @@
 import { login, getUserInfo, loginKakao, updateUserInfo } from '../../api/user';
+import router from '@/router';
 
 const state = () => ({
   userInfo: {},
@@ -21,12 +22,18 @@ const actions = {
     login(
       payload,
       (res) => {
-        localStorage.setItem('accessToken', res.data.data.accessToken)
-        commit('SET_USER_ACCESS_TOKEN', res.data.data.accessToken)
-        dispatch('GET_USER_INFO')
+        if (res.data.code === 200) {
+          localStorage.setItem('accessToken', res.data.data.accessToken)
+          commit('SET_USER_ACCESS_TOKEN', res.data.data.accessToken)
+          dispatch('GET_USER_INFO')
+          router.push({ name: 'Main' })
+        } else {
+          console.log('잘못된 요청.')
+          console.log(res.data)
+        }
       },
       () => {
-        alert('서버가 아파요.')
+        alert('로그인 정보가 맞지 않습니다.')
       }
     )
   },
