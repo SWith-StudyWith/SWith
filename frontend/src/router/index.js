@@ -81,6 +81,11 @@ const routes = [
     name: 'Test',
     component: () => import(/* webpackChunkName: "test" */ '../components/test.vue'),
   },
+  {
+    path: '/members/kakao/callback',
+    name: 'OAuthKakao',
+    component: () => import(/* webpackChunkName: "test" */ '../views/members/components/OAuthKakao.vue'),
+  },
 ];
 
 const router = createRouter({

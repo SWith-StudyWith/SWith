@@ -36,6 +36,15 @@ function getUserInfo(success, fail) {
     .then(success)
     .catch(fail)
 }
+function loginKakao(payload, success, fail) {
+  userInstance
+    .post(`/api/members/login/kakao`, {
+      params: { code: payload }
+     })
+    .then(success)
+    .catch(fail)
+}
+
 // 마이페이지 수정
 function updateUserInfo(payload, success, fail) {
   userInstance
@@ -49,5 +58,6 @@ export {
   checkEmail,
   login,
   getUserInfo,
+  loginKakao,
   updateUserInfo,
 }

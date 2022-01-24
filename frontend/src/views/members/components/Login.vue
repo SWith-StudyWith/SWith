@@ -81,7 +81,7 @@ export default {
         return;
       }
       store.dispatch('LOGIN', { email: state.email, password: state.password })
-      // router.push({ name: 'Main' })
+      router.push({ name: 'Main' })
     };
 
     const validEmail = function (email) {
