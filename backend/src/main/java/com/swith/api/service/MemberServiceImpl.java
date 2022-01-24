@@ -1,9 +1,8 @@
 package com.swith.api.service;
 
-import com.swith.api.request.AuthMailReq;
+import com.swith.api.dto.member.request.MemberInfoReq;
 import com.swith.common.util.MailUtil;
 import com.swith.db.entity.AuthMail;
-import com.swith.api.request.MemberInfoReq;
 import com.swith.common.util.SecurityUtil;
 import com.swith.db.entity.Member;
 import com.swith.db.repository.MemberRepository;

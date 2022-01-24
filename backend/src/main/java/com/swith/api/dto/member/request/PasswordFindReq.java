@@ -1,4 +1,4 @@
-package com.swith.api.request;
+package com.swith.api.dto.member.request;
 
 import lombok.Getter;
 import lombok.Setter;
