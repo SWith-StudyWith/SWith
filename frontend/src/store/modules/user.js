@@ -30,14 +30,18 @@ const actions = {
       }
     )
   },
-  LOGIN_KAKAO({ dispatch }, payload) {
+  LOGIN_KAKAO({ dispatch, commit }, payload) {
     loginKakao(
       payload,
       (res) => {
         localStorage.setItem('accessToken', res.data.data.accessToken)
+        commit('SET_USER_ACCESS_TOKEN', res.data.data.accessToken)
         dispatch('GET_USER_INFO')
       },
-      (err) => {console.log(err)}
+      (err) => {
+        console.log(err)
+        alert('서버가 아파요.')
+      }
     )
   },
   UPDATE_USER_INFO({ dispatch, commit }, payload) {
