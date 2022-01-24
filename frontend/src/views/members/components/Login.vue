@@ -4,27 +4,27 @@
     <h1 class="form-title">로그인</h1>
     <div class="row">
       <div class="offset-4 col-4">
-        <form
-          class="email-form row"
-          :class="{ valid: state.isValidEmail, invalid: !state.isValidEmail }"
-          @submit.prevent
-        >
+        <form class="email-form row" @submit.prevent>
           <label for="email" class="form-label">이메일</label>
           <div>
             <input class="form-control" id="email" type="email"
               v-model="state.email" required autofocus>
           </div>
-          <div class="invalid-feedback">이메일을 입력해주세요.</div>
+          <div
+            :style="{ visibility: (state.isValidEmail || !state.wasEmailInputed) ? 'hidden': 'visible' }"
+            class="invalid-feedback mb-2 mt-0">
+            이메일을 입력해주세요.
+          </div>
         </form>
-        <form
-          class="password-form"
-          :class="{ valid: state.isValidPassword, invalid: !state.isValidPassword }"
-          @submit.prevent
-        >
+        <form class="password-form" @submit.prevent>
           <label for="password" class="form-label">비밀번호</label>
           <input class="form-control" type="password"
             id="password" v-model="state.password" required>
-          <div class="invalid-feedback">유효하지 않은 비밀번호입니다.</div>
+          <div
+            :style="{visibility: (state.isValidPassword || !state.wasPasswordInputed) ? 'hidden': 'visible' }"
+            class="invalid-feedback mb-2 mt-0">
+            비밀번호를 입력해주세요.
+          </div>
         </form>
         <button class="btn btn-primary btn-lg col-12" @click="onClickLogin">로그인</button>
         <div class="socialLogin mt-2">
@@ -64,42 +64,45 @@ export default {
       passwordForm: null,
       email: '',
       password: '',
+      wasEmailInputed: false,
+      wasPasswordInputed: false,
       isValidEmail: computed(() => {
+        if (state.email !== '') {
+          state.wasEmailInputed = true;
+        }
         if (state.email && validEmail(state.email)) {
           return true;
-        } return false;
+        }
+        return false;
       }),
       isValidPassword: computed(() => {
-        if (state.password && validPassword(state.password)) {
+        if (state.password !== '') {
+          state.wasPasswordInputed = true;
+        }
+        if (state.password) {
           return true;
-        } return false;
+        }
+        return false;
       }),
     });
 
     const router = useRouter();
     const onClickLogin = function (e) {
       e.preventDefault();
+      if (state.email === '' || state.password === '') {
+        state.wasEmailInputed = true;
+        state.wasPasswordInputed = true;
+        return
+      }
       if (!state.isValidEmail || !state.isValidPassword ){
         return;
       }
       store.dispatch('LOGIN', { email: state.email, password: state.password })
-      router.push({ name: 'Main' })
     };
 
     const validEmail = function (email) {
       const re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
       return re.test(email);
-    };
-
-    const validPassword = function (password) {
-      const numberChar = /[0-9]/;
-      const specialChar = /[`~!@#$%^&*\\\'\";:\/?]/;
-      const alphabetChar = /[a-zA-Z]/;
-      if (password.length >= 8 && password.length <= 16) {
-        if (numberChar.test(password) && specialChar.test(password) && alphabetChar.test(password)) {
-          return true;
-        }
-      } return false;
     };
 
     return {
@@ -127,17 +130,9 @@ h1 {
   text-align: center;
   font-size: 0.7rem;
 }
-.invalid .invalid-feedback {
+.invalid-feedback {
   display: block;
-}
-.valid .invalid-feedback {
-  display: none;
-}
-.invalid .valid-feedback {
-  display: none;
-}
-.valid .valid-feedback {
-  display: block;
+  font-size: 0.75rem;
 }
 .container2 {
   display: flex;
