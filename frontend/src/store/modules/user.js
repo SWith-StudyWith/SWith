@@ -3,9 +3,9 @@ import router from '@/router';
 
 const state = () => ({
   userInfo: {
-    email : "ssafy@ssafy.com",
-    nickname : "ssafy",
-    goal : "내 꿈은 해적왕",
+    // email : "ssafy@ssafy.com",
+    // nickname : "ssafy",
+    // goal : "내 꿈은 해적왕",
     profileImgUrl: ''
   },
 });
