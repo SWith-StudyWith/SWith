@@ -38,12 +38,15 @@ const actions = {
     )
   },
   LOGIN_KAKAO({ dispatch, commit }, payload) {
+    console.log(payload)
     loginKakao(
       payload,
       (res) => {
+        console.log(res.data)
         localStorage.setItem('accessToken', res.data.data.accessToken)
         commit('SET_USER_ACCESS_TOKEN', res.data.data.accessToken)
         dispatch('GET_USER_INFO')
+        router.push({ name: 'Main' })
       },
       (err) => {
         console.log(err)
