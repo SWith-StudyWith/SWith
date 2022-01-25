@@ -91,6 +91,9 @@ const actions = {
         alert('서버가 아파유.')
       }
     )
+  },
+  LOGOUT({ commit }) {
+    commit('LOGOUT')
   }
 };
 
@@ -108,6 +111,13 @@ const mutations = {
     state.userInfo.nickname = payload.nickname
     state.userInfo.goal = payload.goal
     state.userInfo.profileImgUrl = payload.profileImgUrl
+  },
+  LOGOUT(state) {
+    state.userInfo.email = ''
+    state.userInfo.nickname = ''
+    state.userInfo.goal = ''
+    state.userInfo.accessToken = ''
+    localStorage.removeItem('accessToken')
   }
 };
 
