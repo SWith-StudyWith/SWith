@@ -33,7 +33,7 @@ const actions = {
       (res) => {
         if (res.data.code === 200) {
           localStorage.setItem('accessToken', res.data.data.accessToken)
-          commit('SET_USER_ACCESS_TOKEN', res.data.data.accessToken)
+          commit('SET_USER_ACCESS_INFO', res.data.data)
           dispatch('GET_USER_INFO')
           router.push({ name: 'Main' })
         } else {
@@ -53,7 +53,7 @@ const actions = {
       (res) => {
         console.log(res.data)
         localStorage.setItem('accessToken', res.data.data.accessToken)
-        commit('SET_USER_ACCESS_TOKEN', res.data.data.accessToken)
+        commit('SET_USER_ACCESS_INFO', res.data.data)
         dispatch('GET_USER_INFO')
         router.push({ name: 'Main' })
       },
@@ -70,7 +70,7 @@ const actions = {
       (res) => {
         console.log(res.data)
         localStorage.setItem('accessToken', res.data.data.accessToken)
-        commit('SET_USER_ACCESS_TOKEN', res.data.data.accessToken)
+        commit('SET_USER_ACCESS_INFO', res.data.data)
         dispatch('GET_USER_INFO')
         router.push({ name: 'Main' })
       },
@@ -103,8 +103,9 @@ const mutations = {
     state.userInfo.nickname = payload.nickname;
     state.userInfo.goal = payload.goal;
   },
-  SET_USER_ACCESS_TOKEN(state, payload) {
-    state.userInfo.accessToken = payload
+  SET_USER_ACCESS_INFO(state, payload) {
+    state.userInfo.accessToken = payload.accessToken
+    state.userInfo.path = payload.path
   },
   UPDATE_USER_INFO(state, payload) {
     state.userInfo.nickname = payload.nickname

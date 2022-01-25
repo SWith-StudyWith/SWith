@@ -7,10 +7,7 @@
       <div class="offset-4 col-4">
 
         <!-- Email -->
-        <form
-          class="email-form row"
-          @submit.prevent
-        >
+        <form class="row" @submit.prevent>
           <label for="email" class="form-label">이메일</label>
           <div class="col-9">
             <input class="form-control" id="email" type="email"
@@ -32,7 +29,7 @@
         </form>
 
         <!-- Certification Number -->
-        <form class="authnum-form row"
+        <form class="row"
           :style="{ visibility: state.isAuthNumChecked ? 'hidden': 'visible' }"
           @submit.prevent
           v-if="!state.isAuthNumChecked"
@@ -57,10 +54,7 @@
         </form>
 
         <!-- Password -->
-        <form
-          class="password-form"
-          @submit.prevent
-        >
+        <form @submit.prevent>
           <label for="password" class="form-label">비밀번호</label>
           <input
             class="form-control"
@@ -78,10 +72,7 @@
         </form>
 
         <!-- Password Confirm -->
-        <form
-          class="passwordConfirm-form"
-          @submit.prevent
-        >
+        <form @submit.prevent>
           <label for="passwordConfirm" class="form-label">비밀번호 확인</label>
           <input
             class="form-control"
@@ -101,10 +92,7 @@
         </form>
 
         <!-- Nickname -->
-        <form
-          class="nickname-form"
-          @submit.prevent
-        >
+        <form @submit.prevent>
           <label for="nickname" class="form-label">닉네임</label>
           <input class="form-control" type="text" id="nickname"
             v-model="state.nickname" required>
@@ -118,7 +106,6 @@
 
         <!-- Terms of Use //  !state.ischecked=='' && -->
         <form
-          class="terms-form"
           :class="{ valid: state.isChecked, invalid:
           !state.isChecked }"
           @submit.prevent
@@ -221,19 +208,12 @@ export default {
   setup() {
     const store = useStore()
     const state = reactive({
-      emailForm: null,
-      authNumForm: null,
-      passwordForm: null,
-      passwordConfirmForm: null,
-      nicknameForm: null,
       email: '',
       authNum: '',
       password: '',
       passwordConfirm: '',
       nickname: '',
-      // checked: ''
       isDisableAuthNum: true,
-      // isValidAuthNum: false,
       isAuthNumChecked: false,
       isChecked: false,
       wasInputed: {
@@ -390,23 +370,12 @@ export default {
         return true;
       } return false;
     };
-    // const checkTerms = function (checked) {
-    //   if (checked) {
-    //     return true;
-    //   } return false;
-    // };
     return {
       state, onClickSendCode, onClickSignup, onClickConfirmAuthNum
     };
   },
   created() {},
-  mounted() {
-    this.state.emailForm = document.querySelector('.email-form');
-    this.state.authNumForm = document.querySelector('.authnum-form');
-    this.state.passwordForm = document.querySelector('.password-form');
-    this.state.passwordConfirmForm = document.querySelector('.passwordConfirm-form');
-    this.state.nicknameForm = document.querySelector('.nickname-form');
-  },
+  mounted() {},
   unmounted() {},
   methods: {
   },

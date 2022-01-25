@@ -4,7 +4,7 @@
     <h1 class="form-title">로그인</h1>
     <div class="row">
       <div class="offset-4 col-4">
-        <form class="email-form row" @submit.prevent>
+        <form class="row" @submit.prevent>
           <label for="email" class="form-label">이메일</label>
           <div>
             <input class="form-control" id="email" type="email"
@@ -16,7 +16,7 @@
             이메일을 입력해주세요.
           </div>
         </form>
-        <form class="password-form" @submit.prevent>
+        <form @submit.prevent>
           <label for="password" class="form-label">비밀번호</label>
           <input class="form-control" type="password"
             id="password" v-model="state.password" required>
@@ -77,8 +77,6 @@ export default {
     const store = useStore();
     const state = reactive({
       googleUser: null,
-      emailForm: null,
-      passwordForm: null,
       email: '',
       password: '',
       wasEmailInputed: false,
@@ -153,8 +151,6 @@ export default {
   },
   created() {},
   mounted() {
-    this.state.emailForm = document.querySelector('.email-form');
-    this.state.passwordForm = document.querySelector('.password-form');
     window.gapi.signin2.render('my-signin2', {
       scope: 'profile email',
       width: 240,
