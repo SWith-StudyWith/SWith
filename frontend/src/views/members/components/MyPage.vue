@@ -29,10 +29,16 @@
               </div>
               <button @click="onClickUpdateUserInfo" class="btn btn-primary col-12 btn-save">변경 사항 저장</button>
             </form>
+            <!-- Button trigger modal -->
+            <span class="text-decoration-underline signout-btn" data-bs-toggle="modal" data-bs-target="#signOutModal" style="margin-bottom: 100px;">
+              회원 탈퇴
+            </span>
+
           </section>
         </div>
       </div>
     </div>
+    <SignOut />
     <Footer />
   </div>
 </template>
@@ -42,10 +48,11 @@ import { toRefs, reactive } from 'vue';
 import { useStore } from 'vuex';
 import Navbar from '@/views/common/Navbar.vue';
 import Footer from '@/views/common/Footer.vue';
+import SignOut from '@/views/members/components/SignOut.vue';
 
 export default {
   name: '',
-  components: { Navbar, Footer },
+  components: { Navbar, Footer, SignOut },
   setup() {
     const store = useStore();
     const state = reactive({
@@ -83,6 +90,9 @@ export default {
 form{
   text-align: left;
 }
+section{
+  margin-bottom: 100px;
+}
 h1{
   font-size: 24px;
   color: #737B7D;
@@ -100,7 +110,7 @@ p{
   font-size: 0.7rem;
 }
 .btn-save{
-  margin-bottom: 106px;
+  margin-bottom: 50px;
 }
 .defaultImage{
   margin-bottom: 32px;
@@ -122,5 +132,12 @@ p{
     width: 100%;
     height: 100%;
     object-fit: cover;
+}
+.signout-btn:hover {
+  cursor: pointer;
+  font-weight: bold;
+}
+.signout-btn{
+  color: #BDBDBD;
 }
 </style>
