@@ -57,12 +57,31 @@ public class AuthServiceImpl implements AuthService {
         return member;
     }
 
-//    @Override
-//    public Member loginByGoogle(String authCode) {
-//        String accessToken = getAccessTokenByGoogle(authCode);
-//        System.out.println(accessToken);
-//        return null;
-//    }
+    @Override
+    public Member loginByGoogle(String authCode) {
+        // 인가 코드 -> 아이디 토큰
+        String idToken = getIdTokenByGoogle(authCode);
+
+        // 아이디 토큰 -> 구글 사용자 정보
+        Member googleUser = getMemberInfoByGoogleToken(idToken);
+
+        Member member = memberRepository.findByGoogleId(googleUser.getGoogleId()).orElse(null);
+        if (member == null) {
+            member = Member.builder()
+                    .kakaoId(null)
+                    .googleId(googleUser.getGoogleId())
+                    .email(googleUser.getEmail())
+                    .password(passwordEncoder.encode(googleUser.getGoogleId()))
+                    .nickname(googleUser.getNickname())
+                    .role(Member.Role.MEMBER)
+                    .isDeleted("N")
+                    .build();
+
+            memberRepository.save(member);
+        }
+
+        return member;
+    }
 
     private String getAccessTokenByKakao(String authCode) {
         HttpHeaders headers = new HttpHeaders();
@@ -89,55 +108,6 @@ public class AuthServiceImpl implements AuthService {
 
         return accessToken;
     }
-
-//    public String getAccessTokenByGoogle(String authCode) {
-//        String access_Token = "";
-//        String id_Token = "";
-//        String reqURL = "https://oauth2.googleapis.com/token";
-//
-//        try {
-//            URL url = new URL(reqURL);
-//            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-//            conn.setRequestMethod("POST");
-//            conn.setDoOutput(true);
-//
-//            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
-//            StringBuilder sb = new StringBuilder();
-//            sb.append("grant_type=authorization_code");
-//            sb.append("&client_id=343513890539-mvk01v00kfnp5vdcvfu95hrnh970mtsl.apps.googleusercontent.com");
-//            sb.append("&redirect_uri=http://localhost:8081/login/oauth2/client/google");
-//            sb.append("&client_secret=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");
-//            sb.append("&code=" + authCode);
-//            bw.write(sb.toString());
-//            bw.flush();
-//            int responseCode = conn.getResponseCode();
-//            System.out.println("responseCode : " + responseCode);
-//
-//            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-//            String line = "";
-//            String result = "";
-//
-//            while ((line = br.readLine()) != null) {
-//                result += line;
-//            }
-//            System.out.println("response body : " + result);
-//
-//            JsonParser parser = new JsonParser();
-//            JsonElement element = parser.parse(result);
-//
-//            access_Token = element.getAsJsonObject().get("access_token").getAsString();
-//            id_Token = element.getAsJsonObject().get("id_token").getAsString();
-//            System.out.println("access_token : " + access_Token);
-//            System.out.println(id_Token);
-//
-//            br.close();
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return access_Token;
-//    }
 
     private Member getMemberInfoByKakaoToken(String accessToken) {
         HttpHeaders headers = new HttpHeaders();
@@ -168,6 +138,91 @@ public class AuthServiceImpl implements AuthService {
 
         return Member.builder().kakaoId(socialId)
                 .googleId(null).email(email).password(null)
+                .nickname(nickname).role(Member.Role.MEMBER).isDeleted("N").build();
+    }
+
+    public String getIdTokenByGoogle(String authCode) {
+        String idToken = "";
+        String reqURL = "https://oauth2.googleapis.com/token";
+
+        try {
+            URL url = new URL(reqURL);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
+
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
+            StringBuilder sb = new StringBuilder();
+            sb.append("grant_type=authorization_code");
+            sb.append("&client_id=343513890539-mvk01v00kfnp5vdcvfu95hrnh970mtsl.apps.googleusercontent.com");
+            sb.append("&redirect_uri=http://localhost:8081/login/oauth2/client/google");
+            sb.append("&client_secret=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");
+            sb.append("&code=" + authCode);
+            bw.write(sb.toString());
+            bw.flush();
+            int responseCode = conn.getResponseCode();
+            System.out.println("responseCode : " + responseCode);
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String line = "";
+            String result = "";
+
+            while ((line = br.readLine()) != null) {
+                result += line;
+            }
+            System.out.println("response body : " + result);
+
+            JsonParser parser = new JsonParser();
+            JsonElement element = parser.parse(result);
+
+            idToken = element.getAsJsonObject().get("id_token").getAsString();
+            System.out.println(idToken);
+
+            br.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return idToken;
+    }
+
+    public Member getMemberInfoByGoogleToken(String idToken) {
+        String reqURL = "https://oauth2.googleapis.com/tokeninfo?id_token=" + idToken;
+        String email = "";
+        String nickname = "";
+
+        try {
+            URL url = new URL(reqURL);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setDoOutput(true);
+
+            int responseCode = conn.getResponseCode();
+            System.out.println("responseCode : " + responseCode);
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String line = "";
+            String result = "";
+
+            while ((line = br.readLine()) != null) {
+                result += line;
+            }
+            System.out.println("response body : " + result);
+
+            JsonParser parser = new JsonParser();
+            JsonElement element = parser.parse(result);
+            email = element.getAsJsonObject().get("email").getAsString();
+            nickname = element.getAsJsonObject().get("name").getAsString();
+
+            br.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return Member.builder().kakaoId(null)
+                .googleId(email).email(email).password(null)
                 .nickname(nickname).role(Member.Role.MEMBER).isDeleted("N").build();
     }
 }
