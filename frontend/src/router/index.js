@@ -52,12 +52,17 @@ const routes = [
     component: () => import(/* webpackChunkName: "changepassword" */ '../views/members/components/ChangePassword.vue'),
   },
   {
+    path: '/studies',
+    name: 'Studies',
+    component: () => import(/* webpackChunkName: "test" */ '@/views/studies/Studies.vue'),
+  },
+  {
     path: '/studies/create',
     name: 'StudyCreate',
     component: () => import(/* webpackChunkName: "about" */ '../views/studies/components/StudyCreate.vue'),
   },
   {
-    path: '/studies/update',
+    path: '/studies/:member_id/update',
     name: 'StudyUpdate',
     component: () => import(/* webpackChunkName: "about" */ '../views/studies/components/StudyUpdate.vue'),
   },
