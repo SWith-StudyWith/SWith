@@ -1,0 +1,50 @@
+package com.swith.api.controller;
+
+import com.swith.api.dto.study.request.StudyCodeReq;
+import com.swith.api.service.MemberService;
+import com.swith.api.service.MemberStudyService;
+import com.swith.api.service.StudyService;
+import com.swith.common.response.BaseResponse;
+import com.swith.db.entity.Member;
+import com.swith.db.entity.MemberStudy;
+import com.swith.db.entity.Study;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@Slf4j
+@RestController
+@RequestMapping("/api/studies")
+public class StudyController {
+
+    @Autowired
+    private StudyService studyService;
+
+    @Autowired
+    private MemberService memberService;
+
+    @Autowired
+    private MemberStudyService memberStudyService;
+
+    @PostMapping("/join")
+    public ResponseEntity<BaseResponse> findPassword(@RequestBody StudyCodeReq studyCodeReq) {
+
+        // 참여 코드에 해당하는 스터디 불러오기
+        Study study = studyService.getStudyByCode(studyCodeReq.getCode());
+        if (study == null) {
+            return ResponseEntity.status(200).body(new BaseResponse(false, 400, "참여 코드에 해당하는 스터디 내역 없음"));
+        }
+
+        // 이미 가입되었는지 확인
+        Member member = memberService.getMemberByAuthentication();
+        MemberStudy memberStudy = memberStudyService.getMemberStudyCheck(member, study);
+        if (memberStudy != null) {
+            return ResponseEntity.status(200).body(new BaseResponse(false, 409, "해당 스터디에 이미 가입된 상태"));
+        }
+
+        // 스터디 가입
+        memberStudyService.joinStudy(member, study);
+        return ResponseEntity.status(200).body(new BaseResponse(true, 200, "스터디 가입 성공"));
+    }
+}
