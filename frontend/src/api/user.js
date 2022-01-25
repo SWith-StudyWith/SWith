@@ -62,7 +62,7 @@ function loginGoogle(payload, success, fail) {
 }
 
 // 마이페이지 수정
-function updateUserInfo(payload, success, fail) {
+function updateUserInfoAPI(payload, success, fail) {
   userInstance
     .put(`/api/members`, payload)
     .then(success)
@@ -75,6 +75,6 @@ export {
   login,
   getUserInfo,
   loginKakao,
-  updateUserInfo,
+  updateUserInfoAPI,
   loginGoogle,
 }

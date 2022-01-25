@@ -41,20 +41,20 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = tokenProvider.createToken(authentication);
 
-        BaseDataResponse<AccessTokenRes> token = new BaseDataResponse<AccessTokenRes>(true, 200, "카카오 로그인 성공", new AccessTokenRes(jwt));
+        BaseDataResponse<AccessTokenRes> token = new BaseDataResponse<AccessTokenRes>(true, 200, "카카오 로그인 성공", new AccessTokenRes('K', jwt));
         return ResponseEntity.status(200).body(token);
     }
 
-//    @PostMapping("/google")
-//    public ResponseEntity<BaseDataResponse<AccessTokenRes>> loginByGoogle(@RequestParam(value = "code") String code) {
-//        Member member = authService.loginByGoogle(code);
-//        UsernamePasswordAuthenticationToken authenticationToken =
-//                new UsernamePasswordAuthenticationToken(member.getMemberId(), member.getPassword());
-//        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-//        String jwt = tokenProvider.createToken(authentication);
-//
-//        BaseDataResponse<AccessTokenRes> token = new BaseDataResponse<AccessTokenRes>(true, 200, "구글 로그인 성공", new AccessTokenRes(jwt));
-//        return ResponseEntity.status(200).body(token);
-//    }
+    @PostMapping("/google")
+    public ResponseEntity<BaseDataResponse<AccessTokenRes>> loginByGoogle(@RequestParam(value = "code") String code) {
+        Member member = authService.loginByGoogle(code);
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(member.getMemberId(), member.getGoogleId());
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = tokenProvider.createToken(authentication);
+
+        BaseDataResponse<AccessTokenRes> token = new BaseDataResponse<AccessTokenRes>(true, 200, "구글 로그인 성공", new AccessTokenRes('G', jwt));
+        return ResponseEntity.status(200).body(token);
+    }
 }
