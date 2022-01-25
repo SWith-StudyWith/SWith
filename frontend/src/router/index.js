@@ -62,12 +62,12 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/studies/components/StudyUpdate.vue'),
   },
   {
-    path: '/studies/:member_id',
+    path: '/studies/:study_id',
     name: 'StudyMain',
     component: () => import(/* webpackChunkName: "studymain", webpackPrefetch:true  */ '../views/studies/components/StudyMain.vue'),
   },
   {
-    path: '/studies/:member_id/room',
+    path: '/studies/:study_id/room',
     name: 'StudyView',
     component: () => import(/* webpackChunkName: "studyview", webpackPrefetch:true  */ '../views/studies/components/StudyView.vue'),
   },
