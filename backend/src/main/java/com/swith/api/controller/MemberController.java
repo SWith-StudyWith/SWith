@@ -70,7 +70,7 @@ public class MemberController {
 //        return ResponseEntity.status(200).headers(httpHeaders)
 //                .body(new BaseResponse(true, 200, "로그인 성공"));
         BaseDataResponse<AccessTokenRes> token = new BaseDataResponse<AccessTokenRes>(true, 200,
-                "로그인 성공", new AccessTokenRes(jwt));
+                "로그인 성공", new AccessTokenRes('O', jwt));
         return ResponseEntity.status(200).body(token);
     }
 
