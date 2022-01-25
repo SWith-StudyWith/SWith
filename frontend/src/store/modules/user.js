@@ -1,4 +1,4 @@
-import { login, getUserInfo, loginKakao, updateUserInfo } from '../../api/user';
+import { login, getUserInfo, loginKakao, loginGoogle, updateUserInfo } from '../../api/user';
 import router from '@/router';
 
 const state = () => ({
@@ -49,6 +49,16 @@ const actions = {
         console.log(err)
         alert('서버가 아파요.')
       }
+    )
+  },
+  LOGIN_GOOGLE({ dispatch }, payload) {
+    loginGoogle(
+      payload,
+      (res) => {
+        localStorage.setItem('accessToken', res.data.data.accessToken)
+        dispatch('GET_USER_INFO')
+      },
+      (err) => {console.log(err)}
     )
   },
   UPDATE_USER_INFO({ dispatch, commit }, payload) {
