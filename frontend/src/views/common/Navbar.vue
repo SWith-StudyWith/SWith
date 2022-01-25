@@ -21,10 +21,16 @@
     </section>
     <section id="nav-list" v-else>
 
-      <span>{{ state.userInfo.nickcname }}님 환영합니다!</span>
-      <button class="btn btn-success" @click="onClickLogout" style="color:white">
-        로그아웃
-      </button>
+      <span style="font-weight:500;">{{ state.userInfo.nickcname }}님 환영합니다!</span>
+      <div class="dropdown">
+        <img src="../../assets/img/profile1.png" alt="" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" style="width: 50px;" >
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+          <li><router-link :to="{ name: 'MyPage' }">회원정보 수정</router-link></li>
+          <li>
+            <router-link v-on:click="onClickLogout" to="/Login">로그아웃</router-link>
+          </li>
+        </ul>
+      </div>
     </section>
   </nav>
 </template>
@@ -34,6 +40,7 @@ import { reactive } from '@vue/reactivity';
 import { useStore } from 'vuex';
 import { computed } from '@vue/runtime-core';
 import { useRouter } from 'vue-router'
+
 
 export default {
   name: 'Navbar',
@@ -105,6 +112,23 @@ export default {
 button {
   margin: 0px 0px 0px 20px;
   width: 102px;
+}
+
+.logoutBtn{
+  margin: 0px;
+}
+.dropdown-menu{
+  text-align: center;
+  margin: 50px;
+}
+/* .dropdown-menu.show{
+  transform: translate3d(-70px, 40px, 0px);
+} */
+a{
+  text-decoration-line : none;
+}
+.dropdown{
+  margin-left: 20px;
 }
 
 </style>
