@@ -63,14 +63,21 @@ const actions = {
       }
     )
   },
-  LOGIN_GOOGLE({ dispatch }, payload) {
+  LOGIN_GOOGLE({ dispatch, commit }, payload) {
+    console.log(payload)
     loginGoogle(
       payload,
       (res) => {
+        console.log(res.data)
         localStorage.setItem('accessToken', res.data.data.accessToken)
+        commit('SET_USER_ACCESS_TOKEN', res.data.data.accessToken)
         dispatch('GET_USER_INFO')
+        router.push({ name: 'Main' })
       },
-      (err) => {console.log(err)}
+      (err) => {
+        console.log(err)
+        alert('서버가 아파요.')
+      }
     )
   },
   updateUserInfo({ commit }, payload) {
