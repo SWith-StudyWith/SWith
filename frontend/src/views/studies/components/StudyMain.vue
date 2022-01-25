@@ -4,7 +4,7 @@
     <div class="row col-5">
       <StudyMainHeader/>
       <StudyMainCamera/>
-      <button>입장하기</button>
+      <button class="btn btn-secondary">입장하기</button>
     </div>
   </div>
 </template>
