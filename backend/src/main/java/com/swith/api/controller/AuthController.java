@@ -41,7 +41,7 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = tokenProvider.createToken(authentication);
 
-        BaseDataResponse<AccessTokenRes> token = new BaseDataResponse<AccessTokenRes>(true, 200, "카카오 로그인 성공", new AccessTokenRes(jwt));
+        BaseDataResponse<AccessTokenRes> token = new BaseDataResponse<AccessTokenRes>(true, 200, "카카오 로그인 성공", new AccessTokenRes('K', jwt));
         return ResponseEntity.status(200).body(token);
     }
 
@@ -54,7 +54,7 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = tokenProvider.createToken(authentication);
 
-        BaseDataResponse<AccessTokenRes> token = new BaseDataResponse<AccessTokenRes>(true, 200, "구글 로그인 성공", new AccessTokenRes(jwt));
+        BaseDataResponse<AccessTokenRes> token = new BaseDataResponse<AccessTokenRes>(true, 200, "구글 로그인 성공", new AccessTokenRes('G', jwt));
         return ResponseEntity.status(200).body(token);
     }
 }

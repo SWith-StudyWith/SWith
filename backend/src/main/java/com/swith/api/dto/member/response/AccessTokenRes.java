@@ -8,5 +8,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class AccessTokenRes {
+    private char path;
     private String accessToken;
 }
