@@ -20,7 +20,6 @@
       </router-link>
     </section>
     <section id="nav-list" v-else>
-
       <span style="font-weight:500;">{{ state.userInfo.nickcname }}님 환영합니다!</span>
       <div class="dropdown">
         <img src="../../assets/img/profile1.png" alt="" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" style="width: 50px;" >
@@ -48,27 +47,18 @@ export default {
     const store = useStore()
     const router = useRouter()
 
-    // store.commit('SET_USER_ACCESS_TOKEN', localStorage.getItem('accessToken'))
-    // store.commit('SET_USER_INFO', localStorage.getItem('nickname'))
-
     const state = reactive({
-      isLogin: computed(() => {
-        if(localStorage.getItem('isLogin')) return true
-        else return false
+      isLogin : computed(() => {
+        if(store.state.user.userInfo.accessToken == '' || store.state.user.userInfo.accessToken == undefined)
+          return false
+        else return true
       }),
       userInfo : store.getters.getUserInfo,
     })
 
     const onClickLogout = function (e) {
       e.preventDefault();
-      // const accessToken = localStorage.getItem('accessToken')
-      // 로그아웃으로 localStorage 해제
-      localStorage.removeItem('accessToken')
-      localStorage.removeItem('email')
-      localStorage.removeItem('nickname')
-      localStorage.removeItem('goal')
-      localStorage.removeItem('isLogin')
-      localStorage.clear()
+      store.commit('LOGOUT')
       router.push({ name: 'Login' })
     };
 

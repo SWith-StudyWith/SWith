@@ -24,7 +24,6 @@ const actions = {
       payload,
       (res) => {
         localStorage.setItem('accessToken', res.data.data.accessToken)
-        localStorage.setItem('isLogin', true)
         commit('SET_USER_ACCESS_TOKEN', res.data.data.accessToken)
         dispatch('GET_USER_INFO')
       },
@@ -54,6 +53,9 @@ const actions = {
         alert('서버가 아파유.')
       }
     )
+  },
+  LOGOUT({ commit }) {
+    commit('LOGOUT')
   }
 };
 
@@ -69,6 +71,13 @@ const mutations = {
   UPDATE_USER_INFO(state, payload) {
     state.userInfo.nickname = payload.user.nickname
     state.userInfo.goal = payload.user.goal
+  },
+  LOGOUT(state) {
+    state.userInfo.email = ''
+    state.userInfo.nickname = ''
+    state.userInfo.goal = ''
+    state.userInfo.accessToken = ''
+    localStorage.removeItem('accessToken')
   }
 };
 
