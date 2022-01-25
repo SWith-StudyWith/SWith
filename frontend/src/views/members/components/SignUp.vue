@@ -419,6 +419,9 @@ export default {
 h1 {
   text-align: center;
 }
+label {
+  margin-bottom: 0;
+}
 .btn {
   text-align: center;
   font-size: 0.7rem;
