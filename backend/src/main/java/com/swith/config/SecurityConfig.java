@@ -1,6 +1,5 @@
 package com.swith.config;
 
-//import com.swith.common.auth.CustomOAuth2UserService;
 import com.swith.common.jwt.JwtAccessDeniedHandler;
 import com.swith.common.jwt.JwtAuthenticationEntryPoint;
 import com.swith.common.jwt.JwtSecurityConfig;
@@ -23,18 +22,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final TokenProvider tokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
-//    private final CustomOAuth2UserService customOAuth2UserService;
 
     public SecurityConfig(
             TokenProvider tokenProvider,
             JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
             JwtAccessDeniedHandler jwtAccessDeniedHandler
-//            CustomOAuth2UserService customOAuth2UserService
     ) {
         this.tokenProvider = tokenProvider;
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
         this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
-//        this.customOAuth2UserService = customOAuth2UserService;
     }
 
     @Bean
@@ -56,7 +52,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeHttpRequests()    // HttpServletRequest에 따라 접근을 제한
 //                .antMatchers("").hasRole("")  role에 따라 해당 url 접근을 허용
 //                .mvcMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Preflight Request 허용
-                .antMatchers("/api/members", "/api/members/login", "/api/members/auth/email", "/api/members/auth/email/check", "/api/members/auth/email/password").permitAll()  // 해당 url 접근을 모두 허용
+                .antMatchers("/api/members", "/api/members/login",
+                        "/api/members/auth/email", "/api/members/auth/email/check", "/api/members/auth/email/password",
+                        "/api/members/login/kakao", "/api/members/login/google").permitAll()  // 해당 url 접근을 모두 허용
                 .anyRequest().authenticated()
 
                 .and()

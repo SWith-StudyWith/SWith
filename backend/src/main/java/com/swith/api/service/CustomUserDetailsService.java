@@ -24,7 +24,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         Member member = memberRepository.findById(Long.parseLong(username))
                 .orElseThrow(() -> new UsernameNotFoundException(username + " -> 데이터베이스에서 찾을 수 없습니다."));
         return User.builder()
-                .username(member.getEmail())
+                .username(username)
                 .password(member.getPassword())
                 .roles(member.getRole().name())
                 .build();

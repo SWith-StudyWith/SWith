@@ -9,8 +9,10 @@ import com.swith.db.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.NumberUtils;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Transactional
 @Service
@@ -87,7 +89,12 @@ public class MemberServiceImpl implements MemberService {
     }
 
     public Member getMemberByAuthentication() {
-        return memberRepository.findByEmail(SecurityUtil.getCurrentUsername().orElse(null)).orElse(null);
+        long id = -1L;
+        Optional<String> username = SecurityUtil.getCurrentUsername();
+        if (username.isPresent()) {
+            id = Long.parseLong(username.get());
+        }
+        return memberRepository.findById(id).orElse(null);
     }
 
     @Override
