@@ -29,18 +29,20 @@
         <button class="btn btn-primary btn-lg col-12" @click="onClickLogin">로그인</button>
         <div class="socialLogin mt-2">
           <KakaoLoginBtn/>
-          <button class="btn btn-primary col-6">구글</button>
+          <a :href="GOOGLE_GET_AUTH_CODE_URL"><img src="@/assets/img/icon_oauth_google/btn_google_signin_dark_normal_web.png" alt="google login button"></a>
+          <!-- <GoogleLoginBtn/> -->
+          <!-- <button class="btn btn-primary col-6">구글</button> -->
         </div>
         <!-- google oauth2 -->
         <!-- <div class="g-signin2" data-onsuccess="onSignIn"></div> -->
-        <div>
+        <!-- <div>
           GOOGLE User INFO : {{ state.googleUser }}<p/>
           <div id="my-signin2" class="btn btn-primary btn-lg col-12" @click="GoogleLoginBtn"></div>
           <div id="my-signin2"></div><p/>
           <div class="g-signin2" data-onsuccess="onSignIn"></div>
           <button @click="authInst">signout</button>
-        </div>
-        <a :href="GOOGLE_GET_AUTH_CODE_URL">구글로그인</a>
+        </div> -->
+        <!-- <a :href="GOOGLE_GET_AUTH_CODE_URL"><img src="@/assets/img/icon_oauth_google/btn_google_signin_dark_normal_web.png" alt="google login button"></a> -->
         <!-- find-password / sign-up -->
         <div class="container2 text-center">
           <router-link :to="{ name: 'FindPassword' }">비밀번호 찾기</router-link>
@@ -60,6 +62,7 @@ import { useStore } from 'vuex';
 import Navbar from '../../common/Navbar.vue';
 import Footer from '../../common/Footer.vue';
 import KakaoLoginBtn from '@/views/members/components/KakaoLoginBtn.vue'
+import GoogleLoginBtn from '@/views/members/components/GoogleLoginBtn.vue'
 import { GOOGLE_GET_AUTH_CODE_URL } from '@/api/gauth.js';
 
 export default {
@@ -67,7 +70,8 @@ export default {
   components: {
     Navbar,
     Footer,
-    KakaoLoginBtn
+    KakaoLoginBtn,
+    GoogleLoginBtn,
   },
   setup() {
     const store = useStore();
