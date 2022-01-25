@@ -4,33 +4,44 @@
     <h1 class="form-title">로그인</h1>
     <div class="row">
       <div class="offset-4 col-4">
-        <form
-          class="email-form row"
-          :class="{ valid: state.isValidEmail, invalid: !state.isValidEmail }"
-          @submit.prevent
-        >
+        <form class="email-form row" @submit.prevent>
           <label for="email" class="form-label">이메일</label>
           <div>
             <input class="form-control" id="email" type="email"
               v-model="state.email" required autofocus>
           </div>
-          <div class="invalid-feedback">이메일을 입력해주세요.</div>
+          <div
+            :style="{ visibility: (state.isValidEmail || !state.wasEmailInputed) ? 'hidden': 'visible' }"
+            class="invalid-feedback mb-2 mt-0">
+            이메일을 입력해주세요.
+          </div>
         </form>
-        <form
-          class="password-form"
-          :class="{ valid: state.isValidPassword, invalid: !state.isValidPassword }"
-          @submit.prevent
-        >
+        <form class="password-form" @submit.prevent>
           <label for="password" class="form-label">비밀번호</label>
           <input class="form-control" type="password"
             id="password" v-model="state.password" required>
-          <div class="invalid-feedback">유효하지 않은 비밀번호입니다.</div>
+          <div
+            :style="{visibility: (state.isValidPassword || !state.wasPasswordInputed) ? 'hidden': 'visible' }"
+            class="invalid-feedback mb-2 mt-0">
+            비밀번호를 입력해주세요.
+          </div>
         </form>
         <button class="btn btn-primary btn-lg col-12" @click="onClickLogin">로그인</button>
         <div class="socialLogin mt-2">
-          <button class="btn btn-primary col-6">카카오</button>
+          <KakaoLoginBtn/>
           <button class="btn btn-primary col-6">구글</button>
         </div>
+        <!-- google oauth2 -->
+        <!-- <div class="g-signin2" data-onsuccess="onSignIn"></div> -->
+        <div>
+          GOOGLE User INFO : {{ state.googleUser }}<p/>
+          <div id="my-signin2" class="btn btn-primary btn-lg col-12" @click="GoogleLoginBtn"></div>
+          <div id="my-signin2"></div><p/>
+          <div class="g-signin2" data-onsuccess="onSignIn"></div>
+          <button @click="authInst">signout</button>
+        </div>
+        <a :href="GOOGLE_GET_AUTH_CODE_URL">구글로그인</a>
+        <!-- find-password / sign-up -->
         <div class="container2 text-center">
           <router-link :to="{ name: 'FindPassword' }">비밀번호 찾기</router-link>
           <span> </span>
@@ -48,40 +59,58 @@ import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import Navbar from '../../common/Navbar.vue';
 import Footer from '../../common/Footer.vue';
+import KakaoLoginBtn from '@/views/members/components/KakaoLoginBtn.vue'
+import { GOOGLE_GET_AUTH_CODE_URL } from '@/api/gauth.js';
 
 export default {
   name: '',
   components: {
     Navbar,
     Footer,
+    KakaoLoginBtn
   },
   setup() {
     const store = useStore();
     const state = reactive({
+      googleUser: null,
       emailForm: null,
       passwordForm: null,
       email: '',
       password: '',
+      wasEmailInputed: false,
+      wasPasswordInputed: false,
       isValidEmail: computed(() => {
+        if (state.email !== '') {
+          state.wasEmailInputed = true;
+        }
         if (state.email && validEmail(state.email)) {
           return true;
-        } return false;
+        }
+        return false;
       }),
       isValidPassword: computed(() => {
-        if (state.password && validPassword(state.password)) {
+        if (state.password !== '') {
+          state.wasPasswordInputed = true;
+        }
+        if (state.password) {
           return true;
-        } return false;
+        }
+        return false;
       }),
     });
 
     const router = useRouter();
     const onClickLogin = function (e) {
       e.preventDefault();
+      if (state.email === '' || state.password === '') {
+        state.wasEmailInputed = true;
+        state.wasPasswordInputed = true;
+        return
+      }
       if (!state.isValidEmail || !state.isValidPassword ){
         return;
       }
       store.dispatch('LOGIN', { email: state.email, password: state.password })
-      router.push({ name: 'Main' })
     };
 
     const validEmail = function (email) {
@@ -89,25 +118,48 @@ export default {
       return re.test(email);
     };
 
-    const validPassword = function (password) {
-      const numberChar = /[0-9]/;
-      const specialChar = /[`~!@#$%^&*\\\'\";:\/?]/;
-      const alphabetChar = /[a-zA-Z]/;
-      if (password.length >= 8 && password.length <= 16) {
-        if (numberChar.test(password) && specialChar.test(password) && alphabetChar.test(password)) {
-          return true;
-        }
-      } return false;
-    };
+
+  // const signout = () => {
+  //   const authInst = window.gapi.auth2.getAuthInstance();
+  //   authInst.signOut().then(() => {
+  //       // eslint-disable-next-line
+  //   console.log('User Signed Out!!!');
+  //   });
+  // };
+  const onSuccess = (googleUser) => {
+      // eslint-disable-next-line
+      console.log(googleUser);
+      state.googleUser = googleUser.getBasicProfile();
+  };
+  const onFailure = (error) => {
+      // eslint-disable-next-line
+      console.log(error);
+  };
+  const signout = () => {
+    const authInst = window.gapi.auth2.getAuthInstance();
+    authInst.signOut().then(() => {
+      // eslint-disable-next-line
+      console.log('User Signed Out!!!');
+    });
+  };
 
     return {
-      state, onClickLogin,
+      state, onClickLogin, onSuccess, onFailure, signout, GOOGLE_GET_AUTH_CODE_URL,
     };
   },
   created() {},
   mounted() {
     this.state.emailForm = document.querySelector('.email-form');
     this.state.passwordForm = document.querySelector('.password-form');
+    window.gapi.signin2.render('my-signin2', {
+      scope: 'profile email',
+      width: 240,
+      height: 50,
+      longtitle: true,
+      theme: 'dark',
+      onsuccess: this.onSuccess,
+      onfailure: this.onFailure,
+    });
   },
   unmounted() {},
   methods: {
@@ -121,21 +173,16 @@ export default {
 h1 {
   text-align: center;
 }
+label {
+  margin-bottom: 0;
+}
 .btn {
   text-align: center;
   font-size: 0.7rem;
 }
-.invalid .invalid-feedback {
+.invalid-feedback {
   display: block;
-}
-.valid .invalid-feedback {
-  display: none;
-}
-.invalid .valid-feedback {
-  display: none;
-}
-.valid .valid-feedback {
-  display: block;
+  font-size: 0.75rem;
 }
 .container2 {
   display: flex;

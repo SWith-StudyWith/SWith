@@ -56,9 +56,12 @@ public class MemberController {
     public ResponseEntity<BaseDataResponse<AccessTokenRes>> loginMember(@RequestBody MemberReq memberReq) {
         log.debug("loginMember - {}", memberReq.toString());
         Member member = memberService.getMemberByEmail(memberReq.getEmail());
+        log.debug("loginMember - {}", member.getMemberId());
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(member.getMemberId(), memberReq.getPassword());
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        log.debug("loginMember - {}", authenticationToken);
+        log.debug("loginMember - {}", authentication);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = tokenProvider.createToken(authentication);
 
