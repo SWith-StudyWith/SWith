@@ -20,7 +20,7 @@
       </router-link>
     </section>
     <section id="nav-list" v-else>
-      <span style="font-weight:500;">{{ state.userInfo.nickcname }}님 환영합니다!</span>
+      <span style="font-weight:500;">{{ state.userInfo.nickname }} 님 환영합니다!</span>
       <div class="dropdown">
         <img src="../../assets/img/profile1.png" alt="" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" style="width: 50px;" >
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { reactive } from '@vue/reactivity';
+import { toRefs, reactive } from '@vue/reactivity';
 import { useStore } from 'vuex';
 import { computed } from '@vue/runtime-core';
 import { useRouter } from 'vue-router'
@@ -63,6 +63,7 @@ export default {
     };
 
     return{
+      // ...toRefs(state),
       state, onClickLogout,
     }
   },
