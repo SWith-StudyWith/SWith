@@ -38,9 +38,11 @@ function getUserInfo(success, fail) {
 }
 function loginKakao(payload, success, fail) {
   userInstance
-    .post(`/api/members/login/kakao`, {
-      params: { code: payload }
-     })
+    .post(
+      `/api/members/login/kakao`,
+      {},
+      { params: { code: payload } }
+    )
     .then(success)
     .catch(fail)
 }
