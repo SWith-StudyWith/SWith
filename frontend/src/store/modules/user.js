@@ -4,7 +4,9 @@ const state = () => ({
   userInfo: {},
 });
 
-const getters = {};
+const getters = {
+  getUserInfo: function (state) { return state.userInfo },
+};
 
 const actions = {
   GET_USER_INFO({ commit }) {
@@ -22,6 +24,7 @@ const actions = {
       payload,
       (res) => {
         localStorage.setItem('accessToken', res.data.data.accessToken)
+        localStorage.setItem('isLogin', true)
         commit('SET_USER_ACCESS_TOKEN', res.data.data.accessToken)
         dispatch('GET_USER_INFO')
       },
