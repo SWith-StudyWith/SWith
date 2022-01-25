@@ -40,7 +40,16 @@ function loginKakao(payload, success, fail) {
   userInstance
     .post(`/api/members/login/kakao`, {
       params: { code: payload }
-     })
+    })
+    .then(success)
+    .catch(fail)
+}
+function loginGoogle(payload, success, fail) {
+  userInstance
+    .post(`/api/members/login/google`, {},
+    {
+      params: { code: payload }
+    })
     .then(success)
     .catch(fail)
 }
@@ -60,4 +69,5 @@ export {
   getUserInfo,
   loginKakao,
   updateUserInfo,
+  loginGoogle,
 }

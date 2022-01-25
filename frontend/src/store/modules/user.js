@@ -1,4 +1,4 @@
-import { login, getUserInfo, loginKakao, updateUserInfo } from '../../api/user';
+import { login, getUserInfo, loginKakao, loginGoogle, updateUserInfo } from '../../api/user';
 
 const state = () => ({
   userInfo: {},
@@ -32,6 +32,16 @@ const actions = {
   },
   LOGIN_KAKAO({ dispatch }, payload) {
     loginKakao(
+      payload,
+      (res) => {
+        localStorage.setItem('accessToken', res.data.data.accessToken)
+        dispatch('GET_USER_INFO')
+      },
+      (err) => {console.log(err)}
+    )
+  },
+  LOGIN_GOOGLE({ dispatch }, payload) {
+    loginGoogle(
       payload,
       (res) => {
         localStorage.setItem('accessToken', res.data.data.accessToken)

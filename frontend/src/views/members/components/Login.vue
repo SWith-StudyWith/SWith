@@ -40,6 +40,7 @@
           <div class="g-signin2" data-onsuccess="onSignIn"></div>
           <button @click="authInst">signout</button>
         </div>
+        <a :href="GOOGLE_GET_AUTH_CODE_URL">구글로그인</a>
         <!-- find-password / sign-up -->
         <div class="container2 text-center">
           <router-link :to="{ name: 'FindPassword' }">비밀번호 찾기</router-link>
@@ -58,6 +59,7 @@ import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import Navbar from '../../common/Navbar.vue';
 import Footer from '../../common/Footer.vue';
+import { GOOGLE_GET_AUTH_CODE_URL } from '@/api/gauth.js';
 
 export default {
   name: '',
@@ -118,7 +120,6 @@ export default {
   //   console.log('User Signed Out!!!');
   //   });
   // };
-  // const googleUser = null;
   const onSuccess = (googleUser) => {
       // eslint-disable-next-line
       console.log(googleUser);
@@ -137,7 +138,7 @@ export default {
   };
 
     return {
-      state, onClickLogin, onSuccess, onFailure, signout,
+      state, onClickLogin, onSuccess, onFailure, signout, GOOGLE_GET_AUTH_CODE_URL,
     };
   },
   created() {},

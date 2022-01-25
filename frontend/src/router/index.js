@@ -86,6 +86,11 @@ const routes = [
     name: 'OAuthKakao',
     component: () => import(/* webpackChunkName: "test" */ '../views/members/components/OAuthKakao.vue'),
   },
+  {
+    path: '/login/oauth2/client/google',
+    name: 'OAuthGoogle',
+    component: () => import(/* webpackChunkName: "test" */ '../views/members/components/OAuthGoogle.vue'),
+  },
 ];
 
 const router = createRouter({
