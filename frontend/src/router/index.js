@@ -57,7 +57,7 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/studies/components/StudyCreate.vue'),
   },
   {
-    path: '/studies/update',
+    path: '/studies/:study_id/update',
     name: 'StudyUpdate',
     component: () => import(/* webpackChunkName: "about" */ '../views/studies/components/StudyUpdate.vue'),
   },
