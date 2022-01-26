@@ -81,6 +81,7 @@ export default {
               break;
             case 200:
               alert('임시 비밀번호 전송 성공!\n로그인 후, 비밀번호 변경해주세요.')
+              router.push({ name: 'Login' })
               break;
           }
         },
@@ -89,9 +90,7 @@ export default {
           alert('서버가 아파요.')
         }
       )
-      router.push({ name: 'Login' })
     }
-
     return{
       state, onClickSendCode
     }
