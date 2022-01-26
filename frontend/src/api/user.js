@@ -68,6 +68,15 @@ function updateUserInfoAPI(payload, success, fail) {
     .then(success)
     .catch(fail)
 }
+
+// 비밀번호 수정
+function updatePassword(payload, success, fail) {
+  basicInstance
+    .patch(`/api/members/password`, payload)
+    .then(success)
+    .catch(fail)
+}
+
 export {
   signup,
   sendEmail,
@@ -77,4 +86,5 @@ export {
   loginKakao,
   updateUserInfoAPI,
   loginGoogle,
+  updatePassword,
 }
