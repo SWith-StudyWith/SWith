@@ -15,19 +15,19 @@
                 <input @change="changeFile" type="file" class="form-control" id="inputFileUploadInsert" accept="image/*"/>
               </div>
             <form>
-              <p class="col-8 d-inline-flex" style="">{{ userInfo.email }}</p>
+              <p class="col-8 d-inline-flex" style="">{{ state.userInfo.email }}</p>
               <router-link to="/members/changepassword">
                 <button type="button" class="btn btn-change-pw btn-primary col-4">비밀번호 변경</button>
               </router-link>
               <div class="mb-3">
                 <label for="nickname" class="form-label">닉네임</label>
-                <input type="text" class="form-control" id="nickname">
+                <input type="text" class="form-control" id="nickname" v-model="state.userInfo.nickname">
               </div>
               <div class="mb-3">
                 <label for="goal" class="form-label">나의 목표</label>
-                <textarea class="form-control form-goal" id="goal" rows="3" v-model="userInfo.goal"></textarea>
+                <textarea class="form-control form-goal" id="goal" rows="3" v-model="state.userInfo.goal"></textarea>
               </div>
-              <button @click="onClickUpdateUserInfo" class="btn btn-primary col-12 btn-save">변경 사항 저장</button>
+              <button @click.prevent="onClickUpdateUserInfo" class="btn btn-primary col-12 btn-save">변경 사항 저장</button>
             </form>
             <!-- Button trigger modal -->
             <span class="text-decoration-underline signout-btn" data-bs-toggle="modal" data-bs-target="#signOutModal" style="margin-bottom: 100px;">
@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import { toRefs, reactive } from 'vue';
+import { ref } from 'vue';
 import { useStore } from 'vuex';
 import Navbar from '@/views/common/Navbar.vue';
 import Footer from '@/views/common/Footer.vue';
@@ -55,7 +55,8 @@ export default {
   components: { Navbar, Footer, SignOut },
   setup() {
     const store = useStore();
-    const state = reactive({
+    const state = ref({
+      profileImgUrl: '@/assets/img/profile1.png',
       userInfo : store.getters.getUserInfo,
       file: store.getters.getUserInfo.profileImgUrl
     });
@@ -63,19 +64,24 @@ export default {
     const changeFile = (event) => {
       console.log(event)
       if(event.target.files && event.target.files.length > 0){
-        state.file = URL.createObjectURL(event.target.files[0]);
+        state.value.file = URL.createObjectURL(event.target.files[0]);
       }
     };
 
     const onClickUpdateUserInfo = () => {
-      var updateUserData = new FormData()
-      updateUserData.append("nickname", state.userInfo.nickname )
-      updateUserData.append("goal", state.userInfo.goal )
+      const updateUserData = {
+        nickname: state.value.userInfo.nickname,
+        goal: state.value.userInfo.goal
+      }
       store.dispatch('updateUserInfo', updateUserData)
     }
+    // image는 formData로?
+    // var updateUserData = new FormData()
+    // updateUserData.append("image", state.userInfo.profileImgUrl )
+    // const formData = new FormData(); formData.append("image", this.image)
 
     return {
-      ...toRefs(state), onClickUpdateUserInfo, changeFile
+      state, onClickUpdateUserInfo, changeFile
     }
   },
 
