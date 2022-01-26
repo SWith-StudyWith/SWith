@@ -1,6 +1,11 @@
 package com.swith.api.controller;
 
-import com.swith.api.request.*;
+import com.swith.api.dto.member.request.MemberInfoReq;
+import com.swith.api.dto.member.request.MemberReq;
+import com.swith.api.dto.member.request.MemberSignupReq;
+import com.swith.api.dto.member.request.PasswordFindReq;
+import com.swith.api.dto.member.response.AccessTokenRes;
+import com.swith.api.dto.member.response.MemberInfoRes;
 import com.swith.api.service.MemberService;
 import com.swith.common.jwt.TokenProvider;
 import com.swith.common.response.BaseDataResponse;
@@ -48,12 +53,15 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<BaseDataResponse<AccessToken>> loginMember(@RequestBody MemberReq memberReq) {
+    public ResponseEntity<BaseDataResponse<AccessTokenRes>> loginMember(@RequestBody MemberReq memberReq) {
         log.debug("loginMember - {}", memberReq.toString());
         Member member = memberService.getMemberByEmail(memberReq.getEmail());
+        log.debug("loginMember - {}", member.getMemberId());
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(member.getMemberId(), memberReq.getPassword());
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        log.debug("loginMember - {}", authenticationToken);
+        log.debug("loginMember - {}", authentication);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = tokenProvider.createToken(authentication);
 
@@ -61,8 +69,8 @@ public class MemberController {
 //        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, jwt);
 //        return ResponseEntity.status(200).headers(httpHeaders)
 //                .body(new BaseResponse(true, 200, "로그인 성공"));
-        BaseDataResponse<AccessToken> token = new BaseDataResponse<AccessToken>(true, 200,
-                "로그인 성공", new AccessToken(jwt));
+        BaseDataResponse<AccessTokenRes> token = new BaseDataResponse<AccessTokenRes>(true, 200,
+                "로그인 성공", new AccessTokenRes('O', jwt));
         return ResponseEntity.status(200).body(token);
     }
 
@@ -77,40 +85,40 @@ public class MemberController {
     }
 
     @GetMapping
-    public ResponseEntity<BaseDataResponse<MemberInfo>> getMember() {
+    public ResponseEntity<BaseDataResponse<MemberInfoRes>> getMember() {
         log.debug("getMember");
         Member member = memberService.getMemberByAuthentication();
-        BaseDataResponse<MemberInfo> memberInfo;
+        BaseDataResponse<MemberInfoRes> memberInfo;
         // 회원정보 조회 실패
         if (member == null) {
-            memberInfo = new BaseDataResponse<MemberInfo>(false, 404, "회원정보 조회 실패", null);
+            memberInfo = new BaseDataResponse<MemberInfoRes>(false, 404, "회원정보 조회 실패", null);
             return ResponseEntity.status(200).body(memberInfo);
         }
         // 회원정보 조회 성공
-        memberInfo = new BaseDataResponse<MemberInfo>(true, 200, "회원정보 조회 성공",
-                new MemberInfo(member.getEmail(), member.getNickname(), member.getGoal()));
+        memberInfo = new BaseDataResponse<MemberInfoRes>(true, 200, "회원정보 조회 성공",
+                new MemberInfoRes(member.getEmail(), member.getNickname(), member.getGoal()));
         return ResponseEntity.status(200).body(memberInfo);
     }
 
     @PutMapping
-    public ResponseEntity<BaseDataResponse<MemberInfo>> updateMember(@RequestBody MemberInfoReq memberInfoReq) {
+    public ResponseEntity<BaseDataResponse<MemberInfoRes>> updateMember(@RequestBody MemberInfoReq memberInfoReq) {
         log.debug("updateMember - {}", memberInfoReq);
         Member member = memberService.getMemberByAuthentication();
-        BaseDataResponse<MemberInfo> memberInfo;
+        BaseDataResponse<MemberInfoRes> memberInfo;
         // 회원인증 실패
         if (member == null) {
-            memberInfo = new BaseDataResponse<MemberInfo>(false, 400, "회원인증 실패", null);
+            memberInfo = new BaseDataResponse<MemberInfoRes>(false, 400, "회원인증 실패", null);
             return ResponseEntity.status(200).body(memberInfo);
         }
         member = memberService.updateMember(member, memberInfoReq);
         // 회원정보 수정 실패
         if (member == null) {
-            memberInfo = new BaseDataResponse<MemberInfo>(false, 404, "회원정보 수정 실패", null);
+            memberInfo = new BaseDataResponse<MemberInfoRes>(false, 404, "회원정보 수정 실패", null);
             return ResponseEntity.status(200).body(memberInfo);
         }
         // 회원정보 수정 성공
-        memberInfo = new BaseDataResponse<MemberInfo>(true, 200, "회원정보 수정 성공",
-                new MemberInfo(member.getEmail(), member.getNickname(), member.getGoal()));
+        memberInfo = new BaseDataResponse<MemberInfoRes>(true, 200, "회원정보 수정 성공",
+                new MemberInfoRes(member.getEmail(), member.getNickname(), member.getGoal()));
         return ResponseEntity.status(200).body(memberInfo);
     }
 

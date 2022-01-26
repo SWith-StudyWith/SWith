@@ -1,14 +1,20 @@
-import { login, getUserInfo, putMypage, updateUserInfo } from '../../api/user';
+import { login, getUserInfo, loginKakao, loginGoogle, updateUserInfoAPI } from '../../api/user';
+import router from '@/router';
 
 const state = () => ({
   userInfo: {
     // email : "ssafy@ssafy.com",
     // nickname : "ssafy",
-    // goal : "내 꿈은 해적왕"
+    // goal : "내 꿈은 해적왕",
+    profileImgUrl: ''
   },
 });
 
-const getters = {};
+const getters = {
+  getUserInfo: function (state) {
+    return state.userInfo
+  }
+};
 
 const actions = {
   GET_USER_INFO({ commit }) {
@@ -16,44 +22,102 @@ const actions = {
       (res) => {
         commit('SET_USER_INFO', res.data.data);
       },
-      (err) => {
-        alert('서버가 아파요.')
+      () => {
+        alert('서버가 아파요!')
       }
     )
   },
-  LOGIN({ dispatch }, payload) {
+  LOGIN({ dispatch, commit }, payload) {
     login(
       payload,
       (res) => {
+        if (res.data.code === 200) {
+          localStorage.setItem('accessToken', res.data.data.accessToken)
+          commit('SET_USER_ACCESS_INFO', res.data.data)
+          dispatch('GET_USER_INFO')
+          router.push({ name: 'Main' })
+        } else {
+          console.log('잘못된 요청.')
+          console.log(res.data)
+        }
+      },
+      () => {
+        alert('로그인 정보가 맞지 않습니다.')
+      }
+    )
+  },
+  LOGIN_KAKAO({ dispatch, commit }, payload) {
+    console.log(payload)
+    loginKakao(
+      payload,
+      (res) => {
+        console.log(res.data)
+        localStorage.setItem('accessToken', res.data.data.accessToken)
+        commit('SET_USER_ACCESS_INFO', res.data.data)
         dispatch('GET_USER_INFO')
-        localStorage.setItem('accessToken', res.data.accessToken)
+        router.push({ name: 'Main' })
       },
       (err) => {
+        console.log(err)
         alert('서버가 아파요.')
       }
     )
   },
-  UPDATE_USER_INFO({ dispatch, commit }, payload) {
-    updateUserInfo(
+  LOGIN_GOOGLE({ dispatch, commit }, payload) {
+    console.log(payload)
+    loginGoogle(
       payload,
       (res) => {
+        console.log(res.data)
+        localStorage.setItem('accessToken', res.data.data.accessToken)
+        commit('SET_USER_ACCESS_INFO', res.data.data)
         dispatch('GET_USER_INFO')
-        commit('UPDATE_MYPAGE', res.data.data);
+        router.push({ name: 'Main' })
       },
       (err) => {
+        console.log(err)
+        alert('서버가 아파요.')
+      }
+    )
+  },
+  updateUserInfo({ commit }, payload) {
+    updateUserInfoAPI(
+      payload,
+      (res) => {
+        console.log(res)
+        commit('UPDATE_USER_INFO', res.data.data);
+      },
+      () => {
         alert('서버가 아파유.')
       }
     )
+  },
+  LOGOUT({ commit }) {
+    commit('LOGOUT')
   }
 };
 
 const mutations = {
   SET_USER_INFO(state, payload) {
-    state.userInfo = payload;
+    state.userInfo.email = payload.email;
+    state.userInfo.nickname = payload.nickname;
+    state.userInfo.goal = payload.goal;
+  },
+  SET_USER_ACCESS_INFO(state, payload) {
+    state.userInfo.accessToken = payload.accessToken
+    state.userInfo.path = payload.path
   },
   UPDATE_USER_INFO(state, payload) {
-    state.userInfo.nickname = payload.user.nickname
-    state.userInfo.goal = payload.user.goal
+    state.userInfo.nickname = payload.nickname
+    state.userInfo.goal = payload.goal
+    state.userInfo.profileImgUrl = payload.profileImgUrl
+  },
+  LOGOUT(state) {
+    state.userInfo.email = ''
+    state.userInfo.nickname = ''
+    state.userInfo.goal = ''
+    state.userInfo.accessToken = ''
+    localStorage.removeItem('accessToken')
   }
 };
 

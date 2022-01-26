@@ -36,8 +36,33 @@ function getUserInfo(success, fail) {
     .then(success)
     .catch(fail)
 }
+function loginKakao(payload, success, fail) {
+  userInstance
+    .post(
+      `/api/members/login/kakao`,
+      {},
+      {
+        params: { code: payload }
+      }
+    )
+    .then(success)
+    .catch(fail)
+}
+function loginGoogle(payload, success, fail) {
+  userInstance
+    .post(
+      `/api/members/login/google`,
+      {},
+      {
+        params: { code: payload }
+      }
+    )
+    .then(success)
+    .catch(fail)
+}
+
 // 마이페이지 수정
-function updateUserInfo(payload, success, fail) {
+function updateUserInfoAPI(payload, success, fail) {
   userInstance
     .put(`/api/members`, payload)
     .then(success)
@@ -49,5 +74,7 @@ export {
   checkEmail,
   login,
   getUserInfo,
-  updateUserInfo,
+  loginKakao,
+  updateUserInfoAPI,
+  loginGoogle,
 }

@@ -1,6 +1,6 @@
 package com.swith.api.controller;
 
-import com.swith.api.request.AuthMailReq;
+import com.swith.api.dto.member.request.AuthMailReq;
 import com.swith.api.service.AuthMailService;
 import com.swith.api.service.MemberService;
 import com.swith.common.response.BaseResponse;

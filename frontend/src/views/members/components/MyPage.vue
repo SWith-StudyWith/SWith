@@ -8,69 +8,77 @@
       <div class="row d-flex justify-content-center">
         <div class="col-4">
           <section>
-            <img :src="state.defaultImage" class="defaultImage">
-            <form>
-              <div>
-                <input @change='onInputImage()' class="form-control" ref="serveyImage" type="file" accept="image/*">
+              <div class="box d-inline-flex justify-content-center">
+                <img class="profile-img" :src="file" />
               </div>
-              <p class="col-8 d-inline-flex" style="">{{ state.email }}</p>
+              <div class="form-group mt-3 mb-3">
+                <input @change="changeFile" type="file" class="form-control" id="inputFileUploadInsert" accept="image/*"/>
+              </div>
+            <form>
+              <p class="col-8 d-inline-flex" style="">{{ userInfo.email }}</p>
               <router-link to="/members/changepassword">
-                <button type="button" class="btn btn-primary col-4">비밀번호 변경</button>
+                <button type="button" class="btn btn-change-pw btn-primary col-4">비밀번호 변경</button>
               </router-link>
               <div class="mb-3">
                 <label for="nickname" class="form-label">닉네임</label>
-                <input type="text" class="form-control" id="nickname" v-model="state.nickname">
+                <input type="text" class="form-control" id="nickname">
               </div>
               <div class="mb-3">
                 <label for="goal" class="form-label">나의 목표</label>
-                <textarea class="form-control form-goal" id="goal" rows="3" v-model="state.goal"></textarea>
+                <textarea class="form-control form-goal" id="goal" rows="3" v-model="userInfo.goal"></textarea>
               </div>
-              <button @click="onClickUpdateMypage" class="btn btn-primary col-12 btn-save">변경 사항 저장</button>
+              <button @click="onClickUpdateUserInfo" class="btn btn-primary col-12 btn-save">변경 사항 저장</button>
             </form>
+            <!-- Button trigger modal -->
+            <span class="text-decoration-underline signout-btn" data-bs-toggle="modal" data-bs-target="#signOutModal" style="margin-bottom: 100px;">
+              회원 탈퇴
+            </span>
+
           </section>
         </div>
       </div>
     </div>
+    <SignOut />
     <Footer />
   </div>
 </template>
 
 <script>
-import { reactive, computed } from 'vue';
+import { toRefs, reactive } from 'vue';
 import { useStore } from 'vuex';
-// import { updateMypage } from '@/api/user'
 import Navbar from '@/views/common/Navbar.vue';
 import Footer from '@/views/common/Footer.vue';
+import SignOut from '@/views/members/components/SignOut.vue';
 
 export default {
   name: '',
-  components: { Navbar, Footer },
+  components: { Navbar, Footer, SignOut },
   setup() {
     const store = useStore();
     const state = reactive({
-      email: computed(() => store.state),
-      nickname: computed(() => store.state.user.userinfo.nickname),
-      goal: computed(() => store.state.user.userinfo.goal),
-      defaultImage: require('@/assets/img/profile1.png'),
-      image: ''
+      userInfo : store.getters.getUserInfo,
+      file: store.getters.getUserInfo.profileImgUrl
     });
 
-    const onInputImage = function (e) {
-      this.state.image = this.$refs.serveyImage.files
-      console.log("this.state.image")
+    const changeFile = (event) => {
+      console.log(event)
+      if(event.target.files && event.target.files.length > 0){
+        state.file = URL.createObjectURL(event.target.files[0]);
+      }
+    };
+
+    const onClickUpdateUserInfo = () => {
+      var updateUserData = new FormData()
+      updateUserData.append("nickname", state.userInfo.nickname )
+      updateUserData.append("goal", state.userInfo.goal )
+      store.dispatch('updateUserInfo', updateUserData)
     }
-    const onClickUpdateMypage = function (e) {
-      e.preventDefault();
-      store.dispatch('updateMypage', { nickname: this.state.user.nickname, goal: this.state.user.goal })
-    }
+
     return {
-      state, onInputImage, onClickUpdateMypage
+      ...toRefs(state), onClickUpdateUserInfo, changeFile
     }
   },
-  created() {},
-  mounted() {},
-  unmounted() {},
-  methods: {}
+
 }
 </script>
 
@@ -81,6 +89,9 @@ export default {
 }
 form{
   text-align: left;
+}
+section{
+  margin-bottom: 100px;
 }
 h1{
   font-size: 24px;
@@ -94,12 +105,12 @@ p{
   font-weight: 700;
   display: flex;
 }
-button {
+.btn-change-pw {
   text-align: center;
   font-size: 0.7rem;
 }
 .btn-save{
-  margin-bottom: 106px;
+  margin-bottom: 50px;
 }
 .defaultImage{
   margin-bottom: 32px;
@@ -109,5 +120,24 @@ button {
 }
 .form-goal{
   margin-bottom: 36px;
+}
+.box {
+    width: 150px;
+    height: 150px;
+    border-radius: 70%;
+    overflow: hidden;
+    background: #BDBDBD;
+}
+.profile-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.signout-btn:hover {
+  cursor: pointer;
+  font-weight: bold;
+}
+.signout-btn{
+  color: #BDBDBD;
 }
 </style>

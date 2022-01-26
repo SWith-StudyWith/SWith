@@ -1,6 +1,6 @@
 package com.swith.api.service;
 
-import com.swith.api.request.MemberInfoReq;
+import com.swith.api.dto.member.request.MemberInfoReq;
 import com.swith.db.entity.Member;
 
 public interface MemberService {
