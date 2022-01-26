@@ -13,7 +13,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 // import StudyCreate from "@/views/studies/components/StudyCreate.vue";
 // import StudyUpdate from "@/views/studies/components/StudyUpdate.vue";
 // import StudyMain from "@/views/studies/components/StudyMain.vue";
-// import StudyView from "@/views/studies/components/StudyView.vue";
+// import StudyRoom from "@/views/studies/components/StudyRoom.vue";
 
 const routes = [
   {
@@ -68,8 +68,8 @@ const routes = [
   },
   {
     path: '/studies/:study_id/room',
-    name: 'StudyView',
-    component: () => import(/* webpackChunkName: "studyview", webpackPrefetch:true  */ '../views/studies/components/StudyView.vue'),
+    name: 'StudyRoom',
+    component: () => import(/* webpackChunkName: "studyroom", webpackPrefetch:true  */ '../views/studies/components/StudyRoom.vue'),
   },
   {
     path: '/footer',
