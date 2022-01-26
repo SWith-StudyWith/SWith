@@ -55,12 +55,6 @@ const routes = [
     meta: { authRequired: true },
   },
   {
-    path: '/members/changepassword',
-    name: 'ChangePassword',
-    component: () => import(/* webpackChunkName: "changepassword" */ '../views/members/components/ChangePassword.vue'),
-    meta: { authRequired: true },
-  },
-  {
     path: '/studies/create',
     name: 'StudyCreate',
     component: () => import(/* webpackChunkName: "about" */ '../views/studies/components/StudyCreate.vue'),
