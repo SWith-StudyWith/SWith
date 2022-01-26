@@ -61,6 +61,12 @@ const routes = [
     meta: { authRequired: true },
   },
   {
+    path: '/studies',
+    name: 'StudyPage',
+    component: () => import(/* webpackChunkName: "about" */ '@/views/studies/StudyPage.vue'),
+    meta: { authRequired: true },
+  },
+  {
     path: '/studies/create',
     name: 'StudyCreate',
     component: () => import(/* webpackChunkName: "about" */ '../views/studies/components/StudyCreate.vue'),
