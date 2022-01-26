@@ -2,13 +2,11 @@
   <div class="container">
     <div class="row d-flex justify-content-between">
       <p class="study-list-header col-6">스터디 목록</p>
-        <input type="text" class="form-control" placeholder="스터디 URL">
-        <button class="btn btn-primary">스터디 참여하기</button>
-
-      <div v-if="error">{{ error }}</div>
+        <input type="text" class="form-control" v-model="studyCode" placeholder="스터디 URL">
+        <button class="btn btn-primary" @click="onClickJoin">스터디 참여하기</button>
       <div v-if="studies.length" class="d-flex flex-wrap">
         <div v-for="study in studies" :key="study.id" class="col-4 card-box">
-            <StudyListItem :study="study" />
+          <StudyListItem :study="study" />
         </div>
       </div>
       <div v-else>
@@ -24,12 +22,51 @@
 
 <script>
 import StudyListItem from './StudyListItem.vue';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router'
+import { joinStudy, getStudyList } from '@/api/study';
 
 export default {
   props: ['studies'],
-  components: { StudyListItem },
+  components: {
+    StudyListItem
+  },
   setup(props) {
     console.log(props.studies);
+    let studyCode = ref('')
+
+    const router = useRouter();
+    const onClickJoin = function () {
+      if (!studyCode.value) {
+        return
+      }
+      const payload = { code: studyCode.value }
+      joinStudy(
+        payload,
+        (res) => {
+          console.log(res.data)
+          if (res.data.code === 200) {
+            getStudyList(
+              (res) => {
+                console.log(res.data)
+                router.push({ name: 'StudyMain', params: { studyCode: studyCode.value } })
+              },
+              (err) => {
+                console.log(err)
+              }
+            )
+          } else if (res.data.code === 400) {
+            alert('해당 스터디가 존재하지 않습니다.')
+          } else if (res.data.code === 409) {
+            alert('이미 참여중인 스터디입니다.')
+          }
+        },
+        (err) => {
+          console.log(err)
+        }
+      )
+    }
+    return { studyCode, onClickJoin }
   },
 };
 </script>
