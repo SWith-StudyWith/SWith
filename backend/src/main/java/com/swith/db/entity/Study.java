@@ -18,13 +18,15 @@ public class Study {
     private String code;
     private String goal;
     private String imgUrl;
+    private String isUsed;
 
     @Builder
-    public Study(String name, String code, String goal, String imgUrl) {
+    public Study(String name, String code, String goal, String imgUrl, String isUsed) {
         this.name = name;
         this.code = code;
         this.goal = goal;
         this.imgUrl = imgUrl;
+        this.isUsed = isUsed;
     }
 
     @OneToMany(
