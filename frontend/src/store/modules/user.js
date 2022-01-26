@@ -6,7 +6,6 @@ const state = () => ({
     // email : "ssafy@ssafy.com",
     // nickname : "ssafy",
     // goal : "내 꿈은 해적왕",
-    profileImgUrl: ''
   },
 });
 
@@ -86,9 +85,10 @@ const actions = {
       (res) => {
         console.log(res)
         commit('UPDATE_USER_INFO', res.data.data);
+        router.push({ name: 'Main' })
       },
       () => {
-        alert('서버가 아파유.')
+        alert('서버가 아파요.')
       }
     )
   },
@@ -110,7 +110,7 @@ const mutations = {
   UPDATE_USER_INFO(state, payload) {
     state.userInfo.nickname = payload.nickname
     state.userInfo.goal = payload.goal
-    state.userInfo.profileImgUrl = payload.profileImgUrl
+    // state.userInfo.profileImgUrl = payload.profileImgUrl
   },
   LOGOUT(state) {
     state.userInfo.email = ''

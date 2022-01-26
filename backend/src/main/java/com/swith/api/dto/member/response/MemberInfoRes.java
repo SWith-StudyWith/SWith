@@ -10,5 +10,5 @@ import lombok.Setter;
 public class MemberInfoRes {
     private String email;
     private String nickname;
-    private String gole;
+    private String goal;
 }
