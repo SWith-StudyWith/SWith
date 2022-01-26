@@ -1,5 +1,5 @@
 <template>
-  <!-- <nav-bar></nav-bar> -->
+  <Navbar />
   <div class="container">
     <p class="form-title">비밀번호 찾기</p>
     <div class="row">
@@ -22,18 +22,19 @@
       </form>
     </div>
   </div>
+  <Footer />
 </template>
 
 <script>
-// import { Navbar } from '@/views/common/NavBar.vue';
-// import { Footer } from '@/views/common/Footer.vue';
+import Navbar from '@/views/common/Navbar.vue';
+import Footer from '@/views/common/Footer.vue';
 
 export default {
   name: 'FindPassword',
-  // components: {
-  //   Navbar,
-  //   Footer,
-  // }
+  components: {
+    Navbar,
+    Footer
+  }
 };
 </script>
 
@@ -43,11 +44,16 @@ export default {
 }
 .container {
   width: 377px;
+  margin-top: 180px;
+  margin-bottom: 200px;
 }
 input::placeholder {
   font-size: 12px;
   padding: auto;
   vertical-align: middle;
+}
+form{
+margin-top: 20px;
 }
 .form-title {
   font-size: 24px;
@@ -64,5 +70,8 @@ input::placeholder {
 input[type="email"] {
   height: 42px;
   padding: 10px 15px;
+}
+button{
+  text-align: center;
 }
 </style>
