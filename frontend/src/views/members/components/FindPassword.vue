@@ -19,7 +19,7 @@
     <div class="row">
       <form class="findpassword-btn">
         <button class="btn col-12 button_navy"
-          style="font-size: 14px;"
+          style="font-size: 14px;" @click="onClickSendCode"
         >이메일 보내기</button>
       </form>
     </div>
@@ -31,10 +31,9 @@
 /* eslint-disable */
 import Navbar from '@/views/common/Navbar.vue';
 import Footer from '@/views/common/Footer.vue';
-
 import { reactive, computed } from 'vue';
 import { useRouter } from 'vue-router';
-import { useStore } from 'vuex';
+import {sendTemporaryPassword} from '@/api/user';
 
 export default {
   name: 'FindPassword',
@@ -43,6 +42,7 @@ export default {
     Footer
   },
   setup(){
+    const router = useRouter();
     const state = reactive({
       email: '',
 
@@ -66,12 +66,36 @@ export default {
       return re.test(email);
     };
 
-    return{
-      state,
+    const onClickSendCode = function (e) {
+      e.preventDefault();
+      if (!state.isValidEmail) {
+        return;
+      }
+      sendTemporaryPassword(
+        { email: state.email },
+        (res) => {
+          console.log(res.data)
+          switch (res.data.code) {
+            case 400:
+              alert('가입된 이메일 내역이 없습니다.')
+              break;
+            case 200:
+              alert('임시 비밀번호 전송 성공!\n로그인 후, 비밀번호 변경해주세요.')
+              break;
+          }
+        },
+        (err) => {
+          console.log(err)
+          alert('서버가 아파요.')
+        }
+      )
+      router.push({ name: 'Login' })
     }
 
+    return{
+      state, onClickSendCode
+    }
   },
-
 };
 </script>
 

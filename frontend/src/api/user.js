@@ -29,6 +29,13 @@ function login(payload, success, fail) {
     .then(success)
     .catch(fail)
 }
+// 임시 비밀번호 전송
+function sendTemporaryPassword(payload, success, fail) {
+  basicInstance
+    .post(`/api/members/auth/email/password`, payload)
+    .then(success)
+    .catch(fail)
+}
 // 사용자 정보 확인
 function getUserInfo(success, fail) {
   basicInstance
@@ -87,4 +94,5 @@ export {
   updateUserInfoAPI,
   loginGoogle,
   updatePassword,
+  sendTemporaryPassword,
 }
