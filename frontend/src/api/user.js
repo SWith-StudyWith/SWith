@@ -71,7 +71,7 @@ function updateUserInfoAPI(payload, success, fail) {
 
 // 비밀번호 수정
 function updatePassword(payload, success, fail) {
-  userInstance
+  basicInstance
     .patch(`/api/members/password`, payload)
     .then(success)
     .catch(fail)
