@@ -1,5 +1,5 @@
-import { createStore } from 'vuex';
 import createPersistedState from "vuex-persistedstate";
+import { createStore } from 'vuex';
 
 // 모듈 import
 import user from './modules/user';
@@ -10,7 +10,13 @@ const store = createStore({
     user,
     study,
   },
-  plugins: [createPersistedState()]
+  plugins: [
+    createPersistedState(
+      {
+        path: ['user'],
+      }
+    )
+  ]
 });
 
 export default store;
