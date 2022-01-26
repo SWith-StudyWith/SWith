@@ -1,9 +1,11 @@
 package com.swith.api.controller;
 
 import com.swith.api.dto.study.request.StudyCodeReq;
+import com.swith.api.dto.study.response.MemberStudyRes;
 import com.swith.api.service.MemberService;
 import com.swith.api.service.MemberStudyService;
 import com.swith.api.service.StudyService;
+import com.swith.common.response.BaseDataResponse;
 import com.swith.common.response.BaseResponse;
 import com.swith.db.entity.Member;
 import com.swith.db.entity.MemberStudy;
@@ -12,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -46,5 +50,14 @@ public class StudyController {
         // 스터디 가입
         memberStudyService.joinStudy(member, study);
         return ResponseEntity.status(200).body(new BaseResponse(true, 200, "스터디 가입 성공"));
+    }
+
+    @GetMapping
+    public ResponseEntity<BaseDataResponse<List<MemberStudyRes>>> getStudyList() {
+
+        Member member = memberService.getMemberByAuthentication();
+        List<MemberStudyRes> studyList = studyService.getStudyList(member);
+
+        return ResponseEntity.status(200).body(new BaseDataResponse<>(true, 200, "스터디 목록 조회 성공", studyList));
     }
 }
