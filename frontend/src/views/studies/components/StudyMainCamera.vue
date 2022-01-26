@@ -1,34 +1,76 @@
 <template>
-  <div class="card" style="height: 300px;">
-    StudyMainCamera
+  <div class="videoInput">
+    <video class="myVideo" autoplay style="width: 300px"></video>
+    <audio src="" class="myAudio" autoplay></audio>
   </div>
   <div class="text-center">
-    <button class="btn btn-secondary circle-btn mx-3 p-3">
-      <i class="fas fa-video"></i>
+    <button class="btn btn-primary  mx-3" @click="this.onClickCameraBtn">
+      <font-awesome-icon :icon="['fas', this.cameraIcon]" />
     </button>
-    <button class="btn btn-secondary circle-btn mx-3 p-3">
-      <i class="fas fa-microphone"></i>
+    <button class="btn btn-primary mx-3"  @click="this.onClickMuteBtn">
+      <font-awesome-icon :icon="['fas', this.mutedIcon]" />
     </button>
   </div>
 </template>
 <script>
+
 export default {
   name: '',
   components: {},
   data() {
     return {
-      sampleData: ''
+      myStream: null,
+      myVideo: null,
+      sampleData: '',
+      isMuted: false,
+      isCameraOn: true,
     }
   },
-  setup() {},
-  created() {},
-  mounted() {},
+  mounted() {
+    this.myVideo = document.querySelector('.myVideo')
+    this.getMedia()
+  },
   unmounted() {},
-  methods: {}
+  methods: {
+    getMedia: async function () {
+      try {
+        this.myStream = await navigator.mediaDevices.getUserMedia({
+          audio: true,
+          video: true,
+        });
+        this.myVideo.srcObject = this.myStream;
+
+      } catch(err) {
+        console.log(err)
+      }
+    },
+    onClickMuteBtn: function () {
+      this.isMuted = !this.isMuted;
+      console.log(this.isMuted)
+      this.myStream
+        .getAudioTracks()
+        .forEach(track => {
+          track.enabled = !track.enabled;
+        })
+    },
+    onClickCameraBtn: function () {
+      this.isCameraOn = !this.isCameraOn;
+      this.myStream
+        .getVideoTracks()
+        .forEach(track => {
+          track.enabled = !track.enabled;
+        });
+    },
+  },
+  computed: {
+    mutedIcon() {
+      return this.isMuted ? 'microphone-slash' : 'microphone'
+    },
+    cameraIcon() {
+      return this.isCameraOn ? 'video' : 'video-slash'
+    }
+  }
 }
 </script>
 <style scoped>
-.circle-btn{
-  border-radius: 70%;
-}
 </style>

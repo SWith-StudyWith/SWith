@@ -3,7 +3,7 @@ import axios from 'axios';
 import setInterceptors from './common/interceptors';
 
 // user instance
-function createUserInstance() {
+function createBasicInstance() {
   const instance = axios.create({
     baseURL: process.env.VUE_APP_BASE_URL_DEV,
     headers: {
@@ -12,16 +12,16 @@ function createUserInstance() {
   })
   return setInterceptors(instance);
 }
-export const userInstance = createUserInstance();
+export const basicInstance = createBasicInstance();
 
 // study instance
-function createStudyInstance() {
-  const instance = axios.create({
-    baseURL: process.env.VUE_APP_BASE_URL_DEV,
-    headers: {
-      'Content-Type': 'application/json',
-    }
-  })
-  return setInterceptors(instance);
-}
-export const studyInstance = createStudyInstance();
+// function createStudyInstance() {
+//   const instance = axios.create({
+//     baseURL: process.env.VUE_APP_BASE_URL_DEV,
+//     headers: {
+//       'Content-Type': 'application/json',
+//     }
+//   })
+//   return setInterceptors(instance);
+// }
+// export const studyInstance = createStudyInstance();
