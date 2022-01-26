@@ -52,7 +52,7 @@ const routes = [
     path: '/members/findpassword',
     name: 'FindPassword',
     component: () => import(/* webpackChunkName: "findpassword" */ '../views/members/components/FindPassword.vue'),
-    meta: { authRequired: true },
+    meta: { authRequired: false },
   },
   {
     path: '/studies/create',
