@@ -50,11 +50,6 @@ export default {
 </script>
 
 <style scoped>
-:root {
-  --sidebar-bg-color: #1E304F;
-  --sidebar-item-hover: #38a169;
-  --sidebar-item-active: #276749;
-}
 .sidebar {
   color: black;
   background-color: #1E304F;
