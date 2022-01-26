@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 // createApp(App).use(store).use(router).mount('#app').component('font-awesome-icon', FontAwesomeIcon);
 // createApp(App).use(store).use(router).mount('#app');
+
 const app = createApp(App)
 app.use(store)
 app.use(router)
