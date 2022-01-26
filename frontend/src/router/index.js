@@ -57,17 +57,17 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/studies/components/StudyCreate.vue'),
   },
   {
-    path: '/studies/:study_id/update',
+    path: '/studies/:studyCode/update',
     name: 'StudyUpdate',
     component: () => import(/* webpackChunkName: "about" */ '../views/studies/components/StudyUpdate.vue'),
   },
   {
-    path: '/studies/:study_id',
+    path: '/studies/:studyCode',
     name: 'StudyMain',
     component: () => import(/* webpackChunkName: "studymain", webpackPrefetch:true  */ '../views/studies/components/StudyMain.vue'),
   },
   {
-    path: '/studies/:study_id/room',
+    path: '/studies/:studyCode/room',
     name: 'StudyRoom',
     component: () => import(/* webpackChunkName: "studyroom", webpackPrefetch:true  */ '../views/studies/components/StudyRoom.vue'),
   },
