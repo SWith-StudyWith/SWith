@@ -133,21 +133,28 @@ export default {
         return;
       }
       updatePassword(
-        { password: state.newPassword },
+        { password: state.passwordConfirm },
         (res) => {
           console.log(res.data)
           switch (res.data.code) {
             case 200:
               alert('비밀번호 수정 성공!')
               break;
+            case 404:
+              alert('비밀번호 수정 실패')
+              break;
+            case 400:
+              alert('회원 인증 실패')
+              break;
           }
         },
         (err) => {
           console.log(err)
-          alert('서버가 아파요.')
+          alert('서버가 아파요.ㅠㅠ')
         }
       )
-      router.push({ name: 'Login' })
+
+      router.push({ name: 'MyPage' })
     }
 
     const onClickCancle = function(e){
@@ -160,7 +167,7 @@ export default {
     }
 
     return {
-      state, onClickChange
+      state, onClickChange, onClickCancle
     };
 
   },
