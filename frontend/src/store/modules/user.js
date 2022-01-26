@@ -31,7 +31,7 @@ const actions = {
       payload,
       (res) => {
         if (res.data.code === 200) {
-          localStorage.setItem('accessToken', res.data.data.accessToken)
+          sessionStorage.setItem('accessToken', res.data.data.accessToken)
           commit('SET_USER_ACCESS_INFO', res.data.data)
           dispatch('GET_USER_INFO')
           router.push({ name: 'Main' })
@@ -51,7 +51,7 @@ const actions = {
       payload,
       (res) => {
         console.log(res.data)
-        localStorage.setItem('accessToken', res.data.data.accessToken)
+        sessionStorage.setItem('accessToken', res.data.data.accessToken)
         commit('SET_USER_ACCESS_INFO', res.data.data)
         dispatch('GET_USER_INFO')
         router.push({ name: 'Main' })
@@ -68,7 +68,7 @@ const actions = {
       payload,
       (res) => {
         console.log(res.data)
-        localStorage.setItem('accessToken', res.data.data.accessToken)
+        sessionStorage.setItem('accessToken', res.data.data.accessToken)
         commit('SET_USER_ACCESS_INFO', res.data.data)
         dispatch('GET_USER_INFO')
         router.push({ name: 'Main' })
@@ -104,7 +104,6 @@ const mutations = {
     state.userInfo.goal = payload.goal;
   },
   SET_USER_ACCESS_INFO(state, payload) {
-    state.userInfo.accessToken = payload.accessToken
     state.userInfo.path = payload.path
   },
   UPDATE_USER_INFO(state, payload) {
@@ -113,11 +112,13 @@ const mutations = {
     // state.userInfo.profileImgUrl = payload.profileImgUrl
   },
   LOGOUT(state) {
-    state.userInfo.email = ''
-    state.userInfo.nickname = ''
-    state.userInfo.goal = ''
-    state.userInfo.accessToken = ''
-    localStorage.removeItem('accessToken')
+    // state.userInfo.email = ''
+    // state.userInfo.nickname = ''
+    // state.userInfo.goal = ''
+    // state.userInfo.accessToken = ''
+    state.userInfo = {}
+    sessionStorage.removeItem('accessToken')
+    sessionStorage.clear()
   }
 };
 

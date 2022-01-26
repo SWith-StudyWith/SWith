@@ -152,7 +152,7 @@ router.beforeEach(function (to, from, next) {
   // meta 속성의 authRequired : false 이면 라우팅 이동 허용
   // true 면 라우팅 이동 차단하며 로그인 시도하라는 alert 띄움
 
-  const token = localStorage.getItem('accessToken');
+  const token = sessionStorage.getItem('accessToken');
 
   if (to.matched.some(function (routeInfo) {
     return routeInfo.meta.authRequired;

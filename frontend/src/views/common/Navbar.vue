@@ -49,7 +49,7 @@ export default {
 
     const state = reactive({
       isLogin : computed(() => {
-        if(store.state.user.userInfo.accessToken == '' || store.state.user.userInfo.accessToken == undefined)
+        if(sessionStorage.getItem('accessToken') == '' || sessionStorage.getItem('accessToken') == undefined)
           return false
         else return true
       }),
