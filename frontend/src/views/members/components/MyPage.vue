@@ -16,7 +16,7 @@
               </div>
             <form>
               <div class="row justify-content-between">
-                <p class="col-8 d-inline-flex" style="">{{ userInfo.email }}</p>
+                <p class="col-8 d-inline-flex" style="">{{ state.userInfo.email }}</p>
                 <button type="button" class="btn btn-change-pw btn-primary col-3 align-self-end"
                   data-bs-toggle="modal" data-bs-target="#changePasswordModal">
                   비밀번호 변경
