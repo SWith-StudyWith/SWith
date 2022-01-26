@@ -21,7 +21,7 @@
               </router-link>
               <div class="mb-3">
                 <label for="nickname" class="form-label">닉네임</label>
-                <input type="text" class="form-control" id="nickname" v-model="userInfo.nickname">
+                <input type="text" class="form-control" id="nickname">
               </div>
               <div class="mb-3">
                 <label for="goal" class="form-label">나의 목표</label>
