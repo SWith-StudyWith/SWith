@@ -55,10 +55,10 @@ export default {
   text-decoration: none;
 }
 .link:hover {
-  background-color: #38a169;
+  background-color: #F5CEC7;
 }
 .link.active {
-  background-color: #276749;
+  background-color: #d39e9e;
 }
 .link .icon {
   flex-shrink: 0;

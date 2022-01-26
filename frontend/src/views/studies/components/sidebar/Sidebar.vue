@@ -13,9 +13,12 @@
     <SidebarLink to="/analytics" icon="fas fa-chart-bar">Analytics</SidebarLink>
     <SidebarLink to="/friends" icon="fas fa-users">Friends</SidebarLink>
     <SidebarLink to="/image" icon="fas fa-image">Images</SidebarLink> -->
-    <SidebarLink to="/studies/main" icon="fas fa-microphone"><img src="@/assets/img/icon_study_page/Pen_gray.png">왜안뜨냐1</SidebarLink>
-    <SidebarLink to="/members/signup" icon="fas fa-tv">MainPage</SidebarLink>
-    <SidebarLink to="/main" icon="fas fa-chart-bar">Rooms</SidebarLink>
+    <SidebarLink to="/studies/main" icon="fas fa-sign-out-alt">메인으로가기</SidebarLink>
+    <SidebarLink to="/studies/11" icon="fas fa-microphone">기본화면이라쳐</SidebarLink>
+    <SidebarLink to="/studies/11/kanbanboard" icon="fas fa-chalkboard">칸반보드</SidebarLink>
+    <SidebarLink to="/studies/11/screenshare" icon="fas fa-desktop">화면공유</SidebarLink>
+    <SidebarLink to="/studies/11/whiteboard" icon="fas fa-pencil-alt">화이트보드</SidebarLink>
+    <!-- <img src="@/assets/img/icon_study_page/Pen_gray.png"> -->
     <!-- <SidebarLink to="/friends" icon="fas fa-users">Friends</SidebarLink> -->
     <!-- <SidebarLink to="/image" icon="fas fa-image">Images</SidebarLink> -->
 
