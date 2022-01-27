@@ -2,9 +2,9 @@
   <div>
     <Navbar />
     <div class="container">
-      <header>
-        <h1>내 정보 수정</h1>
-      </header>
+      <!-- <header> -->
+        <h1 class="form-title">내 정보 수정</h1>
+      <!-- </header> -->
       <div class="row d-flex justify-content-center">
         <div class="col-4">
           <section>
@@ -108,22 +108,11 @@ export default {
 </script>
 
 <style scoped>
-.container{
-  margin-top: 50px;
-  justify-content: center;
-}
 form{
   text-align: left;
 }
 section{
   margin-bottom: 100px;
-}
-h1{
-  font-size: 24px;
-  color: #737B7D;
-  text-align: center;
-  margin-top: 70px;
-  margin-bottom: 24px;
 }
 p{
   font-size: 18px;
@@ -179,5 +168,37 @@ p{
 }
 .signout-btn{
   color: #BDBDBD;
+}
+
+/* setting */
+.form-label{
+  margin-bottom: 3px;
+  padding: 1px;
+}
+.form-title {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+.container {
+  margin-top: 100px;
+  margin-bottom: 120px;
+}
+button{
+  font-size: 14px;
+  text-align: center;
+}
+input::placeholder {
+  font-size: 12px;
+  padding: auto;
+  vertical-align: middle;
+}
+input {
+  background-color: #F4F5F4;
+  vertical-align: middle;
+}
+textarea {
+  background-color: #F4F5F4;
+  vertical-align: middle;
 }
 </style>

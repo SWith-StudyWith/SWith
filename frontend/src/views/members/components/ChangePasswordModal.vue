@@ -7,9 +7,8 @@
         <div class="row modalHeader">
             <h5 class="modal-title" id="exampleModalLabel">비밀번호 변경</h5>
         </div>
-        <form action="" class="row g-3 needs-validation"  style="text-align: left;">
+        <form action="" class="row g-3"  style="text-align: left;">
           <div class="col-12" >
-
             <!-- nowPassword -->
             <label for="inputAddress" class="form-label">현재 비밀번호</label>
             <div class="input-group has-validation">
