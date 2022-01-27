@@ -69,6 +69,7 @@ export default {
     const onClickSendCode = function (e) {
       e.preventDefault();
       if (!state.isValidEmail) {
+        alert('이메일을 입력해주세요!');
         return;
       }
       sendTemporaryPassword(
