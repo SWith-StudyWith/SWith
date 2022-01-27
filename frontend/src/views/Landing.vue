@@ -16,7 +16,7 @@
           </span>
         </p>
         <router-link to="/members/signup">
-          <button type="button" class="btn btn-light" >#study_with</button>
+          <button type="button" class="btn btn-success" style="color:white">#study_with</button>
         </router-link>
       </div>
       <div class="col-md-5">
@@ -111,7 +111,7 @@
           </span>
         </p>
         <router-link to="/members/signup">
-          <button type="button" class="btn btn-light" >#study_with</button>
+          <button type="button" class="btn btn-primary" >#study_with</button>
         </router-link>
       </div>
     </div>
@@ -129,7 +129,7 @@
           <p style="font-size:17px;">Let's do a hopeful online study with us. <br>
           If you want, follow me!</p>
         <router-link to="/members/signup">
-          <button type="button" class="btn btn-light" >#study_with</button>
+          <button class="btn btn-primary" style="color:white">#study_with</button>
         </router-link>
         </div>
       </div>
