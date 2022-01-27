@@ -23,14 +23,15 @@
                   style="display: none;"
                 />
               </div>
-              <p class="col-8 d-inline-flex" style="">{{ state.userInfo.email }}</p>
               <!-- Google이나 Kakao 로그인인 경우 안 보이게 하기 -->
-              <div class="col-4 d-inline-flex justify-content-end" v-if="state.userInfo.path === 'O'">
-                <router-link to="/members/changepassword">
-                  <button type="button" class="btn btn-change-pw btn-primary">비밀번호 변경</button>
-                </router-link>
+              <div class="row justify-content-between">
+                <p class="col-8 d-inline-flex" style="">{{ state.userInfo.email }}</p>
+                <button type="button" class="btn btn-change-pw btn-primary col-3 align-self-end"
+                  data-bs-toggle="modal" data-bs-target="#changePasswordModal" v-if="state.userInfo.path === 'O'">
+                  비밀번호 변경
+                </button>
               </div>
-              <div class="mb-3">
+              <div class="row">
                 <label for="nickname" class="form-label">닉네임</label>
                 <input type="text" class="form-control" id="nickname" v-model="state.userInfo.nickname">
               </div>
