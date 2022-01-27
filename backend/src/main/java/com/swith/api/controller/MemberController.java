@@ -124,6 +124,10 @@ public class MemberController {
     public ResponseEntity<BaseResponse> checkMemberPassword(@RequestBody MemberReq memberReq) {
         log.debug("checkMemberPassword - {}", memberReq.getPassword());
         Member member = memberService.getMemberByAuthentication();
+        // 회원인증 실패
+        if (member == null) {
+            return ResponseEntity.status(200).body(new BaseResponse(false, 400, "회원인증 실패"));
+        }
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(member.getMemberId(), memberReq.getPassword());
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
