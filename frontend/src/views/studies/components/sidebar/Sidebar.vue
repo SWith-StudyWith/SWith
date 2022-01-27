@@ -17,7 +17,7 @@
     <!-- <img src="@/assets/img/icon_study_page/Pen_gray.png"> -->
 
     <div class="control-bottons">
-      <p @click="this.onClickMundae">뭔데</p>
+      <!-- <p @click="this.onClickMundae">뭔데</p> -->
       <p>ㅎ ㅏ</p>
       <!-- <button class="btn btn-primary  mx-3" @click="this.onClickCameraBtn">
         <font-awesome-icon :icon="['fas', this.cameraIcon]" />
@@ -26,11 +26,25 @@
         <font-awesome-icon :icon="['fas', this.mutedIcon]" />
       </button> -->
       <p>
+      <font-awesome-icon @click="this.onClickMuteBtn" :icon="['fas', this.mutedIcon]" />
+      </p>
+      <p>
       <font-awesome-icon @click="this.onClickCameraBtn" :icon="['fas', this.cameraIcon]" />
       </p>
       <p>
-      <font-awesome-icon @click="this.onClickMuteBtn" :icon="['fas', this.mutedIcon]" />
+      <font-awesome-icon @click="this.onClickScreenShareIcon" :icon="['fas', this.screenshareIcon]" />
       </p>
+      <p>
+      <font-awesome-icon @click="this.onClickWhiteBoardIcon" :icon="['fas', this.whiteboardIcon]" />
+      </p>
+      <p>
+      <font-awesome-icon @click="this.onClickKanbanBoardIcon" :icon="['fas', this.kanbanboardIcon]" />
+      </p>
+      <!-- <font-awesome-icon @click="this.onClickMuteBtn" :icon="['fas', this.mutedIcon]" />
+      <font-awesome-icon @click="this.onClickCameraBtn" :icon="['fas', this.cameraIcon]" />
+      <font-awesome-icon @click="this.onClickScreenShareIcon" :icon="['fas', this.screenshareIcon]" />
+      <font-awesome-icon @click="this.onClickWhiteBoardIcon" :icon="['fas', this.whiteboardIcon]" />
+      <font-awesome-icon @click="this.onClickKanbanBoardIcon" :icon="['fas', this.kanbanboardIcon]" /> -->
       <!-- <span
         class="collapse-icon"
         :class="{ 'rotate-180': collapsed }"
@@ -71,7 +85,9 @@ export default {
       sampleData: '',
       isMuted: false,
       isCameraOn: true,
-      isMundae: true,
+      isScreenShare: true,
+      isWhiteBoard: true,
+      isKanbanBoard: true,
     }
   },
   methods: {
@@ -81,9 +97,16 @@ export default {
     onClickCameraBtn: function () {
       this.isCameraOn = !this.isCameraOn;
     },
-    onClickMundae: function () {
-      this.isMundae = !this.isMundae;
-    }
+    onClickScreenShareIcon: function () {
+      this.isScreenShare = !this.isScreenShare;
+    },
+    onClickWhiteBoardIcon: function () {
+      this.isWhiteBoard = !this.isWhiteBoard;
+    },
+    onClickKanbanBoardIcon: function () {
+      this.isKanbanBoard = !this.isKanbanBoard;
+    },
+
   },
   computed: {
     mutedIcon() {
@@ -91,7 +114,16 @@ export default {
     },
     cameraIcon() {
       return this.isCameraOn ? 'video' : 'video-slash'
-    }
+    },
+    screenshareIcon() {
+      return this.isScreenShare ? 'desktop' : 'tv'
+    },
+    whiteboardIcon() {
+      return this.isWhiteBoard ? 'pencil-alt' : 'pen'
+    },
+    kanbanboardIcon() {
+      return this.isKanbanBoard ? 'edit' : 'chalkboard'
+    },
   }
 }
 </script>
@@ -148,6 +180,21 @@ export default {
 
 .fas {
   color: rgba(255, 255, 255, 0.7);
+}
+.fa-tv {
+  color: pink;
+}
+.fa-microphone {
+  color: pink;
+}
+.fa-video {
+  color: pink;
+}
+.fa-pencil-alt {
+  color: pink;
+}
+.fa-edit {
+  color: pink;
 }
 
 </style>
