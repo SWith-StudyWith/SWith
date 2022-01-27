@@ -2,14 +2,12 @@ package com.swith.api.service;
 
 import com.swith.api.dto.member.request.MemberInfoReq;
 import com.swith.common.util.MailUtil;
-import com.swith.db.entity.AuthMail;
 import com.swith.common.util.SecurityUtil;
 import com.swith.db.entity.Member;
 import com.swith.db.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.NumberUtils;
 
 import javax.transaction.Transactional;
 import java.util.Optional;
@@ -112,7 +110,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void deleteMember(Member member) {
-        memberRepository.delete(member);
+        member.setIsDeleted("Y");
+        memberRepository.save(member);
     }
 
 }
