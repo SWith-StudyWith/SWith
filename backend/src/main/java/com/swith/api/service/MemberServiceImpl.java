@@ -99,19 +99,21 @@ public class MemberServiceImpl implements MemberService {
     public Member updateMember(Member member, MemberInfoReq memberInfoReq) {
         member.setNickname(memberInfoReq.getNickname());
         member.setGoal(memberInfoReq.getGoal());
-        return memberRepository.save(member);
+        return member;
+        //return memberRepository.save(member);
     }
 
     @Override
     public Member updateMemberPassword(Member member, String password) {
-        member.setPassword(passwordEncoder.encode(member.getPassword()));
-        return memberRepository.save(member);
+        member.setPassword(passwordEncoder.encode(password));
+        return member;
+        //return memberRepository.save(member);
     }
 
     @Override
     public void deleteMember(Member member) {
         member.setIsDeleted("Y");
-        memberRepository.save(member);
+        //memberRepository.save(member);
     }
 
 }
