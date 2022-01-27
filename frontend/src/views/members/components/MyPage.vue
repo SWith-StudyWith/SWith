@@ -8,21 +8,29 @@
       <div class="row d-flex justify-content-center">
         <div class="col-4">
           <section>
-              <div class="box d-inline-flex justify-content-center">
-                <img class="profile-img" :src="file" />
+            <form class="userInfo-wrapper" :model="formData">
+              <div class="image-wrapper d-flex justify-content-center">
+                <label for="changeProfile" class="img-form-label">
+                  <img :src="state.userInfo.profileImgUrl" :fit="fit" class="profile-img" style="cursor:pointer">
+                </label>
+                <input
+                  id="changeProfile"
+                  class="form-control"
+                  ref="file"
+                  @change="onClickUploadFile"
+                  type="file"
+                  accept="image/*"
+                  style="display: none;"
+                />
               </div>
-              <div class="form-group row">
-                <input @change="changeFile" type="file" class="form-control" id="inputFileUploadInsert" accept="image/*"/>
+              <p class="col-8 d-inline-flex" style="">{{ state.userInfo.email }}</p>
+              <!-- Google이나 Kakao 로그인인 경우 안 보이게 하기 -->
+              <div class="col-4 d-inline-flex justify-content-end" v-if="state.userInfo.path === 'O'">
+                <router-link to="/members/changepassword">
+                  <button type="button" class="btn btn-change-pw btn-primary">비밀번호 변경</button>
+                </router-link>
               </div>
-            <form>
-              <div class="row justify-content-between">
-                <p class="col-8 d-inline-flex" style="">{{ state.userInfo.email }}</p>
-                <button type="button" class="btn btn-change-pw btn-primary col-3 align-self-end"
-                  data-bs-toggle="modal" data-bs-target="#changePasswordModal">
-                  비밀번호 변경
-                </button>
-              </div>
-              <div class="row">
+              <div class="mb-3">
                 <label for="nickname" class="form-label">닉네임</label>
                 <input type="text" class="form-control" id="nickname" v-model="state.userInfo.nickname">
               </div>
@@ -63,22 +71,25 @@ export default {
   setup() {
     const store = useStore();
     const state = ref({
-      profileImgUrl: '@/assets/img/profile1.png',
       userInfo : store.getters.getUserInfo,
-      file: store.getters.getUserInfo.profileImgUrl
+      imgFile: '@/assets/img/profile1.png'
     });
 
-    const changeFile = (event) => {
-      console.log(event)
-      if(event.target.files && event.target.files.length > 0){
-        state.value.file = URL.createObjectURL(event.target.files[0]);
-      }
+    const onClickUploadFile = function(e) {
+      console.log(e.target.value)
+      const file = e.target.files[0];
+      state.value.userInfo.profileImgUrl = URL.createObjectURL(file);
+      state.value.imgFile = file;
+      // if(e.target.files && e.target.files.length > 0){
+      //   state.value.file = URL.createObjectURL(e.target.files[0]);
+      // }
     };
 
     const onClickUpdateUserInfo = () => {
       const updateUserData = {
         nickname: state.value.userInfo.nickname,
-        goal: state.value.userInfo.goal
+        goal: state.value.userInfo.goal,
+        img_url: state.value.userInfo.imgFile
       }
       store.dispatch('updateUserInfo', updateUserData)
     }
@@ -88,7 +99,7 @@ export default {
     // const formData = new FormData(); formData.append("image", this.image)
 
     return {
-      state, onClickUpdateUserInfo, changeFile
+      state, onClickUpdateUserInfo, onClickUploadFile
     }
   },
 
@@ -129,27 +140,37 @@ p{
   margin-right: 0px;
   margin-left: 0px;
 }
-.defaultImage{
-  margin-bottom: 32px;
-}
 .uploadImage{
   margin-bottom: 20px;
 }
 .form-goal{
   margin-bottom: 36px;
 }
-.box {
+/* .box {
+
+    overflow: hidden;
+    background: #BDBDBD;
+} */
+.img-form-label{
+  width: 150px;
+  height: 150px;
+  border-radius: 70%;
+}
+.image-wrapper{
+  margin-bottom: 30px;
+}
+.profile-img {
     width: 150px;
     height: 150px;
     border-radius: 70%;
     overflow: hidden;
     background: #BDBDBD;
-    margin: 20px;
 }
 .profile-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    /* object-fit: cover; */
 }
 .signout-btn:hover {
   cursor: pointer;
