@@ -13,11 +13,15 @@ function getStudyList(success, fail) {
     .then(success)
     .catch(fail)
 }
-
 function joinStudy(payload, success, fail) {
-  console.log(payload)
   basicInstance
     .post(`api/studies/join`, payload)
+    .then(success)
+    .catch(fail)
+}
+function exitStudy(payload, success, fail) {
+  basicInstance
+    .delete(`api/studies/${payload}`)
     .then(success)
     .catch(fail)
 }
@@ -26,4 +30,5 @@ export {
   getStudyInfo,
   getStudyList,
   joinStudy,
+  exitStudy,
 }
