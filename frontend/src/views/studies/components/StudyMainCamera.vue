@@ -2,18 +2,28 @@
   <div class="videoInput">
     <video class="myVideo" autoplay style="width: 300px"></video>
   </div>
-  <div class="text-center">
-    <button class="btn btn-primary  mx-3" @click="this.onClickCameraBtn">
+  <div class="text-center mt-3">
+    <button class="btn btn-primary mx-3" @click="this.onClickCameraBtn">
       <font-awesome-icon :icon="['fas', this.cameraIcon]" />
     </button>
-    <select name="cameras" id="cameraSelect" @change="onChangeCamera" v-model="this.currentCamera">
-      <option :value="camera.deviceId" :key="camera.deviceId" v-for="camera in this.cameraDevices">
-        {{ camera.label }}
-      </option>
-    </select>
     <button class="btn btn-primary mx-3"  @click="this.onClickMuteBtn">
       <font-awesome-icon :icon="['fas', this.mutedIcon]" />
     </button>
+    <button class="btn btn-primary mx-3" @click="this.selectsOn = !this.selectsOn">
+      <font-awesome-icon :icon="['fas', 'cog']" />
+    </button>
+    <div v-if="this.selectsOn" class="select-container my-2">
+      <select name="cameras" id="cameraSelect" class="form-select text-truncate" @change="onChangeCamera" v-model="this.currentCamera">
+        <option :value="camera.deviceId" :key="camera.deviceId" v-for="camera in this.cameraDevices">
+          {{ camera.label }}
+        </option>
+      </select>
+      <select name="mics" id="micSelect" class="form-select text-truncate" @change="onChangeCamera" v-model="this.currentMic">
+        <option :value="mic.deviceId" :key="mic.deviceId" v-for="mic in this.micDevices">
+          {{ mic.label }}
+        </option>
+      </select>
+    </div>
   </div>
 </template>
 <script>
@@ -26,50 +36,65 @@ export default {
       myStream: null,
       myVideo: null,
       cameraDevices: [],
-      currentCamera: null,
+      micDevices: [],
+      currentCamera: '',
+      currentMic: '',
       isMuted: false,
       isCameraOn: true,
+      selectsOn: false,
     }
   },
   mounted() {
     this.myVideo = document.querySelector('.myVideo')
-    this.cameraSelect = document.querySelector('#cameraSelect')
     this.getMedia()
-    this.getCameras()
+    this.getDevices()
   },
   unmounted() {
     this.closeMedia()
   },
   methods: {
-    // 카메라 장치 가져오기
-    getCameras: async function () {
+    // 장치 가져오기
+    getDevices: async function () {
       try {
         const devices = await navigator.mediaDevices.enumerateDevices()
         const cameras = devices.filter(device => device.kind === 'videoinput')
+        const mics = devices.filter(device => device.kind === 'audioinput')
         this.currentCamera = this.myStream ? await this.myStream.getVideoTracks()[0].id : null
+        this.currentMic = this.myStream ? await this.myStream.getAudioTracks()[0].id: null
         this.cameraDevices = cameras
+        this.micDevices = mics
       } catch(err) {
         console.log(err)
       }
     },
     // 장치 연결
-    getMedia: async function (deviceId) {
+    getMedia: async function (cameraDeviceId, micDeviceId) {
+      // 초기 세팅
       const initialConstraints = {
         audio: true,
         video: { facingMode: 'user' }
       }
-      const cameraConstraints = {
-        audio: true,
-        video: { deviceId }
+      // 사용자 입력 세팅
+      const exactConstraints = {
+        audio: { deviceId: micDeviceId },
+        video: { deviceId: cameraDeviceId }
       }
-      console.log(deviceId)
       try {
+        // 스트림
         this.myStream = await navigator.mediaDevices.getUserMedia(
-          deviceId ? cameraConstraints : initialConstraints
+          cameraDeviceId ? exactConstraints : initialConstraints
         );
         this.myVideo.srcObject = this.myStream;
-        if (!deviceId) {
-          await this.getCameras();
+        if (this.isMuted) {
+          this.onClickMuteBtn()
+          this.isMuted = true
+        }
+        if (!this.isCameraOn) {
+          this.onClickCameraBtn()
+          this.isCameraOn = false
+        }
+        if (!cameraDeviceId) {
+          await this.getDevices();
         }
       } catch(err) {
         console.log(err)
@@ -77,7 +102,6 @@ export default {
     },
     onClickMuteBtn: function () {
       this.isMuted = !this.isMuted;
-      console.log(this.isMuted)
       this.myStream.getAudioTracks().forEach(track => {
         track.enabled = !track.enabled;
       })
@@ -89,9 +113,18 @@ export default {
       });
     },
     onChangeCamera: async function (e) {
-      console.log(e.target.value)
-      await this.getMedia(e.target.value)
-      this.isCameraOn = true;
+      // 현재 카메라 끄고, 타겟 카메라와 현재 마이크 불러옴.
+      this.myStream.getVideoTracks().forEach(track => {
+        track.stop();
+      });
+      await this.getMedia(e.target.value, this.currentMic)
+    },
+    onChangeMic: async function (e) {
+      // 현재 마이크 끄고, 타겟 마이크와 현재 카메라
+      this.myStream.getAudioTracks().forEach(track => {
+        track.stop();
+      });
+      await this.getMedia(this.currentCamera, e.target.value)
     },
     // 미디어 장치 종료
     closeMedia: function () {
