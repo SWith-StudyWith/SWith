@@ -1,6 +1,7 @@
 package com.swith.api.service;
 
 import com.swith.api.dto.study.response.MemberStudyRes;
+import com.swith.api.dto.study.response.StudyInfoRes;
 import com.swith.db.entity.Member;
 import com.swith.db.entity.Study;
 
@@ -10,4 +11,5 @@ public interface StudyService {
 
     Study getStudyByCode(String studyCode);
     List<MemberStudyRes> getStudyList(Member member);
+    StudyInfoRes getStudyDetail(Long studyId);
 }

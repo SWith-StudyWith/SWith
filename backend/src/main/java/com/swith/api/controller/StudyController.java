@@ -2,6 +2,7 @@ package com.swith.api.controller;
 
 import com.swith.api.dto.study.request.StudyCodeReq;
 import com.swith.api.dto.study.response.MemberStudyRes;
+import com.swith.api.dto.study.response.StudyInfoRes;
 import com.swith.api.service.MemberService;
 import com.swith.api.service.MemberStudyService;
 import com.swith.api.service.StudyService;
@@ -59,5 +60,13 @@ public class StudyController {
         List<MemberStudyRes> studyList = studyService.getStudyList(member);
 
         return ResponseEntity.status(200).body(new BaseDataResponse<>(true, 200, "스터디 목록 조회 성공", studyList));
+    }
+
+    @GetMapping("/{studyId}")
+    public ResponseEntity<BaseDataResponse<StudyInfoRes>> getStudyDetail(@PathVariable String studyId) {
+
+        StudyInfoRes studyInfoRes = studyService.getStudyDetail(Long.parseLong(studyId));
+
+        return ResponseEntity.status(200).body(new BaseDataResponse<>(true, 200, "스터디 정보 조회 성공", studyInfoRes));
     }
 }
