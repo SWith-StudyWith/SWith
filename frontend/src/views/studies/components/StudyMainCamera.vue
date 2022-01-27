@@ -13,12 +13,14 @@
       <font-awesome-icon :icon="['fas', 'cog']" />
     </button>
     <div v-if="this.selectsOn" class="select-container my-2">
-      <select name="cameras" id="cameraSelect" class="form-select text-truncate" @change="onChangeCamera" v-model="this.currentCamera">
+      <select name="cameras" id="cameraSelect" class="form-select text-truncate" @change="onChangeCamera" v-model="this.initCamera">
+        <option value="0" disabled>카메라 선택</option>
         <option :value="camera.deviceId" :key="camera.deviceId" v-for="camera in this.cameraDevices">
           {{ camera.label }}
         </option>
       </select>
-      <select name="mics" id="micSelect" class="form-select text-truncate" @change="onChangeCamera" v-model="this.currentMic">
+      <select name="mics" id="micSelect" class="form-select text-truncate" @change="onChangeCamera" v-model="this.initMic">
+        <option value="0" disabled>마이크 선택</option>
         <option :value="mic.deviceId" :key="mic.deviceId" v-for="mic in this.micDevices">
           {{ mic.label }}
         </option>
@@ -36,11 +38,13 @@ export default {
       myStream: null,
       myVideo: null,
       cameraDevices: [],
-      micDevices: [],
       currentCamera: '',
+      isCameraOn: true,
+      initCamera: 0,
+      micDevices: [],
       currentMic: '',
       isMuted: false,
-      isCameraOn: true,
+      initMic: 0,
       selectsOn: false,
     }
   },
