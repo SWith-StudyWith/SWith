@@ -14,7 +14,6 @@ import { createRouter, createWebHistory } from 'vue-router';
 // import StudyUpdate from "@/views/studies/components/StudyUpdate.vue";
 // import StudyMain from "@/views/studies/components/StudyMain.vue";
 // import StudyRoom from "@/views/studies/components/StudyRoom.vue";
-import { useStore } from 'vuex';
 
 // 전역 가드로 페이지 인증하기 위함 meta: {authRequired : true},
 const routes = [
@@ -130,9 +129,6 @@ const routes = [
     component: () => import(/* webpackChunkName: "test" */ '../views/members/components/OAuthGoogle.vue'),
   },
 ];
-
-const store = useStore();
-
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
