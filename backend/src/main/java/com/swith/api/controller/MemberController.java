@@ -67,7 +67,7 @@ public class MemberController {
 //        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, jwt);
 //        return ResponseEntity.status(200).headers(httpHeaders)
 //                .body(new BaseResponse(true, 200, "로그인 성공"));
-        BaseDataResponse<AccessTokenRes> token = new BaseDataResponse<AccessTokenRes>(true, 200,
+        BaseDataResponse<AccessTokenRes> token = new BaseDataResponse<>(true, 200,
                 "로그인 성공", new AccessTokenRes('O', jwt));
         return ResponseEntity.status(200).body(token);
     }
@@ -128,40 +128,25 @@ public class MemberController {
                 new UsernamePasswordAuthenticationToken(member.getMemberId(), memberReq.getPassword());
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
         // 비밀번호 확인 성공
         return ResponseEntity.status(200).body(new BaseResponse(true, 200, "비밀번호 확인 성공"));
     }
 
     @PatchMapping("/password")
-    public ResponseEntity<BaseDataResponse<AccessTokenRes>> updateMemberPassword(@RequestBody MemberReq memberReq) {
+    public ResponseEntity<BaseResponse> updateMemberPassword(@RequestBody MemberReq memberReq) {
         log.debug("updateMemberPassword - {}", memberReq.getPassword());
         Member member = memberService.getMemberByAuthentication();
         // 회원인증 실패
         if (member == null) {
-            return ResponseEntity.status(200).body(new BaseDataResponse<AccessTokenRes>(false, 400,
-                    "회원 인증 실패", new AccessTokenRes('\u0000', null)));
+            return ResponseEntity.status(200).body(new BaseResponse(false, 400, "회원인증 실패"));
         }
         member = memberService.updateMemberPassword(member, memberReq.getPassword());
         // 비밀번호 수정 실패
         if (member == null) {
-            return ResponseEntity.status(200).body(new BaseDataResponse<AccessTokenRes>(false, 404,
-                    "비밀번호 수정 실패", new AccessTokenRes('\u0000', null)));
+            return ResponseEntity.status(200).body(new BaseResponse(false, 404, "비밀번호 수정 실패"));
         }
         // 비밀번호 수정 성공
-        SecurityContextHolder.getContext().setAuthentication(null);
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(member.getMemberId(), memberReq.getPassword());
-        log.debug("authenticationToken");
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        log.debug("authentication");
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        log.debug("setAuthentication");
-        String jwt = tokenProvider.createToken(authentication);
-        log.debug("createToken");
-        BaseDataResponse<AccessTokenRes> token = new BaseDataResponse<AccessTokenRes>(true, 200,
-                "비밀번호 수정 성공", new AccessTokenRes('O', "test"));
-        return ResponseEntity.status(200).body(token);
+        return ResponseEntity.status(200).body(new BaseResponse(true, 200, "비밀번호 수정 성공"));
     }
 
     @DeleteMapping
