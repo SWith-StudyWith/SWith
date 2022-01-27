@@ -3,25 +3,29 @@
   <div class="container">
     <p class="form-title">비밀번호 찾기</p>
     <div class="row">
-      <form
-        class="findpassword-form"
-      >
-        <label for="email" class="form-label">이메일</label>
-        <input class="form-control" id="email" type="email" v-model="state.email"
-          placeholder="가입하신 이메일을 입력해주세요"
-          style="background-color: #F4F5F4; vertical-align: middle;" required
-        >
-        <div :style="{ visibility: (state.isValidEmail || !state.wasInputed.email)? 'hidden' : 'visible' }"
-          class="invalid-feedback">유효하지 않은 이메일입니다.</div>
-      </form>
-    </div>
-    <br>
-    <div class="row">
-      <form class="findpassword-btn">
-        <button class="btn col-12 button_navy"
-          style="font-size: 14px;" @click="onClickSendCode"
-        >이메일 보내기</button>
-      </form>
+      <div class="offset-4 col-4">
+        <div class="row">
+          <form
+            class="findpassword-form"
+          >
+            <label for="email" class="form-label">이메일</label>
+            <input class="form-control" id="email" type="email" v-model="state.email"
+              placeholder="가입하신 이메일을 입력해주세요"
+              required
+            >
+            <div :style="{ visibility: (state.isValidEmail || !state.wasInputed.email)? 'hidden' : 'visible' }"
+              class="invalid-feedback">유효하지 않은 이메일입니다.</div>
+          </form>
+        </div>
+        <br>
+        <div class="row">
+          <form class="findpassword-btn">
+            <button class="btn col-12 button_navy"
+              style="font-size: 14px;" @click="onClickSendCode"
+            >이메일 보내기</button>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
   <Footer />
@@ -103,26 +107,10 @@ export default {
 * {
   text-align: left;
 }
-.container {
-  width: 377px;
-  margin-top: 180px;
-  margin-bottom: 200px;
-}
-input::placeholder {
-  font-size: 12px;
-  padding: auto;
-  vertical-align: middle;
-}
 form{
 margin-top: 20px;
 }
-.form-title {
-  font-size: 24px;
-  text-align: center;
-}
-.form-label {
-  font-size: 12px;
-}
+
 .button_navy {
   background-color: #334666;
   color: white;
@@ -133,14 +121,39 @@ input[type="email"] {
   padding: 10px 15px;
   margin-bottom: 3px;
 }
-button{
-  text-align: center;
-}
 
 .invalid-feedback {
   display: block;
   font-size: 0.75rem;
   margin-top: 0;
   margin-bottom: 0.5rem;
+}
+
+/*  */
+button{
+  font-size: 14px;
+  text-align: center;
+}
+.form-label{
+  margin-bottom: 3px;
+}
+.form-title {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+.container {
+  margin-top: 100px;
+  margin-bottom: 250px;
+}
+input::placeholder {
+  font-size: 12px;
+  padding: auto;
+  vertical-align: middle;
+
+}
+input{
+  background-color: #F4F5F4;
+  vertical-align: middle;
 }
 </style>

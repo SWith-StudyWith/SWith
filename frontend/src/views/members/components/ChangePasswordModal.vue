@@ -175,17 +175,23 @@ export default {
 </script>
 
 <style>
+input::placeholder {
+  font-size: 12px;
+  padding: auto;
+  vertical-align: middle;
+
+}
 input[type="password"]{
   background-color: #F4F5F4;
-  border: none;
-  font-size: 13px;
-  padding: 10px 15px;
+  vertical-align: middle;
+}
+.form-label{
   margin-bottom: 3px;
 }
-
-input::placeholder{
-  color: #737B7D;
-  font-size: 10 px;
+.modal-title {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 30px;
 }
 
 .row{
@@ -208,7 +214,7 @@ input::placeholder{
   font-size: 0.75rem;
   margin-top: 0;
   margin-bottom: 0.5rem;
-  color: rgb(24, 190, 18);
+  color: green;
 }
 button{
   margin: 10px;
