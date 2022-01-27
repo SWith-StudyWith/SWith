@@ -9,19 +9,22 @@
         <div class="col-4">
           <section>
             <form class="userInfo-wrapper" :model="formData">
-              <div class="image-wrapper d-flex justify-content-center">
-                <label for="changeProfile" class="img-form-label">
-                  <img :src="state.userInfo.profileImgUrl" :fit="fit" class="profile-img" style="cursor:pointer">
-                </label>
-                <input
-                  id="changeProfile"
-                  class="form-control"
-                  ref="file"
-                  @change="onClickUploadFile"
-                  type="file"
-                  accept="image/*"
-                  style="display: none;"
-                />
+              <div class="d-flex justify-content-center">
+                <div class="image-wrapper">
+                  <label for="changeProfile" class="img-form-label">
+                    <img :src="state.userInfo.profileImgUrl" :fit="fit" class="profile-img" style="cursor:pointer">
+                  </label>
+                  <input
+                    id="changeProfile"
+                    class="form-control"
+                    ref="file"
+                    @change="onClickUploadFile"
+                    type="file"
+                    accept="image/*"
+                    style="display: none;"
+                  />
+
+                </div>
               </div>
               <!-- Google이나 Kakao 로그인인 경우 안 보이게 하기 -->
               <div class="row justify-content-between">
@@ -81,9 +84,6 @@ export default {
       const file = e.target.files[0];
       state.value.userInfo.profileImgUrl = URL.createObjectURL(file);
       state.value.imgFile = file;
-      // if(e.target.files && e.target.files.length > 0){
-      //   state.value.file = URL.createObjectURL(e.target.files[0]);
-      // }
     };
 
     const onClickUpdateUserInfo = () => {
@@ -94,11 +94,6 @@ export default {
       }
       store.dispatch('updateUserInfo', updateUserData)
     }
-    // image는 formData로?
-    // var updateUserData = new FormData()
-    // updateUserData.append("image", state.userInfo.profileImgUrl )
-    // const formData = new FormData(); formData.append("image", this.image)
-
     return {
       state, onClickUpdateUserInfo, onClickUploadFile
     }
@@ -147,11 +142,6 @@ p{
 .form-goal{
   margin-bottom: 36px;
 }
-/* .box {
-
-    overflow: hidden;
-    background: #BDBDBD;
-} */
 .img-form-label{
   width: 150px;
   height: 150px;
@@ -159,19 +149,17 @@ p{
 }
 .image-wrapper{
   margin-bottom: 30px;
+  width: 150px;
+  height: 150px;
+  border-radius: 70%;
+  overflow: hidden;
+  background: #BDBDBD;
+  justify-content: center;
 }
 .profile-img {
-    width: 150px;
-    height: 150px;
-    border-radius: 70%;
-    overflow: hidden;
-    background: #BDBDBD;
-}
-.profile-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    /* object-fit: cover; */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 .signout-btn:hover {
   cursor: pointer;
