@@ -18,7 +18,7 @@ import { useStore } from 'vuex';
 
 
 export default {
-  name: '',
+  name: 'StudyMainHeader',
   components: {},
   setup() {
     const store = useStore()
