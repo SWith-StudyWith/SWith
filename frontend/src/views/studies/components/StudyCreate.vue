@@ -2,9 +2,7 @@
   <div>
     <Navbar />
     <div class="container">
-      <header>
-        <h1>스터디룸 만들기</h1>
-      </header>
+      <h1 class="form-title">스터디룸 만들기</h1>
       <div class="row d-flex justify-content-center">
         <div class="col-4">
           <section>
@@ -87,13 +85,6 @@ form{
 section{
   margin-bottom: 100px;
 }
-h1{
-  font-size: 24px;
-  color: #737B7D;
-  text-align: center;
-  margin-top: 70px;
-  margin-bottom: 70px;
-}
 p{
   font-size: 18px;
   font-weight: 700;
@@ -104,7 +95,7 @@ p{
   font-size: 0.7rem;
 }
 .btn-create{
-  margin-bottom: 50px;
+  margin: 10px 0px 0px 0px;
 }
 .uploadImage{
   margin-bottom: 20px;
@@ -130,5 +121,36 @@ p{
   font-size: 16px;
   font-weight: 400;
   margin-bottom: 5px;
+}
+
+/* basic setting */
+button{
+  font-size: 14px;
+  text-align: center;
+}
+.form-label{
+  margin-bottom: 3px;
+}
+.form-title {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+.container {
+  margin-top: 100px;
+  margin-bottom: 120px;
+}
+input::placeholder {
+  font-size: 12px;
+  padding: auto;
+  vertical-align: middle;
+}
+input{
+  background-color: #F4F5F4;
+  vertical-align: middle;
+}
+textarea {
+  background-color: #F4F5F4;
+  vertical-align: middle;
 }
 </style>
