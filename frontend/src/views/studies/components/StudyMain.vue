@@ -21,7 +21,7 @@ import StudyMainCamera from '@/views/studies/components/StudyMainCamera';
 import StudyMainExitModal from '@/views/studies/components/StudyMainExitModal';
 
 export default {
-  name: '',
+  name: 'StudyMain',
   components: {
     Navbar,
     StudyMainHeader,
