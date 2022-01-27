@@ -1,6 +1,6 @@
 <template>
   <navbar/>
-  <Test/>
+  <!-- <Test/> -->
   <div class="container">
     <h1 class="form-title">회원가입</h1>
     <div class="row">
@@ -127,8 +127,9 @@
         <!-- SignUp Btn -->
         <button class="btn btn-primary btn-lg col-12" @click="onClickSignup">회원가입</button>
         <div class="socialLogin mt-2">
-          <KakaoLoginBtn/>
-          <button class="btn btn-primary col-6">구글</button>
+            <KakaoLoginBtn/>
+            <a :href="GOOGLE_GET_AUTH_CODE_URL"><img src="@/assets/img/icon_oauth_google/btn_google_signin_dark_normal_web.png" alt="google login button"></a>
+          <!-- <button class="btn btn-primary col-6">구글</button> -->
         </div>
         <div class="text-center">
           <span>이미 회원이신가요?</span>
@@ -140,9 +141,9 @@
           <div v-on:click="GoogleLoginBtn" style="cursor:pointer;">구글 OAuth2 연동</div>
           <div id="my-signin2" style="display: none; cursor:pointer;"></div>
         </section> -->
-        <button id="my-signin2"
+        <!-- <button id="my-signin2"
           class="btn btn-primary btn-lg col-12" @click="GoogleLoginBtn">구글 OAuth2 연동
-        </button>
+        </button> -->
       </div>
     </div>
   </div>
@@ -159,8 +160,10 @@ import { useStore } from 'vuex';
 import SignUpTerm from './SignUpTerm.vue';
 import Navbar from '../../common/Navbar.vue';
 import Footer from '../../common/Footer.vue';
-import Test from '@/components/test.vue';
-import KakaoLoginBtn from '@/views/members/components/KakaoLoginBtn.vue'
+// import Test from '@/components/test.vue';
+import KakaoLoginBtn from '@/views/members/components/KakaoLoginBtn.vue';
+import { GOOGLE_GET_AUTH_CODE_URL } from '@/api/gauth.js';
+
 
 
 export default {
@@ -169,7 +172,7 @@ export default {
     SignUpTerm,
     Navbar,
     Footer,
-    Test,
+    // Test,
     KakaoLoginBtn,
   },
   methods: {
@@ -371,7 +374,7 @@ export default {
       } return false;
     };
     return {
-      state, onClickSendCode, onClickSignup, onClickConfirmAuthNum
+      state, onClickSendCode, onClickSignup, onClickConfirmAuthNum, GOOGLE_GET_AUTH_CODE_URL,
     };
   },
   created() {},
@@ -411,5 +414,8 @@ label {
 .term-msg {
   font-size: 0.8rem;
   color: red;
+}
+.socialLogin {
+  display: flex;
 }
 </style>
