@@ -5,7 +5,7 @@
         <input type="text" class="form-control" v-model="studyCode" placeholder="스터디 URL">
         <button class="btn btn-primary" @click="onClickJoin">스터디 참여하기</button>
       <div v-if="studies.length" class="d-flex flex-wrap">
-        <div v-for="study in studies" :key="study.id" class="col-4 card-box">
+        <div v-for="study in studies" :key="study.studyId" class="col-4 card-box">
           <StudyListItem :study="study" />
         </div>
       </div>
@@ -23,8 +23,9 @@
 <script>
 import StudyListItem from './StudyListItem.vue';
 import { ref } from 'vue';
+import { useStore } from 'vuex';
 import { useRouter } from 'vue-router'
-import { joinStudy, getStudyList } from '@/api/study';
+import { joinStudy } from '@/api/study';
 
 export default {
   props: ['studies'],
@@ -34,7 +35,7 @@ export default {
   setup(props) {
     console.log(props.studies);
     let studyCode = ref('')
-
+    const store = useStore();
     const router = useRouter();
     const onClickJoin = function () {
       if (!studyCode.value) {
@@ -46,15 +47,8 @@ export default {
         (res) => {
           console.log(res.data)
           if (res.data.code === 200) {
-            getStudyList(
-              (res) => {
-                console.log(res.data)
-                router.push({ name: 'StudyMain', params: { studyCode: studyCode.value } })
-              },
-              (err) => {
-                console.log(err)
-              }
-            )
+            store.dispatch('GET_STUDY_LIST')
+            router.push({ name: 'StudyMain', params: { studyCode: studyCode.value } })
           } else if (res.data.code === 400) {
             alert('해당 스터디가 존재하지 않습니다.')
           } else if (res.data.code === 409) {

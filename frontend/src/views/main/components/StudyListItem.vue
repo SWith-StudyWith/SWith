@@ -1,6 +1,5 @@
 <template>
-  <!-- <router-link :to="{ name: 'StudyView', params: { id: study.studyCode }}"> -->
-  <div>
+  <router-link :to="{ name: 'StudyMain', params: { studyCode: study.studyCode }}">
     <div class="card">
       <img :src="study.studyImage" class="card-img-top" alt="...">
       <div class="card-body">
@@ -8,8 +7,7 @@
         <p class="card-text">{{ study.studyGoal }}</p>
       </div>
     </div>
-  </div>
-  <!-- </router-link> -->
+  </router-link>
 </template>
 
 <script>
