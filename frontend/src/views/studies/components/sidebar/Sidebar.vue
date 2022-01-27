@@ -162,6 +162,8 @@ export default {
   flex-direction: column;
   flex-wrap: nowrap;
   align-items: center;
+
+  cursor: pointer;
 }
 .sidebar h1 {
   height: 2.5em;
