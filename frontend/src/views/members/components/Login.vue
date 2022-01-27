@@ -30,20 +30,7 @@
         <div class="socialLogin mt-2">
           <KakaoLoginBtn/>
           <a :href="GOOGLE_GET_AUTH_CODE_URL"><img src="@/assets/img/icon_oauth_google/btn_google_signin_dark_normal_web.png" alt="google login button"></a>
-          <!-- <GoogleLoginBtn/> -->
-          <!-- <button class="btn btn-primary col-6">구글</button> -->
         </div>
-        <!-- google oauth2 -->
-        <!-- <div class="g-signin2" data-onsuccess="onSignIn"></div> -->
-        <!-- <div>
-          GOOGLE User INFO : {{ state.googleUser }}<p/>
-          <div id="my-signin2" class="btn btn-primary btn-lg col-12" @click="GoogleLoginBtn"></div>
-          <div id="my-signin2"></div><p/>
-          <div class="g-signin2" data-onsuccess="onSignIn"></div>
-          <button @click="authInst">signout</button>
-        </div> -->
-        <!-- <a :href="GOOGLE_GET_AUTH_CODE_URL"><img src="@/assets/img/icon_oauth_google/btn_google_signin_dark_normal_web.png" alt="google login button"></a> -->
-        <!-- find-password / sign-up -->
         <div class="container2 text-center">
           <router-link :to="{ name: 'FindPassword' }">비밀번호 찾기</router-link>
           <span> </span>
@@ -52,7 +39,7 @@
       </div>
     </div>
   </div>
-  <Footer />
+  <Footer class="footer"/>
 </template>
 <script>
 /* eslint-disable */
@@ -120,14 +107,6 @@ export default {
       return re.test(email);
     };
 
-
-  // const signout = () => {
-  //   const authInst = window.gapi.auth2.getAuthInstance();
-  //   authInst.signOut().then(() => {
-  //       // eslint-disable-next-line
-  //   console.log('User Signed Out!!!');
-  //   });
-  // };
   const onSuccess = (googleUser) => {
       // eslint-disable-next-line
       console.log(googleUser);
@@ -187,5 +166,16 @@ label {
 .container2 {
   display: flex;
   justify-content: space-evenly;
+}
+.socialLogin {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.footer {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    left: 0;
 }
 </style>

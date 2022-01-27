@@ -1,6 +1,5 @@
 <template>
   <navbar/>
-  <!-- <Test/> -->
   <div class="container">
     <h1 class="form-title">회원가입</h1>
     <div class="row">
@@ -118,9 +117,6 @@
                 이용 약관 및 개인정보 취급방침
           </span>
               에 대한 내용을 모두 확인하였으며, 이에 동의합니다.</span>
-          <!-- <div class="invalid-feedback">(필수)</div> -->
-          <!-- <label for="">이용 약관 <p style="color:green;">(필수)</p></label> -->
-          <!-- <input type="checkbox" v-model="state.isChecked"> -->
           <div :style="{visibility: (!state.isChecked && state.wasInputed.check) ? 'visible' : 'hidden' }" class="invalid-feedback">SWith 이용약관과 개인정보 수집 및 이용에 모두 동의해주세요.</div>
         </form>
 
@@ -129,21 +125,11 @@
         <div class="socialLogin mt-2">
             <KakaoLoginBtn/>
             <a :href="GOOGLE_GET_AUTH_CODE_URL"><img src="@/assets/img/icon_oauth_google/btn_google_signin_dark_normal_web.png" alt="google login button"></a>
-          <!-- <button class="btn btn-primary col-6">구글</button> -->
         </div>
         <div class="text-center">
           <span>이미 회원이신가요?</span>
           <router-link :to="{ name: 'Login' }">로그인</router-link>
         </div>
-
-        <!-- google-oauth2 -->
-        <!-- <section class="test">
-          <div v-on:click="GoogleLoginBtn" style="cursor:pointer;">구글 OAuth2 연동</div>
-          <div id="my-signin2" style="display: none; cursor:pointer;"></div>
-        </section> -->
-        <!-- <button id="my-signin2"
-          class="btn btn-primary btn-lg col-12" @click="GoogleLoginBtn">구글 OAuth2 연동
-        </button> -->
       </div>
     </div>
   </div>
@@ -160,11 +146,8 @@ import { useStore } from 'vuex';
 import SignUpTerm from './SignUpTerm.vue';
 import Navbar from '../../common/Navbar.vue';
 import Footer from '../../common/Footer.vue';
-// import Test from '@/components/test.vue';
 import KakaoLoginBtn from '@/views/members/components/KakaoLoginBtn.vue';
 import { GOOGLE_GET_AUTH_CODE_URL } from '@/api/gauth.js';
-
-
 
 export default {
 
@@ -417,5 +400,7 @@ label {
 }
 .socialLogin {
   display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 </style>
