@@ -23,7 +23,6 @@ public class KanbanRepositorySupport {
                 .from(qKanban)
                 .leftJoin(qTask).on(qKanban.task.eq(qTask))
                 .where(qKanban.study.eq(study))
-                .groupBy(qTask, qKanban)
                 .orderBy(qKanban.kanbanId.asc())
                 .fetch();
 
