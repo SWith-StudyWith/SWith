@@ -34,6 +34,9 @@ public class StudyServiceImpl implements StudyService {
     @Autowired
     private TaskRepository taskRepository;
 
+    @Autowired
+    private MemberStudyRepository memberStudyRepository;
+
     @Override
     public Study getStudyByCode(String code) {
         return studyRepository.findByCode(code).orElse(null);
@@ -72,5 +75,15 @@ public class StudyServiceImpl implements StudyService {
         }
 
         return studyInfoRes;
+    }
+
+    @Override
+    public Study getStudyById(Long studyId) {
+        return studyRepository.findById(studyId).orElse(null);
+    }
+
+    @Override
+    public void deleteMemberStudy(Member member, Study study) {
+        memberStudyRepository.deleteByMemberAndStudy(member, study);
     }
 }

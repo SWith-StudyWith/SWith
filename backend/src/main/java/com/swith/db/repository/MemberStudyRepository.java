@@ -9,4 +9,5 @@ import java.util.Optional;
 
 public interface MemberStudyRepository extends JpaRepository<MemberStudy, Long> {
     Optional<MemberStudy> findByMemberAndStudy(Member member, Study study);
+    void deleteByMemberAndStudy(Member member, Study study);
 }
