@@ -1,19 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router';
-// import Home from '../views/Home.vue'
-// // main
-// import Landing from "@/views/Landing.vue";
-// import Main from "@/views/main/components/Main.vue";
-// // members
-// import Login from "@/views/members/components/Login.vue";
-// import SignUp from "@/views/members/components/SignUp.vue";
-// import MyPage from "@/views/members/components/MyPage.vue";
-// import ChangePassword from "@/views/members/components/ChangePassword.vue";
-// import FindPassword from "@/views/members/components/FindPassword.vue";
-// // studies
-// import StudyCreate from "@/views/studies/components/StudyCreate.vue";
-// import StudyUpdate from "@/views/studies/components/StudyUpdate.vue";
-// import StudyMain from "@/views/studies/components/StudyMain.vue";
-// import StudyRoom from "@/views/studies/components/StudyRoom.vue";
 
 // 전역 가드로 페이지 인증하기 위함 meta: {authRequired : true},
 const routes = [
@@ -26,25 +11,25 @@ const routes = [
   {
     path: '/main',
     name: 'Main',
-    component: () => import(/* webpackChunkName: "main", webpackPrefetch:true  */ '../views/main/components/Main.vue'),
+    component: () => import(/* webpackChunkName: "main", webpackPrefetch:true  */ '../views/main/Main.vue'),
     meta: {authRequired : true},
   },
   {
     path: '/members/login',
     name: 'Login',
-    component: () => import(/* webpackChunkName: "login" */ '../views/members/components/Login.vue'),
+    component: () => import(/* webpackChunkName: "login" */ '../views/members/Login.vue'),
     meta: { authRequired: false },
   },
   {
     path: '/members/signup',
     name: 'SignUp',
-    component: () => import(/* webpackChunkName: "signup" */ '../views/members/components/SignUp.vue'),
+    component: () => import(/* webpackChunkName: "signup" */ '../views/members/SignUp.vue'),
     meta: { authRequired: false },
   },
   {
     path: '/members/mypage',
     name: 'MyPage',
-    component: () => import(/* webpackChunkName: "mypage" */ '../views/members/components/MyPage.vue'),
+    component: () => import(/* webpackChunkName: "mypage" */ '../views/members/MyPage.vue'),
     meta: { authRequired: true },
   },
   {
@@ -91,14 +76,8 @@ const routes = [
   },
   {
     path: '/studies/:studyCode',
-    name: 'StudyMain',
-    component: () => import(/* webpackChunkName: "studymain", webpackPrefetch:true  */ '../views/studies/components/StudyMain.vue'),
-    meta: { authRequired: true },
-  },
-  {
-    path: '/studies/:studyCode/room',
-    name: 'StudyRoom',
-    component: () => import(/* webpackChunkName: "studyroom", webpackPrefetch:true  */ '../views/studies/components/StudyRoom.vue'),
+    name: 'StudyDetail',
+    component: () => import(/* webpackChunkName: "studydetail", webpackPrefetch:true  */ '../views/studies/StudyDetail.vue'),
     meta: { authRequired: true },
   },
   {
@@ -108,25 +87,14 @@ const routes = [
     meta: { authRequired: true },
   },
   {
-    path: '/footer',
-    name: 'Footer',
-    component: () => import(/* webpackChunkName: "footer" */ '../views/common/Footer.vue'),
-    meta: { authRequired: false },
-  },
-  {
-    path: '/test',
-    name: 'Test',
-    component: () => import(/* webpackChunkName: "test" */ '../components/test.vue'),
-  },
-  {
     path: '/members/kakao/callback',
     name: 'OAuthKakao',
-    component: () => import(/* webpackChunkName: "test" */ '../views/members/components/OAuthKakao.vue'),
+    component: () => import(/* webpackChunkName: "OAuthKakao" */ '../views/members/components/OAuthKakao.vue'),
   },
   {
     path: '/login/oauth2/client/google',
     name: 'OAuthGoogle',
-    component: () => import(/* webpackChunkName: "test" */ '../views/members/components/OAuthGoogle.vue'),
+    component: () => import(/* webpackChunkName: "OAuthGoogle" */ '../views/members/components/OAuthGoogle.vue'),
   },
 ];
 const router = createRouter({

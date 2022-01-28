@@ -14,10 +14,10 @@
 <script>
 import { reactive } from 'vue';
 import { useStore } from 'vuex';
-import Navbar from '../../common/Navbar.vue';
-import MainHeader from './MainHeader.vue';
-import StudyList from './StudyList.vue';
-import Footer from '../../common/Footer.vue';
+import Navbar from '../common/Navbar.vue';
+import MainHeader from './components/MainHeader.vue';
+import StudyList from './components/StudyList.vue';
+import Footer from '../common/Footer.vue';
 
 export default {
   name: 'Main',

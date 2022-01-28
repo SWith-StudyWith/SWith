@@ -36,7 +36,7 @@
         </div>
       </div>
     </div>
-    <SignOut />
+    <SignOutModal />
     <Footer />
   </div>
 </template>
@@ -46,11 +46,11 @@ import { toRefs, reactive } from 'vue';
 import { useStore } from 'vuex';
 import Navbar from '@/views/common/Navbar.vue';
 import Footer from '@/views/common/Footer.vue';
-import SignOut from '@/views/members/components/SignOut.vue';
+import SignOutModal from '@/views/members/components/SignOutModal.vue';
 
 export default {
   name: '',
-  components: { Navbar, Footer, SignOut },
+  components: { Navbar, Footer, SignOutModal },
   setup() {
     const store = useStore();
     const state = reactive({
