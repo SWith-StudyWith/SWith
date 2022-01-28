@@ -2,8 +2,8 @@
   <Navbar/>
   <div class="container">
     <div class="row col-5">
-      <StudyMainHeader/>
-      <StudyMainCamera/>
+      <StudyDetailHeader/>
+      <StudyDetailCamera/>
       <button class="btn btn-success my-3 text-white">입장하기</button>
     </div>
     <div class="text-end">
@@ -11,14 +11,14 @@
         탈퇴하기
       </button>
     </div>
-    <StudyMainExitModal/>
+    <StudyDetailExitModal/>
   </div>
 </template>
 <script>
 import Navbar from '@/views/common/Navbar.vue';
-import StudyMainHeader from '@/views/studies/components/StudyMainHeader';
-import StudyMainCamera from '@/views/studies/components/StudyMainCamera';
-import StudyMainExitModal from '@/views/studies/components/StudyMainExitModal';
+import StudyDetailHeader from '@/views/studies/components/StudyDetailHeader';
+import StudyDetailCamera from '@/views/studies/components/StudyDetailCamera';
+import StudyDetailExitModal from '@/views/studies/components/StudyDetailExitModal';
 import { onMounted, reactive } from 'vue'
 import { useStore } from 'vuex';
 
@@ -26,9 +26,9 @@ export default {
   name: 'StudyMain',
   components: {
     Navbar,
-    StudyMainHeader,
-    StudyMainCamera,
-    StudyMainExitModal
+    StudyDetailHeader,
+    StudyDetailCamera,
+    StudyDetailExitModal
   },
   setup() {
     const store = useStore();

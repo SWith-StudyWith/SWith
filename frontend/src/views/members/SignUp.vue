@@ -147,9 +147,9 @@ import { sendEmail, checkEmail, signup } from '@/api/user';
 import { reactive, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
-import SignUpTerm from './SignUpTerm.vue';
-import Navbar from '../../common/Navbar.vue';
-import Footer from '../../common/Footer.vue';
+import SignUpTerm from './components/SignUpTerm.vue';
+import Navbar from '../common/Navbar.vue';
+import Footer from '../common/Footer.vue';
 import KakaoLoginBtn from '@/views/members/components/KakaoLoginBtn.vue';
 import { GOOGLE_GET_AUTH_CODE_URL } from '@/api/gauth.js';
 
