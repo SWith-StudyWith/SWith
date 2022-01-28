@@ -12,4 +12,6 @@ public interface StudyService {
     Study getStudyByCode(String studyCode);
     List<MemberStudyRes> getStudyList(Member member);
     StudyInfoRes getStudyDetail(Long studyId);
+    Study getStudyById(Long studyId);
+    void deleteMemberStudy(Member member, Study study);
 }

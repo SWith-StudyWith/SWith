@@ -69,4 +69,14 @@ public class StudyController {
 
         return ResponseEntity.status(200).body(new BaseDataResponse<>(true, 200, "스터디 정보 조회 성공", studyInfoRes));
     }
+
+    @DeleteMapping("/{studyId}")
+    public ResponseEntity<BaseResponse> deleteMemberStudy(@PathVariable String studyId) {
+
+        Member member = memberService.getMemberByAuthentication();
+        Study study = studyService.getStudyById(Long.parseLong(studyId));
+        studyService.deleteMemberStudy(member, study);
+
+        return ResponseEntity.status(200).body(new BaseResponse(true, 200, "스터디 탈퇴 성공"));
+    }
 }
