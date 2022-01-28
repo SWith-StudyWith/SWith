@@ -8,14 +8,15 @@
         <!-- Email -->
         <form class="row" @submit.prevent>
           <label for="email" class="form-label">이메일</label>
-          <div class="col-9">
+          <div class="col-8">
             <input class="form-control" id="email" type="email"
               v-model="state.email"
               :disabled="state.isAuthNumChecked"
               required
+              placeholder="가입하실 이메일을 입력해주세요."
             >
           </div>
-          <div class="col-3">
+          <div class="col-4">
             <button class="btn btn-primary"
               style="width:100%"
               :disabled="!state.isValidEmail || state.isAuthNumChecked"
@@ -34,12 +35,13 @@
           v-if="!state.isAuthNumChecked"
         >
           <label for="authNum" class="form-label">인증 번호</label>
-          <div class="col-9">
+          <div class="col-8">
             <input class="form-control" id="authNum" type="text"
               v-model="state.authNum" :disabled="state.isDisableAuthNum" required
+              placeholder=""
             >
           </div>
-          <div class="col-3">
+          <div class="col-4">
             <button class="btn btn-primary" style="width:100%"
               :disabled="state.isDisableAuthNum"
               @click="onClickConfirmAuthNum"
@@ -61,6 +63,7 @@
             id="password"
             v-model="state.password"
             required
+            placeholder="비밀번호를 입력해주세요."
           >
           <div
             :style="{ visibility: (state.isValidPassword || !state.wasInputed.password)? 'hidden' : 'visible' }"
@@ -79,6 +82,7 @@
             id="passwordConfirm"
             v-model="state.passwordConfirm"
             required
+            placeholder="비밀번호를 확인해주세요."
           >
           <div
             v-if="!state.isValidPasswordConfirm && state.wasInputed.passwordConfirm"
@@ -87,13 +91,13 @@
             비밀번호와 일치하지 않습니다.
           </div>
           <div v-else-if="(state.passwordConfirm !== '') && state.isValidPasswordConfirm" class="valid-feedback">비밀번호와 일치합니다.</div>
-          <div v-else style="height: 1.3rem;"></div>
+          <div v-else style="height: 1.7rem;"></div>
         </form>
 
         <!-- Nickname -->
         <form @submit.prevent>
           <label for="nickname" class="form-label">닉네임</label>
-          <input class="form-control" type="text" id="nickname"
+          <input class="form-control" type="text" id="nickname" placeholder="사용할 닉네임을 입력해주세요."
             v-model="state.nickname" required>
           <div
             :style="{ visibility: (state.isValidNickname || !state.wasInputed.nickname)? 'hidden' : 'visible' }"
@@ -121,13 +125,13 @@
         </form>
 
         <!-- SignUp Btn -->
-        <button class="btn btn-primary btn-lg col-12" @click="onClickSignup">회원가입</button>
+        <button class="btn btn-primary btn-lg col-12" @click="onClickSignup" style="margin-bottom:15px;">회원가입</button>
         <div class="socialLogin mt-2">
             <KakaoLoginBtn/>
             <a :href="GOOGLE_GET_AUTH_CODE_URL"><img src="@/assets/img/icon_oauth_google/btn_google_signin_dark_normal_web.png" alt="google login button"></a>
         </div>
         <div class="text-center">
-          <span>이미 회원이신가요?</span>
+          <span>이미 회원이신가요? </span>
           <router-link :to="{ name: 'Login' }">로그인</router-link>
         </div>
       </div>
@@ -377,10 +381,38 @@ h1 {
 label {
   margin-bottom: 0;
 }
-.btn {
+
+/* 레이아웃 기준 */
+
+button{
+  font-size: 14px;
   text-align: center;
-  font-size: 0.7rem;
 }
+.form-label{
+  margin-bottom: 3px;
+}
+.form-title {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+.container {
+  margin-top: 100px;
+  margin-bottom: 180px;
+}
+input::placeholder {
+  font-size: 12px;
+  padding: auto;
+  vertical-align: middle;
+
+}
+input{
+  background-color: #F4F5F4;
+  vertical-align: middle;
+}
+
+/* ! */
+
 .invalid-feedback {
   display: block;
   font-size: 0.75rem;
@@ -389,7 +421,12 @@ label {
 }
 .valid-feedback {
   display: block;
+  font-size: 0.75rem;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  color: green;
 }
+
 .terms:hover {
   cursor: pointer;
   font-weight: bold;
@@ -402,5 +439,7 @@ label {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+  margin-bottom: 20px;
 }
+
 </style>

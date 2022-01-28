@@ -26,12 +26,12 @@
             비밀번호를 입력해주세요.
           </div>
         </form>
-        <button class="btn btn-primary btn-lg col-12" @click="onClickLogin">로그인</button>
+        <button class="btn btn-primary btn-lg col-12" @click="onClickLogin" style="margin-bottom:15px; margin-top: 10px;">로그인</button>
         <div class="socialLogin mt-2">
           <KakaoLoginBtn/>
           <a :href="GOOGLE_GET_AUTH_CODE_URL"><img src="@/assets/img/icon_oauth_google/btn_google_signin_dark_normal_web.png" alt="google login button"></a>
         </div>
-        <div class="container2 text-center">
+        <div class="container2 text-center" >
           <router-link :to="{ name: 'FindPassword' }">비밀번호 찾기</router-link>
           <span> </span>
           <router-link :to="{ name: 'SignUp' }">회원가입</router-link>
@@ -39,7 +39,7 @@
       </div>
     </div>
   </div>
-  <Footer class="footer"/>
+  <Footer />
 </template>
 <script>
 /* eslint-disable */
@@ -155,22 +155,22 @@ h1 {
 label {
   margin-bottom: 0;
 }
-.btn {
-  text-align: center;
-  font-size: 0.7rem;
-}
+
 .invalid-feedback {
   display: block;
   font-size: 0.75rem;
 }
+
 .container2 {
   display: flex;
+  /* justify-content: center; */
   justify-content: space-evenly;
 }
 .socialLogin {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+  margin-bottom: 20px;
 }
 .footer {
     position: fixed;
@@ -178,4 +178,33 @@ label {
     right: 0;
     left: 0;
 }
+
+/*  */
+button{
+  font-size: 14px;
+  text-align: center;
+}
+.form-label{
+  margin-bottom: 3px;
+}
+.form-title {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+.container {
+  margin-top: 100px;
+  margin-bottom: 120px;
+}
+input::placeholder {
+  font-size: 12px;
+  padding: auto;
+  vertical-align: middle;
+
+}
+input{
+  background-color: #F4F5F4;
+  vertical-align: middle;
+}
+
 </style>
