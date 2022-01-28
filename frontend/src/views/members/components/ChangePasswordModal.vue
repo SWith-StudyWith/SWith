@@ -173,7 +173,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 input::placeholder {
   font-size: 12px;
   padding: auto;
