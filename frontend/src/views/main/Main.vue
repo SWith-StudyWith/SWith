@@ -5,14 +5,14 @@
       <MainHeader />
     </header>
     <section>
-      <StudyList :studies="state.studies" />
+      <StudyList :studies="state.studyList" />
     </section>
     <Footer />
   </div>
 </template>
 
 <script>
-import { reactive } from 'vue';
+import { reactive, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import Navbar from '../common/Navbar.vue';
 import MainHeader from './components/MainHeader.vue';
@@ -25,7 +25,8 @@ export default {
   setup() {
     const store = useStore();
     const state = reactive({
-      studies: store.state.study.studyList
+      studyList: store.state.study.studyList,
+      studyInfo: store.state.study.studyInfo
     });
     // const error = ref(null);
 
@@ -37,11 +38,11 @@ export default {
     // };
 
     // load();
-    // onMounted(
-    //   () => {
-    //     // store.dispatch('GET_STUDY_LIST')
-    //   }
-    // )
+    onMounted(
+      () => {
+        store.dispatch('GET_STUDY_LIST')
+      }
+    )
     return {
       state
     };
