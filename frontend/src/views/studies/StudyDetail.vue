@@ -1,10 +1,15 @@
 <template>
   <Navbar/>
-  <div class="container">
-    <div class="row col-5">
-      <StudyDetailHeader/>
-      <StudyDetailCamera/>
-      <button class="btn btn-success my-3 text-white">입장하기</button>
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-5">
+        <StudyDetailHeader/>
+        <StudyDetailCamera/>
+        <button class="btn btn-success my-3 text-white">입장하기</button>
+      </div>
+      <div class="col-7">
+        <StudyDetailKanbanBoard />
+      </div>
     </div>
     <div class="text-end">
       <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exitModal">
@@ -19,6 +24,7 @@ import Navbar from '@/views/common/Navbar.vue';
 import StudyDetailHeader from '@/views/studies/components/StudyDetailHeader';
 import StudyDetailCamera from '@/views/studies/components/StudyDetailCamera';
 import StudyDetailExitModal from '@/views/studies/components/StudyDetailExitModal';
+import StudyDetailKanbanBoard from '@/views/studies/components/StudyDetailKanbanBoard';
 import { onMounted, reactive } from 'vue'
 import { useStore } from 'vuex';
 
@@ -28,7 +34,8 @@ export default {
     Navbar,
     StudyDetailHeader,
     StudyDetailCamera,
-    StudyDetailExitModal
+    StudyDetailExitModal,
+    StudyDetailKanbanBoard,
   },
   setup() {
     const store = useStore();
