@@ -13,7 +13,7 @@ const store = createStore({
   plugins: [
     createPersistedState(
       {
-        path: ['user'],
+        paths: ['user'],
       }
     )
   ]
