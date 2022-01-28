@@ -17,19 +17,12 @@
     <!-- <img src="@/assets/img/icon_study_page/Pen_gray.png"> -->
 
     <div class="control-bottons">
-      <!-- <p @click="this.onClickMundae">뭔데</p> -->
       <p>ㅎ ㅏ</p>
-      <!-- <button class="btn btn-primary  mx-3" @click="this.onClickCameraBtn">
-        <font-awesome-icon :icon="['fas', this.cameraIcon]" />
-      </button>
-      <button class="btn btn-primary mx-3"  @click="this.onClickMuteBtn">
-        <font-awesome-icon :icon="['fas', this.mutedIcon]" />
-      </button> -->
       <p>
-      <font-awesome-icon @click="this.onClickMuteBtn" :icon="['fas', this.mutedIcon]" />
+      <font-awesome-icon @click="this.onClickMuteIcon" :icon="['fas', this.mutedIcon]" />
       </p>
       <p>
-      <font-awesome-icon @click="this.onClickCameraBtn" :icon="['fas', this.cameraIcon]" />
+      <font-awesome-icon @click="this.onClickCameraIcon" :icon="['fas', this.cameraIcon]" />
       </p>
       <p>
       <font-awesome-icon @click="this.onClickScreenShareIcon" :icon="['fas', this.screenshareIcon]" />
@@ -40,18 +33,7 @@
       <p>
       <font-awesome-icon @click="this.onClickKanbanBoardIcon" :icon="['fas', this.kanbanboardIcon]" />
       </p>
-      <!-- <font-awesome-icon @click="this.onClickMuteBtn" :icon="['fas', this.mutedIcon]" />
-      <font-awesome-icon @click="this.onClickCameraBtn" :icon="['fas', this.cameraIcon]" />
-      <font-awesome-icon @click="this.onClickScreenShareIcon" :icon="['fas', this.screenshareIcon]" />
-      <font-awesome-icon @click="this.onClickWhiteBoardIcon" :icon="['fas', this.whiteboardIcon]" />
-      <font-awesome-icon @click="this.onClickKanbanBoardIcon" :icon="['fas', this.kanbanboardIcon]" /> -->
-      <!-- <span
-        class="collapse-icon"
-        :class="{ 'rotate-180': collapsed }"
-        @click="toggleSidebar"
-      >
-        <i class="fas fa-angle-double-left" />
-      </span> -->
+
     </div>
 
     <!-- toggle button -->
@@ -84,17 +66,17 @@ export default {
       myVideo: null,
       sampleData: '',
       isMuted: false,
-      isCameraOn: true,
+      isCameraOn: false,
       isScreenShare: true,
-      isWhiteBoard: true,
-      isKanbanBoard: true,
+      isWhiteBoard: false,
+      isKanbanBoard: false,
     }
   },
   methods: {
-    onClickMuteBtn: function () {
+    onClickMuteIcon: function () {
       this.isMuted = !this.isMuted;
     },
-    onClickCameraBtn: function () {
+    onClickCameraIcon: function () {
       this.isCameraOn = !this.isCameraOn;
     },
     onClickScreenShareIcon: function () {
@@ -162,6 +144,8 @@ export default {
   flex-direction: column;
   flex-wrap: nowrap;
   align-items: center;
+
+  cursor: pointer;
 }
 .sidebar h1 {
   height: 2.5em;
