@@ -67,9 +67,9 @@ export default {
       sampleData: '',
       isMuted: false,
       isCameraOn: false,
-      isScreenShare: true,
+      isScreenShare: false,
       isWhiteBoard: false,
-      isKanbanBoard: false,
+      isKanbanBoard: true,
     }
   },
   methods: {
