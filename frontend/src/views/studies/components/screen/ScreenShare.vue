@@ -1,6 +1,6 @@
 <template>
   <div class="screenshare">
-    <h1>This is 화면공유~~</h1>
+    <h1>화면공유 컴포넌트</h1>
   </div>
 </template>
 
