@@ -1,6 +1,6 @@
 <template>
   <a :href="kakaoGetAuthCodeURL">
-    <img src="@/assets/img/kakao_login_medium_narrow.png" alt="kakao login button">
+    <img src="@/assets/img/icon_oauth_kakao/kakao_login_medium_narrow.png" alt="kakao login button">
   </a>
 </template>
 <script>

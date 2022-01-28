@@ -1,5 +1,5 @@
 <template>
-  <!-- ../assets/img/landing_bg.png -->
+  <!-- @/assets/img/landing/landing_bg.png -->
   <section class="section1">
     <div class="container my-5 ">
     <div class="row">
@@ -20,7 +20,7 @@
         </router-link>
       </div>
       <div class="col-md-5">
-        <img src="../assets/img/Saly-1.png" alt=""
+        <img src="@/assets/img/landing/Saly-1.png" alt=""
           class="animate__animated animate__shakeY">
       </div>
     </div>
@@ -36,7 +36,7 @@
       <div class="row justify-content-center ">
         <div class="col-md-4">
           <div class="row justify-content-center ">
-            <img src="../assets/img/icon_pencil.png" alt="" class="iconIMG">
+            <img src="@/assets/img/landing/icon_pencil.png" alt="" class="iconIMG">
             <p style="font-weight:700; font-size: 17px;">동시 편집이 가능한 화이트 보드 & 에디터</p>
             동시 편집이 가능한 화이트 보드를 사용하여
             적극적인 대화식 스터디를 이용해보세요.
@@ -45,7 +45,7 @@
         </div>
         <div class="col-md-4">
           <div class="row justify-content-center ">
-            <img src="../assets/img/icon_Chat_Double.png" alt="" class="iconIMG">
+            <img src="@/assets/img/landing/icon_Chat_Double.png" alt="" class="iconIMG">
             <p style="font-weight:700; font-size: 17px;">실시간 그룹 화상 채팅</p>
             누구나 사용할 수 있는 SWith의 화상 채팅을 이용해보세요.
             실시간 그룹 화상, 음성 채팅 기능을 제공합니다.
@@ -54,7 +54,7 @@
         </div>
         <div class="col-md-4">
           <div class="row justify-content-center ">
-            <img src="../assets/img/Folder_Opened.png" alt="" class="iconIMG">
+            <img src="@/assets/img/landing/Folder_Opened.png" alt="" class="iconIMG">
             <p style="font-weight:700; font-size: 17px;">참여한 스터디 목록화</p>
             참여하고 있는 스터디들을 모두 목록에서 확인할 수 있습니다.
             지금 바로 스터디 목록을 확인하고 참여해보세요.
@@ -64,7 +64,7 @@
       <div class="row">
         <div class="col-md-4">
           <div class="row justify-content-center ">
-            <img src="../assets/img/icon_Calendar.png" alt="" class="iconIMG">
+            <img src="@/assets/img/landing/icon_Calendar.png" alt="" class="iconIMG">
             <p style="font-weight:700; font-size: 17px;">캘린더와 todo-list를 이용한 일정 관리</p>
             간소화된 일정 관리로, 스터디 개요와 주별 일정,
             개인 별 할 일 등을 관리하세요.
@@ -72,14 +72,14 @@
         </div>
         <div class="col-md-4">
           <div class="row justify-content-center ">
-            <img src="../assets/img/icon_Binocle.png" alt="" class="iconIMG">
+            <img src="@/assets/img/landing/icon_Binocle.png" alt="" class="iconIMG">
             <p style="font-weight:700; font-size: 17px;">실시간 화면 공유</p>
             스터디 참가자들과 실시간으로 서로의 화면을 공유해보세요.
           </div>
         </div>
         <div class="col-md-4">
           <div class="row justify-content-center ">
-            <img src="../assets/img/icon_image_white.png" alt="" class="iconIMG">
+            <img src="@/assets/img/landing/icon_image_white.png" alt="" class="iconIMG">
             <p style="font-weight:700; font-size: 17px;">칸반 보드</p>
             편리한 출석 체크 기능을 활용해 보세요.
             스터디가 시작되면 아직 참여하지 않은 인원들을 알 수 있습니다.
@@ -95,7 +95,7 @@
       <!-- justify-content-between -->
     <div class="row">
       <div class="col-md-6" >
-        <img src="../assets/img/Saly-19.png" alt=""
+        <img src="@/assets/img/landing/Saly-19.png" alt=""
           class="animate__animated animate__shakeY">
       </div>
       <div class="col text-end align-self-center">
@@ -157,7 +157,7 @@ section{
 .section1{
   width: 100%;
   height: 700px;
-  background-image: url("../assets/img/landing_bg.png");
+  background-image: url("../assets/img/landing/landing_bg.png");
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;

@@ -2,10 +2,10 @@
   <nav id="nav">
     <section class="align-text-center d-inline-block ">
       <router-link class="navbar-brand" v-if="!state.isLogin" to="/" >
-        <img src="@/assets/SWith_logo2.png" alt="" height="75"/>
+        <img src="@/assets/img/icon_logo/SWith_logo2.png" alt="" height="75"/>
       </router-link>
       <router-link class="navbar-brand" v-else to="/main">
-        <img src="@/assets/SWith_logo2.png" alt="" height="75"/>
+        <img src="@/assets/img/icon_logo/SWith_logo2.png" alt="" height="75"/>
       </router-link>
     </section>
 
@@ -22,7 +22,7 @@
     <section id="nav-list" v-else>
       <span style="font-weight:500;">{{ state.userInfo.nickname }} 님 환영합니다 !</span>
       <div class="dropdown">
-        <img src="../../assets/img/profile1.png" alt="" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" style="width: 50px;" >
+        <img src="../../assets/img/navbar/profile1.png" alt="" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" style="width: 50px;" >
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
           <li><router-link :to="{ name: 'MyPage' }">회원정보 수정</router-link></li>
           <li>
