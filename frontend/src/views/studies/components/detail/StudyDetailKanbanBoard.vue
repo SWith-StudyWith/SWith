@@ -22,7 +22,7 @@
 </template>
 <script>
 import { useStore } from 'vuex'
-import StudyDetailKanbanBoardCard from '@/views/studies/components/StudyDetailKanbanBoardCard.vue';
+import StudyDetailKanbanBoardCard from '@/views/studies/components/detail/StudyDetailKanbanBoardCard.vue';
 
 export default {
   name: 'StudyDetailKanbanBoard',
