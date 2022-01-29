@@ -14,26 +14,28 @@
   </div>
 </template>
 <script>
-import { reactive } from 'vue';
+import { reactive, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router'
 import { exitStudy } from '@/api/study';
 
 export default {
-  name: 'StudyMainExitModal',
+  name: 'StudyDetailExitModal',
   components: {},
   setup() {
     const store = useStore();
     const router = useRouter();
     const state = reactive({
-      studyId: store.state.study.studyInfo.studyId
+      studyId: computed(() => {
+        return store.state.study.studyInfo.studyId
+      })
     })
     const onClickExitConfirmBtn = function () {
       exitStudy(
         state.studyId,
         (res) => {
           console.log(res.data)
-          if (res.data.data.code === 200) {
+          if (res.data.code === 200) {
             router.push({ name: 'Main' })
           }
         },
