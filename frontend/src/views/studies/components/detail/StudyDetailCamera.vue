@@ -31,7 +31,7 @@
 <script>
 
 export default {
-  name: 'StudyMainCamera',
+  name: 'StudyDetailCamera',
   components: {},
   data() {
     return {

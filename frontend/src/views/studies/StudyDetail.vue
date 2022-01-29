@@ -21,15 +21,15 @@
 </template>
 <script>
 import Navbar from '@/views/common/Navbar.vue';
-import StudyDetailHeader from '@/views/studies/components/StudyDetailHeader';
-import StudyDetailCamera from '@/views/studies/components/StudyDetailCamera';
-import StudyDetailExitModal from '@/views/studies/components/StudyDetailExitModal';
-import StudyDetailKanbanBoard from '@/views/studies/components/StudyDetailKanbanBoard';
+import StudyDetailHeader from '@/views/studies/components/detail/StudyDetailHeader';
+import StudyDetailCamera from '@/views/studies/components/detail/StudyDetailCamera';
+import StudyDetailExitModal from '@/views/studies/components/detail/StudyDetailExitModal';
+import StudyDetailKanbanBoard from '@/views/studies/components/detail/StudyDetailKanbanBoard';
 import { onMounted, reactive } from 'vue'
 import { useStore } from 'vuex';
 
 export default {
-  name: 'StudyMain',
+  name: 'StudyDetail',
   components: {
     Navbar,
     StudyDetailHeader,
