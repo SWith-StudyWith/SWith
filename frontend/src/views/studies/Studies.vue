@@ -1,6 +1,6 @@
 <template>
   <div class="study-base-page">
-    <Sidebar />
+    <Sidebar @show-screenmode="showScreenMode"/>
     <div :style="{ 'margin-left': sidebarWidth }">
     <h1>스터디 기본 페이지</h1>
     <router-view />
@@ -8,7 +8,7 @@
     <button @click="onClickKanbanBoard">칸반보드열어말어</button>
     <button @click="onClickScreenShare">화면공유열어말어</button>
     <button @click="onClickWhiteBoard">화이트보드열어말어</button>
-    <KanbanBoard v-show="isKanbanBoard==1"/>
+    <KanbanBoard v-show="isKanbanBoard"/>
     <ScreenShare v-show="isScreenShare"/>
     <WhiteBoard v-show="isWhiteBoard"/>
     </div>
@@ -33,12 +33,12 @@ export default {
     WhiteBoard,
   },
   setup() {
-    const isKanbanBoard = ref(1);
+    const isKanbanBoard = ref(false);
     const isWhiteBoard = ref(false);
     const isScreenShare = ref(false);
     const screenMode = ref(1);
     const onClickKanbanBoard = () => {
-      isKanbanBoard.value = isKanbanBoard.value * (-1);
+      isKanbanBoard.value = !isKanbanBoard.value;
       console.log(isKanbanBoard);
     };
     const onClickWhiteBoard = () => {
@@ -52,11 +52,24 @@ export default {
     const onClickScreenMode = () => {
       screenMode.value = screenMode.value*  (-1);
     };
+
+    const showScreenMode = ( screen ) => {
+      // switch (screen)
+      if(screen==1){
+        console.log('1 칸반보드 true 보여조라~');
+      } else if(screen==2){
+        console.log('2 화면공유 true 보여조라~');
+      } else if( screen ==3) {
+        console.log('3 화이트보드 true니깐 보여주라~');
+      }
+    }
+
     return { sidebarWidth,
               onClickScreenMode, screenMode,
               isWhiteBoard, isScreenShare, isKanbanBoard,
               onClickWhiteBoard, onClickScreenShare, onClickKanbanBoard,
-    }
+              showScreenMode,
+    };
   }
 }
 </script>

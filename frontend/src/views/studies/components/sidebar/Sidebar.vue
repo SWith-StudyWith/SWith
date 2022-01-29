@@ -24,13 +24,13 @@
       <font-awesome-icon @click="this.onClickCameraIcon" :icon="['fas', this.cameraIcon]" />
       </p>
       <p>
+      <font-awesome-icon @click="this.onClickKanbanBoardIcon" :icon="['fas', this.kanbanboardIcon]" />
+      </p>
+      <p>
       <font-awesome-icon @click="this.onClickScreenShareIcon" :icon="['fas', this.screenshareIcon]" />
       </p>
       <p>
       <font-awesome-icon @click="this.onClickWhiteBoardIcon" :icon="['fas', this.whiteboardIcon]" />
-      </p>
-      <p>
-      <font-awesome-icon @click="this.onClickKanbanBoardIcon" :icon="['fas', this.kanbanboardIcon]" />
       </p>
 
     </div>
@@ -57,11 +57,11 @@ export default {
   components: {
     SidebarLink,
   },
-  props: {},
-  setup() {
-    const isMuted = ref(false);
+  // props: {},
+  setup( props, context ) {
+    const isMuted = ref(true);
     const isCameraOn = ref(false);
-    const isKanbanBoard = ref(true);
+    const isKanbanBoard = ref(false);
     const isScreenShare = ref(false);
     const isWhiteBoard = ref(false);
     const onClickMuteIcon = () => {
@@ -70,14 +70,23 @@ export default {
     const onClickCameraIcon = () => {
       isCameraOn.value = !isCameraOn.value;
     };
-      const onClickKanbanBoardIcon = () => {
-        isKanbanBoard.value = !isKanbanBoard.value;
-      };
+    const onClickKanbanBoardIcon = () => {
+      isKanbanBoard.value = !isKanbanBoard.value;
+      if ( isKanbanBoard.value) {
+        context.emit('show-screenmode', 1)
+      }
+    };
     const onClickScreenShareIcon = () => {
       isScreenShare.value = !isScreenShare.value;
+      if ( isScreenShare.value) {
+          context.emit('show-screenmode', 2)
+      }
     };
     const onClickWhiteBoardIcon = () => {
       isWhiteBoard.value = !isWhiteBoard.value;
+      if ( isWhiteBoard.value) {
+          context.emit('show-screenmode', 3)
+      }
     };
     const mutedIcon = computed(() => {
       return isMuted.value ? 'microphone-slash' : 'microphone';
@@ -206,7 +215,7 @@ export default {
 .fas {
   color: rgba(255, 255, 255, 0.7);
 }
-.fa-tv {
+.fa-desktop {
   color: pink;
 }
 .fa-microphone {
