@@ -5,7 +5,7 @@
       <div class="col-4">
         <StudyDetailHeader :studyInfo="state.studyInfo"/>
         <StudyDetailCamera/>
-        <router-link :to="{ name: 'StudyPage', params: { studyId: state.studyInfo.studyId, studyCode: state.studyInfo.studyCode } }">
+        <router-link :to="{ name: 'Studies', params: { studyId: state.studyInfo.studyId, studyCode: state.studyInfo.studyCode } }">
           <button class="btn btn-success my-3 text-white">입장하기</button>
         </router-link>
       </div>
