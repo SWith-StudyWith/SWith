@@ -215,8 +215,17 @@ export default {
         console.warn(exception);
       });
 
+// 화면 공유 세션
 
+			// On start screen share
+			this.session.on('signal:startScreenSharing', ()=>{
+				this.isScreenShared = true;
+			})
 
+			// On stop screen share
+			this.session.on('signal:stopScreenSharing', ()=>{
+				this.isScreenShared = false;
+			})
 
 
 // 화상회의 화면 틀 구성
