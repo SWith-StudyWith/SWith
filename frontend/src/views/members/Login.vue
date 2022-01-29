@@ -49,7 +49,6 @@ import { useStore } from 'vuex';
 import Navbar from '../common/Navbar.vue';
 import Footer from '../common/Footer.vue';
 import KakaoLoginBtn from '@/views/members/components/KakaoLoginBtn.vue'
-import GoogleLoginBtn from '@/views/members/components/GoogleLoginBtn.vue'
 import { GOOGLE_GET_AUTH_CODE_URL } from '@/api/gauth.js';
 
 export default {
@@ -58,7 +57,6 @@ export default {
     Navbar,
     Footer,
     KakaoLoginBtn,
-    GoogleLoginBtn,
   },
   setup() {
     const store = useStore();
