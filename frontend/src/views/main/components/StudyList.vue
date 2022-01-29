@@ -4,18 +4,19 @@
       <p class="study-list-header col-6">스터디 목록</p>
         <input type="text" class="form-control" v-model="studyCode" placeholder="스터디 URL">
         <button class="btn btn-primary" @click="onClickJoin">스터디 참여하기</button>
-      <div v-if="studies.length" class="d-flex flex-wrap">
+      <div class="d-flex flex-wrap">
+      <!-- <div v-if="studies.length" class="d-flex flex-wrap"> -->
         <div v-for="study in studies" :key="study.studyId" class="col-4 card-box">
           <StudyListItem :study="study" />
         </div>
       </div>
-      <div v-else>
+      <!-- <div v-else>
         <div class="d-flex justify-content-center">
           <div class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -28,7 +29,9 @@ import { useRouter } from 'vue-router'
 import { joinStudy } from '@/api/study';
 
 export default {
-  props: ['studies'],
+  props: {
+    studies: Array,
+  },
   components: {
     StudyListItem
   },

@@ -2,12 +2,12 @@
   <Navbar/>
   <div class="container mt-5">
     <div class="row">
-      <div class="col-5">
+      <div class="col-4">
         <StudyDetailHeader/>
         <StudyDetailCamera/>
         <button class="btn btn-success my-3 text-white">입장하기</button>
       </div>
-      <div class="col-7">
+      <div class="col-8">
         <StudyDetailKanbanBoard />
       </div>
     </div>
@@ -25,8 +25,6 @@ import StudyDetailHeader from '@/views/studies/components/detail/StudyDetailHead
 import StudyDetailCamera from '@/views/studies/components/detail/StudyDetailCamera';
 import StudyDetailExitModal from '@/views/studies/components/detail/StudyDetailExitModal';
 import StudyDetailKanbanBoard from '@/views/studies/components/detail/StudyDetailKanbanBoard';
-import { onMounted, reactive } from 'vue'
-import { useStore } from 'vuex';
 
 export default {
   name: 'StudyDetail',
@@ -37,16 +35,9 @@ export default {
     StudyDetailExitModal,
     StudyDetailKanbanBoard,
   },
-  setup() {
-    const store = useStore();
-    const state = reactive({
-      studyId: store.state.study.studyInfo.studyId
-    })
-    onMounted(() => {
-      store.dispatch('GET_STUDY_INFO', state.studyId)
-    })
 
-    return { state };
+  setup() {
+    return { };
   },
   created() {},
   mounted() {},

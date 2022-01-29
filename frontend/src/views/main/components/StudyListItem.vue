@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="{ name: 'StudyDetail', params: { studyCode: study.studyCode }}">
+  <a @click="onClickStudyItem(study)">
     <div class="card">
       <img :src="study.studyImage" class="card-img-top" alt="...">
       <div class="card-body">
@@ -7,12 +7,25 @@
         <p class="card-text">{{ study.studyGoal }}</p>
       </div>
     </div>
-  </router-link>
+  </a>
 </template>
 
 <script>
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
+
 export default {
   props: ['study'],
+  setup() {
+    const store = useStore()
+    const router = useRouter()
+
+    const onClickStudyItem = function (study) {
+      store.dispatch('GET_STUDY_INFO', study.studyId)
+      router.push({ name: 'StudyDetail', params: { studyCode: study.studyCode }})
+    }
+    return { onClickStudyItem }
+  }
 };
 </script>
 

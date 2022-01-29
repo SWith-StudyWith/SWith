@@ -13,7 +13,7 @@ const actions = {
       payload,
       (res) => {
         console.log(res.data)
-        if (res.data.data.code === 200) {
+        if (res.data.code === 200) {
           commit('SET_STUDY_INFO', res.data.data)
         }
       },
@@ -25,8 +25,7 @@ const actions = {
   GET_STUDY_LIST({ commit }) {
     getStudyList(
       (res) => {
-        console.log(res.data)
-        if (res.data.data.code === 200) {
+        if (res.data.code === 200) {
           commit('SET_STUDY_LIST', res.data.data)
         }
       },
