@@ -1,5 +1,3 @@
-import store from '../../store';
-
 function setInterceptors(instance) {
   // 요청 인터셉터 추가
   instance.interceptors.request.use(
