@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { reactive, onMounted } from 'vue';
+import { reactive, computed } from 'vue';
 import { useStore } from 'vuex';
 import Navbar from '../common/Navbar.vue';
 import MainHeader from './components/MainHeader.vue';
@@ -24,9 +24,14 @@ export default {
   components: { Navbar, MainHeader, StudyList, Footer },
   setup() {
     const store = useStore();
+    store.dispatch('GET_STUDY_LIST')
     const state = reactive({
-      studyList: store.state.study.studyList,
-      studyInfo: store.state.study.studyInfo
+      studyList: computed(() => {
+        return store.state.study.studyList
+      }),
+      studyInfo: computed(() => {
+        return store.state.study.studyInfo
+      })
     });
     // const error = ref(null);
 
@@ -38,11 +43,13 @@ export default {
     // };
 
     // load();
-    onMounted(
-      () => {
-        store.dispatch('GET_STUDY_LIST')
-      }
-    )
+    // onCreated(
+    //   async () => {
+    //     await
+    //     console.log(store.state.study)
+    //     console.log(store.state.study.studyList)
+    //   }
+    // )
     return {
       state
     };
