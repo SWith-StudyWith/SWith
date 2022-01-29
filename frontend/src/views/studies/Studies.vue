@@ -215,6 +215,12 @@ export default {
         console.warn(exception);
       });
 
+
+
+
+
+// 화상회의 화면 틀 구성
+
       // --- Connect to the session with a valid user token ---
 
       // 'getToken' method is simulating what your server-side should do.
