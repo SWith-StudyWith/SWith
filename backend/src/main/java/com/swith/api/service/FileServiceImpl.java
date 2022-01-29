@@ -1,14 +1,11 @@
 package com.swith.api.service;
 
-import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import com.swith.common.util.FirebaseUtil;
 import com.swith.config.FirebaseConfig;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,9 +27,9 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public String upload(MultipartFile multipartFile, String storagePath, String url, String type) throws IOException {
-//        String extension = "." + FilenameUtils.getExtension(multipartFile.getName());
+        // String extension = "." + FilenameUtils.getExtension(multipartFile.getName());
         String fileName = UUID.randomUUID() + "_" + new Date().getTime();
-//        if (!extension.equals(".")) fileName += extension;
+        // if (!extension.equals(".")) fileName += extension;
         String filePath = storagePath + fileName;
         File file = this.convertMultipartToFile(multipartFile);
         this.uploadFile(file, filePath, multipartFile.getContentType());
@@ -57,7 +54,8 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public File convertMultipartToFile(MultipartFile multipartFile) throws IOException {
-        File tempFile = new File(Objects.requireNonNull(multipartFile.getOriginalFilename()));
+        File tempFile = new File("temp");
+        // multipartFile.transferTo(tempFile);
         FileOutputStream fos = new FileOutputStream(tempFile);
         fos.write(multipartFile.getBytes());
         fos.close();

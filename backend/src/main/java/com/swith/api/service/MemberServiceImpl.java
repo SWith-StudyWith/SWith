@@ -1,6 +1,5 @@
 package com.swith.api.service;
 
-import com.sun.xml.internal.ws.server.UnsupportedMediaException;
 import com.swith.api.dto.member.request.MemberInfoReq;
 import com.swith.common.util.MailUtil;
 import com.swith.common.util.SecurityUtil;
