@@ -1,5 +1,8 @@
 <template>
-  <div class="bg-white card-shadow rounded p-2 text-start align-top border border-white">
+  <div @click="onClickCard"
+    class="bg-white card-shadow rounded p-2 text-start align-top border border-white"
+    data-bs-toggle="modal" data-bs-target="#kanbanCardUpdateModal"
+  >
     <span class="d-inline-block font-small">{{ task.content }}</span>
   </div>
 </template>
@@ -11,6 +14,13 @@ export default {
   props: {
     task: Object
   },
+  emits: ['onClickCard'],
+  setup(props, { emit }) {
+    const onClickCard = function() {
+      emit('onClickCard', props.task)
+    };
+    return { onClickCard };
+  }
 };
 </script>
 
