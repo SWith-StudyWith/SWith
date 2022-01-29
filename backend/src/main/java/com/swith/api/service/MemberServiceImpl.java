@@ -1,17 +1,24 @@
 package com.swith.api.service;
 
+import com.sun.xml.internal.ws.server.UnsupportedMediaException;
 import com.swith.api.dto.member.request.MemberInfoReq;
 import com.swith.common.util.MailUtil;
 import com.swith.common.util.SecurityUtil;
+import com.swith.config.FirebaseConfig;
 import com.swith.db.entity.Member;
 import com.swith.db.repository.MemberRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.util.Optional;
 
+@Slf4j
 @Transactional
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -23,6 +30,12 @@ public class MemberServiceImpl implements MemberService {
 
     @Autowired
     MailUtil mailUtil;
+
+    @Autowired
+    FileServiceImpl fileService;
+
+    @Autowired
+    private FirebaseConfig firebaseConfig;
 
     @Override
     public Member insertMember(Member member) {
@@ -96,7 +109,16 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Member updateMember(Member member, MemberInfoReq memberInfoReq) {
+    public Member updateMember(Member member, MemberInfoReq memberInfoReq, MultipartFile multipartFile) throws IOException {
+        // upload할 image가 존재하는 경우
+        if (!multipartFile.isEmpty()) {
+            Tika tika = new Tika();
+            String mimeType = tika.detect(multipartFile.getInputStream());
+            if (mimeType.startsWith("image")) { // MIME type이 image인지 확인
+                member.setImgUrl(fileService.upload(multipartFile, firebaseConfig.getProfile_storage_path(),
+                        member.getImgUrl(), "media"));
+            }else throw new IOException();
+        }
         member.setNickname(memberInfoReq.getNickname());
         member.setGoal(memberInfoReq.getGoal());
         return member;
