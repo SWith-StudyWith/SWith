@@ -5,7 +5,7 @@
 </template>
 <script>
 export default {
-  name: 'StudyDetail',
+  name: 'StudyDetailKanbanBoard',
   components: {
   },
   props: {
