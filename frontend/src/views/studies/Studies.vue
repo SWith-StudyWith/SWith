@@ -2,18 +2,113 @@
   <div class="study-base-page">
     <Sidebar @show-screenmode="showScreenMode"/>
     <div :style="{ 'margin-left': sidebarWidth }">
-    <h2>카메라 들어가는 부분</h2>
-    <!-- <router-view /> -->
-    <!-- <button @click="onClickKanbanBoard">칸반보드열어말어</button>
-    <button @click="onClickScreenShare">화면공유열어말어</button>
-    <button @click="onClickWhiteBoard">화이트보드열어말어</button> -->
-    <KanbanBoard v-show="isKanbanBoard"/>
-    <ScreenShare v-show="isScreenShare"/>
-    <WhiteBoard v-show="isWhiteBoard"/>
-    <!-- <KanbanBoard v-show="screen==1"/>
-    <ScreenShare v-show="screen==2"/>
-    <WhiteBoard v-show="screen==3"/> -->
+
+
+
+      <div id="main-container" class="container">
+		<div id="join" v-if="!session">
+			<div id="img-div"><img src="resources/images/openvidu_grey_bg_transp_cropped.png" /></div>
+			<div id="join-dialog" class="jumbotron vertical-center">
+				<h1>Join a video session</h1>
+				<div class="form-group">
+					<p>
+						<label>Participant</label>
+						<input v-model="myUserName" class="form-control" type="text" required>
+					</p>
+					<p>
+						<label>Session</label>
+						<input v-model="mySessionId" class="form-control" type="text" required>
+					</p>
+					<p class="text-center">
+						<button class="btn btn-lg btn-success" @click="joinSession()">Join!</button>
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<div id="session" v-if="session">
+			<!-- session header -->
+			<div id="session-header">
+				<!-- session header - title -->
+				<h1 id="session-title">{{ mySessionId }}</h1>
+				<!-- session header - functions -->
+				<div class="my-function">
+
+					<div class="function" id="screen-sharing" @click="startScreenSharing">
+						<img src="@/assets/img/icon_logo/logo.png" alt="">
+					</div>
+				</div>
+
+				<div class="session-title"></div>
+				<input class="btn btn-large btn-danger" type="button" id="buttonLeaveSession" @click="leaveSession" value="Leave session">
+			</div>
+
+
+
+
+
+			<div id="main-video" class="col-md-6">
+				<user-video :stream-manager="mainStreamManager"/>
+			</div>
+			<div id="video-container" class="col-md-6">
+				<user-video :stream-manager="publisher" @click="updateMainVideoStreamManager(publisher)"/>
+				<user-video v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub" @click="updateMainVideoStreamManager(sub)"/>
+			</div>
+
+
+
+
+
+			<!-- 비디오 컨테이너 -->
+			<div id="video-container" v-if="isScreenShared">
+				<!-- <user-video :stream-manager="teacher" @click="updateMainVideoStreamManager(teacher)" v-if="teacher"/> -->
+				<div class="video-wrapper" style="width:100%;">
+					<div class="user-video-wrapper" id="user-video-wrapper" style="left:0;">
+						<user-video id="my-video" style="width:10%;" :stream-manager="publisher" @click="updateMainVideoStreamManager(publisher)"/>
+						<div id="user-video-while-shared" style="width:10%;" v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub">
+							<div class="test" v-if="JSON.parse(sub.stream.connection.data).clientData !== 'Screen Sharing'">
+								<user-video :stream-manager="sub" @click="updateMainVideoStreamManager(sub)"/>
+							</div>
+						</div>
+					</div>
+					<div style="width:100%;" v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub">
+						<div class="video-screen-sharing" v-if="JSON.parse(sub.stream.connection.data).clientData === 'Screen Sharing'">
+							<user-video style="width: 100%; " :stream-manager="sub" @click="updateMainVideoStreamManager(sub)"/>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="video-container" v-else>
+				<!-- <user-video :stream-manager="teacher" @click="updateMainVideoStreamManager(teacher)" v-if="teacher"/> -->
+				<div class="user-video" style="" >
+					<user-video id="my-video" :stream-manager="publisher" @click="updateMainVideoStreamManager(publisher)"/>
+				</div>
+
+				<div class="user-video" id="user-video" style="width:30%;" v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub">
+					<div class="test">
+						<user-video :stream-manager="sub" @click="updateMainVideoStreamManager(sub)"/>
+					</div>
+				</div>
+			</div>
+
+
+
+
+
+
+
+		</div>
+	</div>
+
+
+
+
+      <!-- 화면 모드 -->
+      <KanbanBoard v-show="isKanbanBoard"/>
+      <ScreenShare v-show="isScreenShare"/>
+      <WhiteBoard v-show="isWhiteBoard"/>
     </div>
+    <!-- sidebar -->
   </div>
 </template>
 
@@ -23,15 +118,17 @@ import { sidebarWidth } from '@/views/studies/components/sidebar/state.js';
 import KanbanBoard from '@/views/studies/components/screen/KanbanBoard.vue';
 import ScreenShare from '@/views/studies/components/screen/ScreenShare.vue';
 import WhiteBoard from '@/views/studies/components/screen/WhiteBoard.vue';
-import { ref, reactive } from 'vue';
+import { ref } from 'vue';
 import { OpenVidu } from "openvidu-browser";
-import UserVideo from "./meeting-components/UserVideo.vue";
+import UserVideo from "@/views/studies/components/room/video//UserVideo.vue";
 import axios from "axios";
+// import ConnectionUserList from "@/views/studies/components/room/video/ConnectionUserList";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
-const OPENVIDU_SERVER_URL = "https://i65101.p.ssafy.io:4443";
+// const OPENVIDU_SERVER_URL = "https://i65101.p.ssafy.io:4443";
 const OPENVIDU_SERVER_SECRET = "MY_SECRET";
+const OPENVIDU_SERVER_URL = "https://" + location.hostname + ":4443";
 // const OPENVIDU_SERVER_URL = "https://" + location.hostname + ":4443";
 
 export default {
@@ -43,6 +140,46 @@ export default {
     WhiteBoard,
     UserVideo,
   },
+
+  beforeRouteLeave(to, from, next) {
+    console.log(to.fullPath);
+    // if (to.fullPath.indexOf("board") != -1) {
+    //   console.log("게시판갈거고 bid는1 " + to.params.bid);
+    //   this.bid = to.params.bid;
+    //   // console.log(this.bid);
+    // } else {
+    //   console.log("게시판안갈거고 id는2" + this.bid);
+    //   // console.log(typeof this.bid);
+    //   this.bid = false; //재할당
+    // }
+    // if (to.fullPath.indexOf("rollbook") != -1) {
+    //   console.log("출석부가야함" + to.params.bid);
+    //   if (this.session) {
+    //     this.session.disconnect();
+    //   }
+    //   return next();
+    // }
+    if (to.fullPath == `/conference/${this.$route.params.conferenceId}`) {
+      if (this.session) {
+        this.session.disconnect();
+      }
+      return next();
+    } else {
+      if (this.session) {
+        this.session.disconnect();
+      }
+      this.session = undefined;
+      this.mainStreamManager = undefined;
+      this.publisher = undefined;
+      this.subscribers = [];
+      this.OV = undefined;
+
+      window.removeEventListener("beforeunload", this.leaveSession);
+      return next();
+    }
+  },
+
+
   setup() {
     const isKanbanBoard = ref(false);
     const isWhiteBoard = ref(false);
@@ -128,52 +265,30 @@ export default {
   data () {
     return {
       OV: undefined,
-      session: undefined,
-      mainStreamManager: undefined,
-      publisher: undefined,
-      tempPublisher: undefined,
-      subscribers: [],
-      vOnOff: true,
-      aOnOff: true,
-      size: true,
-      connectionUser: false,
-      mainOnOff: false,
-      myUserId: "",
-      tg: false,
-      width: "640",
-      height: "400",
+			session: undefined,
+			mainStreamManager: undefined,
+			publisher: undefined,
+			subscribers: [],
 
-      // 사용자 정보
-      mySessionId: "SessionA",
-      myUserName: "Participant" + Math.floor(Math.random() * 100),
+			// 사용자 정보
+			mySessionId: 'SessionA',
+			myUserName: 'Participant' + Math.floor(Math.random() * 100),
 
-      // 화면 공유
+			// 화면 공유
 			OVForScreenShare: undefined,
 			sessionForScreenShare: undefined,
 			mainStreamManager2: undefined,
 			sharingPublisher: undefined,
 
-      // 상태 관리 변수
+			// 상태 관리 변수
 			//menu: false,			// 메뉴 오픈상태
 			isScreenShared: false,	// 화면공유 상태
 			screenShareName: "Screen Sharing",	// 화면 공유 스트림의 이름
     }
-  },
-  async created() { // 스터디 방 접속 시 세션 id => 스터디 코드로
-    let roomInfo = await this.$store.dispatch(
-      "getRoomById",
-      this.$route.params.conferenceId
-    );
-    this.mySessionId = roomInfo.code;
-    this.myUserName = JSON.parse(sessionStorage.getItem("userInfo")).nickname;
-    this.myUserId = JSON.parse(sessionStorage.getItem("userInfo")).id;
-    console.log("세션 검색");
-    console.log(this.getSession(this.mySessionId));
-    this.joinSession();
-    // this.host_id = roomInfo.host_id;
-  },
 
 
+
+  },  // data end
 
 
 
@@ -184,38 +299,40 @@ export default {
 
 
   methods : {
-    //  join session
-    joinSession() {
-      // --- Get an OpenVidu object ---
-      this.OV = new OpenVidu();
 
-      // --- Init a session ---
-      this.session = this.OV.initSession();
+      joinSession () {
+			// --- Get an OpenVidu object ---
+			this.OV = new OpenVidu();
 
-      // --- Specify the actions when events take place in the session ---
+			// --- Init a session ---
+			this.session = this.OV.initSession();
 
-      // On every new Stream received...
-      this.session.on("streamCreated", ({ stream }) => {
-        const subscriber = this.session.subscribe(stream);
-        this.subscribers.push(subscriber);
-        console.log("인원 변경이 감지되었다.");
-        // this.checkNotice();
-      });
+			// --- Specify the actions when events take place in the session ---
 
-      // On every Stream destroyed...
-      this.session.on("streamDestroyed", ({ stream }) => {
-        const index = this.subscribers.indexOf(stream.streamManager, 0);
-        if (index >= 0) {
-          this.subscribers.splice(index, 1);
-        }
-      });
+			// On every new Stream received...
+			this.session.on('streamCreated', ({ stream }) => {
+				const subscriber = this.session.subscribe(stream);
+				this.subscribers.push(subscriber);
+			});
 
-      // On every asynchronous exception...
-      this.session.on("exception", ({ exception }) => {
-        console.warn(exception);
-      });
+			// On every Stream destroyed...
+			this.session.on('streamDestroyed', ({ stream }) => {
+				const index = this.subscribers.indexOf(stream.streamManager, 0);
+				if (index >= 0) {
+					this.subscribers.splice(index, 1);
+				}
+			});
 
-// 화면 공유 세션
+			// On every asynchronous exception...
+			this.session.on('exception', ({ exception }) => {
+				console.warn(exception);
+			});
+
+
+
+
+
+
 
 			// On start screen share
 			this.session.on('signal:startScreenSharing', ()=>{
@@ -228,56 +345,217 @@ export default {
 			})
 
 
-// 화상회의 화면 틀 구성
 
-      // --- Connect to the session with a valid user token ---
 
-      // 'getToken' method is simulating what your server-side should do.
-      // 'token' parameter should be retrieved and returned by your own backend
-      this.getToken(this.mySessionId).then(token => {
-        this.session
-          .connect(token, {
-            clientData: this.myUserName,
-            idData: this.myUserId
-          })
-          .then(() => {
-            // --- Get your own camera stream with the desired properties ---
 
-            let publisher = this.OV.initPublisher("user-video", {
-              audioSource: undefined, // The source of audio. If undefined default microphone
-              videoSource: undefined, // The source of video. If undefined default webcam
-              publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
-              publishVideo: true, // Whether you want to start publishing with your video enabled or not
-              resolution: this.width + "x" + this.height, // "320x200", // The resolution of your video
-              frameRate: 30, // The frame rate of your video
-              insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
-              mirror: false // Whether to mirror your local video or not
-            });
 
-            console.log("this publisher");
-            console.log(publisher);
-            // console.log(publisher.videoSource("screen"));
-            this.mainStreamManager = publisher;
-            this.publisher = publisher;
+			// --- Connect to the session with a valid user token ---
 
-            // --- Publish your stream ---
-            this.session.publish(this.publisher);
-            console.log("this publisher2");
-            console.log(this.publisher);
+			// 'getToken' method is simulating what your server-side should do.
+			// 'token' parameter should be retrieved and returned by your own backend
+			this.getToken(this.mySessionId).then(token => {
+				this.session.connect(token, { clientData: this.myUserName })
+					.then(() => {
 
-            console.log(this.session);
-          })
-          .catch(error => {
-            console.log(
-              "There was an error connecting to the session:",
-              error.code,
-              error.message
-            );
-          });
-      });
-      window.addEventListener("beforeunload", this.leaveSession);
-    },
-  },
+						// --- Get your own camera stream with the desired properties ---
+
+						let publisher = this.OV.initPublisher(undefined, {
+							audioSource: undefined, // The source of audio. If undefined default microphone
+							videoSource: undefined, // The source of video. If undefined default webcam
+							publishAudio: true,  	// Whether you want to start publishing with your audio unmuted or not
+							publishVideo: true,  	// Whether you want to start publishing with your video enabled or not
+							resolution: '640x480',  // The resolution of your video
+							frameRate: 30,			// The frame rate of your video
+							insertMode: 'APPEND',	// How the video is inserted in the target element 'video-container'
+							mirror: false       	// Whether to mirror your local video or not
+						});
+
+						this.mainStreamManager = publisher;
+						this.publisher = publisher;
+
+						// --- Publish your stream ---
+
+						this.session.publish(this.publisher);
+					})
+					.catch(error => {
+						console.log('There was an error connecting to the session:', error.code, error.message);
+					});
+			});
+
+			window.addEventListener('beforeunload', this.leaveSession)
+		},
+
+		leaveSession () {
+			// --- Leave the session by calling 'disconnect' method over the Session object ---
+			if (this.session) this.session.disconnect();
+
+			this.session = undefined;
+			this.mainStreamManager = undefined;
+			this.publisher = undefined;
+			this.subscribers = [];
+			this.OV = undefined;
+
+			window.removeEventListener('beforeunload', this.leaveSession);
+		},
+
+		updateMainVideoStreamManager (stream) {
+			if (this.mainStreamManager === stream) return;
+			this.mainStreamManager = stream;
+		},
+
+		/**
+		 * --------------------------
+		 * SERVER-SIDE RESPONSIBILITY
+		 * --------------------------
+		 * These methods retrieve the mandatory user token from OpenVidu Server.
+		 * This behavior MUST BE IN YOUR SERVER-SIDE IN PRODUCTION (by using
+		 * the API REST, openvidu-java-client or openvidu-node-client):
+		 *   1) Initialize a Session in OpenVidu Server	(POST /openvidu/api/sessions)
+		 *   2) Create a Connection in OpenVidu Server (POST /openvidu/api/sessions/<SESSION_ID>/connection)
+		 *   3) The Connection.token must be consumed in Session.connect() method
+		 */
+
+		getToken (mySessionId) {
+			return this.createSession(mySessionId).then(sessionId => this.createToken(sessionId));
+		},
+
+		// See https://docs.openvidu.io/en/stable/reference-docs/REST-API/#post-openviduapisessions
+		createSession (sessionId) {
+			return new Promise((resolve, reject) => {
+				axios
+					.post(`${OPENVIDU_SERVER_URL}/openvidu/api/sessions`, JSON.stringify({
+						customSessionId: sessionId,
+					}), {
+						auth: {
+							username: 'OPENVIDUAPP',
+							password: OPENVIDU_SERVER_SECRET,
+						},
+					})
+					.then(response => response.data)
+					.then(data => resolve(data.id))
+					.catch(error => {
+						if (error.response.status === 409) {
+							resolve(sessionId);
+						} else {
+							console.warn(`No connection to OpenVidu Server. This may be a certificate error at ${OPENVIDU_SERVER_URL}`);
+							if (window.confirm(`No connection to OpenVidu Server. This may be a certificate error at ${OPENVIDU_SERVER_URL}\n\nClick OK to navigate and accept it. If no certificate warning is shown, then check that your OpenVidu Server is up and running at "${OPENVIDU_SERVER_URL}"`)) {
+								location.assign(`${OPENVIDU_SERVER_URL}/accept-certificate`);
+							}
+							reject(error.response);
+						}
+					});
+			});
+		},
+
+		// See https://docs.openvidu.io/en/stable/reference-docs/REST-API/#post-openviduapisessionsltsession_idgtconnection
+		createToken (sessionId) {
+			return new Promise((resolve, reject) => {
+				axios
+					.post(`${OPENVIDU_SERVER_URL}/openvidu/api/sessions/${sessionId}/connection`, {}, {
+						auth: {
+							username: 'OPENVIDUAPP',
+							password: OPENVIDU_SERVER_SECRET,
+						},
+					})
+					.then(response => response.data)
+					.then(data => resolve(data.token))
+					.catch(error => reject(error.response));
+			});
+		},
+
+
+
+
+
+		startScreenSharing () {
+			this.OVForScreenShare = new OpenVidu();
+
+			this.sessionForScreenShare = this.OVForScreenShare.initSession();
+
+			var mySessionId = this.mySessionId;
+			this.getToken(mySessionId).then(token => {
+				this.sessionForScreenShare.connect(token, { clientData: this.screenShareName })
+				.then(() => {
+					let publisher = this.OVForScreenShare.initPublisher("sharingvideo", {
+						audioSource: false,
+						videoSource: "screen",
+                        publishVideo: true,
+						resolution: "1920x1980",
+						frameRate: 10,
+                        insertMode: 'APPEND',
+                        mirror: false
+					});
+					console.log("publisher",publisher);
+					publisher.once('accessAllowed', () => {
+						try {
+							console.log("subscriber >>>>> ", this.subscribers);
+							this.isScreenShared=true;
+							this.session.signal({
+								data: JSON.stringify(status),  // Any string (optional)
+								to: [],
+								type: 'startScreenSharing'             // The type of message (optional)
+							})
+							publisher.stream.getMediaStream().getVideoTracks()[0].addEventListener('ended', () => {
+								console.log('User pressed the "Stop sharing" button');
+								this.session.signal({
+									data: JSON.stringify(status),  // Any string (optional)
+									to: [],
+									type: 'stopScreenSharing'             // The type of message (optional)
+								})
+								this.leaveSessionForScreenSharing()
+								this.isScreenShared=false;
+							});
+						} catch (error) {
+							console.error('Error applying constraints: ', error);
+						}
+					});
+
+					publisher.once('accessDenied', () => {
+						console.warn('ScreenShare: Access Denied');
+					});
+
+					this.mainStreamManager2 = publisher;
+                    this.sharingPublisher = publisher;
+
+                    this.sessionForScreenShare.publish(this.sharingPublisher);
+
+				}).catch((error => {
+
+					console.warn('There was an error connecting to the session:', error.code, error.message);
+
+				}));
+			});
+
+			window.addEventListener('beforeunload', this.leaveSessionForScreenSharing)
+		},
+
+		leaveSessionForScreenSharing () {
+			if (this.sessionForScreenShare) this.sessionForScreenShare.disconnect();
+
+            this.sessionForScreenShare = undefined;
+            this.mainStreamManager2 = undefined;
+            this.sharingPublisher = undefined;
+            this.OVForScreenShare = undefined;
+
+            window.removeEventListener('beforeunload', this.leaveSessionForScreenSharing);
+		},
+
+		checkScreenShared () {
+			var buf = 0;
+			this.subscribers.forEach((sub)=>{
+				if(JSON.parse(sub.stream.connection.data).clientData==="Screen Sharing") {
+					buf+=1;
+				}
+			});
+			if (buf) {
+				this.isScreenShared=true;
+			} else {
+				this.isScreenShared = false;
+			}
+		},
+
+
+  },  //methods end
 
 
 }
