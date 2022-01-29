@@ -7,14 +7,12 @@
       </span>
       <span v-else>Swith Sidebar</span>
     </h1>
-    <!-- <SidebarLink/> -->
     <SidebarLink to="/studies/main" icon="fas fa-sign-out-alt">나가기</SidebarLink>
     <SidebarLink to="/studies/11" icon="fas fa-microphone">기본화면이라쳐</SidebarLink>
     <SidebarLink to="/studies/main" icon="fas fa-video">기본화면</SidebarLink>
     <SidebarLink to="/studies/11/kanbanboard" icon="fas fa-chalkboard">칸반보드</SidebarLink>
     <SidebarLink to="/studies/11/screenshare" icon="fas fa-desktop">화면공유</SidebarLink>
     <SidebarLink to="/studies/11/whiteboard" icon="fas fa-pencil-alt">화이트보드</SidebarLink>
-    <!-- <img src="@/assets/img/icon_study_page/Pen_gray.png"> -->
 
     <div class="control-bottons">
       <p>ㅎ ㅏ</p>
@@ -25,13 +23,13 @@
       <font-awesome-icon @click="this.onClickCameraIcon" :icon="['fas', this.cameraIcon]" />
       </p>
       <p>
+      <font-awesome-icon @click="this.onClickKanbanBoardIcon" :icon="['fas', this.kanbanboardIcon]" />
+      </p>
+      <p>
       <font-awesome-icon @click="this.onClickScreenShareIcon" :icon="['fas', this.screenshareIcon]" />
       </p>
       <p>
       <font-awesome-icon @click="this.onClickWhiteBoardIcon" :icon="['fas', this.whiteboardIcon]" />
-      </p>
-      <p>
-      <font-awesome-icon @click="this.onClickKanbanBoardIcon" :icon="['fas', this.kanbanboardIcon]" />
       </p>
 
     </div>
@@ -51,62 +49,113 @@
 <script>
 import SidebarLink from '@/views/studies/components/sidebar/SidebarLink.vue';
 import { collapsed, toggleSidebar, sidebarWidth } from '@/views/studies/components/sidebar/state.js';
+import { ref, computed } from 'vue';
 
 export default {
   name: 'Sidebar',
   components: {
     SidebarLink,
   },
-  props: {},
-  setup() {
-    return { collapsed, toggleSidebar, sidebarWidth };
-  },
-  data() {
-    return {
-      myVideo: null,
-      sampleData: '',
-      isMuted: false,
-      isCameraOn: false,
-      isScreenShare: true,
-      isWhiteBoard: false,
-      isKanbanBoard: false,
-    }
-  },
-  methods: {
-    onClickMuteIcon: function () {
-      this.isMuted = !this.isMuted;
-    },
-    onClickCameraIcon: function () {
-      this.isCameraOn = !this.isCameraOn;
-    },
-    onClickScreenShareIcon: function () {
-      this.isScreenShare = !this.isScreenShare;
-    },
-    onClickWhiteBoardIcon: function () {
-      this.isWhiteBoard = !this.isWhiteBoard;
-    },
-    onClickKanbanBoardIcon: function () {
-      this.isKanbanBoard = !this.isKanbanBoard;
-    },
+  // props: {},
+  setup( props, context ) {
+    const isMuted = ref(true);
+    const isCameraOn = ref(false);
+    const isKanbanBoard = ref(false);
+    const isScreenShare = ref(false);
+    const isWhiteBoard = ref(false);
+    const onClickMuteIcon = () => {
+      isMuted.value = !isMuted.value;
+    };
+    const onClickCameraIcon = () => {
+      isCameraOn.value = !isCameraOn.value;
+    };
+    const onClickKanbanBoardIcon = () => {
+      isKanbanBoard.value = !isKanbanBoard.value;
+      if ( isKanbanBoard.value) {
+        context.emit('show-screenmode', 1)
+      }
+    };
+    const onClickScreenShareIcon = () => {
+      isScreenShare.value = !isScreenShare.value;
+      if ( isScreenShare.value) {
+          context.emit('show-screenmode', 2)
+      }
+    };
+    const onClickWhiteBoardIcon = () => {
+      isWhiteBoard.value = !isWhiteBoard.value;
+      if ( isWhiteBoard.value) {
+          context.emit('show-screenmode', 3)
+      }
+    };
+    const mutedIcon = computed(() => {
+      return isMuted.value ? 'microphone-slash' : 'microphone';
+    });
+    const cameraIcon = computed(() => {
+      return isCameraOn.value ? 'video' : 'video-slash';
+    });
+    const kanbanboardIcon = computed(() => {
+      return isKanbanBoard.value ? 'edit' : 'chalkboard';
+    });
+    const screenshareIcon = computed(() => {
+      return isScreenShare.value ? 'desktop' : 'tv';
+    });
+    const whiteboardIcon = computed(() => {
+      return isWhiteBoard.value ? 'pencil-alt' : 'pen';
+    });
 
+
+    return { collapsed, toggleSidebar, sidebarWidth,
+              isMuted, isCameraOn, isWhiteBoard, isScreenShare, isKanbanBoard,
+              onClickMuteIcon, onClickCameraIcon, onClickScreenShareIcon, onClickWhiteBoardIcon, onClickKanbanBoardIcon,
+              mutedIcon, cameraIcon, screenshareIcon, whiteboardIcon, kanbanboardIcon
+    };
   },
-  computed: {
-    mutedIcon() {
-      return this.isMuted ? 'microphone-slash' : 'microphone'
-    },
-    cameraIcon() {
-      return this.isCameraOn ? 'video' : 'video-slash'
-    },
-    screenshareIcon() {
-      return this.isScreenShare ? 'desktop' : 'tv'
-    },
-    whiteboardIcon() {
-      return this.isWhiteBoard ? 'pencil-alt' : 'pen'
-    },
-    kanbanboardIcon() {
-      return this.isKanbanBoard ? 'edit' : 'chalkboard'
-    },
-  }
+  // data() {
+  //   return {
+  //     myVideo: null,
+  //     sampleData: '',
+  //     isMuted: false,
+  //     isCameraOn: false,
+  //     isScreenShare: false,
+  //     isWhiteBoard: false,
+  //     isKanbanBoard: true,
+  //   }
+  // },
+  // methods: {
+  //   onClickMuteIcon: function () {
+  //     this.isMuted = !this.isMuted;
+  //   },
+  //   onClickCameraIcon: function () {
+  //     this.isCameraOn = !this.isCameraOn;
+  //   },
+  //   onClickScreenShareIcon: function () {
+  //     this.isScreenShare = !this.isScreenShare;
+  //   },
+  //   onClickWhiteBoardIcon: function () {
+  //     this.isWhiteBoard = !this.isWhiteBoard;
+  //   },
+  //   onClickKanbanBoardIcon: function () {
+  //     this.isKanbanBoard = !this.isKanbanBoard;
+  //   },
+
+  // },
+  // computed: {
+  //   mutedIcon() {
+  //     return this.isMuted ? 'microphone-slash' : 'microphone'
+  //   },
+  //   cameraIcon() {
+  //     return this.isCameraOn ? 'video' : 'video-slash'
+  //   },
+  //   screenshareIcon() {
+  //     return this.isScreenShare ? 'desktop' : 'tv'
+  //   },
+  //   whiteboardIcon() {
+  //     return this.isWhiteBoard ? 'pencil-alt' : 'pen'
+  //   },
+  //   kanbanboardIcon() {
+  //     return this.isKanbanBoard ? 'edit' : 'chalkboard'
+  //   },
+  // }
 }
 </script>
 
@@ -165,7 +214,7 @@ export default {
 .fas {
   color: rgba(255, 255, 255, 0.7);
 }
-.fa-tv {
+.fa-desktop {
   color: pink;
 }
 .fa-microphone {

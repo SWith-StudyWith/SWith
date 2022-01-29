@@ -1,7 +1,10 @@
 <template>
-  <h1>The sidebar is {{ collapsed ? 'closed' : 'open' }}</h1>
-  <h1>화이트보드</h1>
-  <button @click="toggleSidebar">Toggle Sidebar</button>
+  <!-- <h1>The sidebar is {{ collapsed ? 'closed' : 'open' }}</h1> -->
+  <!-- <h1>화이트보드 컴포넌트</h1> -->
+  <div class="whiteboard">
+    <h1>화이트보드 컴포넌트</h1>
+  </div>
+  <!-- <button @click="toggleSidebar">Toggle Sidebar</button> -->
 </template>
 
 <script>
