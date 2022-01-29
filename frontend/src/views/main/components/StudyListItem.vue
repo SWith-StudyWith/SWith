@@ -1,31 +1,18 @@
 <template>
-  <a @click="onClickStudyItem(study)">
+  <router-link :to="{ name: 'StudyDetail', params: { studyId: study.studyId, studyCode: study.studyCode }}">
     <div class="card">
-      <img :src="study.studyImage" class="card-img-top" alt="...">
+      <img :src="study.studyImage" class="card-img-top" alt="study image">
       <div class="card-body">
         <h5 class="card-title">{{ study.studyName }}</h5>
         <p class="card-text">{{ study.studyGoal }}</p>
       </div>
     </div>
-  </a>
+  </router-link>
 </template>
 
 <script>
-import { useStore } from 'vuex';
-import { useRouter } from 'vue-router';
-
 export default {
   props: ['study'],
-  setup() {
-    const store = useStore()
-    const router = useRouter()
-
-    const onClickStudyItem = function (study) {
-      store.dispatch('GET_STUDY_INFO', study.studyId)
-      router.push({ name: 'StudyDetail', params: { studyCode: study.studyCode }})
-    }
-    return { onClickStudyItem }
-  }
 };
 </script>
 
