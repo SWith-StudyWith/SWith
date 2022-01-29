@@ -7,7 +7,6 @@
       </span>
       <span v-else>Swith Sidebar</span>
     </h1>
-    <!-- <SidebarLink/> -->
     <SidebarLink to="/studies/main" icon="fas fa-sign-out-alt">나가기</SidebarLink>
     <SidebarLink to="/studies/11" icon="fas fa-microphone">기본화면이라쳐</SidebarLink>
     <SidebarLink to="/studies/main" icon="fas fa-video">기본화면</SidebarLink>

@@ -5,12 +5,15 @@
     <h1>스터디 기본 페이지</h1>
     <router-view />
     <h1>여기에 컴포넌트 넣으면 됨</h1>
-    <button @click="onClickKanbanBoard">칸반보드열어말어</button>
+    <!-- <button @click="onClickKanbanBoard">칸반보드열어말어</button>
     <button @click="onClickScreenShare">화면공유열어말어</button>
-    <button @click="onClickWhiteBoard">화이트보드열어말어</button>
+    <button @click="onClickWhiteBoard">화이트보드열어말어</button> -->
     <KanbanBoard v-show="isKanbanBoard"/>
     <ScreenShare v-show="isScreenShare"/>
     <WhiteBoard v-show="isWhiteBoard"/>
+    <!-- <KanbanBoard v-show="screen==1"/>
+    <ScreenShare v-show="screen==2"/>
+    <WhiteBoard v-show="screen==3"/> -->
     </div>
   </div>
 </template>
@@ -57,10 +60,13 @@ export default {
       // switch (screen)
       if(screen==1){
         console.log('1 칸반보드 true 보여조라~');
+        isKanbanBoard.value = !isKanbanBoard.value;
       } else if(screen==2){
         console.log('2 화면공유 true 보여조라~');
+        isScreenShare.value = !isScreenShare.value;
       } else if( screen ==3) {
         console.log('3 화이트보드 true니깐 보여주라~');
+        isWhiteBoard.value = !isWhiteBoard.value;
       }
     }
 
