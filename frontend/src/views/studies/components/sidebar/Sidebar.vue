@@ -163,6 +163,7 @@ export default {
 .sidebar {
   color: rgb(255, 211, 91);
   background-color: #1E304F;
+  box-shadow:  2px 1px 10px 0 rgb(0 0 0 / 0.7);
 
   float:left;
   position: fixed;
