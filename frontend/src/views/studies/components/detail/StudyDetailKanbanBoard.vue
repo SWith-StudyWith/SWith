@@ -5,7 +5,8 @@
       <div
         v-for="tasks in kanbanBoard"
         :key="tasks.taskId"
-        class="mx-2 w-100 bg-grey p-2 rounded-3"
+        class="mx-2 w-100 bg-grey p-2 rounded-3 overflow-auto"
+        style="max-height: 20rem"
       >
         <p class="text-start mb-0">{{ tasks.taskName }}</p>
         <StudyDetailKanbanBoardCard
@@ -19,8 +20,7 @@
   </div>
 </template>
 <script>
-import { computed } from 'vue'
-import { useStore } from 'vuex'
+import { ref } from 'vue'
 import StudyDetailKanbanBoardCard from '@/views/studies/components/detail/StudyDetailKanbanBoardCard.vue';
 
 export default {
@@ -28,11 +28,11 @@ export default {
   components: {
     StudyDetailKanbanBoardCard,
   },
-  setup() {
-    const store = useStore();
-    const kanbanBoard = computed(() => {
-      return store.state.study.studyInfo.kanbanBoard;
-    })
+  props: {
+    studyInfo: Object
+  },
+  setup(props) {
+    const kanbanBoard = ref(props.studyInfo.kanbanBoard)
 
     return { kanbanBoard }
   },
