@@ -14,4 +14,5 @@ public interface StudyService {
     StudyInfoRes getStudyDetail(Long studyId);
     Study getStudyById(Long studyId);
     void deleteMemberStudy(Member member, Study study);
+    void updateStudyIsUsed(Study study);
 }

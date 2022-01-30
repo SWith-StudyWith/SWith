@@ -86,4 +86,9 @@ public class StudyServiceImpl implements StudyService {
     public void deleteMemberStudy(Member member, Study study) {
         memberStudyRepository.deleteByMemberAndStudy(member, study);
     }
+
+    @Override
+    public void updateStudyIsUsed(Study study) {
+        study.setIsUsed("Y");
+    }
 }
