@@ -192,4 +192,7 @@ export default {
 .card {
   font-size: 0.85rem;
 }
+::-webkit-scrollbar{
+  width: 6px;
+}
 </style>

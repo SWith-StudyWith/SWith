@@ -131,8 +131,8 @@
             <a :href="GOOGLE_GET_AUTH_CODE_URL"><img src="@/assets/img/icon_oauth_google/btn_google_signin_dark_normal_web.png" alt="google login button"></a>
         </div>
         <div class="text-center">
-          <span>이미 회원이신가요? </span>
-          <router-link :to="{ name: 'Login' }">로그인</router-link>
+          <span class="text-muted">이미 회원이신가요? </span>
+          <router-link class="ps-3" :to="{ name: 'Login' }">로그인</router-link>
         </div>
       </div>
     </div>
@@ -441,5 +441,8 @@ input{
   flex-wrap: wrap;
   margin-bottom: 20px;
 }
-
+a {
+  font-weight: bold;
+  text-decoration: none;
+}
 </style>

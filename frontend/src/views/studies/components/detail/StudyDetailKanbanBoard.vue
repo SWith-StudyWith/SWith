@@ -66,4 +66,7 @@ export default {
 .bg-light-grey {
   background-color: #F8F8F8;
 }
+::-webkit-scrollbar{
+  width: 6px;
+}
 </style>

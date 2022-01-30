@@ -3,7 +3,11 @@
   <div class="modal fade" id="exitModal" tabindex="-1" aria-labelledby="exitModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm modal-dialog-centered">
       <div class="modal-content">
-        <div class="modal-body">
+        <div class="modal-header">
+          <h5 class="modal-title">스터디 탈퇴</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body py-5">
           정말로 스터디를 탈퇴하시겠습니까?
         </div>
         <div class="modal-footer">
