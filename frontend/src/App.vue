@@ -23,4 +23,21 @@ $success: #F5CEC7;
   text-align: center;
   color: #2c3e50;
 }
+::-webkit-scrollbar{
+    width: 12px;
+}
+::-webkit-scrollbar-thumb{
+    background-color: #999;
+    border-radius: 10px;
+}
+::-webkit-scrollbar-track{
+    background-color: #ccc;
+}
+.popover {
+  font-size: 0.7rem;
+  max-width: 3.5rem;
+}
+.popover-body {
+  padding: 0.3rem;
+}
 </style>

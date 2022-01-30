@@ -1,6 +1,6 @@
 <template>
   <div class="videoInput">
-    <video class="myVideo" autoplay style="width: 300px"></video>
+    <video class="myVideo" autoplay style="width: 100%"></video>
   </div>
   <div class="text-center mt-3">
     <button class="btn btn-primary mx-3" @click="this.onClickCameraBtn">

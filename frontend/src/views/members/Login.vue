@@ -31,10 +31,10 @@
           <KakaoLoginBtn/>
           <a :href="GOOGLE_GET_AUTH_CODE_URL"><img src="@/assets/img/icon_oauth_google/btn_google_signin_dark_normal_web.png" alt="google login button"></a>
         </div>
-        <div class="container2 text-center" >
-          <router-link :to="{ name: 'FindPassword' }">비밀번호 찾기</router-link>
+        <div class="text-center mt-5">
+          <router-link class="text-muted px-3" :to="{ name: 'FindPassword' }">비밀번호 찾기</router-link>
           <span> </span>
-          <router-link :to="{ name: 'SignUp' }">회원가입</router-link>
+          <router-link class="text-muted px-3" :to="{ name: 'SignUp' }">회원가입</router-link>
         </div>
       </div>
     </div>
@@ -159,11 +159,6 @@ label {
   font-size: 0.75rem;
 }
 
-.container2 {
-  display: flex;
-  /* justify-content: center; */
-  justify-content: space-evenly;
-}
 .socialLogin {
   display: flex;
   justify-content: space-between;
@@ -203,6 +198,9 @@ input::placeholder {
 input{
   background-color: #F4F5F4;
   vertical-align: middle;
+}
+a {
+  text-decoration: none;
 }
 
 </style>
