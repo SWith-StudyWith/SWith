@@ -1,6 +1,7 @@
 package com.swith.api.service;
 
 import com.swith.api.dto.member.request.MemberInfoReq;
+import com.swith.common.util.FirebaseUtil;
 import com.swith.common.util.MailUtil;
 import com.swith.common.util.SecurityUtil;
 import com.swith.config.FirebaseConfig;
@@ -117,7 +118,12 @@ public class MemberServiceImpl implements MemberService {
                 member.setImgUrl(fileService.upload(multipartFile, firebaseConfig.getProfile_storage_path(),
                         member.getImgUrl(), "media"));
             }else throw new IOException();
+        } else if (memberInfoReq.isUpdated() && member.getImgUrl() != null) {
+            log.debug("updateMember - file path: {}", FirebaseUtil.convertUrlToFilePath(member.getImgUrl()));
+            fileService.deleteFile(FirebaseUtil.convertUrlToFilePath(member.getImgUrl()));
+            member.setImgUrl(null);
         }
+
         member.setNickname(memberInfoReq.getNickname());
         member.setGoal(memberInfoReq.getGoal());
         return member;

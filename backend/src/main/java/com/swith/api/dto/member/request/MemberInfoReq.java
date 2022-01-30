@@ -10,4 +10,5 @@ import lombok.ToString;
 public class MemberInfoReq {
     private String nickname;
     private String goal;
+    private boolean updated;
 }
