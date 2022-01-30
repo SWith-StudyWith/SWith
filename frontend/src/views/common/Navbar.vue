@@ -22,7 +22,7 @@
     <section id="nav-list" v-else>
       <span style="font-weight:500;">{{ state.userInfo.nickname }} 님 환영합니다 !</span>
       <div class="dropdown">
-        <img src="../../assets/img/navbar/profile1.png" alt="" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" style="width: 50px;" >
+        <img :src="state.userInfo.profileImg" alt="" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" style="width: 50px;" >
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
           <li><router-link :to="{ name: 'MyPage' }">회원정보 수정</router-link></li>
           <li>

@@ -8,11 +8,11 @@
       <div class="row d-flex justify-content-center">
         <div class="col-4">
           <section>
-            <form class="userInfo-wrapper" :model="formData">
+            <form class="userInfo-wrapper" :model="formData" enctype="multipart/form-data">
               <div class="d-flex justify-content-center">
                 <div class="image-wrapper">
                   <label for="changeProfile" class="img-form-label">
-                    <img :src="state.userInfo.profileImgUrl" :fit="fit" class="profile-img" style="cursor:pointer">
+                    <img :src="state.userInfo.profileImg" :fit="fit" class="profile-img" style="cursor:pointer">
                   </label>
                   <input
                     id="changeProfile"
@@ -68,30 +68,38 @@ import Navbar from '@/views/common/Navbar.vue';
 import Footer from '@/views/common/Footer.vue';
 import SignOutModal from '@/views/members/components/SignOutModal.vue';
 import ChangePasswordModal from './components/ChangePasswordModal.vue';
-
+// import { getUserInfo } from '../../api/user'
 export default {
   name: '',
   components: { Navbar, Footer, SignOutModal, ChangePasswordModal },
   setup() {
     const store = useStore();
     const state = ref({
-      userInfo : store.getters.getUserInfo,
-      imgFile: '@/assets/img/profile1.png'
+      userInfo : store.getters.getUserInfo,  //profileImg
+      profileImg: ''
     });
+
+    // console.log(store.getUserInfo)
+    // console.log(state.value.userInfo.profileImg)
+    // getProfileImg = () => {
+    //   axios.get(state.value.userInfo.profileImg)
+    //     .then((res) => console.log(res))
+    // }
 
     const onClickUploadFile = function(e) {
       console.log(e.target.value)
       const file = e.target.files[0];
-      state.value.userInfo.profileImgUrl = URL.createObjectURL(file);
-      state.value.imgFile = file;
+      state.value.userInfo.profileImg = URL.createObjectURL(file);
+      state.value.profileImg = file;
     };
 
-    const onClickUpdateUserInfo = () => {
-      const updateUserData = {
-        nickname: state.value.userInfo.nickname,
-        goal: state.value.userInfo.goal,
-        img_url: state.value.userInfo.imgFile
-      }
+    const onClickUpdateUserInfo = (e) => {
+      e.preventDefault();
+      const updateUserData = new FormData();
+      updateUserData.append("nickname", state.value.userInfo.nickname)
+      updateUserData.append("goal", state.value.userInfo.goal)
+      updateUserData.append("profileImg", state.value.profileImg)
+      console.log(state.value.userInfo)
       store.dispatch('updateUserInfo', updateUserData)
     }
     return {
@@ -142,7 +150,7 @@ p{
   height: 150px;
   border-radius: 70%;
   overflow: hidden;
-  background: #BDBDBD;
+  /* background: #BDBDBD; */
   justify-content: center;
 }
 .profile-img {

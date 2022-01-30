@@ -99,17 +99,14 @@ const actions = {
 
 const mutations = {
   SET_USER_INFO(state, payload) {
-    state.userInfo.email = payload.email;
-    state.userInfo.nickname = payload.nickname;
-    state.userInfo.goal = payload.goal;
+    console.log(payload)
+    state.userInfo = payload
   },
   SET_USER_ACCESS_INFO(state, payload) {
     state.userInfo.path = payload.path
   },
   UPDATE_USER_INFO(state, payload) {
-    state.userInfo.nickname = payload.nickname
-    state.userInfo.goal = payload.goal
-    // state.userInfo.profileImgUrl = payload.profileImgUrl
+    state.userInfo = payload
   },
   LOGOUT(state) {
     // state.userInfo.email = ''
