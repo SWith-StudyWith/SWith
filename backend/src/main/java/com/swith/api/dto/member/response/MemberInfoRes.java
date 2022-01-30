@@ -11,5 +11,5 @@ public class MemberInfoRes {
     private String email;
     private String nickname;
     private String goal;
-    private String imgUrl;
+    private String profileImg;
 }
