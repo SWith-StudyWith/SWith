@@ -2,6 +2,9 @@ package com.swith.api.service;
 
 import com.swith.api.dto.member.request.MemberInfoReq;
 import com.swith.db.entity.Member;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 public interface MemberService {
     Member insertMember(Member member);
@@ -12,7 +15,7 @@ public interface MemberService {
     Member getMemberByNickname(String nickname);
     void findPassword(String email);
     Member getMemberByAuthentication();
-    Member updateMember(Member member, MemberInfoReq memberInfoReq);
+    Member updateMember(Member member, MemberInfoReq memberInfoReq, MultipartFile multipartFile) throws IOException;
     Member updateMemberPassword(Member member, String password);
     void deleteMember(Member member);
 }

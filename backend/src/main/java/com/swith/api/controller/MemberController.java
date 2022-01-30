@@ -19,6 +19,10 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
 
 @Slf4j
 @RestController
@@ -94,29 +98,43 @@ public class MemberController {
         }
         // 회원정보 조회 성공
         memberInfo = new BaseDataResponse<MemberInfoRes>(true, 200, "회원정보 조회 성공",
-                new MemberInfoRes(member.getEmail(), member.getNickname(), member.getGoal()));
+                new MemberInfoRes(member.getEmail(), member.getNickname(), member.getGoal(), member.getImgUrl()));
         return ResponseEntity.status(200).body(memberInfo);
     }
 
     @PutMapping
-    public ResponseEntity<BaseDataResponse<MemberInfoRes>> updateMember(@RequestBody MemberInfoReq memberInfoReq) {
+    public ResponseEntity<BaseDataResponse<MemberInfoRes>> updateMember(
+            MemberInfoReq memberInfoReq, @RequestParam("profileImg") MultipartFile multipartFile) {
         log.debug("updateMember - {}", memberInfoReq);
+        log.debug("updateMember - file name: {}, file size: {}, content type: {}", multipartFile.getOriginalFilename(),
+                multipartFile.getSize(), multipartFile.getContentType());
         Member member = memberService.getMemberByAuthentication();
-        BaseDataResponse<MemberInfoRes> memberInfo;
+        BaseDataResponse<MemberInfoRes> memberInfo = null;
         // 회원인증 실패
         if (member == null) {
-            memberInfo = new BaseDataResponse<MemberInfoRes>(false, 400, "회원인증 실패", null);
-            return ResponseEntity.status(200).body(memberInfo);
+            return ResponseEntity.status(200).body(new BaseDataResponse<MemberInfoRes>(false,
+                    400, "회원인증 실패", null));
         }
-        member = memberService.updateMember(member, memberInfoReq);
+
+        try {
+            member = memberService.updateMember(member, memberInfoReq, multipartFile);
+        } catch (IOException e) {
+            memberInfo = new BaseDataResponse<MemberInfoRes>(false, 408, "파일 업로드 실패",
+                    new MemberInfoRes(member.getEmail(), member.getNickname(), member.getGoal(), member.getImgUrl()));
+        }
+        File tempFile = new File("temp");
+        if (tempFile.exists() && !tempFile.delete()) log.debug("updateMember - tempFile.delete() failed");
+
         // 회원정보 수정 실패
         if (member == null) {
-            memberInfo = new BaseDataResponse<MemberInfoRes>(false, 404, "회원정보 수정 실패", null);
-            return ResponseEntity.status(200).body(memberInfo);
+            return ResponseEntity.status(200).body(new BaseDataResponse<MemberInfoRes>(false,
+                    404, "회원정보 수정 실패", null));
         }
+        // 파일 업로드 실패
+        if (memberInfo != null) return ResponseEntity.status(200).body(memberInfo);
         // 회원정보 수정 성공
         memberInfo = new BaseDataResponse<MemberInfoRes>(true, 200, "회원정보 수정 성공",
-                new MemberInfoRes(member.getEmail(), member.getNickname(), member.getGoal()));
+                new MemberInfoRes(member.getEmail(), member.getNickname(), member.getGoal(), member.getImgUrl()));
         return ResponseEntity.status(200).body(memberInfo);
     }
 
