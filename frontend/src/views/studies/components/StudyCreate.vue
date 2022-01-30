@@ -28,7 +28,7 @@
                 </div>
               </div>
               <div class="form-group mt-3 mb-3">
-                <input @change="changeFile" type="file" class="form-control" id="inputFileUploadInsert" accept="image/*"/>
+                <input @change="onClickUploadFile" type="file" class="form-control" id="inputFileUploadInsert" accept="image/*"/>
               </div>
               <button @click="onClickUpdateUserInfo" class="btn btn-primary col-12 btn-create">스터디 만들기</button>
             </form>
@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { toRefs, reactive } from 'vue';
+import { ref } from 'vue';
 import { useStore } from 'vuex';
 import Navbar from '@/views/common/Navbar.vue';
 import Footer from '@/views/common/Footer.vue';
@@ -53,21 +53,22 @@ export default {
   components: { Navbar, Footer, SignOutModal },
   setup() {
     const store = useStore();
-    const state = reactive({
+    const state = ref({
       userInfo : store.getters.getUserInfo,
-      file: store.getters.getUserInfo.profileImgUrl
+      file: ''
     });
 
-    const changeFile = (event) => {
-      console.log(event)
-      if(event.target.files && event.target.files.length > 0){
-        state.file = URL.createObjectURL(event.target.files[0]);
+    const onClickUploadFile = (e) => {
+      console.log(e)
+      const files = e.target.files
+      if(files && files.length > 0){
+        state.value.file = URL.createObjectURL(files[0]);
       }
     };
 
 
     return {
-      ...toRefs(state), changeFile
+      state, onClickUploadFile
     }
   },
 

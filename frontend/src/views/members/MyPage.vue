@@ -12,7 +12,7 @@
               <div class="d-flex justify-content-center">
                 <div class="image-wrapper">
                   <label for="changeProfile" class="img-form-label">
-                    <img :src="state.userInfo.profileImg" :fit="fit" class="profile-img" style="cursor:pointer">
+                    <img :src="state.profileImgSrc" :fit="fit" class="profile-img" style="cursor:pointer">
                   </label>
                   <input
                     id="changeProfile"
@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
 import Navbar from '@/views/common/Navbar.vue';
 import Footer from '@/views/common/Footer.vue';
@@ -75,16 +75,17 @@ export default {
   setup() {
     const store = useStore();
     const state = ref({
-      userInfo : store.getters.getUserInfo,  //profileImg
-      profileImg: ''
-    });
+      userInfo : store.getters.getUserInfo,
+      profileImg: '',
+      profileImgSrc : computed(() => {
+        if (state.value.userInfo.profileImg) {
+          return state.value.userInfo.profileImg
+        } else {
+          return require(`@/assets/img/navbar/profile.png`)
+        }
+    })
 
-    // console.log(store.getUserInfo)
-    // console.log(state.value.userInfo.profileImg)
-    // getProfileImg = () => {
-    //   axios.get(state.value.userInfo.profileImg)
-    //     .then((res) => console.log(res))
-    // }
+    });
 
     const onClickUploadFile = function(e) {
       console.log(e.target.value)
@@ -99,6 +100,7 @@ export default {
       updateUserData.append("nickname", state.value.userInfo.nickname)
       updateUserData.append("goal", state.value.userInfo.goal)
       updateUserData.append("profileImg", state.value.profileImg)
+      updateUserData.append("Updated", true)
       console.log(state.value.userInfo)
       store.dispatch('updateUserInfo', updateUserData)
     }
@@ -150,7 +152,6 @@ p{
   height: 150px;
   border-radius: 70%;
   overflow: hidden;
-  /* background: #BDBDBD; */
   justify-content: center;
 }
 .profile-img {
