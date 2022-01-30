@@ -129,30 +129,30 @@
     v-if="vOnOff"
     icon="fas fa-video"
     @click="videoOnOff()"
-  ></button>
+  >비디오 on</button>
   <button
     v-else
     icon="fas fa-video-slash"
     @click="videoOnOff()"
-  ></button>
+  >비디오 off</button>
   <button
     v-if="aOnOff"
     icon="fas fa-microphone"
-    @click="audioOnOff()"
-  ></button>
+    @click="audioOnOff"
+  >오디오 on</button>
   <button
     v-else
     icon="fas fa-microphone-slash"
-    @click="audioOnOff()"
-  ></button>
+    @click="audioOnOff"
+  >오디오 off</button>
   <button
     icon="fas fa-desktop"
     @click="toggleScreanshare()"
-  ></button>
+  >화면 공유 on</button>
   <button
     icon="fas fa-sign-out-alt"
     @click="leaveSession()"
-  ></button>
+  >세션 나가기</button>
 </div>
 
 
