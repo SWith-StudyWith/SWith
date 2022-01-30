@@ -101,6 +101,15 @@ const routes = [
     name: 'OAuthGoogle',
     component: () => import(/* webpackChunkName: "OAuthGoogle" */ '../views/members/components/OAuthGoogle.vue'),
   },
+  {
+    path: '/404',
+    name: '404',
+    component: () => import(/* webpackChunkName: "OAuthGoogle" */ '../views/common/404Page.vue'),
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: '/404'
+  },
 ];
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
