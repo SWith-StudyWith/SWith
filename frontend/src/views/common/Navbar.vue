@@ -22,8 +22,8 @@
     <section id="nav-list" v-else>
       <span style="font-weight:500;">{{ state.userInfo.nickname }} 님 환영합니다 !</span>
       <div class="dropdown">
-        <img :src="state.userInfo.profileImg" alt="" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" style="width: 50px;" >
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+        <img :src="state.profileImgSrc" alt="" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" style="width: 50px; background: #BDBDBD; border-radius: 70%; overflow: hidden;" >
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
           <li><router-link :to="{ name: 'MyPage' }">회원정보 수정</router-link></li>
           <li>
             <router-link v-on:click="onClickLogout" to="/Login">로그아웃</router-link>
@@ -54,6 +54,13 @@ export default {
         else return true
       }),
       userInfo : store.getters.getUserInfo,
+      profileImgSrc : computed(() => {
+      if (state.userInfo.profileImg) {
+        return state.userInfo.profileImg
+      } else {
+        return require(`@/assets/img/navbar/profile.png`)
+      }
+    })
     })
 
     const onClickLogout = function (e) {
