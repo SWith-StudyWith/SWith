@@ -1,9 +1,9 @@
 <template>
+    <!-- class="bg-white card-shadow rounded p-2 text-start align-top border border-white" -->
   <div @click="onClickCard"
-    class="bg-white card-shadow rounded p-2 text-start align-top border border-white"
     data-bs-toggle="modal" data-bs-target="#kanbanCardUpdateModal"
   >
-    <span class="d-inline-block font-small">{{ task.content }}</span>
+    <span class="d-inline-block">{{ task.content }}</span>
   </div>
 </template>
 
@@ -13,12 +13,13 @@ export default {
   components: {
   },
   props: {
-    task: Object
+    task: Object,
+    taskName: String,
   },
   emits: ['onClickCard'],
   setup(props, { emit }) {
     const onClickCard = function() {
-      emit('onClickCard', props.task)
+      emit('onClickCard', { content: props.task.content, kanbanId: props.task.kanbanId, taskName: props.taskName })
     };
     return { onClickCard };
   }
@@ -37,8 +38,5 @@ span {
 }
 .card-shadow {
   box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-}
-.font-small {
-  font-size: 0.9rem;
 }
 </style>
