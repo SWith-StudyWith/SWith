@@ -71,11 +71,17 @@ public class StudyController {
     }
 
     @DeleteMapping("/{studyId}")
-    public ResponseEntity<BaseResponse> deleteMemberStudy(@PathVariable String studyId) {
+    public ResponseEntity<BaseResponse> deleteMemberStudy(@PathVariable long studyId) {
 
         Member member = memberService.getMemberByAuthentication();
-        Study study = studyService.getStudyById(Long.parseLong(studyId));
+        Study study = studyService.getStudyById(studyId);
         studyService.deleteMemberStudy(member, study);
+
+        //해당 스터디에 스터디원 존재 여부 확인
+        List<MemberStudy> memberStudyList = memberStudyService.getMemberStudyByStudy(study);
+        if (memberStudyList.size() == 0) {
+            studyService.deleteStudy(studyId);
+        }
 
         return ResponseEntity.status(200).body(new BaseResponse(true, 200, "스터디 탈퇴 성공"));
     }

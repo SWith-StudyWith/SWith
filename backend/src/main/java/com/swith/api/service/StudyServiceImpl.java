@@ -91,4 +91,9 @@ public class StudyServiceImpl implements StudyService {
     public void updateStudyIsUsed(Study study) {
         study.setIsUsed("Y");
     }
+
+    @Override
+    public void deleteStudy(Long studyId) {
+        studyRepository.deleteById(studyId);
+    }
 }
