@@ -25,10 +25,24 @@ function exitStudy(payload, success, fail) {
     .then(success)
     .catch(fail)
 }
+function checkKanban(studyId, success, fail) {
+  basicInstance
+    .get(`/studies/${studyId}/kanbans`)
+    .then(success)
+    .catch(fail)
+}
+function putKanban(payload, studyId, success, fail) {
+  basicInstance
+    .put(`api/studies/${studyId}/kanbans`, payload)
+    .then(success)
+    .catch(fail)
+}
 
 export {
   getStudyInfo,
   getStudyList,
   joinStudy,
   exitStudy,
+  putKanban,
+  checkKanban,
 }

@@ -1,5 +1,7 @@
 <template>
   <div class="kanbanboard">
+    <button v-if="!editPermit.value" class="btn btn-primary" @click="onClickEditBtn">칸반보드 수정하기</button>
+    <button class="btn btn-primary" @click="onClickSaveBtn">수정내용 저장하기</button>
     <div class="h-100">
       <div class="p-3 d-flex justify-content-center h-90">
         <div
@@ -27,7 +29,7 @@
                 <div class="list-group-item rounded mt-1 p-3">
                   <KanbanBoardCard
                     :task="element"
-                    :taskName="column.taskName"
+                    :taskId="column.taskId"
                     class="align-items-center text-start"
                     @onClickCard="selectedTask.value=$event"
                   />
@@ -39,7 +41,11 @@
       </div>
     </div>
   </div>
-  <KanbanBoardModal :selectedTask="selectedTask" />
+  <KanbanBoardModal
+    :selectedTask="selectedTask"
+    :editPermit="editPermit"
+    @updateTask="updateTask($event)"
+  />
 </template>
 
 <script>
@@ -48,8 +54,9 @@ import { collapsed, toggleSidebar, sidebarWidth } from '@/views/studies/componen
 import { useStore } from 'vuex';
 import KanbanBoardCard from '@/views/studies/components/screen/KanbanBoardCard.vue';
 import KanbanBoardModal from '@/views/studies/components/screen/KanbanBoardModal.vue';
-import { ref, computed, reactive } from 'vue';
+import { ref, computed } from 'vue';
 import draggable from 'vuedraggable'
+import { checkKanban, putKanban } from '@/api/study'
 
 export default {
   name: 'KanbanBoard',
@@ -63,18 +70,67 @@ export default {
     const store = useStore();
     const kanbanBoard = computed(() => {
       return store.state.study.studyInfo.kanbanBoard;
-    })
-    const columns = reactive({
-      todo: kanbanBoard.value[0],
-      inProgress: kanbanBoard.value[1],
-      done: kanbanBoard.value[2]
-    })
-
-    const selectedTask = ref({})
+    });
+    const selectedTask = ref({});
+    const updateTask = function(task) {
+      kanbanBoard.value[task.value.taskId - 1].kanban.forEach((card) => {
+        if (card.kanbanId === task.value.kanbanId) {
+          card.content = task.value.content;
+        }
+      })
+    };
+    const editPermit = ref(false);
+    const onClickEditBtn = function() {
+      console.log('수정할래!')
+      checkKanban(
+        store.state.study.studyInfo.studyId,
+        (res) => {
+          console.log(res.data);
+          if (res.data.code === 200) {
+            console.log('수정 가능');
+            editPermit.value = true;
+          } else if (res.data.code === 400) {
+            console.log('누군가 수정 중');
+            editPermit.value = false;
+          }
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+    }
+    const onClickSaveBtn = function() {
+      // if (!editPermit.value) {
+      //   return;
+      // }
+      const studyId = store.state.study.studyInfo.studyId;
+      console.log('저장할래!')
+      const payload = []
+      kanbanBoard.value.forEach((column) => {
+        let taskId = column.taskId
+        column.kanban.forEach((task) => {
+          payload.push({ studyId, taskId, content: task.content })
+        })
+      })
+      putKanban(
+        payload,
+        store.state.study.studyInfo.studyId,
+        (res) => {
+          console.log(res.data)
+          if (res.data.code === 200) {
+            store.dispatch('GET_STUDY_INFO',studyId)
+          }
+        },
+        (err) => {
+          console.log(err)
+        }
+      )
+      editPermit.value = false;
+    }
 
     return {
       collapsed, toggleSidebar, sidebarWidth,
-      kanbanBoard, selectedTask, columns
+      kanbanBoard, selectedTask, updateTask, onClickEditBtn, editPermit, onClickSaveBtn
     }
   },
 }

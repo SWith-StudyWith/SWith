@@ -14,12 +14,12 @@ export default {
   },
   props: {
     task: Object,
-    taskName: String,
+    taskId: Number,
   },
   emits: ['onClickCard'],
   setup(props, { emit }) {
     const onClickCard = function() {
-      emit('onClickCard', { content: props.task.content, kanbanId: props.task.kanbanId, taskName: props.taskName })
+      emit('onClickCard', { content: props.task.content, kanbanId: props.task.kanbanId, taskId: props.taskId })
     };
     return { onClickCard };
   }
