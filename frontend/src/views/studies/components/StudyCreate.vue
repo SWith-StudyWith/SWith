@@ -10,11 +10,19 @@
               <div class="mb-3">
                 <label for="studyName" class="form-label">스터디 이름</label>
                 <input type="text" class="form-control" id="studyName" v-model="state.studyName" required placeholder="스터디 이름">
+                <div :style="{ visibility: (state.isValidStudyName || !state.wasInputed.studyName )? 'hidden' : 'visible' }"
+                  class="invalid-feedback">
+                  2~20자 사이로 작성해주세요.
+                </div>
               </div>
               <div class="mb-3">
                 <label for="studyCode" class="form-label">스터디 코드</label>
                 <p class="base-url">https://swith.com/</p>
                 <input type="text" class="form-control" id="studyCode" v-model="state.studyCode" required placeholder="URL을 입력하세요">
+                <div :style="{ visibility: (state.isValidStudyCode || !state.wasInputed.studyCode )? 'hidden' : 'visible' }"
+                  class="invalid-feedback">
+                  유효하지 않은 스터디 코드입니다.
+                </div>
               </div>
               <div class="mb-3">
                 <label for="goal" class="form-label">스터디 목표</label>
@@ -22,8 +30,8 @@
               </div>
               <div class="d-flex justify-content-start">
                 <div class="image-wrapper">
-                  <label for="changeStudyImg" class="img-form-label">
-                    <img :src="state.studyImgSrc" class="study-img" style="cursor:pointer">
+                  <label for="changeStudyImg" class="img-form-label">대표 이미지
+                    <img :src="state.studyImgSrc" :fit="fit" class="study-img">
                   </label>
                   <input
                     id="changeStudyImg"
@@ -61,7 +69,7 @@ export default {
     const store = useStore();
     const router = useRouter();
     const state = ref({
-      studyInfo: store.getters.getStudyInfo,
+      // studyInfo: store.getters.getStudyInfo,
       studyName: '',
       studyCode: '',
       studyGoal: '',
@@ -76,7 +84,25 @@ export default {
       wasInputed: {
         studyName: false,
         studyCode: false
-      }
+      },
+      isValidStudyName: computed(() => {
+        if (state.value.studyName !== '') {
+          state.value.wasInputed.studyName = true;
+        }
+        if (state.value.studyName && validateStudyName(state.value.studyName)) {
+          return true;
+        }
+        return false;
+      }),
+      isValidStudyCode: computed(() => {
+        if (state.value.studyCode !== '') {
+          state.value.wasInputed.studyCode = true;
+        }
+        if (state.value.studyCode && validateStudyCode(state.value.studyCode)) {
+          return true;
+        }
+        return false;
+      })
     });
 
     const onClickUploadFile = (e) => {
@@ -92,6 +118,9 @@ export default {
         state.value.wasInputed.studyCode = true;
         return;
       }
+      if (!state.value.isValidStudyName || state.value.isValidStudyCode) {
+        return;
+      }
       createStudy(
         {
           studyName: state.value.studyName,
@@ -100,7 +129,7 @@ export default {
           studyImgUrl: state.value.studyImgUrl
         },
         (res) => {
-          console.log(res)
+          console.log(res.data)
           switch (res.data.code) {
             case 200: alert('스터디룸 생성 완료!🔨')
             break;
@@ -110,9 +139,26 @@ export default {
           console.log(err)
           alert('서버가 아파유~')
         },
-        router.push({ name: 'studyDetail', params: { studyId: state.value.studyInfo.studyId, studyCode: state.value.studyInfo.studyCode }})
+        router.push({ name: 'Main'})
       )
     }
+
+    const validateStudyName = function (studyName) {
+      if (studyName.length >= 2 && studyName.length <= 20) {
+        return true;
+      }
+      return false;
+    };
+
+    const validateStudyCode = function (studyCode) {
+      const koreanChar = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+      const specialChar = /[`~!@#$%^&*\\\'\";:\/?]/;
+      if (studyCode.length >= 2 && studyCode.length <= 20) {
+        if (!koreanChar.test(studyCode) && !specialChar.test(studyCode)) {
+          return true;
+        }
+      } return false;
+    };
     return {
       state, onClickUploadFile, onClickCreateStudy
     }
@@ -169,7 +215,19 @@ p{
   font-weight: 400;
   margin-bottom: 5px;
 }
-
+.invalid-feedback {
+  display: block;
+  font-size: 0.75rem;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+.valid-feedback {
+  display: block;
+  font-size: 0.75rem;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  color: green;
+}
 /* basic setting */
 button{
   font-size: 14px;
@@ -200,13 +258,19 @@ textarea{
   background-color: #F4F5F4;
   vertical-align: middle;
 }
-.image-wrapper{
+.img-form-label{
+  margin-bottom: 3px;
+}
+.image-wrapper .study-img{
+  margin-top: 3px;
   margin-bottom: 6px;
   width: 200px;
   height: 150px;
   border-radius: 4%;
   overflow: hidden;
   justify-content: center;
+  cursor: pointer;
+  display: block;
 }
 .study-img {
   width: 100%;
