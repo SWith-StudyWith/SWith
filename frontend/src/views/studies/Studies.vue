@@ -138,17 +138,21 @@
   <button
     v-if="aOnOff"
     icon="fas fa-microphone"
-    @click="audioOnOff"
+    @click="audioOnOff()"
   >오디오 on</button>
   <button
     v-else
     icon="fas fa-microphone-slash"
-    @click="audioOnOff"
+    @click="audioOnOff()"
   >오디오 off</button>
   <button
     icon="fas fa-desktop"
     @click="toggleScreanshare()"
   >화면 공유 on</button>
+  <!-- <button
+    icon="fas fa-desktop"
+    @click="startScreenSharing()"
+  >화면 공유 on</button> -->
   <button
     icon="fas fa-sign-out-alt"
     @click="leaveSession()"
