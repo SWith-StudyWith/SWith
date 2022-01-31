@@ -6,52 +6,50 @@
         <h1 class="form-title">내 정보 수정</h1>
       <!-- </header> -->
       <div class="row d-flex justify-content-center">
-        <div class="col-4">
-          <section>
-            <form class="userInfo-wrapper" :model="formData" enctype="multipart/form-data">
-              <div class="d-flex justify-content-center">
-                <div class="image-wrapper">
-                  <label for="changeProfile" class="img-form-label">
-                    <img :src="state.profileImgSrc" :fit="fit" class="profile-img" style="cursor:pointer">
-                  </label>
-                  <input
-                    id="changeProfile"
-                    class="form-control"
-                    ref="file"
-                    @change="onClickUploadFile"
-                    type="file"
-                    accept="image/*"
-                    style="display: none;"
-                  />
-
-                </div>
+        <div class="col-4" style="">
+          <form class="userInfo-wrapper" :model="formData" enctype="multipart/form-data">
+            <div class="d-flex justify-content-center">
+              <div class="image-wrapper">
+                <label for="changeProfile" class="img-form-label">
+                  <img :src="state.profileImgSrc" :fit="fit" class="profile-img" style="cursor:pointer">
+                </label>
+                <input
+                  id="changeProfile"
+                  class="form-control"
+                  ref="file"
+                  @change="onClickUploadFile"
+                  type="file"
+                  accept="image/*"
+                  style="display: none;"
+                />
               </div>
-              <!-- Google이나 Kakao 로그인인 경우 안 보이게 하기 -->
-              <div class="row justify-content-between">
-                <p class="col-8 d-inline-flex" style="">{{ state.userInfo.email }}</p>
-                <button type="button" class="btn btn-change-pw btn-primary col-3 align-self-end"
-                  data-bs-toggle="modal" data-bs-target="#changePasswordModal" v-if="state.userInfo.path === 'O'">
+            </div>
+            <!-- Google이나 Kakao 로그인인 경우 안 보이게 하기 -->
+            <div class="row d-flex justify-content-between">
+              <p class="col-6" style="padding: 0px;">{{ state.userInfo.email }}</p>
+              <div class="col-4 d-flex justify-content-end" v-if="state.userInfo.path === 'O'" style="padding: 0px">
+                <button type="button" class="btn btn-change-pw btn-success"
+                  data-bs-toggle="modal" data-bs-target="#changePasswordModal">
                   비밀번호 변경
                 </button>
               </div>
-              <div class="row">
-                <label for="nickname" class="form-label">닉네임</label>
-                <input type="text" class="form-control" id="nickname" v-model="state.userInfo.nickname">
-              </div>
-              <div class="row">
-                <label for="goal" class="form-label">나의 목표</label>
-                <textarea class="form-control form-goal" id="goal" rows="3" v-model="state.userInfo.goal"></textarea>
-              </div>
-              <div class="row">
-                <button @click="onClickUpdateUserInfo" class="btn btn-primary btn-save">변경 사항 저장</button>
-              </div>
-            </form>
-            <!-- Button trigger modal -->
-            <span class="text-decoration-underline signout-btn" data-bs-toggle="modal" data-bs-target="#signOutModal" style="margin-bottom: 100px;">
-              회원 탈퇴
-            </span>
-
-          </section>
+            </div>
+            <div class="row">
+              <label for="nickname" class="form-label">닉네임</label>
+              <input type="text" class="form-control" id="nickname" v-model="state.userInfo.nickname">
+            </div>
+            <div class="row">
+              <label for="goal" class="form-label">나의 목표</label>
+              <textarea class="form-control form-goal" id="goal" rows="3" v-model="state.userInfo.goal"></textarea>
+            </div>
+            <div class="row">
+              <button @click="onClickUpdateUserInfo" class="btn btn-primary btn-save">변경 사항 저장</button>
+            </div>
+          </form>
+          <!-- Button trigger modal -->
+          <span class="text-decoration-underline signout-btn" data-bs-toggle="modal" data-bs-target="#signOutModal" style="margin-bottom: 100px;">
+            회원 탈퇴
+          </span>
         </div>
       </div>
     </div>
