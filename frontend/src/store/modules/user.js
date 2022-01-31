@@ -100,7 +100,10 @@ const actions = {
 const mutations = {
   SET_USER_INFO(state, payload) {
     console.log(payload)
-    state.userInfo = payload
+    state.userInfo = {
+      ...state.userInfo,
+      ...payload
+    };
   },
   SET_USER_ACCESS_INFO(state, payload) {
     state.userInfo.path = payload.path
