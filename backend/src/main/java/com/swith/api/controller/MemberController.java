@@ -61,6 +61,10 @@ public class MemberController {
     public ResponseEntity<BaseDataResponse<AccessTokenRes>> loginMember(@RequestBody MemberReq memberReq) {
         log.debug("loginMember - {}", memberReq.toString());
         Member member = memberService.getMemberByEmail(memberReq.getEmail());
+        if (member == null) {
+            return ResponseEntity.status(200).body(new BaseDataResponse<>(false, 404,
+                    "존재하지 않는 회원", null));
+        }
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(member.getMemberId(), memberReq.getPassword());
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
