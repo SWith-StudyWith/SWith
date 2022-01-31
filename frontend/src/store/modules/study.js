@@ -5,7 +5,11 @@ const state = () => ({
   studyList: [],
 });
 
-const getters = {};
+const getters = {
+  getStudyInfo: function (state) {
+    return state.studyInfo
+  }
+};
 
 const actions = {
   GET_STUDY_INFO({ commit }, payload) {
