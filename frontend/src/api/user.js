@@ -84,13 +84,6 @@ function updatePassword(payload, success, fail) {
     .catch(fail)
 }
 
-// 스터디 만들기
-function createStudyAPI(payload, success, fail) {
-  basicInstance
-    .post(`/api/studies`, payload)
-    .then(success)
-    .catch(fail)
-}
 export {
   signup,
   sendEmail,
@@ -102,5 +95,4 @@ export {
   loginGoogle,
   updatePassword,
   sendTemporaryPassword,
-  createStudyAPI
 }
