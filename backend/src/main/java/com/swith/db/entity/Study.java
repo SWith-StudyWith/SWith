@@ -52,4 +52,10 @@ public class Study {
             cascade = CascadeType.ALL
     )
     List<Schedule> scheduleList = new ArrayList<>();
+
+    @OneToMany(
+            mappedBy = "study",
+            cascade = CascadeType.ALL
+    )
+    List<Kanban> kanbanList = new ArrayList<>();
 }
