@@ -1,6 +1,6 @@
 <template>
   <div class="kanbanboard">
-    <button v-if="!editPermit.value" class="btn btn-primary" @click="onClickEditBtn">칸반보드 수정하기</button>
+    <button v-if="!editPermit" class="btn btn-primary" @click="onClickEditBtn">칸반보드 수정하기</button>
     <button v-else class="btn btn-primary" @click="onClickSaveBtn">수정내용 저장하기</button>
     <div class="h-100">
       <div class="p-3 d-flex justify-content-center h-90">
@@ -17,25 +17,37 @@
                 {{ column.taskName }}
               </span>
           </p>
-          <div class="overflow-auto" style="height: 30rem;">
-            <draggable
-              class="list-group"
-              :list="column.kanban"
-              item-key="kanbanId"
-              group="task"
-              ghost-class="ghost"
-            >
-              <template #item="{ element }">
-                <div class="list-group-item rounded mt-1 p-3">
-                  <KanbanBoardCard
-                    :task="element"
-                    :taskId="column.taskId"
-                    class="align-items-center text-start"
-                    @onClickCard="selectedTask.value=$event"
-                  />
-                </div>
-              </template>
-            </draggable>
+          <div class="overflow-auto my-2" style="height: 30rem;">
+            <div v-if="editPermit">
+              <draggable
+                class="list-group"
+                :list="column.kanban"
+                item-key="kanbanId"
+                group="task"
+                ghost-class="ghost"
+              >
+                <template #item="{ element }">
+                  <div class="list-group-item rounded mt-1 p-3">
+                    <KanbanBoardCard
+                      :task="element"
+                      :taskId="column.taskId"
+                      class="align-items-center text-start"
+                      @onClickCard="selectedTask.value=$event"
+                    />
+                  </div>
+                </template>
+              </draggable>
+            </div>
+            <div v-else>
+              <div v-for="task in column.kanban" :key="task.kanbanId" class="list-group-item rounded mt-1 p-3">
+                <KanbanBoardCard
+                  :task="task"
+                  :taskId="column.taskId"
+                  class="align-items-center text-start"
+                  @onClickCard="selectedTask.value=$event"
+                />
+              </div>
+            </div>
           </div>
           <button
             class="mt-auto btn"
@@ -78,7 +90,7 @@ export default {
     const kanbanBoard = computed(() => {
       return store.state.study.studyInfo.kanbanBoard;
     });
-    const editPermit = ref(false);
+    const editPermit = ref(true);
     const selectedTask = ref({});
     const updateTask = function(task) {
       kanbanBoard.value[task.value.taskId - 1].kanban.forEach((card) => {
