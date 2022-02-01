@@ -9,7 +9,7 @@
           <input type="text" class="form-control" v-model="state.task.value.content" @keyup.enter="closeInput" @blur="closeInput">
         </div>
         <div class="modal-footer">
-          <button v-if="editPermit" type="button" class="btn btn-danger btn-sm">삭제하기</button>
+          <button v-if="editPermit" type="button" class="btn btn-danger btn-sm" @click="onClickDelete" data-bs-dismiss="modal">삭제하기</button>
           <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" @click="closeInput">Close</button>
         </div>
       </div>
@@ -26,7 +26,7 @@ export default {
     selectedTask: Object,
     editPermit: Boolean,
   },
-  emits: ['updateTask'],
+  emits: ['updateTask', 'deleteTask'],
   setup(props, { emit }) {
     const state = reactive({
       isEdit: false,
@@ -42,7 +42,10 @@ export default {
       }
       state.isEdit = true;
     }
-    return { state, closeInput, openInput }
+    const onClickDelete = function () {
+      emit('deleteTask', state.task)
+    }
+    return { state, closeInput, openInput, onClickDelete }
   },
 
 }

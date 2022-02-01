@@ -1,13 +1,13 @@
 <template>
   <div class="kanbanboard">
     <button v-if="!editPermit.value" class="btn btn-primary" @click="onClickEditBtn">칸반보드 수정하기</button>
-    <button class="btn btn-primary" @click="onClickSaveBtn">수정내용 저장하기</button>
+    <button v-else class="btn btn-primary" @click="onClickSaveBtn">수정내용 저장하기</button>
     <div class="h-100">
       <div class="p-3 d-flex justify-content-center h-90">
         <div
           v-for="column in kanbanBoard"
           :key="column.taskId"
-          class="mx-2 w-100 bg-light-grey p-2 rounded-3"
+          class="mx-2 w-100 bg-light-grey p-2 rounded-3 d-flex flex-column"
         >
           <p class="text-start mb-1">
               <span
@@ -17,7 +17,7 @@
                 {{ column.taskName }}
               </span>
           </p>
-          <div class="overflow-auto" style="max-height: 30rem;">
+          <div class="overflow-auto" style="height: 30rem;">
             <draggable
               class="list-group"
               :list="column.kanban"
@@ -37,6 +37,12 @@
               </template>
             </draggable>
           </div>
+          <button
+            class="mt-auto btn"
+            :class="{ 'bg-grey' : column.taskId === 1, 'bg-pink' : column.taskId === 2, 'bg-purple' : column.taskId === 3 }"
+          >
+            추가하기
+          </button>
         </div>
       </div>
     </div>
@@ -45,6 +51,7 @@
     :selectedTask="selectedTask"
     :editPermit="editPermit"
     @updateTask="updateTask($event)"
+    @deleteTask="deleteTask($event)"
   />
 </template>
 
@@ -71,6 +78,7 @@ export default {
     const kanbanBoard = computed(() => {
       return store.state.study.studyInfo.kanbanBoard;
     });
+    const editPermit = ref(false);
     const selectedTask = ref({});
     const updateTask = function(task) {
       kanbanBoard.value[task.value.taskId - 1].kanban.forEach((card) => {
@@ -79,7 +87,15 @@ export default {
         }
       })
     };
-    const editPermit = ref(false);
+    const deleteTask = function(task) {
+      // 삭제할 인덱스 찾기
+      const targetIndex = kanbanBoard.value[task.value.taskId - 1].kanban
+        .findIndex((card) => card.kanbanId === task.value.kanbanId)
+
+      // 삭제
+      kanbanBoard.value[task.value.taskId - 1].kanban
+        .splice(targetIndex, 1)
+    };
     const onClickEditBtn = function() {
       console.log('수정할래!')
       checkKanban(
@@ -105,6 +121,7 @@ export default {
       // }
       const studyId = store.state.study.studyInfo.studyId;
       console.log('저장할래!')
+      // request payload 형태 만들기
       const payload = []
       kanbanBoard.value.forEach((column) => {
         let taskId = column.taskId
@@ -127,10 +144,17 @@ export default {
       )
       editPermit.value = false;
     }
-
     return {
-      collapsed, toggleSidebar, sidebarWidth,
-      kanbanBoard, selectedTask, updateTask, onClickEditBtn, editPermit, onClickSaveBtn
+      collapsed,
+      toggleSidebar,
+      sidebarWidth,
+      kanbanBoard,
+      selectedTask,
+      updateTask,
+      onClickEditBtn,
+      editPermit,
+      onClickSaveBtn,
+      deleteTask,
     }
   },
 }
