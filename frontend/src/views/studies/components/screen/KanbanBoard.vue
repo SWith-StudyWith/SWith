@@ -52,6 +52,9 @@
           <button
             class="mt-auto btn"
             :class="{ 'bg-grey' : column.taskId === 1, 'bg-pink' : column.taskId === 2, 'bg-purple' : column.taskId === 3 }"
+            data-bs-toggle="modal" data-bs-target="#kanbanCardCreateModal"
+            @click="statusId=column.taskId"
+            :disabled="!editPermit"
           >
             추가하기
           </button>
@@ -65,6 +68,10 @@
     @updateTask="updateTask($event)"
     @deleteTask="deleteTask($event)"
   />
+  <KanbanBoardCreateModal
+    :taskId="statusId"
+    @createTask="createTask($event)"
+  />
 </template>
 
 <script>
@@ -73,6 +80,7 @@ import { collapsed, toggleSidebar, sidebarWidth } from '@/views/studies/componen
 import { useStore } from 'vuex';
 import KanbanBoardCard from '@/views/studies/components/screen/KanbanBoardCard.vue';
 import KanbanBoardModal from '@/views/studies/components/screen/KanbanBoardModal.vue';
+import KanbanBoardCreateModal from '@/views/studies/components/screen/KanbanBoardCreateModal.vue';
 import { ref, computed } from 'vue';
 import draggable from 'vuedraggable'
 import { checkKanban, putKanban } from '@/api/study'
@@ -83,6 +91,7 @@ export default {
     // Sidebar,
     KanbanBoardCard,
     KanbanBoardModal,
+    KanbanBoardCreateModal,
     draggable,
   },
   setup() {
@@ -90,7 +99,8 @@ export default {
     const kanbanBoard = computed(() => {
       return store.state.study.studyInfo.kanbanBoard;
     });
-    const editPermit = ref(true);
+    const statusId = ref(null);
+    const editPermit = ref(false);
     const selectedTask = ref({});
     const updateTask = function(task) {
       kanbanBoard.value[task.value.taskId - 1].kanban.forEach((card) => {
@@ -155,7 +165,11 @@ export default {
         }
       )
       editPermit.value = false;
-    }
+    };
+    const createTask = function (task) {
+      const taskId = task.taskId;
+      kanbanBoard.value[taskId - 1].kanban.push({ content: task.content, kanbanId: task.kanbanId })
+    };
     return {
       collapsed,
       toggleSidebar,
@@ -167,6 +181,8 @@ export default {
       editPermit,
       onClickSaveBtn,
       deleteTask,
+      statusId,
+      createTask,
     }
   },
 }
