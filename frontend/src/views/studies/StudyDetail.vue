@@ -5,7 +5,7 @@
       <div class="col-4">
         <StudyDetailHeader :studyInfo="state.studyInfo"/>
         <StudyDetailCamera/>
-        <router-link :to="{ name: 'Studies', params: { studyId: state.studyInfo.studyId, studyCode: state.studyInfo.studyCode } }">
+        <router-link :to="{ name: 'Studies', params: { studyId: route.params.studyId, studyCode: route.params.studyCode } }">
           <button class="btn btn-success my-3 text-white">입장하기</button>
         </router-link>
       </div>
@@ -43,13 +43,13 @@ export default {
   setup() {
     const route = useRoute();
     const store = useStore()
-    store.dispatch('GET_STUDY_LIST', route.params.studyId)
+    store.dispatch('GET_STUDY_INFO', route.params.studyId)
     const state = reactive({
       studyInfo: computed(() => {
         return store.state.study.studyInfo
       })
     });
-    return { state };
+    return { state, route };
   },
 }
 </script>
