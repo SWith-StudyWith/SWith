@@ -13,7 +13,7 @@
             <label for="inputAddress" class="form-label">현재 비밀번호</label>
             <div class="input-group has-validation">
               <input type="password" class="form-control" id="nowPassword" v-model="state.nowPassword"
-              placeholder="현재 비밀번호 입력" required>
+              placeholder="현재 비밀번호 입력" required autofocus>
             </div>
             <div
             :style="{ visibility: (state.isValidNowPassword || !state.wasInputed.nowPassword)? 'hidden' : 'visible' }"
@@ -62,7 +62,7 @@
 
 <script>
 /* eslint-disable */
-import { updatePassword } from '@/api/user';
+import { updatePassword, confirmpassword } from '@/api/user';
 import { reactive, computed } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -131,16 +131,39 @@ export default {
       if (!state.isValidNewPassword || !state.isValidPasswordConfirm || !state.isValidNowPassword){
         return;
       }
-      updatePassword(
-        { password: state.passwordConfirm },
+
+      // 비밀번호 확인
+      confirmpassword(
+        { password: state.nowPassword },
         (res) => {
           console.log(res.data)
           switch (res.data.code) {
             case 200:
-              alert('비밀번호 수정 성공!')
-              break;
-            case 404:
-              alert('비밀번호 수정 실패')
+              // alert('비밀번호 확인 성공!')
+
+              // 비밀번호 수정
+              updatePassword(
+                { password: state.passwordConfirm },
+                (res) => {
+                  console.log(res.data)
+                  switch (res.data.code) {
+                    case 200:
+                      alert('비밀번호 수정 성공!')
+                      router.go({ name: 'MyPage' })
+                      break;
+                    case 404:
+                      alert('비밀번호 수정 실패')
+                      break;
+                    case 400:
+                      alert('회원 인증 실패')
+                      break;
+                  }
+                },
+                (err) => {
+                  console.log(err)
+                  alert('(수정) 서버가 아파요.!!')
+                }
+              )
               break;
             case 400:
               alert('회원 인증 실패')
@@ -149,10 +172,18 @@ export default {
         },
         (err) => {
           console.log(err)
-          alert('서버가 아파요.ㅠㅠ')
-        }
+          alert('비밀번호 확인 실패')
+          state.nowPassword = ''
+          state.wasInputed.nowPassword = false
+        },
       )
 
+      // state.nowPassword = ''
+      // state.newPassword = ''
+      // state.passwordConfirm = ''
+      // state.wasInputed.nowPassword = false
+      // state.wasInputed.newPassword = false
+      // state.wasInputed.passwordConfirm = false
       router.push({ name: 'MyPage' })
     }
 
