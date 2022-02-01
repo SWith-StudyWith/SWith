@@ -83,6 +83,13 @@ function updatePassword(payload, success, fail) {
     .then(success)
     .catch(fail)
 }
+// 비밀번호 확인
+function confirmpassword(payload, success, fail) {
+  basicInstance
+    .post(`/api/members/password`, payload)
+    .then(success)
+    .catch(fail)
+}
 
 export {
   signup,
@@ -94,5 +101,6 @@ export {
   updateUserInfoAPI,
   loginGoogle,
   updatePassword,
+  confirmpassword,
   sendTemporaryPassword,
 }
