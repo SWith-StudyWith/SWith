@@ -35,8 +35,8 @@ const actions = {
           commit('SET_USER_ACCESS_INFO', res.data.data)
           dispatch('GET_USER_INFO')
           router.push({ name: 'Main' })
-        } else {
-          console.log('잘못된 요청.')
+        } else if (res.data.code === 404) {
+          alert('존재하지 않는 이메일입니다.')
           console.log(res.data)
         }
       },
