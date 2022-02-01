@@ -17,11 +17,15 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @Slf4j
 @Transactional
 @Service
 public class MemberServiceImpl implements MemberService {
+
+    final String PASSWORD_REGEX = "^((?=.*\\d)(?=.*[a-zA-Z])(?=.*[\\W]).{" + 8 + "," + 16 + "})$";
+
     @Autowired
     MemberRepository memberRepository;
 
@@ -72,7 +76,13 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void findPassword(String email) {
         // 임시 비밀번호 생성
-        String tempPassword = makeTempPassword();
+        String tempPassword = "";
+        while (true) {
+            tempPassword = makeTempPassword();
+            if (Pattern.compile(PASSWORD_REGEX).matcher(tempPassword).find()) {
+                break;
+            }
+        }
 
         // 인코딩해서 DB에 넣기
         Member member = memberRepository.findByEmail(email).orElse(null);
