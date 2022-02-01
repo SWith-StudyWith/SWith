@@ -1,4 +1,4 @@
-import { login, getUserInfo, loginKakao, loginGoogle, updateUserInfoAPI, createStudyAPI } from '../../api/user';
+import { login, getUserInfo, loginKakao, loginGoogle, updateUserInfoAPI } from '../../api/user';
 import router from '@/router';
 
 const state = () => ({
@@ -95,22 +95,15 @@ const actions = {
   LOGOUT({ commit }) {
     commit('LOGOUT')
   },
-  createStudy({ commit }, payload) {
-    createStudyAPI(
-      payload,
-      (res) => {
-        console.log(res)
-        commit('CREATE_STUDY', res.data.data);
-        router.push({ name: 'StudyDetail' })
-      }
-    )
-  },
 };
 
 const mutations = {
   SET_USER_INFO(state, payload) {
     console.log(payload)
-    state.userInfo = payload
+    state.userInfo = {
+      ...state.userInfo,
+      ...payload
+    };
   },
   SET_USER_ACCESS_INFO(state, payload) {
     state.userInfo.path = payload.path
@@ -127,10 +120,6 @@ const mutations = {
     sessionStorage.removeItem('accessToken')
     sessionStorage.clear()
   },
-  CREATE_STUDY(state, payload) {
-    console.log(payload)
-    state.studyInfo = payload
-  }
 };
 
 export default {

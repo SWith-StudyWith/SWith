@@ -1,6 +1,13 @@
 // study 관련 api 요청
 import { basicInstance } from './index.js';
 
+function createStudy(payload, success, fail) {
+  basicInstance
+    .post(`/api/studies`, payload)
+    .then(success)
+    .catch(fail)
+}
+
 function getStudyInfo(payload, success, fail) {
   basicInstance
     .get(`/api/studies/${payload}`)
@@ -25,10 +32,25 @@ function exitStudy(payload, success, fail) {
     .then(success)
     .catch(fail)
 }
+function checkKanban(studyId, success, fail) {
+  basicInstance
+    .get(`api/studies/${studyId}/kanbans`)
+    .then(success)
+    .catch(fail)
+}
+function putKanban(payload, studyId, success, fail) {
+  basicInstance
+    .put(`api/studies/${studyId}/kanbans`, payload)
+    .then(success)
+    .catch(fail)
+}
 
 export {
+  createStudy,
   getStudyInfo,
   getStudyList,
   joinStudy,
   exitStudy,
+  putKanban,
+  checkKanban,
 }

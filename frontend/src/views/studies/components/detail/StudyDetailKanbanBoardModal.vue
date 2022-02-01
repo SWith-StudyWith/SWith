@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="modal fade" id="kanbanCardUpdateModal" tabindex="-1" aria-labelledby="kanbanCardUpdateModalLabel" aria-hidden="true">
+    <div class="modal fade" id="kanbanCardModal" tabindex="-1" aria-labelledby="kanbanCardUpdateModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content">
           <div class="modal-body">

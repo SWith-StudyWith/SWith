@@ -6,69 +6,161 @@
       <div class="row d-flex justify-content-center">
         <div class="col-4">
           <section>
-
-            <form>
+            <form class="studyInfo-wrapper">
               <div class="mb-3">
                 <label for="studyName" class="form-label">스터디 이름</label>
-                <input type="text" class="form-control" id="studyName" placeholder="스터디 이름">
+                <input type="text" class="form-control" id="studyName" v-model="state.studyName" required placeholder="스터디 이름">
+                <div :style="{ visibility: (state.isValidStudyName || !state.wasInputed.studyName )? 'hidden' : 'visible' }"
+                  class="invalid-feedback">
+                  2~20자 사이로 작성해주세요.
+                </div>
               </div>
               <div class="mb-3">
                 <label for="studyCode" class="form-label">스터디 코드</label>
                 <p class="base-url">https://swith.com/</p>
-                <input type="text" class="form-control" id="studyCode" placeholder="URL을 입력하세요">
+                <input type="text" class="form-control" id="studyCode" v-model="state.studyCode" required placeholder="URL을 입력하세요">
+                <div :style="{ visibility: (state.isValidStudyCode || !state.wasInputed.studyCode )? 'hidden' : 'visible' }"
+                  class="invalid-feedback">
+                  유효하지 않은 스터디 코드입니다.
+                </div>
               </div>
               <div class="mb-3">
                 <label for="goal" class="form-label">스터디 목표</label>
-                <textarea class="form-control form-goal" id="goal" rows="3" v-model="userInfo.goal" placeholder="스터디 목표를 한 줄로 표현해 보세요!"></textarea>
+                <textarea class="form-control form-goal" id="studyGoal" rows="3" v-model="state.studyGoal" placeholder="스터디 목표를 한 줄로 표현해 보세요!"></textarea>
               </div>
-              <div class="studyroom-img">
-                <p>대표 이미지</p>
-                <div class="box d-inline-flex justify-content-center">
-                  <img class="profile-img" :src="file" />
+              <div class="d-flex justify-content-start">
+                <div class="image-wrapper">
+                  <label for="changeStudyImg" class="img-form-label">대표 이미지
+                    <img :src="state.studyImgSrc" :fit="fit" class="study-img">
+                  </label>
+                  <input
+                    id="changeStudyImg"
+                    class="form-control"
+                    ref="file"
+                    @change="onClickUploadFile"
+                    type="file"
+                    accept="image/*"
+                    style="display: none;"
+                  />
                 </div>
               </div>
-              <div class="form-group mt-3 mb-3">
-                <input @change="onClickUploadFile" type="file" class="form-control" id="inputFileUploadInsert" accept="image/*"/>
-              </div>
-              <button @click="onClickUpdateUserInfo" class="btn btn-primary col-12 btn-create">스터디 만들기</button>
+              <button @click="onClickCreateStudy" class="btn btn-primary col-12 btn-create">스터디 만들기</button>
             </form>
           </section>
         </div>
       </div>
     </div>
-    <SignOutModal />
     <Footer />
   </div>
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
+import { createStudy } from '@/api/study';
 import Navbar from '@/views/common/Navbar.vue';
 import Footer from '@/views/common/Footer.vue';
-import SignOutModal from '@/views/members/components/SignOutModal.vue';
 
 export default {
   name: '',
-  components: { Navbar, Footer, SignOutModal },
+  components: { Navbar, Footer },
   setup() {
     const store = useStore();
+    const router = useRouter();
     const state = ref({
-      userInfo : store.getters.getUserInfo,
-      file: ''
+      // studyInfo: store.getters.getStudyInfo,
+      studyName: '',
+      studyCode: '',
+      studyGoal: '',
+      studyImgUrl: '',
+      studyImgSrc: computed(()=> {
+        if (state.value.studyImgUrl) {
+          return state.value.studyImgUrl
+        } else {
+          return require(`@/assets/img/study_room/studyroom.png`)
+        }
+      }),
+      wasInputed: {
+        studyName: false,
+        studyCode: false
+      },
+      isValidStudyName: computed(() => {
+        if (state.value.studyName !== '') {
+          state.value.wasInputed.studyName = true;
+        }
+        if (state.value.studyName && validateStudyName(state.value.studyName)) {
+          return true;
+        }
+        return false;
+      }),
+      isValidStudyCode: computed(() => {
+        if (state.value.studyCode !== '') {
+          state.value.wasInputed.studyCode = true;
+        }
+        if (state.value.studyCode && validateStudyCode(state.value.studyCode)) {
+          return true;
+        }
+        return false;
+      })
     });
 
     const onClickUploadFile = (e) => {
       console.log(e)
-      const files = e.target.files
-      if(files && files.length > 0){
-        state.value.file = URL.createObjectURL(files[0]);
-      }
+      const file = e.target.files[0]
+      state.value.studyImgUrl = URL.createObjectURL(file);
     };
 
+    const onClickCreateStudy = (e) => {
+      e.preventDefault();
+      if (state.value.studyName === '' || state.value.studyCode === '') {
+        state.value.wasInputed.studyName = true;
+        state.value.wasInputed.studyCode = true;
+        return;
+      }
+      if (!state.value.isValidStudyName || state.value.isValidStudyCode) {
+        return;
+      }
+      createStudy(
+        {
+          studyName: state.value.studyName,
+          studyCode: state.value.studyCode,
+          studyGoal: state.value.studyGoal,
+          studyImgUrl: state.value.studyImgUrl
+        },
+        (res) => {
+          console.log(res.data)
+          switch (res.data.code) {
+            case 200: alert('스터디룸 생성 완료!🔨')
+            break;
+          }
+        },
+        (err) => {
+          console.log(err)
+          alert('서버가 아파유~')
+        },
+        router.push({ name: 'Main'})
+      )
+    }
 
+    const validateStudyName = function (studyName) {
+      if (studyName.length >= 2 && studyName.length <= 20) {
+        return true;
+      }
+      return false;
+    };
+
+    const validateStudyCode = function (studyCode) {
+      const koreanChar = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+      const specialChar = /[`~!@#$%^&*\\\'\";:\/?]/;
+      if (studyCode.length >= 2 && studyCode.length <= 20) {
+        if (!koreanChar.test(studyCode) && !specialChar.test(studyCode)) {
+          return true;
+        }
+      } return false;
+    };
     return {
-      state, onClickUploadFile
+      state, onClickUploadFile, onClickCreateStudy
     }
   },
 
@@ -123,7 +215,19 @@ p{
   font-weight: 400;
   margin-bottom: 5px;
 }
-
+.invalid-feedback {
+  display: block;
+  font-size: 0.75rem;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+.valid-feedback {
+  display: block;
+  font-size: 0.75rem;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  color: green;
+}
 /* basic setting */
 button{
   font-size: 14px;
@@ -150,8 +254,27 @@ input{
   background-color: #F4F5F4;
   vertical-align: middle;
 }
-textarea {
+textarea{
   background-color: #F4F5F4;
   vertical-align: middle;
+}
+.img-form-label{
+  margin-bottom: 3px;
+}
+.image-wrapper .study-img{
+  margin-top: 3px;
+  margin-bottom: 6px;
+  width: 200px;
+  height: 150px;
+  border-radius: 4%;
+  overflow: hidden;
+  justify-content: center;
+  cursor: pointer;
+  display: block;
+}
+.study-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 </style>

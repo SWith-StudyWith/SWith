@@ -20,4 +20,5 @@ public interface StudyService {
     Study updateStudy(Study study, StudyInfoReq studyInfoReq, MultipartFile multipartFile) throws IOException;
     void deleteMemberStudy(Member member, Study study);
     void updateStudyIsUsed(Study study);
+    void deleteStudy(Long studyId);
 }
