@@ -3,7 +3,7 @@
     <h2 class="text-start px-4">StudyDetailKanbanBoard</h2>
     <div class="p-3 d-flex justify-content-center h-90">
       <div
-        v-for="tasks in kanbanBoard"
+        v-for="tasks in state.kanbanBoard"
         :key="tasks.taskId"
         class="mx-2 w-100 bg-light-grey p-2 rounded-3 "
       >
@@ -28,7 +28,7 @@
   <StudyDetailKanbanBoardModal :selectedTask="selectedTask"/>
 </template>
 <script>
-import { ref } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import StudyDetailKanbanBoardCard from '@/views/studies/components/detail/StudyDetailKanbanBoardCard.vue';
 import StudyDetailKanbanBoardModal from '@/views/studies/components/detail/StudyDetailKanbanBoardModal.vue';
 
@@ -42,10 +42,14 @@ export default {
     studyInfo: Object,
   },
   setup(props) {
-    const kanbanBoard = ref(props.studyInfo.kanbanBoard)
+    const state = reactive({
+      kanbanBoard: computed(() => {
+        return props.studyInfo.kanbanBoard
+      }),
+    })
     const selectedTask = ref({})
 
-    return { kanbanBoard, selectedTask }
+    return { state, selectedTask }
   },
 }
 </script>
