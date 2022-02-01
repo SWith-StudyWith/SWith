@@ -3,6 +3,7 @@ package com.swith;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.storage.StorageOptions;
+import com.swith.api.service.StudyService;
 import com.swith.config.FirebaseConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
@@ -18,10 +19,10 @@ import java.nio.charset.StandardCharsets;
 @SpringBootTest
 class SwithApplicationTests {
 
-	@Autowired
-	private FirebaseConfig firebaseConfig;
-
-	public StorageOptions storageOptions;
+//	@Autowired
+//	private FirebaseConfig firebaseConfig;
+//
+//	public StorageOptions storageOptions;
 
 	@Test
 	void contextLoads() {

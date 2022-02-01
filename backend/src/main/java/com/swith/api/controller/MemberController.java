@@ -97,11 +97,11 @@ public class MemberController {
         BaseDataResponse<MemberInfoRes> memberInfo;
         // 회원정보 조회 실패
         if (member == null) {
-            memberInfo = new BaseDataResponse<MemberInfoRes>(false, 404, "회원정보 조회 실패", null);
+            memberInfo = new BaseDataResponse<>(false, 404, "회원정보 조회 실패", null);
             return ResponseEntity.status(200).body(memberInfo);
         }
         // 회원정보 조회 성공
-        memberInfo = new BaseDataResponse<MemberInfoRes>(true, 200, "회원정보 조회 성공",
+        memberInfo = new BaseDataResponse<>(true, 200, "회원정보 조회 성공",
                 new MemberInfoRes(member.getEmail(), member.getNickname(), member.getGoal(), member.getImgUrl()));
         return ResponseEntity.status(200).body(memberInfo);
     }
@@ -113,17 +113,17 @@ public class MemberController {
         log.debug("updateMember - file name: {}, file size: {}, content type: {}", multipartFile.getOriginalFilename(),
                 multipartFile.getSize(), multipartFile.getContentType());
         Member member = memberService.getMemberByAuthentication();
-        BaseDataResponse<MemberInfoRes> memberInfo = null;
         // 회원인증 실패
         if (member == null) {
-            return ResponseEntity.status(200).body(new BaseDataResponse<MemberInfoRes>(false,
+            return ResponseEntity.status(200).body(new BaseDataResponse<>(false,
                     400, "회원인증 실패", null));
         }
 
+        BaseDataResponse<MemberInfoRes> memberInfo = null;
         try {
             member = memberService.updateMember(member, memberInfoReq, multipartFile);
         } catch (IOException e) {
-            memberInfo = new BaseDataResponse<MemberInfoRes>(false, 408, "파일 업로드 실패",
+            memberInfo = new BaseDataResponse<>(false, 408, "파일 업로드 실패",
                     new MemberInfoRes(member.getEmail(), member.getNickname(), member.getGoal(), member.getImgUrl()));
         }
         File tempFile = new File("temp");
@@ -131,13 +131,13 @@ public class MemberController {
 
         // 회원정보 수정 실패
         if (member == null) {
-            return ResponseEntity.status(200).body(new BaseDataResponse<MemberInfoRes>(false,
+            return ResponseEntity.status(200).body(new BaseDataResponse<>(false,
                     404, "회원정보 수정 실패", null));
         }
         // 파일 업로드 실패
         if (memberInfo != null) return ResponseEntity.status(200).body(memberInfo);
         // 회원정보 수정 성공
-        memberInfo = new BaseDataResponse<MemberInfoRes>(true, 200, "회원정보 수정 성공",
+        memberInfo = new BaseDataResponse<>(true, 200, "회원정보 수정 성공",
                 new MemberInfoRes(member.getEmail(), member.getNickname(), member.getGoal(), member.getImgUrl()));
         return ResponseEntity.status(200).body(memberInfo);
     }
