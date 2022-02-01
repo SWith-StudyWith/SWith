@@ -145,9 +145,13 @@
     icon="fas fa-microphone-slash"
     @click="audioOnOff()"
   >오디오 off</button>
-  <button
+  <!-- <button
     icon="fas fa-desktop"
     @click="toggleScreanshare()"
+  >화면 공유 on</button> -->
+  <button
+    icon="fas fa-desktop"
+    @click="startScreenSharing()"
   >화면 공유 on</button>
   <!-- <button
     icon="fas fa-desktop"
