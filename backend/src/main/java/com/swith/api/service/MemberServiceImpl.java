@@ -7,6 +7,7 @@ import com.swith.common.util.SecurityUtil;
 import com.swith.config.FirebaseConfig;
 import com.swith.db.entity.Member;
 import com.swith.db.repository.MemberRepository;
+import com.swith.db.repository.MemberStudyRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Autowired
     MemberRepository memberRepository;
+
+    @Autowired
+    private MemberStudyRepository memberStudyRepository;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -120,6 +124,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Member updateMember(Member member, MemberInfoReq memberInfoReq, MultipartFile multipartFile) throws IOException {
+        member.setNickname(memberInfoReq.getNickname());
+        member.setGoal(memberInfoReq.getGoal());
         // upload할 image가 존재하는 경우
         if (memberInfoReq.isUpdated()) {
             if (!multipartFile.isEmpty()) {
@@ -136,9 +142,6 @@ public class MemberServiceImpl implements MemberService {
                 member.setImgUrl(null);
             }
         }
-
-        member.setNickname(memberInfoReq.getNickname());
-        member.setGoal(memberInfoReq.getGoal());
         return member;
         //return memberRepository.save(member);
     }

@@ -54,6 +54,9 @@ dependencies {
 	// MIME Type Detection
 	implementation group: 'org.apache.tika', name: 'tika-core', version: '2.1.0'
 
+	// Random Code Generation
+	implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.11'
+
 	compileOnly 'org.springframework.boot:spring-boot-autoconfigure'
 	compileOnly 'org.springframework.boot:spring-boot-autoconfigure-processor'
 }
