@@ -1,20 +1,31 @@
 package com.swith.api.service;
 
 import com.swith.api.dto.study.KanbanDto;
+import com.swith.api.dto.study.request.StudyInfoReq;
 import com.swith.api.dto.study.response.KanbanBoardRes;
 import com.swith.api.dto.study.response.KanbanRes;
 import com.swith.api.dto.study.response.MemberStudyRes;
 import com.swith.api.dto.study.response.StudyInfoRes;
+import com.swith.common.util.FirebaseUtil;
+import com.swith.config.FirebaseConfig;
 import com.swith.db.entity.Member;
 import com.swith.db.entity.Study;
 import com.swith.db.entity.Task;
 import com.swith.db.repository.*;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
+import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 
+@Slf4j
 @Transactional
 @Service
 public class StudyServiceImpl implements StudyService {
@@ -36,6 +47,49 @@ public class StudyServiceImpl implements StudyService {
 
     @Autowired
     private MemberStudyRepository memberStudyRepository;
+
+    @Autowired
+    FileServiceImpl fileService;
+
+    @Autowired
+    private FirebaseConfig firebaseConfig;
+
+    public HashSet<String> codeSet;
+
+    @PostConstruct
+    public void init() {
+        codeSet = new HashSet<>();
+        List<Study> studyList = studyRepository.findAll();
+        for (Study study: studyList) codeSet.add(study.getCode());
+    }
+
+    @Override
+    public Study insertStudy(Study study, StudyInfoReq studyInfoReq, MultipartFile multipartFile) throws IOException {
+        // upload할 image가 존재하는 경우
+        if (studyInfoReq.isUpdated()) {
+            if (!multipartFile.isEmpty()) {
+                Tika tika = new Tika();
+                String mimeType = tika.detect(multipartFile.getInputStream());
+                // MIME type이 image인지 확인, file size가 1MB이내인지 확인
+                if (mimeType.startsWith("image") && multipartFile.getSize() < Math.pow(10, 6)) {
+                    study.setImgUrl(fileService.upload(multipartFile, firebaseConfig.getStudy_storage_path(),
+                            study.getImgUrl(), "media"));
+                }else throw new IOException();
+            }
+        }
+        study.setCode(generateCode());
+        studyRepository.save(study);
+        codeSet.add(study.getCode());
+        return study;
+    }
+
+    public String generateCode(){
+        String generatedString = RandomStringUtils.randomAlphanumeric(32);
+        while(codeSet.contains(generatedString))
+            generatedString = RandomStringUtils.randomAlphanumeric(32);
+        log.debug("generateCode - {}", generatedString);
+        return generatedString;
+    }
 
     @Override
     public Study getStudyByCode(String code) {
@@ -80,6 +134,29 @@ public class StudyServiceImpl implements StudyService {
     @Override
     public Study getStudyById(Long studyId) {
         return studyRepository.findById(studyId).orElse(null);
+    }
+
+    @Override
+    public Study updateStudy(Study study, StudyInfoReq studyInfoReq, MultipartFile multipartFile) throws IOException {
+        study.setName(studyInfoReq.getStudyName());
+        study.setGoal(studyInfoReq.getStudyGoal());
+        // upload할 image가 존재하는 경우
+        if (studyInfoReq.isUpdated()) {
+            if (!multipartFile.isEmpty()) {
+                Tika tika = new Tika();
+                String mimeType = tika.detect(multipartFile.getInputStream());
+                // MIME type이 image인지 확인, file size가 1MB이내인지 확인
+                if (mimeType.startsWith("image") && multipartFile.getSize() < Math.pow(10, 6)) {
+                    study.setImgUrl(fileService.upload(multipartFile, firebaseConfig.getStudy_storage_path(),
+                            study.getImgUrl(), "media"));
+                }else throw new IOException();
+            } else if (study.getImgUrl() != null) {
+                log.debug("updateStudy - file path: {}", FirebaseUtil.convertUrlToFilePath(study.getImgUrl()));
+                fileService.deleteFile(FirebaseUtil.convertUrlToFilePath(study.getImgUrl()));
+                study.setImgUrl(null);
+            }
+        }
+        return study;
     }
 
     @Override
