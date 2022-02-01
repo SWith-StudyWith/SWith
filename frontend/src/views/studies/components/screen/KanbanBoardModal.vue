@@ -6,18 +6,26 @@
           {{ selectedTask.value ? selectedTask.value.content : '' }}
         </div>
         <div v-else class="modal-body">
-          <input type="text" class="form-control" v-model="state.task.value.content" @keyup.enter="closeInput" @blur="closeInput">
+          <input type="text" ref="inputForm" class="form-control" maxlength="100" minlength="1" v-model="state.task.value.content" @keyup.enter="closeInput" @blur="closeInput">
         </div>
         <div class="modal-footer">
-          <button v-if="editPermit" type="button" class="btn btn-danger btn-sm" @click="onClickDelete" data-bs-dismiss="modal">삭제하기</button>
-          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" @click="closeInput">Close</button>
+          <button v-if="editPermit" type="button" class="btn btn-primary btn-sm" @click="openInput">
+            <font-awesome-icon  :icon="['fas', 'pen']"></font-awesome-icon>
+          </button>
+          <button v-if="editPermit" type="button" class="btn btn-primary btn-sm" @click="onClickDelete" data-bs-dismiss="modal">
+            <font-awesome-icon :icon="['fas', 'trash-alt']"></font-awesome-icon>
+          </button>
+          <button type="button" class="btn btn-primary btn-sm" data-bs-dismiss="modal" @click="closeInput">
+            <font-awesome-icon :icon="['fas', 'times']"></font-awesome-icon>
+          </button>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue';
+import { Modal } from 'bootstrap';
 
 export default {
   name: 'KanbanBoardModal',
@@ -34,18 +42,25 @@ export default {
     })
     const closeInput = function() {
       state.isEdit = false;
-      emit('updateTask', state.task)
+      emit('updateTask', state.task);
+      let myModalEl = document.getElementById('kanbanCardUpdateModal');
+      let modal = Modal.getInstance(myModalEl);
+      modal.hide();
     }
+    const inputForm = ref(null);
     const openInput = function() {
       if (!props.editPermit) {
-        return
+        return;
       }
       state.isEdit = true;
+      setTimeout(
+        ()=>inputForm.value.focus(), 0
+      )
     }
     const onClickDelete = function () {
-      emit('deleteTask', state.task)
+      emit('deleteTask', state.task);
     }
-    return { state, closeInput, openInput, onClickDelete }
+    return { state, closeInput, openInput, onClickDelete, inputForm }
   },
 
 }

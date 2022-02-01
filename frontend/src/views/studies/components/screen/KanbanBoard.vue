@@ -1,6 +1,6 @@
 <template>
   <div class="kanbanboard">
-    <button v-if="!editPermit.value" class="btn btn-primary" @click="onClickEditBtn">칸반보드 수정하기</button>
+    <button v-if="!editPermit" class="btn btn-primary" @click="onClickEditBtn">칸반보드 수정하기</button>
     <button v-else class="btn btn-primary" @click="onClickSaveBtn">수정내용 저장하기</button>
     <div class="h-100">
       <div class="p-3 d-flex justify-content-center h-90">
@@ -17,29 +17,44 @@
                 {{ column.taskName }}
               </span>
           </p>
-          <div class="overflow-auto" style="height: 30rem;">
-            <draggable
-              class="list-group"
-              :list="column.kanban"
-              item-key="kanbanId"
-              group="task"
-              ghost-class="ghost"
-            >
-              <template #item="{ element }">
-                <div class="list-group-item rounded mt-1 p-3">
-                  <KanbanBoardCard
-                    :task="element"
-                    :taskId="column.taskId"
-                    class="align-items-center text-start"
-                    @onClickCard="selectedTask.value=$event"
-                  />
-                </div>
-              </template>
-            </draggable>
+          <div class="overflow-auto my-2" style="height: 30rem;">
+            <div v-if="editPermit">
+              <draggable
+                class="list-group"
+                :list="column.kanban"
+                item-key="kanbanId"
+                group="task"
+                ghost-class="ghost"
+              >
+                <template #item="{ element }">
+                  <div class="list-group-item rounded mt-1 p-3">
+                    <KanbanBoardCard
+                      :task="element"
+                      :taskId="column.taskId"
+                      class="align-items-center text-start"
+                      @onClickCard="selectedTask.value=$event"
+                    />
+                  </div>
+                </template>
+              </draggable>
+            </div>
+            <div v-else>
+              <div v-for="task in column.kanban" :key="task.kanbanId" class="list-group-item rounded mt-1 p-3">
+                <KanbanBoardCard
+                  :task="task"
+                  :taskId="column.taskId"
+                  class="align-items-center text-start"
+                  @onClickCard="selectedTask.value=$event"
+                />
+              </div>
+            </div>
           </div>
           <button
             class="mt-auto btn"
             :class="{ 'bg-grey' : column.taskId === 1, 'bg-pink' : column.taskId === 2, 'bg-purple' : column.taskId === 3 }"
+            data-bs-toggle="modal" data-bs-target="#kanbanCardCreateModal"
+            @click="statusId=column.taskId"
+            :disabled="!editPermit"
           >
             추가하기
           </button>
@@ -53,6 +68,10 @@
     @updateTask="updateTask($event)"
     @deleteTask="deleteTask($event)"
   />
+  <KanbanBoardCreateModal
+    :taskId="statusId"
+    @createTask="createTask($event)"
+  />
 </template>
 
 <script>
@@ -61,6 +80,7 @@ import { collapsed, toggleSidebar, sidebarWidth } from '@/views/studies/componen
 import { useStore } from 'vuex';
 import KanbanBoardCard from '@/views/studies/components/screen/KanbanBoardCard.vue';
 import KanbanBoardModal from '@/views/studies/components/screen/KanbanBoardModal.vue';
+import KanbanBoardCreateModal from '@/views/studies/components/screen/KanbanBoardCreateModal.vue';
 import { ref, computed } from 'vue';
 import draggable from 'vuedraggable'
 import { checkKanban, putKanban } from '@/api/study'
@@ -71,6 +91,7 @@ export default {
     // Sidebar,
     KanbanBoardCard,
     KanbanBoardModal,
+    KanbanBoardCreateModal,
     draggable,
   },
   setup() {
@@ -78,6 +99,7 @@ export default {
     const kanbanBoard = computed(() => {
       return store.state.study.studyInfo.kanbanBoard;
     });
+    const statusId = ref(null);
     const editPermit = ref(false);
     const selectedTask = ref({});
     const updateTask = function(task) {
@@ -143,7 +165,11 @@ export default {
         }
       )
       editPermit.value = false;
-    }
+    };
+    const createTask = function (task) {
+      const taskId = task.taskId;
+      kanbanBoard.value[taskId - 1].kanban.push({ content: task.content, kanbanId: task.kanbanId })
+    };
     return {
       collapsed,
       toggleSidebar,
@@ -155,6 +181,8 @@ export default {
       editPermit,
       onClickSaveBtn,
       deleteTask,
+      statusId,
+      createTask,
     }
   },
 }

@@ -172,6 +172,8 @@ import KanbanBoard from '@/views/studies/components/screen/KanbanBoard.vue';
 import ScreenShare from '@/views/studies/components/screen/ScreenShare.vue';
 import WhiteBoard from '@/views/studies/components/screen/WhiteBoard.vue';
 import { ref } from 'vue';
+import { useStore } from 'vuex';
+import { useRoute } from 'vue-router';
 import { OpenVidu } from "openvidu-browser";
 import UserVideo from "@/views/studies/components/room/video//UserVideo.vue";
 import axios from "axios";
@@ -217,6 +219,9 @@ export default {
 
 
   setup() {
+    const store = useStore();
+    const route = useRoute();
+    store.dispatch('GET_STUDY_INFO', route.params.studyId)
     const isKanbanBoard = ref(false);
     const isWhiteBoard = ref(false);
     const isScreenShare = ref(false);
