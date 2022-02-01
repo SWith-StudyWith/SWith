@@ -27,7 +27,7 @@ function exitStudy(payload, success, fail) {
 }
 function checkKanban(studyId, success, fail) {
   basicInstance
-    .get(`/studies/${studyId}/kanbans`)
+    .get(`api/studies/${studyId}/kanbans`)
     .then(success)
     .catch(fail)
 }
