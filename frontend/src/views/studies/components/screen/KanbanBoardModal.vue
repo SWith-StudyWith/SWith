@@ -2,11 +2,12 @@
   <div class="modal fade" id="kanbanCardUpdateModal" tabindex="-1" aria-labelledby="kanbanCardUpdateModalLabel" aria-hidden="true" @click.self="closeInput">
     <div class="modal-dialog modal-dialog-centered modal-md">
       <div class="modal-content">
-        <div v-if="!state.isEdit" class="modal-body text-start" @click="openInput">
+        <div v-if="!state.isEdit" class="modal-body text-start d-flex" @click="openInput">
           {{ selectedTask.value ? selectedTask.value.content : '' }}
+          <font-awesome-icon class="ms-auto" :icon="['fas', 'pen']"></font-awesome-icon>
         </div>
         <div v-else class="modal-body">
-          <input type="text" class="form-control" v-model="state.task.value.content" @keyup.enter="closeInput" @blur="closeInput">
+          <input type="text" class="form-control" maxlength="100" minlength="1" v-model="state.task.value.content" @keyup.enter="closeInput" @blur="closeInput">
         </div>
         <div class="modal-footer">
           <button v-if="editPermit" type="button" class="btn btn-danger btn-sm" @click="onClickDelete" data-bs-dismiss="modal">삭제하기</button>
