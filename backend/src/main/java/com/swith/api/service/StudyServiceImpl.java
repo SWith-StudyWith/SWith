@@ -165,8 +165,8 @@ public class StudyServiceImpl implements StudyService {
     }
 
     @Override
-    public void updateStudyIsUsed(Study study) {
-        study.setIsUsed("Y");
+    public void updateStudyIsUsed(Study study, String isUsed) {
+        study.setIsUsed(isUsed);
     }
 
     @Override

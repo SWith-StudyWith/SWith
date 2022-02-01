@@ -36,7 +36,7 @@ public class StudyInnerController {
         Study study = studyService.getStudyById(studyId);
 
         if (study.getIsUsed().equals("N")) {
-            studyService.updateStudyIsUsed(study);
+            studyService.updateStudyIsUsed(study, "Y");
             return ResponseEntity.status(200).body(new BaseResponse(true, 200, "칸반보드 수정 가능"));
         } else {
             return ResponseEntity.status(200).body(new BaseResponse(true, 400, "이미 칸반보드 수정중"));
@@ -53,6 +53,9 @@ public class StudyInnerController {
 
         //칸반보드 등록
         kanbanService.insertKanban(kanbanUpdateReqList);
+
+        //isUsed 변경
+        studyService.updateStudyIsUsed(study, "N");
 
         return ResponseEntity.status(200).body(new BaseResponse(true, 200, "칸반보드 수정 성공"));
     }

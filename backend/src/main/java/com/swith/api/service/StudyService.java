@@ -19,6 +19,6 @@ public interface StudyService {
     Study getStudyById(Long studyId);
     Study updateStudy(Study study, StudyInfoReq studyInfoReq, MultipartFile multipartFile) throws IOException;
     void deleteMemberStudy(Member member, Study study);
-    void updateStudyIsUsed(Study study);
+    void updateStudyIsUsed(Study study, String isUsed);
     void deleteStudy(Long studyId);
 }
