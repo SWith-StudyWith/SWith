@@ -8,7 +8,7 @@
         </div>
         <div class="col-12 ">
           <!-- <router-link :to="{ name: 'Main' }"> -->
-            <button type="button" class="btn" style="color:white;">Go Back Main</button>
+            <button type="button" class="btn" style="color:white; width:150px">Go Back Main</button>
           <!-- </router-link> -->
         </div>
       </div>
