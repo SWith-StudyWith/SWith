@@ -16,6 +16,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)  // method security 설정
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -75,8 +78,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.addAllowedOrigin("http://localhost:8081");
-        configuration.addAllowedOrigin("http://i6a501.p.ssafy.io");
+//        configuration.addAllowedOrigin("http://localhost:8081");
+        List<String> originList = new ArrayList<>();
+        originList.add("http://localhost:8081");
+        originList.add("http://i6a501.p.ssafy.io");
+        configuration.setAllowedOrigins(originList);
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
         configuration.setAllowCredentials(true);
