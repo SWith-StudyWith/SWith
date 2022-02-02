@@ -7,12 +7,12 @@
       </span>
       <span v-else>Swith Sidebar</span>
     </h1>
-    <SidebarLink to="/studies/main" icon="fas fa-sign-out-alt">나가기</SidebarLink>
+    <!-- <SidebarLink to="/studies/main" icon="fas fa-sign-out-alt">나가기</SidebarLink>
     <SidebarLink to="/studies/11" icon="fas fa-microphone">기본화면이라쳐</SidebarLink>
     <SidebarLink to="/studies/main" icon="fas fa-video">기본화면</SidebarLink>
     <SidebarLink to="/studies/11/kanbanboard" icon="fas fa-chalkboard">칸반보드</SidebarLink>
     <SidebarLink to="/studies/11/screenshare" icon="fas fa-desktop">화면공유</SidebarLink>
-    <SidebarLink to="/studies/11/whiteboard" icon="fas fa-pencil-alt">화이트보드</SidebarLink>
+    <SidebarLink to="/studies/11/whiteboard" icon="fas fa-pencil-alt">화이트보드</SidebarLink> -->
 
     <div class="control-bottons">
       <p>ㅎ ㅏ</p>
@@ -42,19 +42,21 @@
     >
       <i class="fas fa-angle-double-left" />
     </span>
-
+    <SidebarChat/>
   </div>
 </template>
 
 <script>
-import SidebarLink from '@/views/studies/components/sidebar/SidebarLink.vue';
+// import SidebarLink from '@/views/studies/components/sidebar/SidebarLink.vue';
 import { collapsed, toggleSidebar, sidebarWidth } from '@/views/studies/components/sidebar/state.js';
+import SidebarChat from '@/views/studies/components/sidebar/SidebarChat.vue';
 import { ref, computed } from 'vue';
 
 export default {
   name: 'Sidebar',
   components: {
-    SidebarLink,
+    // SidebarLink,
+    SidebarChat,
   },
   // props: {},
   setup( props, context ) {
