@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.HashSet;
 import java.util.List;
 
@@ -49,7 +50,7 @@ public class StudyServiceImpl implements StudyService {
     private MemberStudyRepository memberStudyRepository;
 
     @Autowired
-    FileServiceImpl fileService;
+    private FileServiceImpl fileService;
 
     @Autowired
     private FirebaseConfig firebaseConfig;
@@ -171,6 +172,14 @@ public class StudyServiceImpl implements StudyService {
 
     @Override
     public void deleteStudy(Long studyId) {
+        Study study = studyRepository.findById(studyId).orElse(null);
+        if (study != null) {
+            try {
+                fileService.deleteFile(FirebaseUtil.convertUrlToFilePath(study.getImgUrl()));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
         studyRepository.deleteById(studyId);
     }
 }

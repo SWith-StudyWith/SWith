@@ -1,13 +1,14 @@
 package com.swith.api.service;
 
 import com.swith.api.dto.member.request.MemberInfoReq;
+import com.swith.api.dto.study.response.MemberStudyRes;
 import com.swith.common.util.FirebaseUtil;
 import com.swith.common.util.MailUtil;
 import com.swith.common.util.SecurityUtil;
 import com.swith.config.FirebaseConfig;
 import com.swith.db.entity.Member;
-import com.swith.db.repository.MemberRepository;
-import com.swith.db.repository.MemberStudyRepository;
+import com.swith.db.entity.MemberStudy;
+import com.swith.db.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -28,19 +31,28 @@ public class MemberServiceImpl implements MemberService {
     final String PASSWORD_REGEX = "^((?=.*\\d)(?=.*[a-zA-Z])(?=.*[\\W]).{" + 8 + "," + 16 + "})$";
 
     @Autowired
-    MemberRepository memberRepository;
+    private MemberRepository memberRepository;
 
     @Autowired
     private MemberStudyRepository memberStudyRepository;
 
     @Autowired
-    PasswordEncoder passwordEncoder;
+    private StudyService studyService;
 
     @Autowired
-    MailUtil mailUtil;
+    private StudyRepositorySupport studyRepositorySupport;
 
     @Autowired
-    FileServiceImpl fileService;
+    private MemberStudyRepositorySupport memberStudyRepositorySupport;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private MailUtil mailUtil;
+
+    @Autowired
+    private FileServiceImpl fileService;
 
     @Autowired
     private FirebaseConfig firebaseConfig;
@@ -155,6 +167,18 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void deleteMember(Member member) {
+        List<MemberStudy> memberStudyList = memberStudyRepository.findByMember(member);
+        List<MemberStudyRes> studyList = studyRepositorySupport.getStudyList(member).orElse(new ArrayList<>());
+        for (MemberStudy memberStudy:memberStudyList) {
+            memberStudyRepository.delete(memberStudy);
+        }
+
+        for (MemberStudyRes study: studyList) {
+            Long count = memberStudyRepositorySupport.getCountByStudyId(study.getStudyId());
+            log.debug("deleteMember - {}: {}", study.getStudyId(), count);
+            if (count != null && count == 0) studyService.deleteStudy(study.getStudyId());
+        }
+
         member.setIsDeleted("Y");
         //memberRepository.save(member);
     }
