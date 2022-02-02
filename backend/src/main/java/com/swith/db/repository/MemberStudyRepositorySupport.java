@@ -28,4 +28,11 @@ public class MemberStudyRepositorySupport {
 
         return Optional.ofNullable(list);
     }
+
+    public Long getCountByStudyId(Long studyId) {
+        return jpaQueryFactory.select(qMemberStudy.count())
+                .from(qMemberStudy)
+                .where(qMemberStudy.study.studyId.eq(studyId))
+                .fetchOne();
+    }
 }
