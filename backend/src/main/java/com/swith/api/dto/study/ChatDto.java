@@ -13,4 +13,5 @@ public class ChatDto {
     private String imgUrl;
     private String nickname;
     private String content;
+    private String createdAt;
 }
