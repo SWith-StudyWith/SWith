@@ -13,9 +13,7 @@
     <SidebarLink to="/studies/11/kanbanboard" icon="fas fa-chalkboard">칸반보드</SidebarLink>
     <SidebarLink to="/studies/11/screenshare" icon="fas fa-desktop">화면공유</SidebarLink>
     <SidebarLink to="/studies/11/whiteboard" icon="fas fa-pencil-alt">화이트보드</SidebarLink> -->
-
-    <SidebarLink to="SidebarMemberView" icon="fas fa-pencil-alt">화이트보드</SidebarLink>
-
+    <!-- <SidebarLink to="/studies/1/whiteboard" icon="fas fa-pencil-alt">화이트보드</SidebarLink> -->
     <div class="control-bottons">
       <p>
       <font-awesome-icon @click="this.onClickMuteIcon" :icon="['fas', this.mutedIcon]" />
@@ -41,7 +39,6 @@
       </p>
 
     </div>
-
     <!-- toggle button -->
     <span
       class="collapse-icon"
@@ -51,6 +48,8 @@
       <i class="fas fa-angle-double-left" />
     </span>
     <SidebarChat/>
+    <SidebarMemberView :members="state.memberList"/>
+    <!-- <SidebarMemberView/> -->
   </div>
 </template>
 
@@ -58,13 +57,17 @@
 // import SidebarLink from '@/views/studies/components/sidebar/SidebarLink.vue';
 import { collapsed, toggleSidebar, sidebarWidth } from '@/views/studies/components/sidebar/state.js';
 import SidebarChat from '@/views/studies/components/sidebar/SidebarChat.vue';
+import SidebarMemberView from '@/views/studies/components/sidebar/SidebarMemberView.vue'
 import { ref, computed, reactive } from 'vue';
+import { useStore } from 'vuex';
+import { useRoute } from 'vue-router';
 
 export default {
   name: 'Sidebar',
   components: {
     // SidebarLink,
     SidebarChat,
+    SidebarMemberView,
   },
   // props: {},
   setup( props, context ) {
@@ -75,8 +78,17 @@ export default {
     const isWhiteBoard = ref(false);
     const isChat = ref(false);
 
+    // 스터디 회원 목록 조회
+    const store = useStore();
+    const route = useRoute();
+    store.dispatch('GET_MEMBER_LIST', route.params.studyId);
+
     const state = reactive({
-      isMemberList : false
+      memberList : computed(() => {
+        return store.state.study.memberList;
+      }),
+
+      isMemberList : false,
     })
 
     const onClickMuteIcon = () => {
