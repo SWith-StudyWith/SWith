@@ -14,6 +14,8 @@
     <SidebarLink to="/studies/11/screenshare" icon="fas fa-desktop">화면공유</SidebarLink>
     <SidebarLink to="/studies/11/whiteboard" icon="fas fa-pencil-alt">화이트보드</SidebarLink> -->
 
+    <SidebarLink to="SidebarMemberView" icon="fas fa-pencil-alt">화이트보드</SidebarLink>
+
     <div class="control-bottons">
       <p>
       <font-awesome-icon @click="this.onClickMuteIcon" :icon="['fas', this.mutedIcon]" />
@@ -32,6 +34,10 @@
       </p>
       <p>
       <font-awesome-icon @click="this.onClickChatIcon" :icon="['fas', this.chatIcon]" />
+      </p>
+      <p>
+      <font-awesome-icon @click="this.onClickMemberIcon" :icon="['fas', this.memberIcon]"
+      :style="{ color: state.isMemberList ? '#F5CEC7': 'rgba(255, 255, 255, 0.7)' }"/>
       </p>
 
     </div>
@@ -52,7 +58,7 @@
 // import SidebarLink from '@/views/studies/components/sidebar/SidebarLink.vue';
 import { collapsed, toggleSidebar, sidebarWidth } from '@/views/studies/components/sidebar/state.js';
 import SidebarChat from '@/views/studies/components/sidebar/SidebarChat.vue';
-import { ref, computed } from 'vue';
+import { ref, computed, reactive } from 'vue';
 
 export default {
   name: 'Sidebar',
@@ -68,6 +74,10 @@ export default {
     const isScreenShare = ref(false);
     const isWhiteBoard = ref(false);
     const isChat = ref(false);
+
+    const state = reactive({
+      isMemberList : false
+    })
 
     const onClickMuteIcon = () => {
       isMuted.value = !isMuted.value;
@@ -95,9 +105,9 @@ export default {
     };
     const onClickChatIcon = () => {
       isChat.value = !isChat.value;
-      if(isChat.value){
-        context.emit('show-screenmode', 3)
-      }
+    };
+    const onClickMemberIcon = () => {
+      state.isMemberList = !state.isMemberList;
     }
 
     const mutedIcon = computed(() => {
@@ -121,12 +131,18 @@ export default {
       }
       else return 'comment';
     });
+    const memberIcon = computed(() => {
+      if(state.isMemberList){
+        return 'user-friends';
+      }
+      else return 'user-friends';
+    });
 
 
-    return { collapsed, toggleSidebar, sidebarWidth,
+    return { state, collapsed, toggleSidebar, sidebarWidth,
               isMuted, isCameraOn, isWhiteBoard, isScreenShare, isKanbanBoard,
               onClickMuteIcon, onClickCameraIcon, onClickScreenShareIcon, onClickWhiteBoardIcon, onClickKanbanBoardIcon,
-              mutedIcon, cameraIcon, screenshareIcon, whiteboardIcon, kanbanboardIcon, chatIcon, onClickChatIcon
+              mutedIcon, cameraIcon, screenshareIcon, whiteboardIcon, kanbanboardIcon, chatIcon, onClickChatIcon, memberIcon, onClickMemberIcon
     };
   },
   // data() {
@@ -253,4 +269,7 @@ export default {
 .fa-comment-dots{
   color: #F5CEC7;
 }
+/* .fa-user-friends{
+  color: #F5CEC7;
+} */
 </style>
