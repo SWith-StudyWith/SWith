@@ -8,26 +8,7 @@
       <div class="row d-flex justify-content-center">
         <div class="col-4" style="">
           <form class="userInfo-wrapper" enctype="multipart/form-data">
-            <!-- <div class="d-flex justify-content-center">
-              <div class="image-wrapper">
-                <label for="changeProfile" class="img-form-label">
-                  <img :src="state.profileImgSrc" :fit="fit" class="profile-img" style="cursor:pointer">
-                </label>
-                <input
-                  id="changeProfile"
-                  class="form-control"
-                  ref="file"
-                  @change="onClickUploadFile"
-                  type="file"
-                  accept="image/*"
-                  style="display: none;"
-                />
-              </div>
-            </div> -->
             <div class="d-flex justify-content-center">
-              <!-- <div class="image-wrapper">
-                <img class="profile-img" :src="state.profileImgSrc" />
-              </div> -->
               <div class="dropend">
                 <div class="image-wrapper" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" >
                   <img class="profile-img" :src="state.profileImgSrc" alt=""  >
@@ -98,6 +79,7 @@ export default {
       userInfo : store.getters.getUserInfo,
       nickname : store.getters.getUserInfo.nickname,
       profileImg: '',
+      updated: false,
       profileImgSrc : computed(() => {
         if (state.value.userInfo.profileImg) {
           return state.value.userInfo.profileImg
@@ -113,11 +95,13 @@ export default {
       const file = e.target.files[0];
       state.value.userInfo.profileImg = URL.createObjectURL(file);
       state.value.profileImg = file;
+      state.value.updated = true;
     };
 
     const onClickDefaultImg = (e) => {
       console.log(e.target.value)
-      state.value.userInfo.profileImg = ''
+      state.value.userInfo.profileImg = '';
+      state.value.updated = true;
     }
 
     const onClickUpdateUserInfo = (e) => {
@@ -126,7 +110,7 @@ export default {
       updateUserData.append("nickname", state.value.nickname)
       updateUserData.append("goal", state.value.userInfo.goal)
       updateUserData.append("profileImg", state.value.profileImg)
-      updateUserData.append("updated", true)
+      updateUserData.append("updated", state.value.update)
       console.log(state.value.userInfo)
       store.dispatch('updateUserInfo', updateUserData)
     }
