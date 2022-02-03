@@ -31,6 +31,9 @@
       <p>
       <font-awesome-icon @click="this.onClickWhiteBoardIcon" :icon="['fas', this.whiteboardIcon]" />
       </p>
+      <p>
+      <font-awesome-icon @click="this.onClickChatIcon" :icon="['fas', this.chatIcon]" />
+      </p>
 
     </div>
 
@@ -65,6 +68,8 @@ export default {
     const isKanbanBoard = ref(false);
     const isScreenShare = ref(false);
     const isWhiteBoard = ref(false);
+    const isChat = ref(false);
+
     const onClickMuteIcon = () => {
       isMuted.value = !isMuted.value;
     };
@@ -89,6 +94,13 @@ export default {
           context.emit('show-screenmode', 3)
       }
     };
+    const onClickChatIcon = () => {
+      isChat.value = !isChat.value;
+      if(isChat.value){
+        context.emit('show-screenmode', 3)
+      }
+    }
+
     const mutedIcon = computed(() => {
       return isMuted.value ? 'microphone-slash' : 'microphone';
     });
@@ -104,12 +116,18 @@ export default {
     const whiteboardIcon = computed(() => {
       return isWhiteBoard.value ? 'pencil-alt' : 'pen';
     });
+    const chatIcon = computed(() => {
+      if(isChat.value){
+        return 'comment-dots';
+      }
+      else return 'comment';
+    });
 
 
     return { collapsed, toggleSidebar, sidebarWidth,
               isMuted, isCameraOn, isWhiteBoard, isScreenShare, isKanbanBoard,
               onClickMuteIcon, onClickCameraIcon, onClickScreenShareIcon, onClickWhiteBoardIcon, onClickKanbanBoardIcon,
-              mutedIcon, cameraIcon, screenshareIcon, whiteboardIcon, kanbanboardIcon
+              mutedIcon, cameraIcon, screenshareIcon, whiteboardIcon, kanbanboardIcon, chatIcon, onClickChatIcon
     };
   },
   // data() {
@@ -218,19 +236,21 @@ export default {
   color: rgba(255, 255, 255, 0.7);
 }
 .fa-desktop {
-  color: pink;
+  color: #F5CEC7;
 }
 .fa-microphone {
-  color: pink;
+  color: #F5CEC7;
 }
 .fa-video {
-  color: pink;
+  color: #F5CEC7;
 }
 .fa-pencil-alt {
-  color: pink;
+  color: #F5CEC7;
 }
 .fa-edit {
-  color: pink;
+  color: #F5CEC7
 }
-
+.fa-comment-dots{
+  color: #F5CEC7;
+}
 </style>
