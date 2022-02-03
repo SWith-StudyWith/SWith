@@ -140,7 +140,7 @@ public class MemberServiceImpl implements MemberService {
         member.setGoal(memberInfoReq.getGoal());
         // upload할 image가 존재하는 경우
         if (memberInfoReq.isUpdated()) {
-            if (!multipartFile.isEmpty()) {
+            if (multipartFile != null && !multipartFile.isEmpty()) {
                 Tika tika = new Tika();
                 String mimeType = tika.detect(multipartFile.getInputStream());
                 // MIME type이 image인지 확인, file size가 1MB이내인지 확인
