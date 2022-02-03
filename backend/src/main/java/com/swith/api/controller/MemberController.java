@@ -108,7 +108,7 @@ public class MemberController {
 
     @PutMapping
     public ResponseEntity<BaseDataResponse<MemberInfoRes>> updateMember(
-            MemberInfoReq memberInfoReq, @RequestParam("profileImg") MultipartFile multipartFile) {
+            MemberInfoReq memberInfoReq, @RequestParam(value = "profileImg", required = false) MultipartFile multipartFile) {
         log.debug("updateMember - {}", memberInfoReq);
         log.debug("updateMember - file name: {}, file size: {}, content type: {}", multipartFile.getOriginalFilename(),
                 multipartFile.getSize(), multipartFile.getContentType());
