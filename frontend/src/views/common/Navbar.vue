@@ -48,12 +48,14 @@ export default {
     const router = useRouter()
 
     const state = reactive({
+      userInfo : computed(() => {
+        return store.state.user.userInfo
+      }),
       isLogin : computed(() => {
         if(sessionStorage.getItem('accessToken') == '' || sessionStorage.getItem('accessToken') == undefined)
           return false
         else return true
       }),
-      userInfo : store.getters.getUserInfo,
       profileImgSrc : computed(() => {
       if (state.userInfo.profileImg) {
         return state.userInfo.profileImg
