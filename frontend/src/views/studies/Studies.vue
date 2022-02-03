@@ -6,10 +6,7 @@
       <div id="main-container" class="container">
         <!-- join session page -->
         <div id="join" v-if="!session">
-          <div id="img-div">
-            <img src="@/assets/img/icon_logo/logo.png" />
-          </div>
-          <div id="join-dialog" class="jumbotron vertical-center">
+          <div id="join-dialog" class="vertical-center">
             <h1>Join a video session</h1>
             <div class="form-group">
               <p>
@@ -30,27 +27,10 @@
         <div id="session" v-if="session">
           <!-- session header -->
           <div id="session-header">
-            <!-- session header - title -->
-            <!-- <h1 id="session-title">{{ mySessionId }}</h1> -->
-            <!-- screen share icon -->
-            <!-- session header - functions -->
-            <div class="my-function">
-              <div class="function" id="screen-sharing" @click="startScreenSharing">
-                <img src="@/assets/img/icon_logo/logo.png" alt="">
-              </div>
-            </div>
-            <!-- <div class="session-title"></div> -->
             <!-- leave session button -->
             <input class="btn btn-large btn-danger" type="button" id="buttonLeaveSession" @click="leaveSession" value="Leave session">
           </div>
-          <!-- main-video start -->
-          <!-- <div id="main-video" class="col-md-6">
-            <user-video :stream-manager="mainStreamManager"/>
-          </div>
-          <div id="video-container" class="col-md-6">
-            <user-video :stream-manager="publisher" @click="updateMainVideoStreamManager(publisher)"/>
-            <user-video v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub" @click="updateMainVideoStreamManager(sub)"/>
-          </div>-->
+          <!-- 더블 클릭해서 크게 보는 화면 -->
           <div id="main-video">
             <user-video
               v-if="mainOnOff"
@@ -60,43 +40,25 @@
             />
           </div>
           <!-- video-container start -->
-          <!-- <div id="video-container" class="col-md-6">
-            <div id="myvideo">
-              <user-video
-                id="vid"
-                :stream-manager="publisher"
-                v-on:dblclick="updateMainVideoStreamManager(publisher)"
-              />
-            </div>
-          </div> -->
           <!-- 화면 공유할 때의 비디오 컨테이너 -->
-          <div id="video-container" v-if="isScreenShared">
-            <!-- <user-video :stream-manager="teacher" @click="updateMainVideoStreamManager(teacher)" v-if="teacher"/> -->
-            <div class="video-wrapper" style="width:100%;">
-              <div class="user-video-wrapper" id="user-video-wrapper" style="left:0;">
-                <user-video id="my-video" style="width:10%;" :stream-manager="publisher" @click="updateMainVideoStreamManager(publisher)"/>
-                <div id="user-video-while-shared" style="width:10%;" v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub">
-                  <div class="test" v-if="JSON.parse(sub.stream.connection.data).clientData !== 'Screen Sharing'">
-                    <user-video :stream-manager="sub" @click="updateMainVideoStreamManager(sub)"/>
-                  </div>
-                </div>
+          <div id="video-container">
+            <div class="user-video-wrapper d-flex overflow-auto">
+              <div class="video-box m-2">
+                <user-video id="my-video" :stream-manager="publisher" @click="updateMainVideoStreamManager(publisher)"/>
               </div>
-              <div style="width:100%;" v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub">
-                <div class="video-screen-sharing" v-if="JSON.parse(sub.stream.connection.data).clientData === 'Screen Sharing'">
-                  <user-video style="width: 100%; " :stream-manager="sub" @click="updateMainVideoStreamManager(sub)"/>
+              <div v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub">
+                <div class="video-box m-2">
+                  <user-video :stream-manager="sub" @click="updateMainVideoStreamManager(sub)"/>
+                  <button class="btn btn-primary mx-2" style="width:3rem;" @click="toggleVideoSub(sub)">
+                    <font-awesome-icon :icon="['fas', sub.stream.videoActive ? 'video' : 'video-slash' ]" />
+                  </button>
+                  <button
+                    class="btn btn-primary mx-2" style="width:3rem;" @click="toggleAudioSub(sub)"
+                    v-if="JSON.parse(sub.stream.connection.data).clientData !== 'Screen Sharing'"
+                  >
+                    <font-awesome-icon :icon="['fas', sub.stream.audioActive ? 'microphone' : 'microphone-slash']" />
+                  </button>
                 </div>
-              </div>
-            </div>
-          </div>
-          <!-- 화면 공유 안 할 때의 비디오 컨테이너 -->
-          <div id="video-container" v-else>
-            <!-- <user-video :stream-manager="teacher" @click="updateMainVideoStreamManager(teacher)" v-if="teacher"/> -->
-            <div class="user-video" style="" >
-              <user-video id="my-video" :stream-manager="publisher" @click="updateMainVideoStreamManager(publisher)"/>
-            </div>
-            <div class="user-video" id="user-video" style="width:30%;" v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub">
-              <div class="test">
-                <user-video :stream-manager="sub" @click="updateMainVideoStreamManager(sub)"/>
               </div>
             </div>
           </div>
@@ -104,7 +66,6 @@
         <!-- session div end -->
       </div>
       <!-- main container end -->
-
       <!-- buttons -->
       <div id="btngroup">
         <button
@@ -257,8 +218,6 @@ export default {
       mainOnOff: false,
       myUserId: "",
       tg: false,
-      width: "640",
-      height: "400",
 
 			// 사용자 정보
 			mySessionId: 'SessionA',
@@ -277,6 +236,12 @@ export default {
     }
   },  // data end
   methods : {
+      toggleVideoSub(sub) {
+        sub.subscribeToVideo(!sub.stream.videoActive)
+      },
+      toggleAudioSub(sub) {
+        sub.subscribeToAudio(!sub.stream.audioActive)
+      },
       joinSession () {
 			// --- Get an OpenVidu object ---
 			this.OV = new OpenVidu();
@@ -359,7 +324,7 @@ export default {
       this.vOnOff = !this.vOnOff;
     },
 
-		leaveSession () {
+		leaveSession() {
 			// --- Leave the session by calling 'disconnect' method over the Session object ---
 			if (this.session) this.session.disconnect();
 
@@ -494,14 +459,11 @@ export default {
 					});
 
 					this.mainStreamManager2 = publisher;
-                    this.sharingPublisher = publisher;
-
-                    this.sessionForScreenShare.publish(this.sharingPublisher);
+          this.sharingPublisher = publisher;
+          this.sessionForScreenShare.publish(this.sharingPublisher);
 
 				}).catch((error => {
-
 					console.warn('There was an error connecting to the session:', error.code, error.message);
-
 				}));
 			});
 
@@ -509,16 +471,15 @@ export default {
 		},
 
 		leaveSessionForScreenSharing () {
-			if (this.sessionForScreenShare) this.sessionForScreenShare.disconnect();
-
-            this.sessionForScreenShare = undefined;
-            this.mainStreamManager2 = undefined;
-            this.sharingPublisher = undefined;
-            this.OVForScreenShare = undefined;
-
-            window.removeEventListener('beforeunload', this.leaveSessionForScreenSharing);
+			if (this.sessionForScreenShare) {
+        this.sessionForScreenShare.disconnect();
+      }
+      this.sessionForScreenShare = undefined;
+      this.mainStreamManager2 = undefined;
+      this.sharingPublisher = undefined;
+      this.OVForScreenShare = undefined;
+      window.removeEventListener('beforeunload', this.leaveSessionForScreenSharing);
 		},
-
 		checkScreenShared () {
 			var buf = 0;
 			this.subscribers.forEach((sub)=>{
@@ -547,4 +508,9 @@ export default {
 
   background-color: #7285A6;
 }
+/* .video-box {
+  width: 300px;
+  height: 200px;
+  overflow: hidden;
+} */
 </style>
