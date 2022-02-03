@@ -16,32 +16,15 @@
     <SidebarLink to="" icon="fas fa-file-upload">파일업로드</SidebarLink> -->
     <!-- <SidebarFile /> -->
     <div class="control-bottons">
-      <p>
-      <font-awesome-icon @click="toggleSidebar" :icon="['fas', 'file-upload']" />
-      </p>
-      <p>ㅎ ㅏ</p>
-      <p>
-      <font-awesome-icon @click="this.onClickMuteIcon" :icon="['fas', this.mutedIcon]" />
-      </p>
-      <p>
-      <font-awesome-icon @click="this.onClickCameraIcon" :icon="['fas', this.cameraIcon]" />
-      </p>
-      <p>
-      <font-awesome-icon @click="this.onClickKanbanBoardIcon" :icon="['fas', this.kanbanboardIcon]" />
-      </p>
-      <p>
-      <font-awesome-icon @click="this.onClickScreenShareIcon" :icon="['fas', this.screenshareIcon]" />
-      </p>
-      <p>
-      <font-awesome-icon @click="this.onClickWhiteBoardIcon" :icon="['fas', this.whiteboardIcon]" />
-      </p>
-      <p>
-      <font-awesome-icon @click="this.onClickChatIcon" :icon="['fas', this.chatIcon]" />
-      </p>
-      <p>
-      <font-awesome-icon @click="this.onClickMemberIcon" :icon="['fas', this.memberIcon]"
+      <font-awesome-icon class="m-2" @click="toggleSidebar" :icon="['fas', 'file-upload']" />
+      <!-- <font-awesome-icon class="m-2" @click="onClickMuteIcon" :icon="['fas', 'microphone']" /> -->
+      <!-- <font-awesome-icon class="m-2" @click="onClickCameraIcon" :icon="['fas', 'video']" /> -->
+      <font-awesome-icon class="m-2" @click="onClickKanbanBoardIcon" :icon="['fas', 'chalkboard']" />
+      <font-awesome-icon class="m-2" @click="onClickScreenShareIcon" :icon="['fas', 'tv']" />
+      <font-awesome-icon class="m-2" @click="onClickWhiteBoardIcon" :icon="['fas', 'pen']" />
+      <font-awesome-icon class="m-2" @click="onClickChatIcon" :icon="['fas', 'comment', 'comments-dots']" />
+      <font-awesome-icon class="m-2" @click="onClickMemberIcon" :icon="['fas', 'user-friends']"
       :style="{ color: state.isMemberList ? '#F5CEC7': 'rgba(255, 255, 255, 0.7)' }"/>
-      </p>
 
     </div>
     <!-- toggle button -->
@@ -77,7 +60,7 @@ export default {
     SidebarFile,
     SidebarMemberView,
   },
-  // props: {},
+  // props: {  },
   setup( props, context ) {
     const isMuted = ref(true);
     const isCameraOn = ref(false);
@@ -166,52 +149,6 @@ export default {
               mutedIcon, cameraIcon, screenshareIcon, whiteboardIcon, kanbanboardIcon, chatIcon, onClickChatIcon, memberIcon, onClickMemberIcon
     };
   },
-  // data() {
-  //   return {
-  //     myVideo: null,
-  //     sampleData: '',
-  //     isMuted: false,
-  //     isCameraOn: false,
-  //     isScreenShare: false,
-  //     isWhiteBoard: false,
-  //     isKanbanBoard: true,
-  //   }
-  // },
-  // methods: {
-  //   onClickMuteIcon: function () {
-  //     this.isMuted = !this.isMuted;
-  //   },
-  //   onClickCameraIcon: function () {
-  //     this.isCameraOn = !this.isCameraOn;
-  //   },
-  //   onClickScreenShareIcon: function () {
-  //     this.isScreenShare = !this.isScreenShare;
-  //   },
-  //   onClickWhiteBoardIcon: function () {
-  //     this.isWhiteBoard = !this.isWhiteBoard;
-  //   },
-  //   onClickKanbanBoardIcon: function () {
-  //     this.isKanbanBoard = !this.isKanbanBoard;
-  //   },
-
-  // },
-  // computed: {
-  //   mutedIcon() {
-  //     return this.isMuted ? 'microphone-slash' : 'microphone'
-  //   },
-  //   cameraIcon() {
-  //     return this.isCameraOn ? 'video' : 'video-slash'
-  //   },
-  //   screenshareIcon() {
-  //     return this.isScreenShare ? 'desktop' : 'tv'
-  //   },
-  //   whiteboardIcon() {
-  //     return this.isWhiteBoard ? 'pencil-alt' : 'pen'
-  //   },
-  //   kanbanboardIcon() {
-  //     return this.isKanbanBoard ? 'edit' : 'chalkboard'
-  //   },
-  // }
 }
 </script>
 
@@ -271,10 +208,6 @@ export default {
 .rotate-180 {
   transform: rotate(180deg);
   transition: 0.2s linear;
-}
-
-.fas {
-  color: rgba(255, 255, 255, 0.7);
 }
 .fa-desktop {
   color: #F5CEC7;

@@ -15,7 +15,7 @@
             나의 동료들과 온라인에서 함께 목표를 달성해 보세요.
           </span>
         </p>
-        <router-link to="/members/signup">
+        <router-link to="/members/login">
           <button type="button" class="btn btn-success" style="color:white">#study_with</button>
         </router-link>
       </div>
@@ -110,7 +110,7 @@
             여러분의 아이디어를 막힘없이 펼쳐보세요!
           </span>
         </p>
-        <router-link to="/members/signup">
+        <router-link to="/members/login">
           <button type="button" class="btn btn-primary" >#study_with</button>
         </router-link>
       </div>
@@ -128,7 +128,7 @@
           </p>
           <p style="font-size:17px;">Let's do a hopeful online study with us. <br>
           If you want, follow me!</p>
-        <router-link to="/members/signup">
+        <router-link to="/members/login">
           <button class="btn btn-primary" style="color:white">#study_with</button>
         </router-link>
         </div>

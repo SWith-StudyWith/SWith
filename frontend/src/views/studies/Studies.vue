@@ -5,7 +5,7 @@
       <!-- main container start -->
       <div id="main-container" class="container">
         <!-- join session page -->
-        <div id="join" v-if="!session">
+        <!-- <div id="join" v-if="!session">
           <div id="join-dialog" class="vertical-center">
             <h1>Join a video session</h1>
             <div class="form-group">
@@ -22,7 +22,7 @@
               </p>
             </div>
           </div>
-        </div>
+        </div> -->
         <!-- session start -->
         <div id="session" v-if="session">
           <!-- session header -->
@@ -43,21 +43,34 @@
           <!-- 화면 공유할 때의 비디오 컨테이너 -->
           <div id="video-container">
             <div class="user-video-wrapper d-flex overflow-auto">
-              <div class="video-box m-2">
-                <user-video id="my-video" :stream-manager="publisher" @click="updateMainVideoStreamManager(publisher)"/>
+              <div class="video-box m-2 position-relative">
+                <user-video id="my-video" :stream-manager="publisher"/>
+                <div class="stream-btn-container" @click.self="updateMainVideoStreamManager(publisher)">
+                  <button class="btn btn-primary mx-2 stream-onoff-btn" @click="videoOnOff(publisher)">
+                    <font-awesome-icon :icon="['fas', publisher&&publisher.stream.videoActive ? 'video' : 'video-slash' ]" />
+                  </button>
+                  <button class="btn btn-primary mx-2 stream-onoff-btn" @click="audioOnOff(sub)">
+                    <font-awesome-icon :icon="['fas', publisher&&publisher.stream.audioActive ? 'microphone' : 'microphone-slash']" />
+                  </button>
+                </div>
               </div>
               <div v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub">
-                <div class="video-box m-2">
-                  <user-video :stream-manager="sub" @click="updateMainVideoStreamManager(sub)"/>
-                  <button class="btn btn-primary mx-2" style="width:3rem;" @click="toggleVideoSub(sub)">
-                    <font-awesome-icon :icon="['fas', sub.stream.videoActive ? 'video' : 'video-slash' ]" />
-                  </button>
-                  <button
-                    class="btn btn-primary mx-2" style="width:3rem;" @click="toggleAudioSub(sub)"
-                    v-if="JSON.parse(sub.stream.connection.data).clientData !== 'Screen Sharing'"
-                  >
-                    <font-awesome-icon :icon="['fas', sub.stream.audioActive ? 'microphone' : 'microphone-slash']" />
-                  </button>
+                <div class="video-box m-2 position-relative">
+                  <user-video :stream-manager="sub"/>
+                  <div v-if="sub" class="stream-btn-container" @click.self="updateMainVideoStreamManager(sub)">
+                    <button
+                      class="btn btn-primary mx-2 stream-onoff-btn" @click="toggleVideoSub(sub)"
+                      v-if="JSON.parse(sub.stream.connection.data).clientData !== 'Screen Sharing'"
+                    >
+                      <font-awesome-icon :icon="['fas', sub.stream.videoActive ? 'video' : 'video-slash' ]" />
+                    </button>
+                    <button
+                      class="btn btn-primary mx-2 stream-onoff-btn" @click="toggleAudioSub(sub)"
+                      v-if="JSON.parse(sub.stream.connection.data).clientData !== 'Screen Sharing'"
+                    >
+                      <font-awesome-icon :icon="['fas', sub.stream.audioActive ? 'microphone' : 'microphone-slash']" />
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -68,42 +81,18 @@
       <!-- main container end -->
       <!-- buttons -->
       <div id="btngroup">
-        <button
-          v-if="vOnOff"
-          icon="fas fa-video"
-          @click="videoOnOff()"
-        >비디오 on</button>
-        <button
-          v-else
-          icon="fas fa-video-slash"
-          @click="videoOnOff()"
-        >비디오 off</button>
-        <button
-          v-if="aOnOff"
-          icon="fas fa-microphone"
-          @click="audioOnOff()"
-        >오디오 on</button>
-        <button
-          v-else
-          icon="fas fa-microphone-slash"
-          @click="audioOnOff()"
-        >오디오 off</button>
-        <!-- <button
-          icon="fas fa-desktop"
-          @click="toggleScreanshare()"
-        >화면 공유 on</button> -->
-        <button
-          icon="fas fa-desktop"
-          @click="startScreenSharing()"
-        >화면 공유 on</button>
-        <!-- <button
-          icon="fas fa-desktop"
-          @click="startScreenSharing()"
-        >화면 공유 on</button> -->
-        <button
-          icon="fas fa-sign-out-alt"
-          @click="leaveSession()"
-        >세션 나가기</button>
+        <button @click="startScreenSharing()">
+          <font-awesome-icon :icon="['fas', 'desktop']"></font-awesome-icon>
+          화면 공유 on
+        </button>
+        <button @click="stopScreenSharing()">
+          <font-awesome-icon :icon="['fas', 'desktop']"></font-awesome-icon>
+          화면 공유 off
+        </button>
+        <button @click="leaveSession()">
+          <font-awesome-icon :icon="['fas', 'sign-out-alt']"></font-awesome-icon>
+          세션 나가기
+        </button>
       </div>
       <!-- 화면 모드 -->
       <KanbanBoard v-show="isKanbanBoard"/>
@@ -164,7 +153,7 @@ export default {
   setup() {
     const store = useStore();
     const route = useRoute();
-    store.dispatch('GET_STUDY_INFO', route.params.studyId)
+    store.dispatch('GET_STUDY_INFO', route.params.studyId);
     const isKanbanBoard = ref(false);
     const isWhiteBoard = ref(false);
     const isScreenShare = ref(false);
@@ -211,17 +200,16 @@ export default {
 			mainStreamManager: undefined,
 			publisher: undefined,
 			subscribers: [],
-      vOnOff: true,
-      aOnOff: true,
-      size: true,
+      videoOn: true,
+      audioOn: true,
       connectionUser: false,
       mainOnOff: false,
       myUserId: "",
       tg: false,
 
 			// 사용자 정보
-			mySessionId: 'SessionA',
-			myUserName: 'Participant' + Math.floor(Math.random() * 100),
+			// mySessionId: 'SessionA',
+			// myUserName: 'Participant' + Math.floor(Math.random() * 100),
 
 			// 화면 공유
 			OVForScreenShare: undefined,
@@ -235,6 +223,17 @@ export default {
 			screenShareName: "Screen Sharing",	// 화면 공유 스트림의 이름
     }
   },  // data end
+  mounted() {
+    this.joinSession()
+  },
+  computed: {
+    mySessionId() {
+      return this.$route.params.studyId
+    },
+    myUserName() {
+      return this.$store.state.user.userInfo.nickname
+    }
+  },
   methods : {
       toggleVideoSub(sub) {
         sub.subscribeToVideo(!sub.stream.videoActive)
@@ -309,19 +308,18 @@ export default {
 						console.log('There was an error connecting to the session:', error.code, error.message);
 					});
 			});
-
 			window.addEventListener('beforeunload', this.leaveSession)
 		},
     connectionUserOnOff() {
       this.connectionUser = !this.connectionUser;
     },
     audioOnOff() {
-      this.publisher.publishAudio(!this.aOnOff);
-      this.aOnOff = !this.aOnOff;
+      this.publisher.publishAudio(!this.audioOn);
+      this.audioOn = !this.audioOn;
     },
     videoOnOff() {
-      this.publisher.publishVideo(!this.vOnOff);
-      this.vOnOff = !this.vOnOff;
+      this.publisher.publishVideo(!this.videoOn);
+      this.videoOn = !this.videoOn;
     },
 
     leaveSession() {
@@ -471,6 +469,9 @@ export default {
 
 			window.addEventListener('beforeunload', this.leaveSessionForScreenSharing)
 		},
+    stopScreenSharing() {
+      this.leaveSessionForScreenSharing()
+    },
 
 		leaveSessionForScreenSharing () {
 			if (this.sessionForScreenShare) {
@@ -511,6 +512,27 @@ export default {
 
   background-color: #7285A6;
 }
+.stream-onoff-btn {
+  width: 2.4rem;
+  font-size:0.7rem;
+  margin-top: 160px;
+}
+.stream-btn-container {
+  position: absolute;
+  width: 100%;
+  height: 200px;
+  top: 0;
+  visibility: collapse;
+  border-radius: 1rem;
+}
+.video-box:hover .stream-btn-container {
+  visibility: visible;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+.stream-btn-container:hover{
+  cursor: pointer;
+}
+
 /* .video-box {
   width: 300px;
   height: 200px;
