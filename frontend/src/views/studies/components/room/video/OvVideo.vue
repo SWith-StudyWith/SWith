@@ -20,11 +20,17 @@ export default {
 
 <style scoped>
 .main {
-  width: 960px;
+  width: 900px;
   height: 600px;
+  border-radius: 1rem;
+  overflow: hidden;
+  object-fit: cover;
 }
 .sub {
-  width: 320px;
+  width: 300px;
   height: 200px;
+  overflow: hidden;
+  object-fit: cover;
+  border-radius: 1rem;
 }
 </style>
