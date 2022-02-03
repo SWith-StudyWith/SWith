@@ -1,8 +1,9 @@
 <template>
-  <router-link to="/test"></router-link>
-  <router-link to="/"></router-link>
-  <router-view/>
-
+  <div class="app">
+    <router-link to="/test"></router-link>
+    <router-link to="/"></router-link>
+    <router-view/>
+  </div>
 </template>
 
 <script>
@@ -39,5 +40,10 @@ $success: #F5CEC7;
 }
 .popover-body {
   padding: 0.3rem;
+}
+.app {
+min-height: 100%;
+position: relative;
+padding-bottom: 170px; /* footer height */
 }
 </style>
