@@ -8,7 +8,7 @@
       <div class="row d-flex justify-content-center">
         <div class="col-4" style="">
           <form class="userInfo-wrapper" enctype="multipart/form-data">
-            <div class="d-flex justify-content-center">
+            <!-- <div class="d-flex justify-content-center">
               <div class="image-wrapper">
                 <label for="changeProfile" class="img-form-label">
                   <img :src="state.profileImgSrc" :fit="fit" class="profile-img" style="cursor:pointer">
@@ -23,7 +23,29 @@
                   style="display: none;"
                 />
               </div>
+            </div> -->
+            <div class="d-flex justify-content-center">
+              <!-- <div class="image-wrapper">
+                <img class="profile-img" :src="state.profileImgSrc" />
+              </div> -->
+              <div class="dropend">
+                <div class="image-wrapper" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" >
+                  <img class="profile-img" :src="state.profileImgSrc" alt=""  >
+                </div>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                  <li>
+                    <label for="changeProfile" class="img-form-label">프로필 이미지 선택</label>
+                  </li>
+                  <li>
+                    <span @click="onClickDefaultImg" class="img-revert-default">기본 이미지로 변경</span>
+                  </li>
+                </ul>
+              </div>
+              <div class="form-group mt-3 mb-3">
+                <input @change="onClickUploadFile" id="changeProfile" type="file" ref="file" class="form-control" accept="image/*" style="display: none;" />
+              </div>
             </div>
+
             <!-- Google이나 Kakao 로그인인 경우 안 보이게 하기 -->
             <div class="row d-flex justify-content-between">
               <p class="col-6" style="padding: 0px;">{{ state.userInfo.email }}</p>
@@ -93,6 +115,11 @@ export default {
       state.value.profileImg = file;
     };
 
+    const onClickDefaultImg = (e) => {
+      console.log(e.target.value)
+      state.value.userInfo.profileImg = ''
+    }
+
     const onClickUpdateUserInfo = (e) => {
       e.preventDefault();
       const updateUserData = new FormData();
@@ -104,7 +131,7 @@ export default {
       store.dispatch('updateUserInfo', updateUserData)
     }
     return {
-      state, onClickUpdateUserInfo, onClickUploadFile
+      state, onClickUpdateUserInfo, onClickUploadFile, onClickDefaultImg
     }
   },
 
@@ -141,9 +168,15 @@ p{
   margin-bottom: 36px;
 }
 .img-form-label{
-  width: 150px;
+  /* width: 150px;
   height: 150px;
-  border-radius: 70%;
+  border-radius: 70%; */
+  padding-bottom: 10px;
+  cursor: pointer;
+}
+.img-revert-default{
+  padding-bottom: 10px;
+  cursor: pointer;
 }
 .image-wrapper{
   margin-bottom: 30px;
@@ -157,6 +190,7 @@ p{
   width: 100%;
   height: 100%;
   object-fit: cover;
+  background: #BDBDBD;
 }
 .signout-btn:hover {
   cursor: pointer;
@@ -164,6 +198,12 @@ p{
 }
 .signout-btn{
   color: #BDBDBD;
+}
+.dropdown-menu{
+  text-align: center;
+}
+.dropend{
+  margin-left: 40px;
 }
 
 /* setting */
