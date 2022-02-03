@@ -47,7 +47,7 @@
     >
       <i class="fas fa-angle-double-left" />
     </span>
-    <SidebarChat/>
+    <SidebarChat v-if="state.isChat"/>
     <SidebarMemberView :members="state.memberList" v-if="state.isMemberList"/>
 
   </div>
@@ -76,7 +76,7 @@ export default {
     const isKanbanBoard = ref(false);
     const isScreenShare = ref(false);
     const isWhiteBoard = ref(false);
-    const isChat = ref(false);
+    // const isChat = ref(false);
 
     // 스터디 회원 목록 조회
     const store = useStore();
@@ -88,6 +88,7 @@ export default {
         return store.state.study.memberList;
       }),
 
+      isChat : false,
       isMemberList : false,
     })
 
@@ -116,7 +117,7 @@ export default {
       }
     };
     const onClickChatIcon = () => {
-      isChat.value = !isChat.value;
+      state.isChat = !state.isChat;
     };
     const onClickMemberIcon = () => {
       state.isMemberList = !state.isMemberList;
@@ -138,7 +139,7 @@ export default {
       return isWhiteBoard.value ? 'pencil-alt' : 'pen';
     });
     const chatIcon = computed(() => {
-      if(isChat.value){
+      if(state.isChat){
         return 'comment-dots';
       }
       else return 'comment';
@@ -238,7 +239,7 @@ export default {
   z-index: 1;
   top: 10;
   left: 0;
-  bottom: 70px;
+  bottom: 40px;
   padding: 0.5em;
 
   display: flex;
