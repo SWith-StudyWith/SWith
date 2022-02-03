@@ -56,10 +56,9 @@ public class StudyController {
         memberStudyService.joinStudy(member, study);
         return ResponseEntity.status(200).body(new BaseResponse(true, 200, "스터디 생성 성공"));
     }
-
-    // findPassword?? joinStudy??
+    
     @PostMapping("/join")
-    public ResponseEntity<BaseResponse> findPassword(@RequestBody StudyCodeReq studyCodeReq) {
+    public ResponseEntity<BaseResponse> joinStudy(@RequestBody StudyCodeReq studyCodeReq) {
 
         // 참여 코드에 해당하는 스터디 불러오기
         Study study = studyService.getStudyByCode(studyCodeReq.getCode());
@@ -89,10 +88,16 @@ public class StudyController {
     }
 
     @GetMapping("/{studyId}")
-    public ResponseEntity<BaseDataResponse<StudyInfoRes>> getStudyDetail(@PathVariable String studyId) {
+    public ResponseEntity<BaseDataResponse<StudyInfoRes>> getStudyDetail(@PathVariable Long studyId) {
 
-        StudyInfoRes studyInfoRes = studyService.getStudyDetail(Long.parseLong(studyId));
-
+        Member member = memberService.getMemberByAuthentication();
+        Study study = studyService.getStudyById(studyId);
+        MemberStudy memberStudy = memberStudyService.getMemberStudyCheck(member, study);
+        if (memberStudy == null) {
+            return ResponseEntity.status(200).body(new BaseDataResponse<>(true, 401, "스터디 정보 조회 권한 없음", null));
+        }
+        
+        StudyInfoRes studyInfoRes = studyService.getStudyDetail(studyId);
         return ResponseEntity.status(200).body(new BaseDataResponse<>(true, 200, "스터디 정보 조회 성공", studyInfoRes));
     }
 
