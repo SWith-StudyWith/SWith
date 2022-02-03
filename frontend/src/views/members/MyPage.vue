@@ -110,8 +110,8 @@ export default {
       updateUserData.append("nickname", state.value.nickname)
       updateUserData.append("goal", state.value.userInfo.goal)
       updateUserData.append("profileImg", state.value.profileImg)
-      updateUserData.append("updated", state.value.update)
-      console.log(state.value.userInfo)
+      updateUserData.append("updated", state.value.updated)
+      //console.log(state.value.userInfo)
       store.dispatch('updateUserInfo', updateUserData)
     }
     return {
