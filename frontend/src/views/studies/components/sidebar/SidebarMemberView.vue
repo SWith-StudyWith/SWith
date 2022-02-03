@@ -1,6 +1,6 @@
 <template>
-  <div>
-    회원 목록
+  <p style="font-size: 20px; font-weight:500; margin-bottom: 30px;">스터디 회원 목록</p>
+  <div class= "memberDiv">
     <div v-if="members.length">
       <div class="row" v-for="member in members" :key="member.memberId">
         <div class="col">
@@ -34,7 +34,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 /* .img-form-label{
   width: 150px;
   height: 150px;
@@ -45,5 +45,14 @@ export default {
   height: 50px;
   /* object-fit: cover; */
   border-radius: 70%;
+}
+
+.memberDiv{
+  /* float: right; */
+  width: 90%;
+  text-align: right;
+}
+.row{
+  margin-bottom: 20px;
 }
 </style>
