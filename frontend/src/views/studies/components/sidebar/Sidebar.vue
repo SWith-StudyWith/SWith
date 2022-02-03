@@ -35,9 +35,15 @@
       <p>
       <font-awesome-icon @click="this.onClickWhiteBoardIcon" :icon="['fas', this.whiteboardIcon]" />
       </p>
+      <p>
+      <font-awesome-icon @click="this.onClickChatIcon" :icon="['fas', this.chatIcon]" />
+      </p>
+      <p>
+      <font-awesome-icon @click="this.onClickMemberIcon" :icon="['fas', this.memberIcon]"
+      :style="{ color: state.isMemberList ? '#F5CEC7': 'rgba(255, 255, 255, 0.7)' }"/>
+      </p>
 
     </div>
-
     <!-- toggle button -->
     <span
       class="collapse-icon"
@@ -46,17 +52,22 @@
     >
       <i class="fas fa-angle-double-left" />
     </span>
-    <SidebarChat/>
     <SidebarFile/>
+    <SidebarChat v-if="state.isChat"/>
+    <SidebarMemberView :members="state.memberList" v-if="state.isMemberList"/>
+
   </div>
 </template>
 
 <script>
 // import SidebarLink from '@/views/studies/components/sidebar/SidebarLink.vue';
 import { collapsed, toggleSidebar, sidebarWidth } from '@/views/studies/components/sidebar/state.js';
-import { ref, computed } from 'vue';
 import SidebarChat from '@/views/studies/components/sidebar/SidebarChat.vue';
 import SidebarFile from '@/views/studies/components/sidebar/SidebarFile.vue';
+import SidebarMemberView from '@/views/studies/components/sidebar/SidebarMemberView.vue'
+import { ref, computed, reactive } from 'vue';
+import { useStore } from 'vuex';
+import { useRoute } from 'vue-router';
 
 export default {
   name: 'Sidebar',
@@ -64,6 +75,7 @@ export default {
     // SidebarLink,
     SidebarChat,
     SidebarFile,
+    SidebarMemberView,
   },
   // props: {},
   setup( props, context ) {
@@ -72,6 +84,22 @@ export default {
     const isKanbanBoard = ref(false);
     const isScreenShare = ref(false);
     const isWhiteBoard = ref(false);
+    // const isChat = ref(false);
+
+    // 스터디 회원 목록 조회
+    const store = useStore();
+    const route = useRoute();
+    store.dispatch('GET_MEMBER_LIST', route.params.studyId);
+
+    const state = reactive({
+      memberList : computed(() => {
+        return store.state.study.memberList;
+      }),
+
+      isChat : false,
+      isMemberList : false,
+    })
+
     const onClickMuteIcon = () => {
       isMuted.value = !isMuted.value;
     };
@@ -96,6 +124,13 @@ export default {
           context.emit('show-screenmode', 3)
       }
     };
+    const onClickChatIcon = () => {
+      state.isChat = !state.isChat;
+    };
+    const onClickMemberIcon = () => {
+      state.isMemberList = !state.isMemberList;
+    }
+
     const mutedIcon = computed(() => {
       return isMuted.value ? 'microphone-slash' : 'microphone';
     });
@@ -111,12 +146,24 @@ export default {
     const whiteboardIcon = computed(() => {
       return isWhiteBoard.value ? 'pencil-alt' : 'pen';
     });
+    const chatIcon = computed(() => {
+      if(state.isChat){
+        return 'comment-dots';
+      }
+      else return 'comment';
+    });
+    const memberIcon = computed(() => {
+      if(state.isMemberList){
+        return 'user-friends';
+      }
+      else return 'user-friends';
+    });
 
 
-    return { collapsed, toggleSidebar, sidebarWidth,
+    return { state, collapsed, toggleSidebar, sidebarWidth,
               isMuted, isCameraOn, isWhiteBoard, isScreenShare, isKanbanBoard,
               onClickMuteIcon, onClickCameraIcon, onClickScreenShareIcon, onClickWhiteBoardIcon, onClickKanbanBoardIcon,
-              mutedIcon, cameraIcon, screenshareIcon, whiteboardIcon, kanbanboardIcon
+              mutedIcon, cameraIcon, screenshareIcon, whiteboardIcon, kanbanboardIcon, chatIcon, onClickChatIcon, memberIcon, onClickMemberIcon
     };
   },
   // data() {
@@ -186,6 +233,10 @@ export default {
 
   display: flex;
   flex-direction: column;
+
+  /* scroll */
+  overflow-x: hidden;
+    overflow-y: auto;
 }
 .control-bottons {
   text-align: center;
@@ -196,7 +247,7 @@ export default {
   z-index: 1;
   top: 10;
   left: 0;
-  bottom: 70px;
+  bottom: 40px;
   padding: 0.5em;
 
   display: flex;
@@ -212,9 +263,10 @@ export default {
 .collapse-icon {
   position: absolute;
   bottom: 0;
-  padding: 0.75em;
+  /* padding: 0.75em; */
   color: rgba(255, 255, 255, 0.7);
   transition: 0.2s linear;
+  font-size: 30px;
 }
 .rotate-180 {
   transform: rotate(180deg);
@@ -225,19 +277,24 @@ export default {
   color: rgba(255, 255, 255, 0.7);
 }
 .fa-desktop {
-  color: pink;
+  color: #F5CEC7;
 }
 .fa-microphone {
-  color: pink;
+  color: #F5CEC7;
 }
 .fa-video {
-  color: pink;
+  color: #F5CEC7;
 }
 .fa-pencil-alt {
-  color: pink;
+  color: #F5CEC7;
 }
 .fa-edit {
-  color: pink;
+  color: #F5CEC7
 }
-
+.fa-comment-dots{
+  color: #F5CEC7;
+}
+/* .fa-user-friends{
+  color: #F5CEC7;
+} */
 </style>

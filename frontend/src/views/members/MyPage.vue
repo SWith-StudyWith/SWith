@@ -7,7 +7,7 @@
       <!-- </header> -->
       <div class="row d-flex justify-content-center">
         <div class="col-4" style="">
-          <form class="userInfo-wrapper" :model="formData" enctype="multipart/form-data">
+          <form class="userInfo-wrapper" enctype="multipart/form-data">
             <div class="d-flex justify-content-center">
               <div class="image-wrapper">
                 <label for="changeProfile" class="img-form-label">
@@ -36,7 +36,7 @@
             </div>
             <div class="row">
               <label for="nickname" class="form-label">닉네임</label>
-              <input type="text" class="form-control" id="nickname" v-model="state.userInfo.nickname">
+              <input type="text" class="form-control" id="nickname" v-model="state.nickname">
             </div>
             <div class="row">
               <label for="goal" class="form-label">나의 목표</label>
@@ -74,6 +74,7 @@ export default {
     const store = useStore();
     const state = ref({
       userInfo : store.getters.getUserInfo,
+      nickname : store.getters.getUserInfo.nickname,
       profileImg: '',
       profileImgSrc : computed(() => {
         if (state.value.userInfo.profileImg) {
@@ -95,10 +96,10 @@ export default {
     const onClickUpdateUserInfo = (e) => {
       e.preventDefault();
       const updateUserData = new FormData();
-      updateUserData.append("nickname", state.value.userInfo.nickname)
+      updateUserData.append("nickname", state.value.nickname)
       updateUserData.append("goal", state.value.userInfo.goal)
       updateUserData.append("profileImg", state.value.profileImg)
-      updateUserData.append("Updated", true)
+      updateUserData.append("updated", true)
       console.log(state.value.userInfo)
       store.dispatch('updateUserInfo', updateUserData)
     }
