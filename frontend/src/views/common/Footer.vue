@@ -1,5 +1,5 @@
 <template>
-  <footer>
+  <footer class="footer">
     <div id="footer-content">
       <p>(주) <b>SWith</b> 주소 : 서울특별시 강남구 역삼동 테헤란로 212</p>
       <p>이메일 : official.swith@gmail.com</p>
@@ -25,8 +25,14 @@ footer {
   justify-content: center;
   flex-direction: row;
   background-color : #373F41;
-  height : 273px;
-}
+  height: 170px;
+  position : relative;
+  transform : translateY(100%);
+  /* position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0; */
+  }
 
 #footer-content {
   margin : auto;

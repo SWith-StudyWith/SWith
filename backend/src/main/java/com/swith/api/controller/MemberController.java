@@ -108,10 +108,10 @@ public class MemberController {
 
     @PutMapping
     public ResponseEntity<BaseDataResponse<MemberInfoRes>> updateMember(
-            MemberInfoReq memberInfoReq, @RequestParam("profileImg") MultipartFile multipartFile) {
+            MemberInfoReq memberInfoReq, @RequestPart(value = "profileImg", required = false) MultipartFile multipartFile) {
         log.debug("updateMember - {}", memberInfoReq);
-        log.debug("updateMember - file name: {}, file size: {}, content type: {}", multipartFile.getOriginalFilename(),
-                multipartFile.getSize(), multipartFile.getContentType());
+//        log.debug("updateMember - file name: {}, file size: {}, content type: {}", multipartFile.getOriginalFilename(),
+//                multipartFile.getSize(), multipartFile.getContentType());
         Member member = memberService.getMemberByAuthentication();
         // 회원인증 실패
         if (member == null) {

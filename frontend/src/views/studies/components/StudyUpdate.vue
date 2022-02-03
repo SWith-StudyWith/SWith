@@ -53,7 +53,7 @@ export default {
       userInfo : store.getters.getUserInfo,
       file: store.getters.getUserInfo.profileImgUrl
     });
-
+    store.dispatch('GET_STUDY_INFO')
     const changeFile = (event) => {
       console.log(event)
       if(event.target.files && event.target.files.length > 0){
