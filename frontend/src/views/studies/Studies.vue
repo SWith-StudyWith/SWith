@@ -5,7 +5,7 @@
       <!-- main container start -->
       <div id="main-container" class="container">
         <!-- join session page -->
-        <div id="join" v-if="!session">
+        <!-- <div id="join" v-if="!session">
           <div id="join-dialog" class="vertical-center">
             <h1>Join a video session</h1>
             <div class="form-group">
@@ -22,7 +22,7 @@
               </p>
             </div>
           </div>
-        </div>
+        </div> -->
         <!-- session start -->
         <div id="session" v-if="session">
           <!-- session header -->
@@ -49,11 +49,11 @@
               <div v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub">
                 <div class="video-box m-2">
                   <user-video :stream-manager="sub" @click="updateMainVideoStreamManager(sub)"/>
-                  <button class="btn btn-primary mx-2" style="width:3rem;" @click="toggleVideoSub(sub)">
+                  <button class="btn btn-primary mx-2 position-relative" style="width: 2.4rem; top:-4rem; font-size:0.7rem" @click="toggleVideoSub(sub)">
                     <font-awesome-icon :icon="['fas', sub.stream.videoActive ? 'video' : 'video-slash' ]" />
                   </button>
                   <button
-                    class="btn btn-primary mx-2" style="width:3rem;" @click="toggleAudioSub(sub)"
+                    class="btn btn-primary mx-2 position-relative" style="width: 2.4rem; top:-4rem; font-size:0.7rem" @click="toggleAudioSub(sub)"
                     v-if="JSON.parse(sub.stream.connection.data).clientData !== 'Screen Sharing'"
                   >
                     <font-awesome-icon :icon="['fas', sub.stream.audioActive ? 'microphone' : 'microphone-slash']" />
@@ -95,7 +95,16 @@
         <button
           icon="fas fa-desktop"
           @click="startScreenSharing()"
-        >화면 공유 on</button>
+        >
+          <font-awesome-icon :icon="['fas', 'desktop']"></font-awesome-icon>
+          화면 공유 on
+        </button>
+        <button
+          @click="stopScreenSharing()"
+        >
+          <font-awesome-icon :icon="['fas', 'desktop-slash']"></font-awesome-icon>
+          화면 공유 off
+        </button>
         <!-- <button
           icon="fas fa-desktop"
           @click="startScreenSharing()"
@@ -164,7 +173,7 @@ export default {
   setup() {
     const store = useStore();
     const route = useRoute();
-    store.dispatch('GET_STUDY_INFO', route.params.studyId)
+    store.dispatch('GET_STUDY_INFO', route.params.studyId);
     const isKanbanBoard = ref(false);
     const isWhiteBoard = ref(false);
     const isScreenShare = ref(false);
@@ -220,8 +229,8 @@ export default {
       tg: false,
 
 			// 사용자 정보
-			mySessionId: 'SessionA',
-			myUserName: 'Participant' + Math.floor(Math.random() * 100),
+			// mySessionId: 'SessionA',
+			// myUserName: 'Participant' + Math.floor(Math.random() * 100),
 
 			// 화면 공유
 			OVForScreenShare: undefined,
@@ -235,6 +244,17 @@ export default {
 			screenShareName: "Screen Sharing",	// 화면 공유 스트림의 이름
     }
   },  // data end
+  mounted() {
+    this.joinSession()
+  },
+  computed: {
+    mySessionId() {
+      return this.$route.params.studyId
+    },
+    myUserName() {
+      return this.$store.state.user.userInfo.nickname
+    }
+  },
   methods : {
       toggleVideoSub(sub) {
         sub.subscribeToVideo(!sub.stream.videoActive)
@@ -309,7 +329,6 @@ export default {
 						console.log('There was an error connecting to the session:', error.code, error.message);
 					});
 			});
-
 			window.addEventListener('beforeunload', this.leaveSession)
 		},
     connectionUserOnOff() {
@@ -469,6 +488,9 @@ export default {
 
 			window.addEventListener('beforeunload', this.leaveSessionForScreenSharing)
 		},
+    stopScreenSharing() {
+      this.leaveSessionForScreenSharing()
+    },
 
 		leaveSessionForScreenSharing () {
 			if (this.sessionForScreenShare) {
@@ -487,7 +509,7 @@ export default {
 					buf+=1;
 				}
 			});
-			if (buf) {
+			if (buf === 0) {
 				this.isScreenShared=true;
 			} else {
 				this.isScreenShared = false;
