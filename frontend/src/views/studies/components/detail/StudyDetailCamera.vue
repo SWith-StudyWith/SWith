@@ -39,11 +39,11 @@ export default {
       myVideo: null,
       cameraDevices: [],
       currentCamera: '',
-      isCameraOn: true,
+      isCameraOn: false,
       initCamera: 0,
       micDevices: [],
       currentMic: '',
-      isMuted: false,
+      isMuted: true,
       initMic: 0,
       selectsOn: false,
     }
