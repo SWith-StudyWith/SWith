@@ -5,9 +5,7 @@
     <div class="row">
       <div class="offset-4 col-4">
         <div class="row">
-          <form
-            class="findpassword-form"
-          >
+          <form class="findpassword-form" @submit.prevent>
             <label for="email" class="form-label">이메일</label>
             <input class="form-control" id="email" type="email" v-model="state.email"
               placeholder="가입하신 이메일을 입력해주세요"
@@ -19,7 +17,7 @@
         </div>
         <br>
         <div class="row">
-          <form class="findpassword-btn">
+          <form class="findpassword-btn" @submit.prevent>
             <button class="btn col-12 button_navy"
               style="font-size: 14px;" @click="onClickSendCode"
             >이메일 보내기</button>
