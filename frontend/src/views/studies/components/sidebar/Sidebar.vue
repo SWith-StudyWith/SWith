@@ -48,8 +48,8 @@
       <i class="fas fa-angle-double-left" />
     </span>
     <SidebarChat/>
-    <SidebarMemberView :members="state.memberList"/>
-    <!-- <SidebarMemberView/> -->
+    <SidebarMemberView :members="state.memberList" v-if="state.isMemberList"/>
+
   </div>
 </template>
 
@@ -224,6 +224,10 @@ export default {
 
   display: flex;
   flex-direction: column;
+
+  /* scroll */
+  overflow-x: hidden;
+    overflow-y: auto;
 }
 .control-bottons {
   text-align: center;
