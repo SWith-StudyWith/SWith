@@ -12,9 +12,13 @@
     <SidebarLink to="/studies/main" icon="fas fa-video">기본화면</SidebarLink>
     <SidebarLink to="/studies/11/kanbanboard" icon="fas fa-chalkboard">칸반보드</SidebarLink>
     <SidebarLink to="/studies/11/screenshare" icon="fas fa-desktop">화면공유</SidebarLink>
-    <SidebarLink to="/studies/11/whiteboard" icon="fas fa-pencil-alt">화이트보드</SidebarLink> -->
-
+    <SidebarLink to="/studies/11/whiteboard" icon="fas fa-pencil-alt">화이트보드</SidebarLink>
+    <SidebarLink to="" icon="fas fa-file-upload">파일업로드</SidebarLink> -->
+    <!-- <SidebarFile /> -->
     <div class="control-bottons">
+      <p>
+      <font-awesome-icon @click="toggleSidebar" :icon="['fas', 'file-upload']" />
+      </p>
       <p>ㅎ ㅏ</p>
       <p>
       <font-awesome-icon @click="this.onClickMuteIcon" :icon="['fas', this.mutedIcon]" />
@@ -43,20 +47,23 @@
       <i class="fas fa-angle-double-left" />
     </span>
     <SidebarChat/>
+    <SidebarFile/>
   </div>
 </template>
 
 <script>
 // import SidebarLink from '@/views/studies/components/sidebar/SidebarLink.vue';
 import { collapsed, toggleSidebar, sidebarWidth } from '@/views/studies/components/sidebar/state.js';
-import SidebarChat from '@/views/studies/components/sidebar/SidebarChat.vue';
 import { ref, computed } from 'vue';
+import SidebarChat from '@/views/studies/components/sidebar/SidebarChat.vue';
+import SidebarFile from '@/views/studies/components/sidebar/SidebarFile.vue';
 
 export default {
   name: 'Sidebar',
   components: {
     // SidebarLink,
     SidebarChat,
+    SidebarFile,
   },
   // props: {},
   setup( props, context ) {
