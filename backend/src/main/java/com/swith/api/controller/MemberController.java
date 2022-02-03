@@ -107,10 +107,11 @@ public class MemberController {
     }
 
     @PutMapping
-    public ResponseEntity<BaseDataResponse<MemberInfoRes>> updateMember(MemberInfoReq memberInfoReq) {
+    public ResponseEntity<BaseDataResponse<MemberInfoRes>> updateMember(
+            MemberInfoReq memberInfoReq, @RequestParam("profileImg") MultipartFile multipartFile) {
         log.debug("updateMember - {}", memberInfoReq);
-//        log.debug("updateMember - file name: {}, file size: {}, content type: {}", multipartFile.getOriginalFilename(),
-//                multipartFile.getSize(), multipartFile.getContentType());
+        log.debug("updateMember - file name: {}, file size: {}, content type: {}", multipartFile.getOriginalFilename(),
+                multipartFile.getSize(), multipartFile.getContentType());
         Member member = memberService.getMemberByAuthentication();
         // 회원인증 실패
         if (member == null) {
@@ -120,7 +121,7 @@ public class MemberController {
 
         BaseDataResponse<MemberInfoRes> memberInfo = null;
         try {
-            member = memberService.updateMember(member, memberInfoReq, memberInfoReq.getProfileImg());
+            member = memberService.updateMember(member, memberInfoReq, multipartFile);
         } catch (IOException e) {
             memberInfo = new BaseDataResponse<>(false, 408, "파일 업로드 실패",
                     new MemberInfoRes(member.getEmail(), member.getNickname(), member.getGoal(), member.getImgUrl()));
