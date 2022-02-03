@@ -1,8 +1,9 @@
-import { getStudyInfo, getStudyList } from "../../api/study";
+import { getStudyInfo, getStudyList, getMemberList } from "../../api/study";
 
 const state = () => ({
   studyInfo: {},
   studyList: [],
+  memberList: [],
 });
 
 const getters = {
@@ -37,6 +38,20 @@ const actions = {
         console.log(err)
       }
     )
+  },
+  GET_MEMBER_LIST({ commit } ,studyId) {
+    getMemberList(
+      studyId,
+      (res) => {
+        console.log(res.data)
+        if (res.data.code === 200) {
+          commit('SET_MEMBER_LIST', res.data.data)
+        }
+      },
+      (err) => {
+        console.log(err)
+      }
+    )
   }
 };
 
@@ -46,6 +61,9 @@ const mutations = {
   },
   SET_STUDY_LIST(state, payload) {
     state.studyList = payload;
+  },
+  SET_MEMBER_LIST(state, payload) {
+    state.memberList = payload;
   }
 };
 

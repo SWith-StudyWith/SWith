@@ -44,6 +44,13 @@ function putKanban(payload, studyId, success, fail) {
     .then(success)
     .catch(fail)
 }
+function getMemberList(studyId, success, fail) {
+  basicInstance
+    .get(`api/studies/${studyId}/members`)
+    // .get(`api/studies/1/members`)
+    .then(success)
+    .catch(fail)
+}
 
 export {
   createStudy,
@@ -53,4 +60,5 @@ export {
   exitStudy,
   putKanban,
   checkKanban,
+  getMemberList,
 }
