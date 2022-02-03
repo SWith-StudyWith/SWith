@@ -57,7 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .mvcMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Preflight Request 허용
                 .antMatchers("/api/members", "/api/members/login",
                         "/api/members/auth/email", "/api/members/auth/email/check", "/api/members/auth/email/password",
-                        "/api/members/login/kakao", "/api/members/login/google", "/ws/**").permitAll()  // 해당 url 접근을 모두 허용
+                        "/api/members/login/kakao", "/api/members/login/google", "/api/ws/**").permitAll()  // 해당 url 접근을 모두 허용
                 .anyRequest().authenticated()
 
                 .and()
