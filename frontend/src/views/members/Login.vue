@@ -8,7 +8,9 @@
           <label for="email" class="form-label">이메일</label>
           <div>
             <input class="form-control" id="email" type="email"
-              v-model="state.email" required autofocus>
+              v-model="state.email" required autofocus
+              @keyup.enter="onClickLogin"
+            >
           </div>
           <div
             :style="{ visibility: (state.isValidEmail || !state.wasEmailInputed) ? 'hidden': 'visible' }"
@@ -19,7 +21,9 @@
         <form @submit.prevent>
           <label for="password" class="form-label">비밀번호</label>
           <input class="form-control" type="password"
-            id="password" v-model="state.password" required>
+            id="password" v-model="state.password" required
+            @keyup.enter="onClickLogin"
+          >
           <div
             :style="{visibility: (state.isValidPassword || !state.wasPasswordInputed) ? 'hidden': 'visible' }"
             class="invalid-feedback mb-2 mt-0">
