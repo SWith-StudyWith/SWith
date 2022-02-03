@@ -324,11 +324,11 @@ export default {
       this.vOnOff = !this.vOnOff;
     },
 
-		leaveSession() {
+    leaveSession() {
       this.leaveSessionForScreenSharing();
-			this.isScreenShared=false;
-			// --- Leave the session by calling 'disconnect' method over the Session object ---
-			if (this.session) this.session.disconnect();
+      this.isScreenShared=false;
+      // --- Leave the session by calling 'disconnect' method over the Session object ---
+      if (this.session) this.session.disconnect();
 
 			this.session = undefined;
 			this.mainStreamManager = undefined;
@@ -490,7 +490,7 @@ export default {
 				}
 			});
 			// if (buf) {
-			if (buf==0) {
+			if (buf===0) {
 				this.isScreenShared=true;
 			} else {
 				this.isScreenShared = false;
