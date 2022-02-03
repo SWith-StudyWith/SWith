@@ -15,7 +15,6 @@
     <SidebarLink to="/studies/11/whiteboard" icon="fas fa-pencil-alt">화이트보드</SidebarLink> -->
 
     <div class="control-bottons">
-      <p>ㅎ ㅏ</p>
       <p>
       <font-awesome-icon @click="this.onClickMuteIcon" :icon="['fas', this.mutedIcon]" />
       </p>
@@ -223,9 +222,10 @@ export default {
 .collapse-icon {
   position: absolute;
   bottom: 0;
-  padding: 0.75em;
+  /* padding: 0.75em; */
   color: rgba(255, 255, 255, 0.7);
   transition: 0.2s linear;
+  font-size: 30px;
 }
 .rotate-180 {
   transform: rotate(180deg);
