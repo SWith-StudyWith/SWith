@@ -98,10 +98,10 @@ public class StudyController {
 
     @PutMapping("/{studyId}")
     public ResponseEntity<BaseDataResponse<StudyRes>> updateStudy(@PathVariable String studyId,
-                                                                  StudyInfoReq studyInfoReq, @RequestParam("studyImage") MultipartFile multipartFile) {
+                                                                  StudyInfoReq studyInfoReq, @RequestPart(value = "studyImage", required = false) MultipartFile multipartFile) {
         log.debug("updateStudy - {}: {}", studyId, studyInfoReq);
-        log.debug("updateStudy - file name: {}, file size: {}, content type: {}", multipartFile.getOriginalFilename(),
-                multipartFile.getSize(), multipartFile.getContentType());
+//        log.debug("updateStudy - file name: {}, file size: {}, content type: {}", multipartFile.getOriginalFilename(),
+//                multipartFile.getSize(), multipartFile.getContentType());
         Study study = studyService.getStudyById(Long.parseLong(studyId));
         // 존재하지 않는 스터디
         if (study == null) {
