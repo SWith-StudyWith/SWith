@@ -43,21 +43,34 @@
           <!-- 화면 공유할 때의 비디오 컨테이너 -->
           <div id="video-container">
             <div class="user-video-wrapper d-flex overflow-auto">
-              <div class="video-box m-2">
-                <user-video id="my-video" :stream-manager="publisher" @click="updateMainVideoStreamManager(publisher)"/>
+              <div class="video-box m-2 position-relative">
+                <user-video id="my-video" :stream-manager="publisher"/>
+                <div class="stream-btn-container" @click.self="updateMainVideoStreamManager(publisher)">
+                  <button class="btn btn-primary mx-2 stream-onoff-btn" @click="videoOnOff(publisher)">
+                    <font-awesome-icon :icon="['fas', publisher&&publisher.stream.videoActive ? 'video' : 'video-slash' ]" />
+                  </button>
+                  <button class="btn btn-primary mx-2 stream-onoff-btn" @click="audioOnOff(sub)">
+                    <font-awesome-icon :icon="['fas', publisher&&publisher.stream.audioActive ? 'microphone' : 'microphone-slash']" />
+                  </button>
+                </div>
               </div>
               <div v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub">
-                <div class="video-box m-2">
-                  <user-video :stream-manager="sub" @click="updateMainVideoStreamManager(sub)"/>
-                  <button class="btn btn-primary mx-2 position-relative" style="width: 2.4rem; top:-4rem; font-size:0.7rem" @click="toggleVideoSub(sub)">
-                    <font-awesome-icon :icon="['fas', sub.stream.videoActive ? 'video' : 'video-slash' ]" />
-                  </button>
-                  <button
-                    class="btn btn-primary mx-2 position-relative" style="width: 2.4rem; top:-4rem; font-size:0.7rem" @click="toggleAudioSub(sub)"
-                    v-if="JSON.parse(sub.stream.connection.data).clientData !== 'Screen Sharing'"
-                  >
-                    <font-awesome-icon :icon="['fas', sub.stream.audioActive ? 'microphone' : 'microphone-slash']" />
-                  </button>
+                <div class="video-box m-2 position-relative">
+                  <user-video :stream-manager="sub"/>
+                  <div v-if="sub" class="stream-btn-container" @click.self="updateMainVideoStreamManager(sub)">
+                    <button
+                      class="btn btn-primary mx-2 stream-onoff-btn" @click="toggleVideoSub(sub)"
+                      v-if="JSON.parse(sub.stream.connection.data).clientData !== 'Screen Sharing'"
+                    >
+                      <font-awesome-icon :icon="['fas', sub.stream.videoActive ? 'video' : 'video-slash' ]" />
+                    </button>
+                    <button
+                      class="btn btn-primary mx-2 stream-onoff-btn" @click="toggleAudioSub(sub)"
+                      v-if="JSON.parse(sub.stream.connection.data).clientData !== 'Screen Sharing'"
+                    >
+                      <font-awesome-icon :icon="['fas', sub.stream.audioActive ? 'microphone' : 'microphone-slash']" />
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -68,51 +81,18 @@
       <!-- main container end -->
       <!-- buttons -->
       <div id="btngroup">
-        <button
-          v-if="vOnOff"
-          icon="fas fa-video"
-          @click="videoOnOff()"
-        >비디오 on</button>
-        <button
-          v-else
-          icon="fas fa-video-slash"
-          @click="videoOnOff()"
-        >비디오 off</button>
-        <button
-          v-if="aOnOff"
-          icon="fas fa-microphone"
-          @click="audioOnOff()"
-        >오디오 on</button>
-        <button
-          v-else
-          icon="fas fa-microphone-slash"
-          @click="audioOnOff()"
-        >오디오 off</button>
-        <!-- <button
-          icon="fas fa-desktop"
-          @click="toggleScreanshare()"
-        >화면 공유 on</button> -->
-        <button
-          icon="fas fa-desktop"
-          @click="startScreenSharing()"
-        >
+        <button @click="startScreenSharing()">
           <font-awesome-icon :icon="['fas', 'desktop']"></font-awesome-icon>
           화면 공유 on
         </button>
-        <button
-          @click="stopScreenSharing()"
-        >
-          <font-awesome-icon :icon="['fas', 'desktop-slash']"></font-awesome-icon>
+        <button @click="stopScreenSharing()">
+          <font-awesome-icon :icon="['fas', 'desktop']"></font-awesome-icon>
           화면 공유 off
         </button>
-        <!-- <button
-          icon="fas fa-desktop"
-          @click="startScreenSharing()"
-        >화면 공유 on</button> -->
-        <button
-          icon="fas fa-sign-out-alt"
-          @click="leaveSession()"
-        >세션 나가기</button>
+        <button @click="leaveSession()">
+          <font-awesome-icon :icon="['fas', 'sign-out-alt']"></font-awesome-icon>
+          세션 나가기
+        </button>
       </div>
       <!-- 화면 모드 -->
       <KanbanBoard v-show="isKanbanBoard"/>
@@ -220,9 +200,8 @@ export default {
 			mainStreamManager: undefined,
 			publisher: undefined,
 			subscribers: [],
-      vOnOff: true,
-      aOnOff: true,
-      size: true,
+      videoOn: true,
+      audioOn: true,
       connectionUser: false,
       mainOnOff: false,
       myUserId: "",
@@ -335,12 +314,12 @@ export default {
       this.connectionUser = !this.connectionUser;
     },
     audioOnOff() {
-      this.publisher.publishAudio(!this.aOnOff);
-      this.aOnOff = !this.aOnOff;
+      this.publisher.publishAudio(!this.audioOn);
+      this.audioOn = !this.audioOn;
     },
     videoOnOff() {
-      this.publisher.publishVideo(!this.vOnOff);
-      this.vOnOff = !this.vOnOff;
+      this.publisher.publishVideo(!this.videoOn);
+      this.videoOn = !this.videoOn;
     },
 
     leaveSession() {
@@ -533,6 +512,27 @@ export default {
 
   background-color: #7285A6;
 }
+.stream-onoff-btn {
+  width: 2.4rem;
+  font-size:0.7rem;
+  margin-top: 160px;
+}
+.stream-btn-container {
+  position: absolute;
+  width: 100%;
+  height: 200px;
+  top: 0;
+  visibility: collapse;
+  border-radius: 1rem;
+}
+.video-box:hover .stream-btn-container {
+  visibility: visible;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+.stream-btn-container:hover{
+  cursor: pointer;
+}
+
 /* .video-box {
   width: 300px;
   height: 200px;
