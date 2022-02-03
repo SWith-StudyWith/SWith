@@ -325,6 +325,8 @@ export default {
     },
 
 		leaveSession() {
+      this.leaveSessionForScreenSharing();
+			this.isScreenShared=false;
 			// --- Leave the session by calling 'disconnect' method over the Session object ---
 			if (this.session) this.session.disconnect();
 
@@ -487,7 +489,8 @@ export default {
 					buf+=1;
 				}
 			});
-			if (buf) {
+			// if (buf) {
+			if (buf==0) {
 				this.isScreenShared=true;
 			} else {
 				this.isScreenShared = false;
