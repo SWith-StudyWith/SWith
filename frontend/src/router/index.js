@@ -45,24 +45,24 @@ const routes = [
     meta: { authRequired: true },
   },
   {
-    path: '/studies/:studyId/:studyCode/update',
+    path: '/studies/:studyId/update',
     name: 'StudyUpdate',
     component: () => import(/* webpackChunkName: "about" */ '../views/studies/components/StudyUpdate.vue'),
     meta: { authRequired: true },
   },
   {
-    path: '/studies/:studyId/:studyCode',
+    path: '/studies/:studyId',
     name: 'StudyDetail',
     component: () => import(/* webpackChunkName: "studydetail", webpackPrefetch:true  */ '../views/studies/StudyDetail.vue'),
     meta: { authRequired: true },
   },
   {
-    path: '/studies/:studyId/:studyCode/page',
+    path: '/studies/:studyId/page',
     name: 'StudyPage',
     component: () => import(/* webpackChunkName: "about" */ '@/views/studies/StudyPage.vue'),
   },
   {
-    path: '/studies/:studyId/:studyCode/room',
+    path: '/studies/:studyId/room',
     name: 'Studies',
     component: () => import(/* webpackChunkName: "about" */ '@/views/studies/Studies.vue'),
     meta: { authRequired: true },

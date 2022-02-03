@@ -20,6 +20,9 @@ const actions = {
         console.log(res.data)
         if (res.data.code === 200) {
           commit('SET_STUDY_INFO', res.data.data)
+        } else if (res.data.code === 401) {
+          alert('접근 권한이 없습니다.')
+          history.back()
         }
       },
       (err) => {

@@ -44,6 +44,7 @@ export default {
     const route = useRoute();
     const store = useStore()
     store.dispatch('GET_STUDY_INFO', route.params.studyId)
+
     const state = reactive({
       studyInfo: computed(() => {
         return store.state.study.studyInfo
