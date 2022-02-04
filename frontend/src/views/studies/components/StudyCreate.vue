@@ -94,8 +94,9 @@ export default {
       state.value.studyImage = file;
     };
     const onClickDefaultImg = (e) => {
-      console.log(e.target.value)
-      state.value.studyImgUrl = '';
+      state.value.studyImgURL = '';
+      state.value.studyImage = '';
+      // state.value.updated = true;
     };
     const onClickCreateStudy = (e) => {
       e.preventDefault();
