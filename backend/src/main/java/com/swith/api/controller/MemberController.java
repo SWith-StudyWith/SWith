@@ -102,7 +102,7 @@ public class MemberController {
         }
         // 회원정보 조회 성공
         memberInfo = new BaseDataResponse<>(true, 200, "회원정보 조회 성공",
-                new MemberInfoRes(member.getEmail(), member.getNickname(), member.getGoal(), member.getImgUrl()));
+                new MemberInfoRes(member.getMemberId(), member.getEmail(), member.getNickname(), member.getGoal(), member.getImgUrl()));
         return ResponseEntity.status(200).body(memberInfo);
     }
 
@@ -124,7 +124,7 @@ public class MemberController {
             member = memberService.updateMember(member, memberInfoReq, multipartFile);
         } catch (IOException e) {
             memberInfo = new BaseDataResponse<>(false, 408, "파일 업로드 실패",
-                    new MemberInfoRes(member.getEmail(), member.getNickname(), member.getGoal(), member.getImgUrl()));
+                    new MemberInfoRes(member.getMemberId(), member.getEmail(), member.getNickname(), member.getGoal(), member.getImgUrl()));
         }
         File tempFile = new File("temp");
         if (tempFile.exists() && !tempFile.delete()) log.debug("updateMember - tempFile.delete() failed");
@@ -138,7 +138,7 @@ public class MemberController {
         if (memberInfo != null) return ResponseEntity.status(200).body(memberInfo);
         // 회원정보 수정 성공
         memberInfo = new BaseDataResponse<>(true, 200, "회원정보 수정 성공",
-                new MemberInfoRes(member.getEmail(), member.getNickname(), member.getGoal(), member.getImgUrl()));
+                new MemberInfoRes(member.getMemberId(), member.getEmail(), member.getNickname(), member.getGoal(), member.getImgUrl()));
         return ResponseEntity.status(200).body(memberInfo);
     }
 
