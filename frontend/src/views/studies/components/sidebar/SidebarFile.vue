@@ -2,10 +2,11 @@
   <div>
     <h1>DropZone</h1>
     <DropZone @drop.prevent="drop" @change="selectedFile" />
-    <div v-for="dropzoneFile in dropzoneFiles" v-bind:key="dropzoneFile.id">
+    <div v-for="(dropzoneFile, index) in dropzoneFiles" v-bind:key="dropzoneFile.id">
       <span class="file-info">File: {{dropzoneFile.name}}</span>
+      <button @click="deleteFile(index)">삭제</button>
     </div>
-
+    <button @click="uploadFile">전송</button>
   </div>
 </template>
 
@@ -19,18 +20,32 @@ export default {
     DropZone,
   },
   setup() {
-    let dropzoneFiles = ref("");
+    let dropzoneFiles = ref([]);
 
     const drop = (e) => {
-      dropzoneFiles.value = e.dataTransfer.files;
+      // dropzoneFiles.value = e.dataTransfer.files;
+      for (let i = 0; i < e.dataTransfer.files.length; i++) {
+        dropzoneFiles.value.push(e.dataTransfer.files[i]);
+      }
     };
 
     const selectedFile = () => {
-      dropzoneFiles.value = document.querySelector('.dropzoneFile').files;
-      console.log(dropzoneFiles.value);
+      // dropzoneFiles.value = document.querySelector('.dropzoneFile').files;
+      let files = document.querySelector('.dropzoneFile').files;
+      for (let i = 0; i < files.length; i++) {
+        dropzoneFiles.value.push(files[i]);
+      }
     }
 
-    return { dropzoneFiles, drop, selectedFile };
+    const deleteFile = (index) => {
+      dropzoneFiles.value.splice(index, 1);
+    }
+
+    const uploadFile = () => {
+
+    }
+
+    return { dropzoneFiles, drop, selectedFile, deleteFile, uploadFile };
   },
 }
 </script>
