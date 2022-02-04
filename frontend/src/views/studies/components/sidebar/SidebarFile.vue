@@ -2,7 +2,10 @@
   <div>
     <h1>DropZone</h1>
     <DropZone @drop.prevent="drop" @change="selectedFile" />
-    <span class="file-info">File: {{dropzoneFile.name}}</span>
+    <div v-for="dropzoneFile in dropzoneFiles" v-bind:key="dropzoneFile.id">
+      <span class="file-info">File: {{dropzoneFile.name}}</span>
+    </div>
+
   </div>
 </template>
 
@@ -16,17 +19,18 @@ export default {
     DropZone,
   },
   setup() {
-    let dropzoneFile = ref("");
+    let dropzoneFiles = ref("");
 
     const drop = (e) => {
-      dropzoneFile.value = e.dataTransfer.files[0]
+      dropzoneFiles.value = e.dataTransfer.files;
     };
 
     const selectedFile = () => {
-      dropzoneFile.value = document.querySelector('.dropzoneFile').files[0];
+      dropzoneFiles.value = document.querySelector('.dropzoneFile').files;
+      console.log(dropzoneFiles.value);
     }
 
-    return { dropzoneFile, drop, selectedFile };
+    return { dropzoneFiles, drop, selectedFile };
   },
 }
 </script>
