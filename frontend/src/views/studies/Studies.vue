@@ -267,6 +267,28 @@ export default {
 				this.isScreenShared = false;
 			})
 
+      // Speech Start Detection
+      this.session.on("publisherStartSpeaking", (event) => {
+        console.log(event);
+        console.log("User " + event.connection.data + " start speaking");
+        // this.$store.dispatch('startSpeaking')
+        // this.$store.dispatch(
+        //   "addSpeaker",
+        //   JSON.parse(event.connection.data).clientData
+        // );
+      });
+
+      // Speech Stop Detection
+      this.session.on("publisherStopSpeaking", (event) => {
+        console.log("User " + event.connection.connectionId + " stop speaking");
+        // this.$store.dispatch('stopSpeaking')
+        // this.$store.dispatch(
+        //   "removeSpeaker",
+        //   JSON.parse(event.connection.data).clientData
+        // );
+      });
+
+
 			// --- Connect to the session with a valid user token ---
 
 			// 'getToken' method is simulating what your server-side should do.
