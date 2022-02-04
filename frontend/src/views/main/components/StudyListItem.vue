@@ -1,7 +1,7 @@
 <template>
   <router-link :to="{ name: 'StudyDetail', params: { studyId: study.studyId, studyCode: study.studyCode }}">
     <div class="card">
-      <img :src="study.studyImage" class="card-img-top" alt="study image">
+      <img :src="study.studyImgURL" class="card-img-top" alt="study image">
       <div class="card-body">
         <h5 class="card-title">{{ study.studyName }}</h5>
         <p class="card-text">{{ study.studyGoal }}</p>
