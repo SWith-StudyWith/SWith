@@ -12,7 +12,7 @@
           <font-awesome-icon class="m-2" :class="{ 'font-active': screenMode === 0 }" @click="onClickKanbanBoardIcon" :icon="['fas', 'chalkboard']" />
           <font-awesome-icon class="m-2" :class="{ 'font-active': isScreenShared }" @click="onClickScreenShareIcon" :icon="['fas', 'tv']" />
           <font-awesome-icon class="m-2" :class="{ 'font-active': screenMode === 2 }" @click="onClickWhiteBoardIcon" :icon="['fas', 'pen']" />
-          <font-awesome-icon class="m-2" :class="{ 'font-active': isFile }" @click="toggleSidebar" :icon="['fas', 'file-upload']" />
+          <font-awesome-icon class="m-2" :class="{ 'font-active': state.isFile }" @click="onClickFileIcon()" :icon="['fas', 'file-upload']" />
           <font-awesome-icon class="m-2" :class="{ 'font-active': state.isChat }" @click="onClickChatIcon" :icon="['fas', 'comment']" />
           <font-awesome-icon class="m-2" :class="{ 'font-active': state.isMemberList }" @click="onClickMemberIcon" :icon="['fas', 'user-friends']"/>
           <!-- toggle button -->
@@ -30,7 +30,7 @@
       </div>
       <div class="col-10 sidebar-main">
         <!-- <div class="sidebar-main"> -->
-          <SidebarFile v-if="this.isFile"/>
+          <SidebarFile v-if="state.isFile"/>
           <SidebarChat v-if="state.isChat"/>
           <SidebarMemberView :members="state.memberList" v-if="state.isMemberList"/>
         <!-- </div> -->
@@ -76,6 +76,7 @@ export default {
       }),
       isChat : false,
       isMemberList : false,
+      isFile : false,
     })
     const onClickKanbanBoardIcon = () => {
       context.emit('show-screenmode', 0)
@@ -90,6 +91,9 @@ export default {
     const onClickWhiteBoardIcon = () => {
       context.emit('show-screenmode', 2)
     };
+    const onClickFileIcon = () => {
+      state.isFile = !state.isFile;
+    }
     const onClickChatIcon = () => {
       state.isChat = !state.isChat;
     };
@@ -100,7 +104,7 @@ export default {
     return {
       state, collapsed, toggleSidebar, sidebarWidth,
       onClickScreenShareIcon, onClickWhiteBoardIcon, onClickKanbanBoardIcon,
-      onClickChatIcon, onClickMemberIcon
+      onClickChatIcon, onClickMemberIcon, onClickFileIcon
     };
   },
 }
