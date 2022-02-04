@@ -42,8 +42,8 @@ $success: #F5CEC7;
   padding: 0.3rem;
 }
 .app {
-min-height: 100%;
-position: relative;
-padding-bottom: 170px; /* footer height */
+  min-height: 100%;
+  position: relative;
+  // padding-bottom: 170px; /* footer height */
 }
 </style>

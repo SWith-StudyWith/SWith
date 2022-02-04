@@ -169,12 +169,6 @@ label {
   flex-wrap: wrap;
   margin-bottom: 20px;
 }
-.footer {
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    left: 0;
-}
 
 /*  */
 button{
