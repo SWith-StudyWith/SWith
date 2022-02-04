@@ -16,15 +16,6 @@
                 </div>
               </div>
               <div class="mb-3">
-                <label for="studyCode" class="form-label">스터디 코드</label>
-                <p class="base-url">https://swith.com/</p>
-                <input type="text" class="form-control" id="studyCode" v-model="state.studyCode" required placeholder="URL을 입력하세요">
-                <div :style="{ visibility: (state.isValidStudyCode || !state.wasInputed.studyCode )? 'hidden' : 'visible' }"
-                  class="invalid-feedback">
-                  유효하지 않은 스터디 코드입니다.
-                </div>
-              </div>
-              <div class="mb-3">
                 <label for="goal" class="form-label">스터디 목표</label>
                 <textarea class="form-control form-goal" id="studyGoal" rows="3" v-model="state.studyGoal" placeholder="스터디 목표를 한 줄로 표현해 보세요!"></textarea>
               </div>
@@ -69,11 +60,10 @@ export default {
     const store = useStore();
     const router = useRouter();
     const state = ref({
-      // studyInfo: store.getters.getStudyInfo,
       studyName: '',
-      studyCode: '',
       studyGoal: '',
-      studyImgUrl: '',
+      studyImgUrl: '', // studyInfo 안에 포함
+      studyImage: '',
       studyImgSrc: computed(()=> {
         if (state.value.studyImgUrl) {
           return state.value.studyImgUrl
@@ -83,7 +73,6 @@ export default {
       }),
       wasInputed: {
         studyName: false,
-        studyCode: false
       },
       isValidStudyName: computed(() => {
         if (state.value.studyName !== '') {
@@ -94,45 +83,40 @@ export default {
         }
         return false;
       }),
-      isValidStudyCode: computed(() => {
-        if (state.value.studyCode !== '') {
-          state.value.wasInputed.studyCode = true;
-        }
-        if (state.value.studyCode && validateStudyCode(state.value.studyCode)) {
-          return true;
-        }
-        return false;
-      })
     });
 
     const onClickUploadFile = (e) => {
       console.log(e)
       const file = e.target.files[0]
       state.value.studyImgUrl = URL.createObjectURL(file);
+      state.value.studyImage = file;
     };
 
     const onClickCreateStudy = (e) => {
       e.preventDefault();
-      if (state.value.studyName === '' || state.value.studyCode === '') {
+      if (state.value.studyName === '') {
         state.value.wasInputed.studyName = true;
-        state.value.wasInputed.studyCode = true;
         return;
       }
-      if (!state.value.isValidStudyName || state.value.isValidStudyCode) {
+      if (!state.value.isValidStudyName) {
         return;
       }
+      const createStudyData = new FormData();
+      createStudyData.append("studyName", state.value.studyName)
+      createStudyData.append("studyGoal", state.value.studyGoal)
+      createStudyData.append("studyImage", state.value.studyImage)
+
       createStudy(
-        {
-          studyName: state.value.studyName,
-          studyCode: state.value.studyCode,
-          studyGoal: state.value.studyGoal,
-          studyImgUrl: state.value.studyImgUrl
-        },
+        createStudyData,
         (res) => {
           console.log(res.data)
           switch (res.data.code) {
-            case 200: alert('스터디룸 생성 완료!🔨')
-            break;
+            case 200:
+              alert('스터디룸 생성 완료!🔨')
+              break;
+            case 400:
+              alert('스터디룸 생성 실패😥')
+              break;
           }
         },
         (err) => {
@@ -150,15 +134,6 @@ export default {
       return false;
     };
 
-    const validateStudyCode = function (studyCode) {
-      const koreanChar = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
-      const specialChar = /[`~!@#$%^&*\\\'\";:\/?]/;
-      if (studyCode.length >= 2 && studyCode.length <= 20) {
-        if (!koreanChar.test(studyCode) && !specialChar.test(studyCode)) {
-          return true;
-        }
-      } return false;
-    };
     return {
       state, onClickUploadFile, onClickCreateStudy
     }
