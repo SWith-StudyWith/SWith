@@ -1,4 +1,5 @@
 import { getStudyInfo, getStudyList, getMemberList, updateStudy } from "../../api/study";
+import router from '@/router';
 
 const state = () => ({
   studyInfo: {},
