@@ -170,7 +170,7 @@ public class StudyServiceImpl implements StudyService {
     @Override
     public void deleteStudy(Long studyId) {
         Study study = studyRepository.findById(studyId).orElse(null);
-        if (study != null) {
+        if (study != null && study.getImgUrl() != null) {
             try {
                 fileService.deleteFile(FirebaseUtil.convertUrlToFilePath(study.getImgUrl()));
             } catch (UnsupportedEncodingException e) {
