@@ -7,6 +7,14 @@ const routes = [
     name: 'Landing',
     component: () => import(/* webpackChunkName: "landing" */ '../views/Landing.vue'),
     meta: { authRequired: false },
+
+    // 로그인 상태로 랜딩 페이지 접근 못하게
+    beforeEnter: function (to, from, next) {
+      const token = sessionStorage.getItem('accessToken');
+      if (token) {
+        next('/Main');
+      } else next();
+    }
   },
   {
     path: '/main',
@@ -19,12 +27,24 @@ const routes = [
     name: 'Login',
     component: () => import(/* webpackChunkName: "login" */ '../views/members/Login.vue'),
     meta: { authRequired: false },
+    beforeEnter: function (to, from, next) {
+      const token = sessionStorage.getItem('accessToken');
+      if (token) {
+        next('/Main');
+      } else next();
+    }
   },
   {
     path: '/members/signup',
     name: 'SignUp',
     component: () => import(/* webpackChunkName: "signup" */ '../views/members/SignUp.vue'),
     meta: { authRequired: false },
+    beforeEnter: function (to, from, next) {
+      const token = sessionStorage.getItem('accessToken');
+      if (token) {
+        next('/Main');
+      } else next();
+    }
   },
   {
     path: '/members/mypage',
@@ -37,6 +57,12 @@ const routes = [
     name: 'FindPassword',
     component: () => import(/* webpackChunkName: "findpassword" */ '../views/members/components/FindPassword.vue'),
     meta: { authRequired: false },
+    beforeEnter: function (to, from, next) {
+      const token = sessionStorage.getItem('accessToken');
+      if (token) {
+        next('/Main');
+      } else next();
+    }
   },
   {
     path: '/studies/create',
