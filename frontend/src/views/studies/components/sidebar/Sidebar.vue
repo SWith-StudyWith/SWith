@@ -22,7 +22,7 @@
       <font-awesome-icon class="m-2" @click="onClickKanbanBoardIcon" :icon="['fas', 'chalkboard']" />
       <font-awesome-icon class="m-2" @click="onClickScreenShareIcon" :icon="['fas', 'tv']" />
       <font-awesome-icon class="m-2" @click="onClickWhiteBoardIcon" :icon="['fas', 'pen']" />
-      <font-awesome-icon class="m-2" @click="onClickChatIcon" :icon="['fas', 'comment', 'comments-dots']" />
+      <font-awesome-icon class="m-2" @click="onClickChatIcon" :icon="['fas', this.chatIcon]" />
       <font-awesome-icon class="m-2" @click="onClickMemberIcon" :icon="['fas', 'user-friends']"
       :style="{ color: state.isMemberList ? '#F5CEC7': 'rgba(255, 255, 255, 0.7)' }"/>
 
@@ -136,10 +136,7 @@ export default {
       else return 'comment';
     });
     const memberIcon = computed(() => {
-      if(state.isMemberList){
-        return 'user-friends';
-      }
-      else return 'user-friends';
+      return 'user-friends';
     });
 
 
