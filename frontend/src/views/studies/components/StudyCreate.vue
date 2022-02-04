@@ -6,7 +6,7 @@
       <div class="row d-flex justify-content-center">
         <div class="col-4">
           <section>
-            <form class="studyInfo-wrapper">
+            <form class="studyInfo-wrapper" enctype="multipart/form-data">
               <div>
                 <label for="studyName" class="form-label">스터디 이름</label>
                 <input type="text" class="form-control" id="studyName" v-model="state.studyName" required placeholder="스터디 이름">
@@ -22,7 +22,7 @@
               <div class="d-flex justify-content-start mb-4">
                 <div class="dropend">
                   <div class="image-wrapper" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" >
-                    <img class="study-img" :src="state.studyImgSrc" alt=""  >
+                    <img class="study-img" :src="state.studyImgSrc">
                   </div>
                   <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                     <li>
@@ -64,11 +64,11 @@ export default {
     const state = ref({
       studyName: '',
       studyGoal: '',
-      studyImgUrl: '', // studyInfo 안에 포함
+      studyImgURL: '', // studyInfo 안에 포함
       studyImage: '',
       studyImgSrc: computed(()=> {
-        if (state.value.studyImgUrl) {
-          return state.value.studyImgUrl
+        if (state.value.studyImgURL) {
+          return state.value.studyImgURL
         } else {
           return require(`@/assets/img/study_room/studyroom.png`)
         }
@@ -90,12 +90,12 @@ export default {
     const onClickUploadFile = (e) => {
       console.log(e)
       const file = e.target.files[0]
-      state.value.studyImgUrl = URL.createObjectURL(file);
+      state.value.studyImgURL = URL.createObjectURL(file);
       state.value.studyImage = file;
     };
     const onClickDefaultImg = (e) => {
-      console.log(e.target.value)
-      state.value.studyImgUrl = '';
+      state.value.studyImgURL = '';
+      state.value.studyImage = '';
       // state.value.updated = true;
     };
     const onClickCreateStudy = (e) => {

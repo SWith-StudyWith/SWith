@@ -1,7 +1,7 @@
 <template>
   <router-link :to="{ name: 'StudyDetail', params: { studyId: study.studyId, studyCode: study.studyCode }}">
     <div class="card">
-      <img :src="study.studyImage" class="card-img-top" alt="study image">
+      <img :src="state.studyImgSrc" class="card-img-top" alt="study image">
       <div class="card-body">
         <h5 class="card-title">{{ study.studyName }}</h5>
         <p class="card-text">{{ study.studyGoal }}</p>
@@ -11,8 +11,21 @@
 </template>
 
 <script>
+import { reactive, computed } from 'vue';
 export default {
   props: ['study'],
+  setup(props) {
+    const state = reactive({
+      studyImgSrc: computed(()=> {
+        if ( props.study.studyImgURL) {
+          return props.study.studyImgURL
+        } else {
+          return require(`@/assets/img/study_room/studyroom.png`)
+        }
+      }),
+    })
+    return { state }
+  }
 };
 </script>
 
