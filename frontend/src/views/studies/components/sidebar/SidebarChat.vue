@@ -197,7 +197,7 @@ input{
   /* overflow: auto; */
   padding: 1rem;
 
-  overflow: scroll;
+  overflow-y: scroll;
   scroll-behavior: smooth;
 }
 .chat {
@@ -207,7 +207,17 @@ input{
   /* width: fit-content; */
 }
 .chat-body::-webkit-scrollbar {
-  display: none;
+  /* display: none; */
+}
+::-webkit-scrollbar{
+    width: 12px;
+}
+::-webkit-scrollbar-thumb{
+    background-color: #999;
+    border-radius: 10px;
+}
+::-webkit-scrollbar-track{
+    background-color: #1E304F;
 }
 .chat-other-message{
   display: flex;
@@ -240,7 +250,7 @@ input{
 }
 .other-content{
   margin: 0.4rem 1rem 0 0;
-  border-radius: 0px 10px 10px 10px;
+  border-radius: 0px 20px 20px 20px;
   background-color: #f3f3f3;
   max-width: 180px;
   color: #414141;
@@ -252,6 +262,7 @@ input{
   font-size: 10px;
   color: #9c9c9c;
   margin-left: auto;
+  margin-right: 16px;
 }
 .chat-my-message{
   display: flex;
@@ -263,12 +274,14 @@ input{
 }
 .my-content{
   margin: 0.4rem 0 0 1rem;
-  border-radius: 10px 10px 0px 10px;
+  border-radius: 20px 20px 0px 20px;
   max-width: 180px;
   background-color: #acb5e4;
   color: #ffffff;
   padding: 0.8rem;
   font-size: 14px;
+  max-width: 170px;
+  margin-left: 3px;;
 }
 .chat-my-message-time{
   margin: 0;
