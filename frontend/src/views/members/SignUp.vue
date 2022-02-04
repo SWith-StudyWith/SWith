@@ -442,7 +442,7 @@ input{
   margin-bottom: 20px;
 }
 a {
-  font-weight: bold;
+  font-weight: 500;
   text-decoration: none;
 }
 </style>
