@@ -4,13 +4,13 @@
       <p class="study-list-header col-6">스터디 목록</p>
       <div class="col-6">
         <div class="row navbar">
-          <div class="col col-8">
+          <div class="col col-6">
             <input type="text" class="form-control" v-model="studyCode" placeholder="스터디 URL">
           </div>
-          <div class="col col-2">
+          <div class="col col-3">
             <button class="btn btn-primary" @click="onClickJoin">참여하기</button>
           </div>
-          <div class="col col-2">
+          <div class="col col-3">
             <router-link :to="{ name: 'StudyCreate'}">
               <button class="btn btn-success">만들기</button>
             </router-link>
@@ -24,13 +24,6 @@
       </div>
       <div v-if="studies.length == 0" class="none">
         <p>아직 참여중인 스터디가 없습니다🙃</p>
-      </div>
-      <div v-else>
-        <div class="d-flex justify-content-center">
-          <div class="spinner-border" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -101,7 +94,7 @@ export default {
   margin-top:10px;
 }
 .btn{
-  width: 90px;
+  width: 94%;
   height: 42px;
   color: #ffffff;
   font-size: 14px;
