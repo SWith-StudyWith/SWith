@@ -3,7 +3,7 @@
     <button v-if="!editPermit" class="btn btn-primary" @click="onClickEditBtn">칸반보드 수정하기</button>
     <button v-else class="btn btn-primary" @click="onClickSaveBtn">수정내용 저장하기</button>
     <div class="h-100">
-      <div class="p-3 d-flex justify-content-center h-90">
+      <div class="p-3 d-flex justify-content-center h-100">
         <div
           v-for="column in kanbanBoard"
           :key="column.taskId"

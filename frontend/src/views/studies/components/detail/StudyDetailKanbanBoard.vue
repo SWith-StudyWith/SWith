@@ -1,24 +1,24 @@
 <template>
-  <div class="h-100">
+  <div style="height: 28rem;">
     <h2 class="text-start px-4">StudyDetailKanbanBoard</h2>
-    <div class="p-3 d-flex justify-content-center h-90">
+    <div class="p-3 d-flex justify-content-center h-100">
       <div
         v-for="tasks in state.kanbanBoard"
         :key="tasks.taskId"
-        class="mx-2 w-100 bg-light-grey p-2 rounded-3 "
+        class="mx-2 w-100 bg-light-grey p-2 rounded-3"
       >
-        <p class="text-start mb-0">
+        <p class="text-start mb-2">
           <span class="taskname px-2 py-1"
             :class="{ 'bg-grey' : tasks.taskId === 1, 'bg-pink' : tasks.taskId === 2, 'bg-purple' : tasks.taskId === 3 }">
             {{ tasks.taskName }}
           </span>
           </p>
-        <div class="overflow-auto" style="max-height: 20rem">
+        <div class="overflow-auto" style="max-height: 23rem">
           <StudyDetailKanbanBoardCard
             v-for="(task) in tasks.kanban"
             :key="task.kanbanId"
             :task="task"
-            class="my-2 align-items-center"
+            class="mb-2 align-items-center"
             @onClickCard="selectedTask.value=$event"
           />
         </div>
