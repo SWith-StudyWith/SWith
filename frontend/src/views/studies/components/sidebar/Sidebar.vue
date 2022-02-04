@@ -40,9 +40,12 @@
         <!-- </div> -->
       </div>
 
-      <div class="col-12 sidebar-main">
+      <div class="col-2">
+        <!-- 사이드바 컨트롤 버튼들 자리차지 ? 가 안되서 만들어준 col...입니다 -->
+      </div>
+      <div class="col-10 sidebar-main">
         <!-- <div class="sidebar-main"> -->
-          <SidebarFile/>
+          <SidebarFile v-if="this.isFile"/>
           <SidebarChat v-if="state.isChat"/>
           <SidebarMemberView :members="state.memberList" v-if="state.isMemberList"/>
         <!-- </div> -->
@@ -162,7 +165,7 @@ export default {
 
 <style scoped>
 .sidebar {
-  color: rgb(255, 211, 91);
+  color: white;
   background-color: #1E304F;
   box-shadow:  2px 1px 10px 0 rgb(0 0 0 / 0.7);
 
@@ -227,6 +230,11 @@ export default {
 .rotate-180 {
   transform: rotate(180deg);
   transition: 0.2s linear;
+}
+
+.sidebar-main{
+  /* background-color: #9EABCB; */
+  height: 100%;
 }
 .fa-desktop {
   color: #F5CEC7;
