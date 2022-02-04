@@ -1,5 +1,5 @@
 <template>
-  <div class="not-found">
+  <div class="not-found" style="padding-bottom: 0px">
     <!-- 404 Not Found -->
     <div class="container">
       <div class="row">
@@ -7,9 +7,9 @@
           <img class="d-inline-block" src="@/assets/img/error_page/404.png">
         </div>
         <div class="col-12 ">
-          <!-- <router-link :to="{ name: 'Main' }"> -->
+          <router-link :to="{ name: 'Main' }">
             <button type="button" class="btn" style="color:white; width:150px">Go Back Main</button>
-          <!-- </router-link> -->
+          </router-link>
         </div>
       </div>
     </div>
@@ -21,7 +21,6 @@ export default {
 }
 </script>
 <style scoped>
-
 .not-found {
   font-size: 10rem;
   font-weight: bold;
@@ -34,5 +33,8 @@ img{
 button{
   background-color: #3F4966;
   box-shadow: 0px 4px blur #000000;
+}
+.app{
+  padding-bottom: 0px;
 }
 </style>
