@@ -7,7 +7,7 @@
         <div class="col-4">
           <section>
             <form class="studyInfo-wrapper">
-              <div class="mb-3">
+              <div>
                 <label for="studyName" class="form-label">스터디 이름</label>
                 <input type="text" class="form-control" id="studyName" v-model="state.studyName" required placeholder="스터디 이름">
                 <div :style="{ visibility: (state.isValidStudyName || !state.wasInputed.studyName )? 'hidden' : 'visible' }"
@@ -19,23 +19,25 @@
                 <label for="goal" class="form-label">스터디 목표</label>
                 <textarea class="form-control form-goal" id="studyGoal" rows="3" v-model="state.studyGoal" placeholder="스터디 목표를 한 줄로 표현해 보세요!"></textarea>
               </div>
-              <div class="d-flex justify-content-start">
-                <div class="image-wrapper">
-                  <label for="changeStudyImg" class="img-form-label">대표 이미지
-                    <img :src="state.studyImgSrc" :fit="fit" class="study-img">
-                  </label>
-                  <input
-                    id="changeStudyImg"
-                    class="form-control"
-                    ref="file"
-                    @change="onClickUploadFile"
-                    type="file"
-                    accept="image/*"
-                    style="display: none;"
-                  />
+              <div class="d-flex justify-content-start mb-4">
+                <div class="dropend">
+                  <div class="image-wrapper" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" >
+                    <img class="study-img" :src="state.studyImgSrc" alt=""  >
+                  </div>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <li>
+                      <label for="changeStudyImg" class="dropdown-item img-form-label">스터디 이미지 선택</label>
+                    </li>
+                    <li>
+                      <span @click="onClickDefaultImg" class="dropdown-item img-revert-default">기본 이미지로 변경</span>
+                    </li>
+                  </ul>
+                </div>
+                <div class="form-group">
+                  <input @change="onClickUploadFile" id="changeStudyImg" type="file" ref="file" class="form-control" accept="image/*" style="display: none;" />
                 </div>
               </div>
-              <button @click="onClickCreateStudy" class="btn btn-primary col-12 btn-create">스터디 만들기</button>
+              <button @click="onClickCreateStudy" class="btn btn-primary col-12">스터디 만들기</button>
             </form>
           </section>
         </div>
@@ -91,7 +93,11 @@ export default {
       state.value.studyImgUrl = URL.createObjectURL(file);
       state.value.studyImage = file;
     };
-
+    const onClickDefaultImg = (e) => {
+      console.log(e.target.value)
+      state.value.studyImgUrl = '';
+      // state.value.updated = true;
+    };
     const onClickCreateStudy = (e) => {
       e.preventDefault();
       if (state.value.studyName === '') {
@@ -135,7 +141,7 @@ export default {
     };
 
     return {
-      state, onClickUploadFile, onClickCreateStudy
+      state, onClickUploadFile, onClickDefaultImg, onClickCreateStudy
     }
   },
 
@@ -161,9 +167,6 @@ p{
 .btn-change-pw {
   text-align: center;
   font-size: 0.7rem;
-}
-.btn-create{
-  margin: 10px 0px 0px 0px;
 }
 .uploadImage{
   margin-bottom: 20px;
@@ -194,13 +197,13 @@ p{
   display: block;
   font-size: 0.75rem;
   margin-top: 0;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0;
 }
 .valid-feedback {
   display: block;
   font-size: 0.75rem;
   margin-top: 0;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.2rem;
   color: green;
 }
 /* basic setting */
@@ -236,9 +239,7 @@ textarea{
 .img-form-label{
   margin-bottom: 3px;
 }
-.image-wrapper .study-img{
-  margin-top: 3px;
-  margin-bottom: 6px;
+.image-wrapper{
   width: 200px;
   height: 150px;
   border-radius: 4%;
@@ -251,5 +252,12 @@ textarea{
   width: 100%;
   height: 100%;
   object-fit: cover;
+  background: #BDBDBD;
+}
+.dropdown-menu{
+  text-align: center;
+}
+.dropdown-item{
+  cursor: pointer;
 }
 </style>
