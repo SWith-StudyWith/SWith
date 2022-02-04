@@ -8,7 +8,7 @@
     <button @click="onClickScreenShare">화면공유열어말어</button>
     <button @click="onClickWhiteBoard">화이트보드열어말어</button> -->
     <KanbanBoard v-show="isKanbanBoard"/>
-    <ScreenShare v-show="isScreenShare"/>
+    <!-- <ScreenShare v-show="isScreenShare"/> -->
     <WhiteBoard v-show="isWhiteBoard"/>
     <!-- <KanbanBoard v-show="screen==1"/>
     <ScreenShare v-show="screen==2"/>
@@ -21,7 +21,7 @@
 import Sidebar from '@/views/studies/components/sidebar/Sidebar.vue';
 import { sidebarWidth } from '@/views/studies/components/sidebar/state.js';
 import KanbanBoard from '@/views/studies/components/screen/KanbanBoard.vue';
-import ScreenShare from '@/views/studies/components/screen/ScreenShare.vue';
+// import ScreenShare from '@/views/studies/components/screen/ScreenShare.vue';
 import WhiteBoard from '@/views/studies/components/screen/WhiteBoard.vue';
 import { ref } from 'vue';
 
@@ -30,7 +30,7 @@ export default {
   components: {
     Sidebar,
     KanbanBoard,
-    ScreenShare,
+    // ScreenShare,
     WhiteBoard,
   },
   setup() {

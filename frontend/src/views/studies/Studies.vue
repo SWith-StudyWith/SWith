@@ -1,6 +1,12 @@
 <template>
   <div class="study-base-page">
-    <Sidebar @show-screenmode="showScreenMode"/>
+    <Sidebar
+      @show-screenmode="showScreenMode($event)"
+      @startScreenSharing="startScreenSharing"
+      @stopScreenSharing="stopScreenSharing"
+      :screenMode="screenMode"
+      :isScreenShared="isScreenShared"
+    />
     <div :style="{ 'margin-left': sidebarWidth }">
       <!-- main container start -->
       <div id="main-container" class="container">
@@ -31,14 +37,14 @@
             <input class="btn btn-large btn-danger" type="button" id="buttonLeaveSession" @click="leaveSession" value="Leave session">
           </div>
           <!-- 더블 클릭해서 크게 보는 화면 -->
-          <div id="main-video">
+          <!-- <div id="main-video">
             <user-video
               v-if="mainOnOff"
               :stream-manager="mainStreamManager"
               :mainStream="true"
               v-on:dblclick="deleteMainVideoStreamManager"
             />
-          </div>
+          </div> -->
           <!-- video-container start -->
           <!-- 화면 공유할 때의 비디오 컨테이너 -->
           <div id="video-container">
@@ -81,23 +87,26 @@
       <!-- main container end -->
       <!-- buttons -->
       <div id="btngroup">
-        <button @click="startScreenSharing()">
+        <!-- <button @click="startScreenSharing()">
           <font-awesome-icon :icon="['fas', 'desktop']"></font-awesome-icon>
           화면 공유 on
         </button>
         <button @click="stopScreenSharing()">
           <font-awesome-icon :icon="['fas', 'desktop']"></font-awesome-icon>
           화면 공유 off
-        </button>
+        </button> -->
         <button @click="leaveSession()">
           <font-awesome-icon :icon="['fas', 'sign-out-alt']"></font-awesome-icon>
           세션 나가기
         </button>
       </div>
       <!-- 화면 모드 -->
-      <KanbanBoard v-show="isKanbanBoard"/>
-      <ScreenShare v-show="isScreenShare"/>
-      <WhiteBoard v-show="isWhiteBoard"/>
+      <KanbanBoard v-if="screenMode === 0"/>
+      <MainScreen
+        v-show="screenMode === 1"
+        :streamManager="mainStreamManager"
+      />
+      <WhiteBoard v-show="screenMode === 2"/>
     </div>
     <!-- sidebar end -->
   </div>
@@ -106,9 +115,8 @@
 import Sidebar from '@/views/studies/components/sidebar/Sidebar.vue';
 import { sidebarWidth } from '@/views/studies/components/sidebar/state.js';
 import KanbanBoard from '@/views/studies/components/screen/KanbanBoard.vue';
-import ScreenShare from '@/views/studies/components/screen/ScreenShare.vue';
+import MainScreen from '@/views/studies/components/screen/MainScreen.vue';
 import WhiteBoard from '@/views/studies/components/screen/WhiteBoard.vue';
-import { ref } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
 import { OpenVidu } from "openvidu-browser";
@@ -125,7 +133,7 @@ export default {
   components: {
     Sidebar,
     KanbanBoard,
-    ScreenShare,
+    MainScreen,
     WhiteBoard,
     UserVideo,
   },
@@ -154,44 +162,10 @@ export default {
     const store = useStore();
     const route = useRoute();
     store.dispatch('GET_STUDY_INFO', route.params.studyId);
-    const isKanbanBoard = ref(false);
-    const isWhiteBoard = ref(false);
-    const isScreenShare = ref(false);
-    const screenMode = ref(1);
-    const onClickKanbanBoard = () => {
-      isKanbanBoard.value = !isKanbanBoard.value;
-      console.log(isKanbanBoard);
-    };
-    const onClickWhiteBoard = () => {
-      isWhiteBoard.value = !isWhiteBoard.value;
-      console.log(isWhiteBoard);
-    };
-    const onClickScreenShare = () => {
-      isScreenShare.value = !isScreenShare.value;
-      console.log(isScreenShare);
-    };
-    const onClickScreenMode = () => {
-      screenMode.value = screenMode.value*  (-1);
-    };
-    const showScreenMode = ( screen ) => {
-      // switch (screen)
-      if(screen==1){
-        console.log('1 칸반보드 true 보여조라~');
-        isKanbanBoard.value = !isKanbanBoard.value;
-      } else if(screen==2){
-        console.log('2 화면공유 true 보여조라~');
-        isScreenShare.value = !isScreenShare.value;
-      } else if( screen ==3) {
-        console.log('3 화이트보드 true니깐 보여주라~');
-        isWhiteBoard.value = !isWhiteBoard.value;
-      }
-    }
-    return { sidebarWidth,
-              onClickScreenMode, screenMode,
-              isWhiteBoard, isScreenShare, isKanbanBoard,
-              onClickWhiteBoard, onClickScreenShare, onClickKanbanBoard,
-              showScreenMode,
-    };
+    // const screenMode = ref(0);
+
+
+    return { sidebarWidth };
   },
   data () {
     return {
@@ -206,6 +180,8 @@ export default {
       mainOnOff: false,
       myUserId: "",
       tg: false,
+
+      screenMode: 0,
 
 			// 사용자 정보
 			// mySessionId: 'SessionA',
@@ -235,26 +211,38 @@ export default {
     }
   },
   methods : {
-      toggleVideoSub(sub) {
-        sub.subscribeToVideo(!sub.stream.videoActive)
-      },
-      toggleAudioSub(sub) {
-        sub.subscribeToAudio(!sub.stream.audioActive)
-      },
-      joinSession () {
-			// --- Get an OpenVidu object ---
-			this.OV = new OpenVidu();
+    showScreenMode ( mode ) {
+      // switch (screen)
+      console.log(mode)
+      if(mode === 0){
+        console.log('0 칸반보드 true 보여조라~');
+      } else if(mode === 1){
+        console.log('1 화면공유 true 보여조라~');
+      } else if(mode === 2) {
+        console.log('2 화이트보드 true니깐 보여주라~');
+      }
+      this.screenMode = mode;
+    },
+    toggleVideoSub(sub) {
+      sub.subscribeToVideo(!sub.stream.videoActive)
+    },
+    toggleAudioSub(sub) {
+      sub.subscribeToAudio(!sub.stream.audioActive)
+    },
+    joinSession () {
+      // --- Get an OpenVidu object ---
+      this.OV = new OpenVidu();
 
-			// --- Init a session ---
-			this.session = this.OV.initSession();
+      // --- Init a session ---
+      this.session = this.OV.initSession();
 
-			// --- Specify the actions when events take place in the session ---
+      // --- Specify the actions when events take place in the session ---
 
-			// On every new Stream received...
-			this.session.on('streamCreated', ({ stream }) => {
-				const subscriber = this.session.subscribe(stream);
-				this.subscribers.push(subscriber);
-			});
+      // On every new Stream received...
+      this.session.on('streamCreated', ({ stream }) => {
+        const subscriber = this.session.subscribe(stream);
+        this.subscribers.push(subscriber);
+      });
 
 			// On every Stream destroyed...
 			this.session.on('streamDestroyed', ({ stream }) => {
@@ -298,7 +286,6 @@ export default {
 							mirror: false       	// Whether to mirror your local video or not
 						});
 
-						this.mainStreamManager = publisher;
 						this.publisher = publisher;
 
 						// --- Publish your stream ---
@@ -324,7 +311,7 @@ export default {
 
     leaveSession() {
       this.leaveSessionForScreenSharing();
-      this.isScreenShared=false;
+      this.isScreenShared = false;
       // --- Leave the session by calling 'disconnect' method over the Session object ---
       if (this.session) this.session.disconnect();
 
@@ -338,8 +325,8 @@ export default {
 		},
 
 		updateMainVideoStreamManager (stream) {
-      this.mainOnOff = true;
-			if (this.mainStreamManager === stream) return;
+      // this.mainOnOff = false;
+      this.screenMode = 1;
 			this.mainStreamManager = stream;
       this.mainStreamManager.stream.videoDimensions = {
         width: 960,
@@ -348,9 +335,11 @@ export default {
       console.log("바뀐 메인스트림정보");
       console.log(this.mainStreamManager);
       console.log(this.mainStreamManager.stream.videoDimensions);
+      // this.mainOnOff = true;
 		},
     deleteMainVideoStreamManager() {
-      this.mainOnOff = false;
+      // this.mainOnOff = false;
+      this.mainStreamManager = undefined;
     },
 		/**
 		 * --------------------------
@@ -458,7 +447,7 @@ export default {
 						console.warn('ScreenShare: Access Denied');
 					});
 
-					this.mainStreamManager2 = publisher;
+					this.mainStreamManager = publisher;
           this.sharingPublisher = publisher;
           this.sessionForScreenShare.publish(this.sharingPublisher);
 
@@ -470,6 +459,7 @@ export default {
 			window.addEventListener('beforeunload', this.leaveSessionForScreenSharing)
 		},
     stopScreenSharing() {
+      this.isScreenShared = false;
       this.leaveSessionForScreenSharing()
     },
 
@@ -478,7 +468,7 @@ export default {
         this.sessionForScreenShare.disconnect();
       }
       this.sessionForScreenShare = undefined;
-      this.mainStreamManager2 = undefined;
+      this.mainStreamManager = undefined;
       this.sharingPublisher = undefined;
       this.OVForScreenShare = undefined;
       window.removeEventListener('beforeunload', this.leaveSessionForScreenSharing);

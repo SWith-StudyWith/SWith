@@ -15,6 +15,9 @@ export default {
 	mounted () {
 		this.streamManager.addVideoElement(this.$el);
 	},
+	updated () {
+		this.streamManager.addVideoElement(this.$el);
+	},
 };
 </script>
 

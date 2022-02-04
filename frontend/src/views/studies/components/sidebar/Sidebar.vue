@@ -7,25 +7,13 @@
       </span>
       <span v-else>Swith Sidebar</span>
     </h1>
-    <!-- <SidebarLink to="/studies/main" icon="fas fa-sign-out-alt">나가기</SidebarLink>
-    <SidebarLink to="/studies/11" icon="fas fa-microphone">기본화면이라쳐</SidebarLink>
-    <SidebarLink to="/studies/main" icon="fas fa-video">기본화면</SidebarLink>
-    <SidebarLink to="/studies/11/kanbanboard" icon="fas fa-chalkboard">칸반보드</SidebarLink>
-    <SidebarLink to="/studies/11/screenshare" icon="fas fa-desktop">화면공유</SidebarLink>
-    <SidebarLink to="/studies/11/whiteboard" icon="fas fa-pencil-alt">화이트보드</SidebarLink>
-    <SidebarLink to="" icon="fas fa-file-upload">파일업로드</SidebarLink> -->
-    <!-- <SidebarFile /> -->
     <div class="control-bottons">
-      <font-awesome-icon class="m-2" @click="toggleSidebar" :icon="['fas', 'file-upload']" />
-      <!-- <font-awesome-icon class="m-2" @click="onClickMuteIcon" :icon="['fas', 'microphone']" /> -->
-      <!-- <font-awesome-icon class="m-2" @click="onClickCameraIcon" :icon="['fas', 'video']" /> -->
-      <font-awesome-icon class="m-2" @click="onClickKanbanBoardIcon" :icon="['fas', 'chalkboard']" />
-      <font-awesome-icon class="m-2" @click="onClickScreenShareIcon" :icon="['fas', 'tv']" />
-      <font-awesome-icon class="m-2" @click="onClickWhiteBoardIcon" :icon="['fas', 'pen']" />
-      <font-awesome-icon class="m-2" @click="onClickChatIcon" :icon="['fas', 'comment', 'comments-dots']" />
-      <font-awesome-icon class="m-2" @click="onClickMemberIcon" :icon="['fas', 'user-friends']"
-      :style="{ color: state.isMemberList ? '#F5CEC7': 'rgba(255, 255, 255, 0.7)' }"/>
-
+      <font-awesome-icon class="m-2" :class="{ 'font-active': screenMode === 0 }" @click="onClickKanbanBoardIcon" :icon="['fas', 'chalkboard']" />
+      <font-awesome-icon class="m-2" :class="{ 'font-active': isScreenShared }" @click="onClickScreenShareIcon" :icon="['fas', 'tv']" />
+      <font-awesome-icon class="m-2" :class="{ 'font-active': screenMode === 2 }" @click="onClickWhiteBoardIcon" :icon="['fas', 'pen']" />
+      <font-awesome-icon class="m-2" :class="{ 'font-active': false }" @click="toggleSidebar" :icon="['fas', 'file-upload']" />
+      <font-awesome-icon class="m-2" :class="{ 'font-active': state.isChat }" @click="onClickChatIcon" :icon="['fas', 'comment']" />
+      <font-awesome-icon class="m-2" :class="{ 'font-active': state.isMemberList }" @click="onClickMemberIcon" :icon="['fas', 'user-friends']"/>
     </div>
     <!-- toggle button -->
     <span
@@ -38,7 +26,6 @@
     <SidebarFile/>
     <SidebarChat v-if="state.isChat"/>
     <SidebarMemberView :members="state.memberList" v-if="state.isMemberList"/>
-
   </div>
 </template>
 
@@ -48,7 +35,7 @@ import { collapsed, toggleSidebar, sidebarWidth } from '@/views/studies/componen
 import SidebarChat from '@/views/studies/components/sidebar/SidebarChat.vue';
 import SidebarFile from '@/views/studies/components/sidebar/SidebarFile.vue';
 import SidebarMemberView from '@/views/studies/components/sidebar/SidebarMemberView.vue'
-import { ref, computed, reactive } from 'vue';
+import { computed, reactive } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
 
@@ -60,52 +47,36 @@ export default {
     SidebarFile,
     SidebarMemberView,
   },
-  // props: {  },
+  props: {
+    screenMode: Number,
+    isScreenShared: Boolean,
+  },
   setup( props, context ) {
-    const isMuted = ref(true);
-    const isCameraOn = ref(false);
-    const isKanbanBoard = ref(false);
-    const isScreenShare = ref(false);
-    const isWhiteBoard = ref(false);
     // const isChat = ref(false);
 
     // 스터디 회원 목록 조회
     const store = useStore();
     const route = useRoute();
     store.dispatch('GET_MEMBER_LIST', route.params.studyId);
-
     const state = reactive({
       memberList : computed(() => {
         return store.state.study.memberList;
       }),
-
       isChat : false,
       isMemberList : false,
     })
-
-    const onClickMuteIcon = () => {
-      isMuted.value = !isMuted.value;
-    };
-    const onClickCameraIcon = () => {
-      isCameraOn.value = !isCameraOn.value;
-    };
     const onClickKanbanBoardIcon = () => {
-      isKanbanBoard.value = !isKanbanBoard.value;
-      if ( isKanbanBoard.value) {
-        context.emit('show-screenmode', 1)
-      }
+      context.emit('show-screenmode', 0)
     };
     const onClickScreenShareIcon = () => {
-      isScreenShare.value = !isScreenShare.value;
-      if ( isScreenShare.value) {
-          context.emit('show-screenmode', 2)
+      if (props.isScreenShared) {
+        context.emit('stopScreenSharing')
+      } else {
+        context.emit('startScreenSharing')
       }
     };
     const onClickWhiteBoardIcon = () => {
-      isWhiteBoard.value = !isWhiteBoard.value;
-      if ( isWhiteBoard.value) {
-          context.emit('show-screenmode', 3)
-      }
+      context.emit('show-screenmode', 2)
     };
     const onClickChatIcon = () => {
       state.isChat = !state.isChat;
@@ -114,39 +85,10 @@ export default {
       state.isMemberList = !state.isMemberList;
     }
 
-    const mutedIcon = computed(() => {
-      return isMuted.value ? 'microphone-slash' : 'microphone';
-    });
-    const cameraIcon = computed(() => {
-      return isCameraOn.value ? 'video' : 'video-slash';
-    });
-    const kanbanboardIcon = computed(() => {
-      return isKanbanBoard.value ? 'edit' : 'chalkboard';
-    });
-    const screenshareIcon = computed(() => {
-      return isScreenShare.value ? 'desktop' : 'tv';
-    });
-    const whiteboardIcon = computed(() => {
-      return isWhiteBoard.value ? 'pencil-alt' : 'pen';
-    });
-    const chatIcon = computed(() => {
-      if(state.isChat){
-        return 'comment-dots';
-      }
-      else return 'comment';
-    });
-    const memberIcon = computed(() => {
-      if(state.isMemberList){
-        return 'user-friends';
-      }
-      else return 'user-friends';
-    });
-
-
-    return { state, collapsed, toggleSidebar, sidebarWidth,
-              isMuted, isCameraOn, isWhiteBoard, isScreenShare, isKanbanBoard,
-              onClickMuteIcon, onClickCameraIcon, onClickScreenShareIcon, onClickWhiteBoardIcon, onClickKanbanBoardIcon,
-              mutedIcon, cameraIcon, screenshareIcon, whiteboardIcon, kanbanboardIcon, chatIcon, onClickChatIcon, memberIcon, onClickMemberIcon
+    return {
+      state, collapsed, toggleSidebar, sidebarWidth,
+      onClickScreenShareIcon, onClickWhiteBoardIcon, onClickKanbanBoardIcon,
+      onClickChatIcon, onClickMemberIcon
     };
   },
 }
@@ -209,7 +151,7 @@ export default {
   transform: rotate(180deg);
   transition: 0.2s linear;
 }
-.fa-desktop {
+/* .fa-desktop {
   color: #F5CEC7;
 }
 .fa-microphone {
@@ -226,8 +168,11 @@ export default {
 }
 .fa-comment-dots{
   color: #F5CEC7;
-}
+} */
 /* .fa-user-friends{
   color: #F5CEC7;
 } */
+.font-active {
+  color: #F5CEC7;
+}
 </style>
