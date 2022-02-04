@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class MemberInfoRes {
+    private Long memberId;
     private String email;
     private String nickname;
     private String goal;
