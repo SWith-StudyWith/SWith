@@ -66,17 +66,14 @@ public class StudyServiceImpl implements StudyService {
 
     @Override
     public Study insertStudy(Study study, StudyInfoReq studyInfoReq, MultipartFile multipartFile) throws IOException {
-        // upload할 image가 존재하는 경우
-        if (studyInfoReq.isUpdated()) {
-            if (multipartFile != null && !multipartFile.isEmpty()) {
-                Tika tika = new Tika();
-                String mimeType = tika.detect(multipartFile.getInputStream());
-                // MIME type이 image인지 확인, file size가 1MB이내인지 확인
-                if (mimeType.startsWith("image") && multipartFile.getSize() < Math.pow(10, 6)) {
-                    study.setImgUrl(fileService.upload(multipartFile, firebaseConfig.getStudy_storage_path(),
-                            study.getImgUrl(), "media"));
-                }else throw new IOException();
-            }
+        if (multipartFile != null && !multipartFile.isEmpty()) {
+            Tika tika = new Tika();
+            String mimeType = tika.detect(multipartFile.getInputStream());
+            // MIME type이 image인지 확인, file size가 1MB이내인지 확인
+            if (mimeType.startsWith("image") && multipartFile.getSize() < Math.pow(10, 6)) {
+                study.setImgUrl(fileService.upload(multipartFile, firebaseConfig.getStudy_storage_path(),
+                        study.getImgUrl(), "media"));
+            }else throw new IOException();
         }
         study.setCode(generateCode());
         studyRepository.save(study);
