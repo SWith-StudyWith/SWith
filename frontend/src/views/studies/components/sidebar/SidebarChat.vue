@@ -8,8 +8,15 @@
         :key="idx"
         class="chat"
       >
+
+        <!-- 내가 보낸 메세지 -->
+        <div class="chat-my-message" v-if="item.memberId==this.getUserInfo.memberId">
+          <p class="chat-my-message-time">{{ item.createdAt }}</p>
+          <p class="my-content">{{ item.content }}</p>
+        </div>
+
         <!-- 상대가 보낸 메세지  -->
-        <div class="chat-other-message">
+        <div class="chat-other-message" v-else>
           <div class="chat-other-img">
             <img :src="item.imgUrl?item.imgUrl:require(`@/assets/img/navbar/profile.png`)" alt="" aria-expanded="false">
           </div>
@@ -18,7 +25,6 @@
               <p class="chat-other-nickname">{{ item.nickname }}</p>
               <p class="chat-other-message-time">{{ item.createdAt }}</p>
             </div>
-            <!-- <p class="chat-other-nickname">{{ item.memberId }}</p> -->
             <div class="chat-other-content2">
               <p class="other-content">{{ item.content }}</p>
             </div>
@@ -50,13 +56,13 @@ export default {
   data() {
     return {
       message: "",
-      recvList: []
+      recvList: [],
+      memId: '',
     }
   },
   created() {
     // App.vue가 생성되면 소켓 연결을 시도합니다.
     this.connect()
-
   },
   computed: {
     ...mapGetters([
@@ -80,8 +86,17 @@ export default {
           nickname: this.getUserInfo.nickname,
           content: this.message
         };
-        // alert(msg.memberId);
+        this.memId = this.getUserInfo.memberId,
         this.stompClient.send("/receive", JSON.stringify(msg), {});
+
+        setTimeout(() => {
+          const element = document.getElementById('chat-body');
+          //  300
+          console.log(element.scrollHeight);
+          // 0
+          console.log(element.scrollTop);
+          element.scrollTop = element.scrollHeight;
+        }, 0);
       }
     },
     connect() {
@@ -102,6 +117,14 @@ export default {
 
             // 받은 데이터를 json으로 파싱하고 리스트에 넣어줍니다.
             this.recvList.push(JSON.parse(res.body))
+            setTimeout(() => {
+              const element = document.getElementById('chat-body');
+              //  300
+              console.log(element.scrollHeight);
+              // 0
+              console.log(element.scrollTop);
+              element.scrollTop = element.scrollHeight;
+            }, 0);
           });
         },
         error => {
@@ -229,5 +252,28 @@ input{
   font-size: 10px;
   color: #9c9c9c;
   margin-left: auto;
+}
+.chat-my-message{
+  display: flex;
+  justify-content: right;
+  align-items: flex-end;
+  margin: 0;
+  min-height: 40px;
+  line-break: anywhere;
+}
+.my-content{
+  margin: 0.4rem 0 0 1rem;
+  border-radius: 10px 10px 0px 10px;
+  max-width: 180px;
+  background-color: #acb5e4;
+  color: #ffffff;
+  padding: 0.8rem;
+  font-size: 14px;
+}
+.chat-my-message-time{
+  margin: 0;
+  font-size: 10px;
+  color: #9c9c9c;
+  margin-right: auto;
 }
 </style>
