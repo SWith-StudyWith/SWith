@@ -47,8 +47,9 @@
           <div class="row justify-content-center ">
             <img src="@/assets/img/landing/icon_Chat_Double.png" alt="" class="iconIMG">
             <p style="font-weight:700; font-size: 17px;">실시간 그룹 화상 채팅</p>
-              스터디원 간 실시간 그룹 화상, 음성 채팅 기능을 제공합니다.
-              누구나 사용할 수 있는 SWith의 화상 채팅을 이용해보세요.
+              스터디원 간 실시간 화상, 채팅 기능을 제공합니다. <br>
+              누구나 사용할 수 있는 <br>
+              SWith의 화상 채팅을 이용해보세요.
           </div>
         </div>
         <div class="col-md-4">
@@ -65,24 +66,25 @@
         <div class="col-md-4">
           <div class="row justify-content-center ">
             <img src="@/assets/img/landing/icon_download.png" alt="" class="iconIMG">
-            <p style="font-weight:700; font-size: 17px;">캘린더와 todo-list를 이용한 일정 관리</p>
-            간소화된 일정 관리로, 스터디 개요와 주별 일정,
-            개인 별 할 일 등을 관리하세요.
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="row justify-content-center ">
-            <img src="@/assets/img/landing/icon_Binocle.png" alt="" class="iconIMG">
-            <p style="font-weight:700; font-size: 17px;">실시간 화면 공유</p>
-            스터디 참가자들과 실시간으로 서로의 화면을 공유해보세요.
+            <p style="font-weight:700; font-size: 17px;">파일 공유</p>
+              더이상 추가적인 SNS로 파일 공유 할 필요 없습니다. <br>
+              스터디 참가자들과 손쉽게 파일을 공유해보세요 !
           </div>
         </div>
         <div class="col-md-4">
           <div class="row justify-content-center ">
             <img src="@/assets/img/landing/icon_image_white.png" alt="" class="iconIMG">
             <p style="font-weight:700; font-size: 17px;">칸반 보드</p>
-            편리한 출석 체크 기능을 활용해 보세요.
-            스터디가 시작되면 아직 참여하지 않은 인원들을 알 수 있습니다.
+              칸반 보드를 이용해보세요. <br>
+              스터디의 일정과 할 일을 한 눈에 파악할 수 있습니다.<br>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="row justify-content-center ">
+            <img src="@/assets/img/landing/icon_Binocle.png" alt="" class="iconIMG">
+            <p style="font-weight:700; font-size: 17px;">실시간 화면 공유</p>
+              기존의 공유 방법으로 불편하지 않으셨나요 ? <br>
+              한 명의 화면이 아닌 모두의 화면 공유가 가능합니다. <br>
           </div>
         </div>
       </div>
@@ -118,8 +120,8 @@
   </div>
   </section>
 
-  <section class="section4">
-    <div class="container my-5" style="height: 100%">
+  <div class="section4">
+    <div class="container my-5" >
       <div class="row ">
         <div class="col ">
           <p>
@@ -131,10 +133,12 @@
         <router-link to="/members/login">
           <button class="btn btn-primary" style="color:white">#study_with</button>
         </router-link>
+        <br>
         </div>
       </div>
     </div>
-  </section>
+    <img src="@/assets/img/landing/Saly-3.png" alt="" class="animate__animated animate__fadeInLeftBig saly3">
+  </div>
   <Footer/>
 </template>
 
@@ -169,6 +173,8 @@ section{
 }
 .section4{
   height: 400px;
+  margin-top: 200px;
+  margin-bottom: 0px;
 }
 
 .btn{
@@ -178,6 +184,11 @@ section{
 
 .animate__animated.animate__shakeY{
   --animate-duration: 10s;
+}
+
+.animate__animated.animate__fadeInLeftBig{
+  /* --animate__delay-2s: 10s; */
+  --animate-duration: 12s;
 }
 
 .outer {
@@ -198,5 +209,13 @@ section{
 
 .inner img{
   margin-bottom: 20px;
+}
+
+.saly3{
+  /* float: left; */
+  float: right;
+  margin-top: 20px;
+  margin-right: 50px;
+  width: 350px;
 }
 </style>
