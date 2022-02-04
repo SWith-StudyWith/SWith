@@ -197,6 +197,9 @@ export default {
 			//menu: false,			// 메뉴 오픈상태
 			isScreenShared: false,	// 화면공유 상태
 			screenShareName: "Screen Sharing",	// 화면 공유 스트림의 이름
+
+      // 발언 확인
+      isSpeakList: [],
     }
   },  // data end
   mounted() {
@@ -271,6 +274,9 @@ export default {
       this.session.on("publisherStartSpeaking", (event) => {
         console.log(event);
         console.log("User " + event.connection.data + " start speaking");
+        this.isSpeakList.push(event.connection.connectionId);
+        console.log(event.connection.connectionId);
+        alert("발언자 리스트 : " + this.isSpeakList);
         // this.$store.dispatch('startSpeaking')
         // this.$store.dispatch(
         //   "addSpeaker",
@@ -281,6 +287,12 @@ export default {
       // Speech Stop Detection
       this.session.on("publisherStopSpeaking", (event) => {
         console.log("User " + event.connection.connectionId + " stop speaking");
+        let temp = this.isSpeakList;
+        let index = temp.indexOf(event.connection.connectionId, 0);
+        if (index >= 0) {
+          temp.splice(index, 1);
+          this.isSpeakList = temp;
+        }
         // this.$store.dispatch('stopSpeaking')
         // this.$store.dispatch(
         //   "removeSpeaker",
