@@ -19,7 +19,7 @@ const actions = {
   GET_USER_INFO({ commit }) {
     getUserInfo(
       (res) => {
-        commit('SET_USER_INFO', res.data.data);
+        commit('UPDATE_USER_INFO', res.data.data);
       },
       () => {
         alert('서버가 아파요!')
@@ -98,18 +98,14 @@ const actions = {
 };
 
 const mutations = {
-  SET_USER_INFO(state, payload) {
-    console.log(payload)
-    state.userInfo = {
-      ...state.userInfo,
-      ...payload
-    };
-  },
   SET_USER_ACCESS_INFO(state, payload) {
     state.userInfo.path = payload.path
   },
   UPDATE_USER_INFO(state, payload) {
-    state.userInfo = payload
+    state.userInfo = {
+      ...state.userInfo,
+      ...payload
+    };
   },
   LOGOUT(state) {
     // state.userInfo.email = ''
