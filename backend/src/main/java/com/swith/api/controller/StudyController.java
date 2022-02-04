@@ -39,7 +39,7 @@ public class StudyController {
 
     @PostMapping
     public ResponseEntity<BaseResponse> createStudy(StudyInfoReq studyInfoReq,
-                                                    @RequestParam("studyImage") MultipartFile multipartFile) {
+                                                    @RequestPart(value = "studyImage", required = false) MultipartFile multipartFile) {
         log.debug("createStudy - {}", studyInfoReq);
         Member member = memberService.getMemberByAuthentication();
         // 스터디 생성
