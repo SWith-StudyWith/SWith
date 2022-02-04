@@ -7,7 +7,12 @@ function createStudy(payload, success, fail) {
     .then(success)
     .catch(fail)
 }
-
+function updateStudy(studyId, payload, success, fail) {
+  basicInstance
+    .put(`api/studies/${studyId}`, payload)
+    .then(success)
+    .catch(fail)
+}
 function getStudyInfo(payload, success, fail) {
   basicInstance
     .get(`/api/studies/${payload}`)
@@ -54,6 +59,7 @@ function getMemberList(studyId, success, fail) {
 
 export {
   createStudy,
+  updateStudy,
   getStudyInfo,
   getStudyList,
   joinStudy,
