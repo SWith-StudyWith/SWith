@@ -1,20 +1,23 @@
 <template>
   <div class= "memberDiv">
     <p class="title">👥 스터디 회원 목록</p>
-    <div v-if="members.length">
-      <div class="row" v-for="member in members" :key="member.memberId">
-        <div class="col-4">
-          <img :src="member.imgUrl?member.imgUrl:require(`@/assets/img/navbar/profile.png`)" :fit="fit" class="profile-img">
-        </div>
-        <div class="col-8">
-          <p class="nickname">{{ member.nickname }}</p>
-          <p class="email">{{ member.email }}</p>
+    <div class="member-body">
+      <div v-if="members.length" >
+        <div class="row" v-for="member in members" :key="member.memberId">
+          <div class="col-4">
+            <img :src="member.imgUrl?member.imgUrl:require(`@/assets/img/navbar/profile.png`)" :fit="fit" class="profile-img">
+          </div>
+          <div class="col-8">
+            <p class="nickname">{{ member.nickname }}</p>
+            <p class="email">{{ member.email }}</p>
+          </div>
         </div>
       </div>
+      <div v-if="members.length === 0">
+        없는데용 ?
+      </div>
     </div>
-    <div v-if="members.length === 0">
-      없는데용 ?
-    </div>
+
   </div>
 </template>
 
@@ -41,6 +44,22 @@ export default {
   width: 90%;
   text-align: left;
 
+  height: 100vh;
+
+  display: flex;
+  /* scroll */
+  flex-direction: column;
+}
+.member-body{
+  flex-grow: 1;
+  /* scroll */
+  overflow: scroll;
+  scroll-behavior: smooth;
+  /* overflow: auto; */
+}
+/* scroll 안보이게 */
+.member-body::-webkit-scrollbar {
+  display: none;
 }
 .row{
   margin-bottom: 20px;
@@ -48,6 +67,7 @@ export default {
 .title{
   font-size: 25px;
   font-weight:500;
+  margin-top: 20px;
   margin-bottom: 30px;
 }
 .profile-img {

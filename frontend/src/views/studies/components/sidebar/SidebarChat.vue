@@ -1,20 +1,31 @@
 <template>
-  <div>
-    <div
-      v-for="(item, idx) in recvList"
-      :key="idx"
-      class="chat-userinfo-box"
-    >
-      <img :src="item.imgUrl?item.imgUrl:require(`@/assets/img/navbar/profile.png`)" alt="" aria-expanded="false" style="width: 30px; background: #BDBDBD; border-radius: 70%; overflow: hidden;" >
-      <div class="content">{{ item.createdAt }}</div>
-      <div class="nickname">닉네임: {{ item.nickname }}</div>
-      <div class="content">내용: {{ item.content }}</div>
+  <div class= "chatDiv">
+    <p class="title">💬 채팅 </p>
+
+    <div class="chat-body" id="chat-body">
+      <div
+        v-for="(item, idx) in recvList"
+        :key="idx"
+        class="chat"
+      >
+        <span>
+          <img :src="item.imgUrl?item.imgUrl:require(`@/assets/img/navbar/profile.png`)" alt="" aria-expanded="false">
+          <p class="nickname">{{ item.nickname }}</p>
+        </span>
+        <div class="content">내용: {{ item.content }}</div>
+        <div class="content">{{ item.createdAt }}</div>
+      </div>
     </div>
-    내용: <input
-      v-model="message"
-      type="text"
-      @keyup="sendMessage"
-    >
+    <div>
+      <div class="inputText">
+        <input
+          v-model="message"
+          type="text"
+          @keyup="sendMessage"
+        >
+        <!-- <button :disabled='text === ""'>Send</button> -->
+      </div>
+    </div>
   </div>
 </template>
 
@@ -92,5 +103,79 @@ export default {
 }
 </script>
 <style scoped>
+.chatDiv{
+  /* float: right; */
+  width: 90%;
+  text-align: left;
+  flex-direction: column;
 
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.row{
+  margin-bottom: 20px;
+  border: 1px solid;
+}
+.title{
+  font-size: 25px;
+  font-weight:500;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+img {
+  width: 30px;
+  height: 30px;
+  border-radius: 70%;
+}
+.nickname{
+  font-size: 17px;
+  margin-bottom: 2px;
+}
+.email{
+  font-size: 13px;
+  color: rgb(199, 199, 199);
+}
+
+.inputText{
+  position: fixed;
+  bottom: 0;
+  margin: 10px;
+  /* display: block; */
+
+  display: flex;
+}
+input{
+  /* width: 100%; */
+  height: 100px;
+  border: none;
+  border-radius: 3%;
+
+  flex-grow: 1;
+}
+
+.chat-userinfo-box{
+  margin: 10px;
+}
+
+
+
+/*  */
+.chat-body{
+  flex-grow: 1;
+  /* overflow: auto; */
+  padding: 1rem;
+
+  overflow: scroll;
+  scroll-behavior: smooth;
+}
+.chat {
+  background: #BDBDBD;
+  border-radius: 10px;
+  padding: 1rem;
+  width: fit-content;
+}
+.chat-body::-webkit-scrollbar {
+  display: none;
+}
 </style>

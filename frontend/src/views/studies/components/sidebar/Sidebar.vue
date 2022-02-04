@@ -183,8 +183,8 @@ export default {
   flex-direction: column;
 
   /* scroll */
-  overflow-x: hidden;
-    overflow-y: auto;
+  /* overflow-x: hidden; */
+  /* overflow-y: auto; */
 }
 /* .sidebar-left{
   height: 50%;
@@ -254,4 +254,6 @@ export default {
 .fa-comment-dots{
   color: #F5CEC7;
 }
+
+
 </style>
