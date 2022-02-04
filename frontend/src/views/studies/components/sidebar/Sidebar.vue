@@ -1,12 +1,12 @@
 <template>
-  <div class="sidebar" :style="{ width: sidebarWidth }">
-    <h1>
+  <div class="sidebar container" :style="{ width: sidebarWidth }">
+    <!-- <h1>
       <span v-if="collapsed">
         <div>S</div>
         <div>S</div>
       </span>
       <span v-else>Swith Sidebar</span>
-    </h1>
+    </h1> -->
     <!-- <SidebarLink to="/studies/main" icon="fas fa-sign-out-alt">나가기</SidebarLink>
     <SidebarLink to="/studies/11" icon="fas fa-microphone">기본화면이라쳐</SidebarLink>
     <SidebarLink to="/studies/main" icon="fas fa-video">기본화면</SidebarLink>
@@ -15,29 +15,40 @@
     <SidebarLink to="/studies/11/whiteboard" icon="fas fa-pencil-alt">화이트보드</SidebarLink>
     <SidebarLink to="" icon="fas fa-file-upload">파일업로드</SidebarLink> -->
     <!-- <SidebarFile /> -->
-    <div class="control-bottons">
-      <font-awesome-icon class="m-2" @click="toggleSidebar" :icon="['fas', 'file-upload']" />
-      <!-- <font-awesome-icon class="m-2" @click="onClickMuteIcon" :icon="['fas', 'microphone']" /> -->
-      <!-- <font-awesome-icon class="m-2" @click="onClickCameraIcon" :icon="['fas', 'video']" /> -->
-      <font-awesome-icon class="m-2" @click="onClickKanbanBoardIcon" :icon="['fas', 'chalkboard']" />
-      <font-awesome-icon class="m-2" @click="onClickScreenShareIcon" :icon="['fas', 'tv']" />
-      <font-awesome-icon class="m-2" @click="onClickWhiteBoardIcon" :icon="['fas', 'pen']" />
-      <font-awesome-icon class="m-2" @click="onClickChatIcon" :icon="['fas', this.chatIcon]" />
-      <font-awesome-icon class="m-2" @click="onClickMemberIcon" :icon="['fas', 'user-friends']"
-      :style="{ color: state.isMemberList ? '#F5CEC7': 'rgba(255, 255, 255, 0.7)' }"/>
+
+    <div class="row">
+      <div class="sidebar-left control-bottons">
+        <!-- <div class="control-bottons"> -->
+          <font-awesome-icon class="m-2 file" @click="toggleSidebar" :icon="['fas', 'file-upload']"/>
+          <!-- <font-awesome-icon class="m-2" @click="onClickMuteIcon" :icon="['fas', 'microphone']" /> -->
+          <!-- <font-awesome-icon class="m-2" @click="onClickCameraIcon" :icon="['fas', 'video']" /> -->
+          <font-awesome-icon class="m-2" @click="onClickKanbanBoardIcon" :icon="['fas', 'chalkboard']" />
+          <font-awesome-icon class="m-2" @click="onClickScreenShareIcon" :icon="['fas', 'tv']" />
+          <font-awesome-icon class="m-2" @click="onClickWhiteBoardIcon" :icon="['fas', 'pen']" />
+          <font-awesome-icon class="m-2" @click="onClickChatIcon" :icon="['fas', this.chatIcon]" />
+          <font-awesome-icon class="m-2" @click="onClickMemberIcon" :icon="['fas', 'user-friends']"
+          :style="{ color: state.isMemberList ? '#F5CEC7': 'rgba(255, 255, 255, 0.7)' }"/>
+
+          <!-- toggle button -->
+          <span
+            class="collapse-icon"
+            :class="{ 'rotate-180': collapsed }"
+            @click="toggleSidebar"
+          >
+            <i class="fas fa-angle-double-left" />
+          </span>
+        <!-- </div> -->
+      </div>
+
+      <div class="col-12 sidebar-main">
+        <!-- <div class="sidebar-main"> -->
+          <SidebarFile/>
+          <SidebarChat v-if="state.isChat"/>
+          <SidebarMemberView :members="state.memberList" v-if="state.isMemberList"/>
+        <!-- </div> -->
+      </div>
 
     </div>
-    <!-- toggle button -->
-    <span
-      class="collapse-icon"
-      :class="{ 'rotate-180': collapsed }"
-      @click="toggleSidebar"
-    >
-      <i class="fas fa-angle-double-left" />
-    </span>
-    <SidebarFile/>
-    <SidebarChat v-if="state.isChat"/>
-    <SidebarMemberView :members="state.memberList" v-if="state.isMemberList"/>
 
   </div>
 </template>
@@ -172,11 +183,15 @@ export default {
   overflow-x: hidden;
     overflow-y: auto;
 }
+/* .sidebar-left{
+  height: 50%;
+  width: 54px;
+} */
 .control-bottons {
-  text-align: center;
+  /* text-align: center; */
   color: rgba(255, 255, 255, 0.7);
 
-  float:left;
+  /* float:left;
   position: fixed;
   z-index: 1;
   top: 10;
@@ -187,20 +202,27 @@ export default {
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
-  align-items: center;
+  align-items: center; */
 
+  position: fixed;
+  left: 0x;
+  bottom: 0px;
+  width: 54px;
+  text-align: left;
+  font-size: 23px;
   cursor: pointer;
 }
 .sidebar h1 {
   height: 2.5em;
 }
 .collapse-icon {
-  position: absolute;
-  bottom: 0;
+  /* position: absolute; */
+  /* bottom: 0; */
   /* padding: 0.75em; */
-  color: rgba(255, 255, 255, 0.7);
+  /* color: rgba(255, 255, 255, 0.7); */
   transition: 0.2s linear;
   font-size: 30px;
+  margin-left: 7px;
 }
 .rotate-180 {
   transform: rotate(180deg);
@@ -224,7 +246,4 @@ export default {
 .fa-comment-dots{
   color: #F5CEC7;
 }
-/* .fa-user-friends{
-  color: #F5CEC7;
-} */
 </style>
