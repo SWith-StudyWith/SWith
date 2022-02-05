@@ -109,6 +109,7 @@ public class StudyServiceImpl implements StudyService {
         studyInfoRes.setStudyCode(study.getCode());
         studyInfoRes.setStudyGoal(study.getGoal());
         studyInfoRes.setStudyName(study.getName());
+        studyInfoRes.setStudyImgUrl(study.getImgUrl());
 
         //태스크 목록 가져오기
         List<Task> taskList = taskRepository.findAll();
