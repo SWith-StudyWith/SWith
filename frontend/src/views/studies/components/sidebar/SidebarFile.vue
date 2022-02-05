@@ -1,18 +1,28 @@
 <template>
   <div>
+    <div class="member-body">
+    <div v-if="files.length" >
+      <div class="row" v-for="file in files" :key="file.memberId">
+        <div class="col-4">
+        </div>
+        <div class="col-8">
+        </div>
+      </div>
+    </div>
     <h1>DropZone</h1>
     <DropZone @drop.prevent="drop" @change="selectedFile" />
     <div v-for="(dropzoneFile, index) in dropzoneFiles" v-bind:key="dropzoneFile.id">
       <span class="file-info">File: {{dropzoneFile.name}}</span>
-      <button @click="deleteFile(index)">삭제</button>
+      <button @click="onClickDeleteFile(index)">삭제</button>
     </div>
-    <button @click="uploadFile">전송</button>
+    <button @click="onClickUploadFile">전송</button>
   </div>
 </template>
 
 <script>
 import DropZone from '@/views/studies/components/sidebar/SidebarFileDropzone.vue';
 import { ref } from "vue";
+import { uploadFile } from '@/api/study';
 
 export default {
   name: "SidebarFile",
@@ -37,15 +47,39 @@ export default {
       }
     }
 
-    const deleteFile = (index) => {
+    const onClickDeleteFile = (index) => {
       dropzoneFiles.value.splice(index, 1);
     }
 
-    const uploadFile = () => {
+    const onClickUploadFile = (e) => {
+      e.preventDefault();
 
+      const uploadFileData = new FormData();
+      for (let i = 0; i < dropzoneFiles.value.length; i++) {
+        uploadFileData.append("studyFile", dropzoneFiles.value[i]);
+      }
+
+      uploadFile(
+        uploadFileData,
+        (res) => {
+          console.log(res.data)
+          switch (res.data.code) {
+            case 200:
+              alert('파일 업로드 완료')
+              break;
+            case 400:
+              alert('파일 업로드 실패')
+              break;
+          }
+        },
+        (err) => {
+          console.log(err)
+          alert('서버가 아파유~')
+        },
+      )
     }
 
-    return { dropzoneFiles, drop, selectedFile, deleteFile, uploadFile };
+    return { dropzoneFiles, drop, selectedFile, onClickDeleteFile, onClickUploadFile };
   },
 }
 </script>
