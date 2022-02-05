@@ -1,5 +1,5 @@
 <template>
-  <div class="sidebar container" :style="{ width: sidebarWidth }">
+  <div class="sidebar" :style="{ width: sidebarWidth }">
     <!-- <h1>
       <span v-if="collapsed">
         <div>S</div>
@@ -8,13 +8,25 @@
       <span v-else>Swith Sidebar</span>
     </h1> -->
     <div class="row">
-      <div class="sidebar-left control-bottons">
+      <div class="sidebar-left control-bottons ps-2">
+        <div class="icon-container" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="칸반보드">
           <font-awesome-icon class="m-2" :class="{ 'font-active': screenMode === 0 }" @click="onClickKanbanBoardIcon" :icon="['fas', 'chalkboard']" />
+        </div>
+        <div class="icon-container" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="화면공유">
           <font-awesome-icon class="m-2" :class="{ 'font-active': isScreenShared }" @click="onClickScreenShareIcon" :icon="['fas', 'tv']" />
+        </div>
+        <div class="icon-container" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="화이트보드">
           <font-awesome-icon class="m-2" :class="{ 'font-active': screenMode === 2 }" @click="onClickWhiteBoardIcon" :icon="['fas', 'pen']" />
+        </div>
+        <div class="icon-container" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="파일공유">
           <font-awesome-icon class="m-2" :class="{ 'font-active': state.isFile }" @click="onClickFileIcon()" :icon="['fas', 'file-upload']" />
+        </div>
+        <div class="icon-container" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="채팅">
           <font-awesome-icon class="m-2" :class="{ 'font-active': state.isChat }" @click="onClickChatIcon" :icon="['fas', 'comment']" />
+        </div>
+        <div class="icon-container" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="유저목록">
           <font-awesome-icon class="m-2" :class="{ 'font-active': state.isMemberList }" @click="onClickMemberIcon" :icon="['fas', 'user-friends']"/>
+        </div>
           <!-- toggle button -->
           <span
             class="collapse-icon"
@@ -35,9 +47,7 @@
           <SidebarMemberView :members="state.memberList" v-if="state.isMemberList"/>
         <!-- </div> -->
       </div>
-
     </div>
-
   </div>
 </template>
 
@@ -50,6 +60,7 @@ import SidebarMemberView from '@/views/studies/components/sidebar/SidebarMemberV
 import { computed, reactive } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
+import { Popover } from 'bootstrap';
 
 //
 import { getMemberList } from '@/api/study'
@@ -125,6 +136,10 @@ export default {
       onClickChatIcon, onClickMemberIcon, onClickFileIcon
     };
   },
+  mounted() {
+    Array.from(document.querySelectorAll('[data-bs-toggle="popover"]'))
+    .forEach(popoverNode => new Popover(popoverNode))
+  },
 }
 </script>
 
@@ -132,50 +147,25 @@ export default {
 .sidebar {
   color: white;
   background-color: #1E304F;
-  box-shadow:  2px 1px 10px 0 rgb(0 0 0 / 0.7);
-
-  float:left;
+  box-shadow:  2px 1px 10px rgb(0 0 0 / 0.7);
+  /* float: left; */
   position: fixed;
   z-index: 1;
   top: 0;
   left: 0;
   bottom: 0;
-  padding: 0.5em;
-
+  padding: 0.5rem;
   transition: 0.3s ease;
-
   display: flex;
-  flex-direction: column;
-
-  /* scroll */
-  /* overflow-x: hidden; */
-  /* overflow-y: auto; */
+  flex-direction: column-reverse;
 }
-/* .sidebar-left{
-  height: 50%;
-  width: 54px;
-} */
 .control-bottons {
   /* text-align: center; */
   color: rgba(255, 255, 255, 0.7);
-
-  /* float:left;
-  position: fixed;
-  z-index: 1;
-  top: 10;
-  left: 0;
-  bottom: 40px;
-  padding: 0.5em;
-
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  align-items: center; */
-
-  position: fixed;
-  left: 0x;
-  bottom: 0px;
-  width: 54px;
+  /* position: fixed; */
+  /* left: 0x; */
+  /* bottom: 0px; */
+  /* width: 54px; */
   text-align: left;
   font-size: 23px;
   cursor: pointer;
@@ -184,10 +174,6 @@ export default {
   height: 2.5em;
 }
 .collapse-icon {
-  /* position: absolute; */
-  /* bottom: 0; */
-  /* padding: 0.75em; */
-  /* color: rgba(255, 255, 255, 0.7); */
   transition: 0.2s linear;
   font-size: 30px;
   margin-left: 7px;
@@ -202,5 +188,16 @@ export default {
 }
 .font-active {
   color: #F5CEC7;
+}
+.icon-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 2.8rem;
+  margin-top: 0.4rem;
+  border-radius: 0.5rem;
+}
+.icon-container:hover {
+  background-color: #334564;
 }
 </style>

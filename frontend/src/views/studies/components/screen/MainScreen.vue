@@ -5,7 +5,7 @@
       <user-video
         :stream-manager="streamManager"
         :mainStream="true"
-        v-on:dblclick="deleteMainVideoStreamManager"
+        @dblclick="$emit('deleteMainVideoStreamManager')"
       />
     </div>
   </div>
@@ -21,7 +21,5 @@ export default {
   props: {
     streamManager: Object,
   },
-  setup() {
-  }
 }
 </script>

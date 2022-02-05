@@ -35,8 +35,8 @@ $success: #F5CEC7;
     background-color: #ccc;
 }
 .popover {
+  font-family:  'Noto Sans KR', 'Mulish', sans-serif;
   font-size: 0.7rem;
-  max-width: 3.5rem;
 }
 .popover-body {
   padding: 0.3rem;
