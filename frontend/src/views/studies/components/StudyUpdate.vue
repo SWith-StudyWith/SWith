@@ -78,7 +78,7 @@ export default {
       state.updated = true;
     };
     const onClickDefaultImg = () => {
-      state.userInfo.studyImgURL = '';
+      state.studyInfo.studyImgURL = '';
       state.updated = true;
     };
     const onClickUpdateStudy = (e) => {
