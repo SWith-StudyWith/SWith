@@ -9,15 +9,11 @@
             <form class="studyInfo-wrapper" enctype="multipart/form-data">
               <div>
                 <label for="studyName" class="form-label">스터디 이름</label>
-                <input type="text" class="form-control" id="studyName" v-model="state.studyInfo.studyName" required placeholder="스터디 이름">
-                <div :style="{ visibility: (state.isValidStudyName || !state.wasInputed.studyName )? 'hidden' : 'visible' }"
-                  class="invalid-feedback">
-                  2~20자 사이로 작성해주세요.
-                </div>
+                <input type="text" class="form-control" id="studyName" v-model="state.studyInfo.studyName" required>
               </div>
               <div class="mb-3">
                 <label for="goal" class="form-label">스터디 목표</label>
-                <textarea class="form-control form-goal" id="studyGoal" rows="3" v-model="state.studyInfo.studyGoal" placeholder="스터디 목표를 한 줄로 표현해 보세요!"></textarea>
+                <textarea class="form-control form-goal" id="studyGoal" rows="3" v-model="state.studyInfo.studyGoal"></textarea>
               </div>
               <div class="d-flex justify-content-start mb-4">
                 <div class="dropend">
@@ -48,7 +44,7 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue';
+import { reactive, computed } from 'vue';
 import { useStore } from 'vuex';
 import Navbar from '@/views/common/Navbar.vue';
 import Footer from '@/views/common/Footer.vue';
@@ -58,66 +54,42 @@ export default {
   components: { Navbar, Footer },
   setup() {
     const store = useStore();
-    const state = ref({
-      studyInfo : store.getters.getStudyInfo,
+    const state = reactive({
+      // studyInfo : store.getters.getStudyInfo,
+      studyInfo : computed(() => {
+        return store.state.study.studyInfo
+      }),
       studyImage: '',
       updated: false,
       studyImgSrc: computed(()=> {
-        if (state.value.studyInfo.studyImgURL) {
-          return state.value.studyInfo.studyImgURL
+        if (state.studyInfo.studyImgURL) {
+          return state.studyInfo.studyImgURL
         } else {
           return require(`@/assets/img/study_room/studyroom.png`)
         }
-      }),
-      wasInputed: {
-        studyName: false,
-      },
-      isValidStudyName: computed(() => {
-        if (state.value.studyInfo.studyName !== '') {
-          state.value.wasInputed.studyName = true;
-        }
-        if (state.value.studyInfo.studyName && validateStudyName(state.value.studyInfo.studyName)) {
-          return true;
-        }
-        return false;
       }),
     });
 
     const onClickUploadFile = (e) => {
       console.log(e)
       const file = e.target.files[0]
-      state.value.studyInfo.studyImgURL = URL.createObjectURL(file);
-      state.value.studyImage = file;
-      state.value.updated = true;
+      state.studyInfo.studyImgURL = URL.createObjectURL(file);
+      state.studyImage = file;
+      state.updated = true;
     };
     const onClickDefaultImg = () => {
-      state.value.userInfo.studyImgURL = '';
-      state.value.updated = true;
+      state.userInfo.studyImgURL = '';
+      state.updated = true;
     };
     const onClickUpdateStudy = (e) => {
       e.preventDefault();
-      if (state.value.studyInfo.studyName === '') {
-        state.value.wasInputed.studyName = true;
-        return;
-      }
-      if (!state.value.isValidStudyName) {
-        return;
-      }
       const updateStudyData = new FormData();
-      updateStudyData.append("studyName", state.value.studyInfo.studyName)
-      updateStudyData.append("studyGoal", state.value.studyInfo.studyGoal)
-      updateStudyData.append("studyImage", state.value.studyImage)
-      updateStudyData.append("updated", state.value.updated)
-      store.dispatch('updateStudyInfo', state.value.studyInfo.studyId, updateStudyData)
+      updateStudyData.append("studyName", state.studyInfo.studyName)
+      updateStudyData.append("studyGoal", state.studyInfo.studyGoal)
+      updateStudyData.append("studyImage", state.studyImage)
+      updateStudyData.append("updated", state.updated)
+      store.dispatch('updateStudyInfo', { studyId: state.studyInfo.studyId, payload:updateStudyData})
     }
-
-    const validateStudyName = function (studyName) {
-      if (studyName.length >= 2 && studyName.length <= 20) {
-        return true;
-      }
-      return false;
-    };
-
     return {
       state, onClickUploadFile, onClickDefaultImg, onClickUpdateStudy
     }
