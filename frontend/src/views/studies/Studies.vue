@@ -62,7 +62,12 @@
               </div>
               <div v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub">
                 <div class="video-box m-2 position-relative">
-                  <user-video :stream-manager="sub"/>
+                  <user-video :stream-manager="sub" :isSpeak="isSpeakList.includes(sub.stream.connection.connectionId)"
+                    v-if="isSpeak" class="video-isSpeak"
+                  />
+                  <user-video :stream-manager="sub" :isSspeak="isSpeakList.includes(sub.stream.connection.connectionId)"
+                    v-else class="video-not-isSpeak"
+                  />
                   <div v-if="sub" class="stream-btn-container" @click.self="updateMainVideoStreamManager(sub)">
                     <button
                       class="btn btn-primary mx-2 stream-onoff-btn" @click="toggleVideoSub(sub)"
@@ -200,6 +205,7 @@ export default {
 
       // 발언 확인
       isSpeakList: [],
+      isSpeak : false,
     }
   },  // data end
   mounted() {
@@ -275,8 +281,10 @@ export default {
         console.log(event);
         console.log("User " + event.connection.data + " start speaking");
         this.isSpeakList.push(event.connection.connectionId);
+        this.isSpeak = !this.isSpeak;
         console.log(event.connection.connectionId);
-        alert("발언자 리스트 : " + this.isSpeakList);
+        console.log("isSpeak 상태 : " + this.isSpeak);
+        // alert("발언자 리스트 : " + this.isSpeakList);
         // this.$store.dispatch('startSpeaking')
         // this.$store.dispatch(
         //   "addSpeaker",
@@ -293,6 +301,8 @@ export default {
           temp.splice(index, 1);
           this.isSpeakList = temp;
         }
+        this.isSpeak = !this.isSpeak;
+        console.log("isSpeak 상태 : " + this.isSpeak);
         // this.$store.dispatch('stopSpeaking')
         // this.$store.dispatch(
         //   "removeSpeaker",
@@ -562,4 +572,8 @@ export default {
   height: 200px;
   overflow: hidden;
 } */
+
+.video-isSpeak {
+  box-shadow:  6px 1px 10px 0 rgb(0 0 0 / 1.0);
+}
 </style>
