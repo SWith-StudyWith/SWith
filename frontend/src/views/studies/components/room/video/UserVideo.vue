@@ -1,6 +1,7 @@
 <template>
   <div v-if="streamManager" id="UserVideo">
-    <OvVideo :stream-manager="streamManager" :mainStream="mainStream" :is-speak="isSpeak"/>
+    <!-- <OvVideo :stream-manager="streamManager" :mainStream="mainStream" :is-speak="isSpeak"/> -->
+    <OvVideo :stream-manager="streamManager" :is-speak="isSpeak"/>
     <p style="margin:0px;">{{ clientData }}</p>
   </div>
 <!-- <div id="UserVideo" v-if="streamManager">
@@ -44,10 +45,8 @@ export default {
 </script>
 
 <style>
-#UserVideo {
-  display: inline-block;
-  border: 5px rgb(240, 17, 17) solid;
-  margin: 5px;
-
-}
+/* #UserVideo {
+  box-shadow:  0px 0px 10px rgb(0 255 0 / 1.0);
+  border-radius: 1rem;
+} */
 </style>
