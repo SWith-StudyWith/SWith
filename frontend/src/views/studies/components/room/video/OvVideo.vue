@@ -23,11 +23,8 @@ export default {
 
 <style scoped>
 .main {
-  width: 900px;
-  height: 600px;
-  border-radius: 1rem;
-  overflow: hidden;
-  object-fit: cover;
+  width: 1080px;
+  border-radius: 0.5rem;
 }
 .sub {
   width: 300px;
