@@ -50,7 +50,8 @@
           <div id="video-container">
             <div class="user-video-wrapper d-flex overflow-auto">
               <div class="video-box m-2 position-relative">
-                <user-video id="my-video" :stream-manager="publisher"/>
+                <user-video id="my-video" :stream-manager="publisher"
+                    :class="{'video-isSpeak':isSpeakList.includes(publisher.stream.connection.connectionId)}"/>
                 <div class="stream-btn-container" @click.self="updateMainVideoStreamManager(publisher)">
                   <button class="btn btn-primary mx-2 stream-onoff-btn" @click="videoOnOff(publisher)">
                     <font-awesome-icon :icon="['fas', publisher&&publisher.stream.videoActive ? 'video' : 'video-slash' ]" />
@@ -62,12 +63,10 @@
               </div>
               <div v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub">
                 <div class="video-box m-2 position-relative">
-                  <user-video :stream-manager="sub" :isSpeak="isSpeakList.includes(sub.stream.connection.connectionId)"
-                    v-if="isSpeak" class="video-isSpeak"
-                  />
-                  <user-video :stream-manager="sub" :isSspeak="isSpeakList.includes(sub.stream.connection.connectionId)"
-                    v-else class="video-not-isSpeak"
-                  />
+                  <user-video :stream-manager="sub" :class="{'video-isSpeak':isSpeakList.includes(sub.stream.connection.connectionId)}"/>
+                  <!-- <user-video :stream-manager="sub" :isSspeak="isSpeakList.includes(sub.stream.connection.connectionId)"
+                    :class="video-not-isSpeak"
+                  /> -->
                   <div v-if="sub" class="stream-btn-container" @click.self="updateMainVideoStreamManager(sub)">
                     <button
                       class="btn btn-primary mx-2 stream-onoff-btn" @click="toggleVideoSub(sub)"
@@ -341,6 +340,19 @@ export default {
 			});
 			window.addEventListener('beforeunload', this.leaveSession)
 		},
+    // speechDetectIconOn() {
+    //   if(this.isSpeak) {
+
+    //   } else {
+
+    //   }
+    // },
+    // speechDetectIconOff() {
+    //   if(!this.isSpeak) {
+
+    //   }
+    //   this.connectionUser = !this.connectionUser;
+    // },
     connectionUserOnOff() {
       this.connectionUser = !this.connectionUser;
     },
@@ -574,6 +586,11 @@ export default {
 } */
 
 .video-isSpeak {
+  box-shadow:  0px 0px 10px rgb(0 255 0 / 1.0);
+  border-radius: 1rem;
+}
+.video-not-isSpeak {
   box-shadow:  6px 1px 10px 0 rgb(0 0 0 / 1.0);
+  border-radius: 20rem;
 }
 </style>
