@@ -51,6 +51,8 @@ import { computed, reactive } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
 
+//
+import { getMemberList } from '@/api/study'
 export default {
   name: 'Sidebar',
   components: {
@@ -99,6 +101,22 @@ export default {
     };
     const onClickMemberIcon = () => {
       state.isMemberList = !state.isMemberList;
+
+      // test
+      console.log('스터디 회원 목록 조회 테스트!');
+      getMemberList(
+        route.params.studyId,
+        (res) => {
+          console.log(res.data);
+          if (res.data.code === 200) {
+            // console.log('회원 목록 조회 성공!');
+            store.dispatch('GET_MEMBER_LIST', route.params.studyId);
+          }
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
     }
 
     return {
