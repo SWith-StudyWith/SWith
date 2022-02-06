@@ -1,5 +1,28 @@
 <template>
-  <div>
+  <!-- <div> -->
+    <!-- <div v-for="(dropzoneFile, index) in dropzoneFiles" v-bind:key="dropzoneFile.id" class="file-item">
+      <span class="file-info"><img class="file-type" src="@/assets/img/icon_sidebar/file/file-type-img-DEE8F9.svg" alt=""> {{dropzoneFile.name}} </span>
+      <img class="file-type" @click="deleteFile(index)" src="@/assets/img/icon_sidebar/file/trash-DEE8F9.svg" alt="">
+    </div>
+    <div class="file-submit">
+      <img class="file-submit-icon" @click="uploadFile" src="@/assets/img/icon_sidebar/file/check-DEE8F9.svg" alt="">
+      <span @click="uploadFile"> submit</span>
+    </div>
+    <DropZone @drop.prevent="drop" @change="selectedFile" /> -->
+
+    <div class="member-body">
+    <div v-if="files.length" >
+      <div class="row" v-for="file in state.fileList" :key="file.memberId">
+        <div class="col-4">
+          <span>파일명</span>
+          <span>파일크기</span>
+          <span>생성일자</span>
+        </div>
+        <div class="col-8">
+          <button>다운로드</button>
+        </div>
+      </div>
+    </div>
     <!-- <h1>DropZone</h1> -->
     <div v-for="(dropzoneFile, index) in dropzoneFiles" v-bind:key="dropzoneFile.id" class="file-item">
       <span class="file-info"><img class="file-type" src="@/assets/img/icon_sidebar/file/file-type-img-DEE8F9.svg" alt=""> {{dropzoneFile.name}} </span>
@@ -17,6 +40,10 @@
 <script>
 import DropZone from '@/views/studies/components/sidebar/SidebarFileDropzone.vue';
 import { ref } from "vue";
+import { uploadFile } from '@/api/study';
+import { computed, reactive } from 'vue';
+import { useStore } from 'vuex';
+import { useRoute } from 'vue-router';
 
 export default {
   name: "SidebarFile",
@@ -24,6 +51,15 @@ export default {
     DropZone,
   },
   setup() {
+    const store = useStore();
+    const route = useRoute();
+    store.dispatch('GET_FILE_LIST', route.params.studyId);
+    const state = reactive({
+      fileList : computed(() => {
+        return store.state.study.fileList;
+      }),
+    })
+
     let dropzoneFiles = ref([]);
 
     const drop = (e) => {
@@ -41,15 +77,40 @@ export default {
       }
     }
 
-    const deleteFile = (index) => {
+    const onClickDeleteFile = (index) => {
       dropzoneFiles.value.splice(index, 1);
     }
 
-    const uploadFile = () => {
+    const onClickUploadFile = (e) => {
+      e.preventDefault();
 
+      const uploadFileData = new FormData();
+      for (let i = 0; i < dropzoneFiles.value.length; i++) {
+        uploadFileData.append("studyFile", dropzoneFiles.value[i]);
+      }
+
+      uploadFile(
+        uploadFileData,
+        (res) => {
+          console.log(res.data)
+          switch (res.data.code) {
+            case 200:
+              alert('파일 업로드 완료')
+              break;
+            case 400:
+              alert('파일 업로드 실패')
+              break;
+          }
+          store.dispatch('GET_FILE_LIST', route.params.studyId);
+        },
+        (err) => {
+          console.log(err)
+          alert('서버가 아파유~')
+        },
+      )
     }
 
-    return { dropzoneFiles, drop, selectedFile, deleteFile, uploadFile };
+    return { state, dropzoneFiles, drop, selectedFile, onClickDeleteFile, onClickUploadFile };
   },
 }
 </script>
