@@ -20,8 +20,10 @@
           <div id="video-container">
             <div class="user-video-wrapper d-flex overflow-auto">
               <div class="video-box m-2 position-relative">
-                <user-video id="my-video" :stream-manager="publisher"
-                    :class="{'video-isSpeak':isSpeakList.includes(publisher.stream.connection.connectionId)}"/>
+                <div v-if="publisher">
+                  <user-video id="my-video" :stream-manager="publisher"
+                      :class="{'video-isSpeak':isSpeakList.includes(publisher.stream.connection.connectionId)}"/>
+                </div>
                 <div class="stream-btn-container" @click.self="updateMainVideoStreamManager(publisher)">
                   <button class="btn btn-primary mx-1 stream-onoff-btn" @click="videoOnOff(publisher)">
                     <font-awesome-icon
@@ -114,6 +116,12 @@ const OPENVIDU_SERVER_SECRET = "MY_SECRET";
 // const OPENVIDU_SERVER_URL = "https://" + location.hostname + ":4443";
 export default {
   name: 'Studies',
+  props: {
+    initVideoId: String,
+    initAudioId: String,
+    initVideoOn: Boolean,
+    initAudioOn: Boolean,
+  },
   components: {
     Sidebar,
     KanbanBoard,
@@ -174,14 +182,15 @@ export default {
 			mainStreamManager: undefined,
 			publisher: undefined,
 			subscribers: [],
-      videoOn: true,
-      audioOn: true,
+      videoOn: this.initVideoOn,
+      audioOn: this.initAudioOn,
+      // initVideoId: JSON.parse(this.initDeviceSetting).videoId,
+      // initAudioId: JSON.parse(this.initDeviceSetting).audioId,
       connectionUser: false,
       mainOnOff: false,
       myUserId: "",
       tg: false,
       screenMode: 0,
-
       editPermit: false,
       canLeave: true,
 
@@ -206,7 +215,7 @@ export default {
     }
   },  // data end
   mounted() {
-    this.joinSession()
+    this.joinSession(this.initVideoOn, this.initAudioOn)
     window.addEventListener('beforeunload', this.unloadEvent)
   },
   unmounted() {
@@ -214,11 +223,11 @@ export default {
   },
   computed: {
     mySessionId() {
-      return this.$route.params.studyId
+      return this.$route.params.studyId;
     },
     myUserName() {
-      return this.$store.state.user.userInfo.nickname
-    }
+      return this.$store.state.user.userInfo.nickname;
+    },
   },
   methods : {
     unloadEvent(e) {
@@ -259,7 +268,7 @@ export default {
       sub.muteAudio = !sub.muteAudio;
       sub.stream.audioActive = now;
     },
-    joinSession () {
+    joinSession (initVideoOn, initAudioOn) {
       // --- Get an OpenVidu object ---
       this.OV = new OpenVidu();
 
@@ -332,8 +341,6 @@ export default {
         //   JSON.parse(event.connection.data).clientData
         // );
       });
-
-
 			// --- Connect to the session with a valid user token ---
 
 			// 'getToken' method is simulating what your server-side should do.
@@ -342,11 +349,25 @@ export default {
 				this.session.connect(token, { clientData: this.myUserName })
 					.then(() => {
 						// --- Get your own camera stream with the desired properties ---
+            console.log(typeof(initAudioOn))
+            const parsing = (string) => {
+              if (string === 'true') {
+                return true;
+              } else if (string === 'false') {
+                return false;
+              } else {
+                return undefined;
+              }
+            }
+            console.log(initAudioOn)
+            console.log(initVideoOn)
+            console.log(parsing(initAudioOn))
+            console.log(parsing(initVideoOn))
 						let publisher = this.OV.initPublisher(undefined, {
-							audioSource: undefined, // The source of audio. If undefined default microphone
-							videoSource: undefined, // The source of video. If undefined default webcam
-							publishAudio: true,  	// Whether you want to start publishing with your audio unmuted or not
-							publishVideo: true,  	// Whether you want to start publishing with your video enabled or not
+							audioSource: this.initAudioId, // The source of audio. If undefined default microphone
+							videoSource: this.initVideoId, // The source of video. If undefined default webcam
+							publishAudio: parsing(initAudioOn),  	// Whether you want to start publishing with your audio unmuted or not
+							publishVideo: parsing(initVideoOn),  	// Whether you want to start publishing with your video enabled or not
 							resolution: '640x480',  // The resolution of your video
 							frameRate: 30,			// The frame rate of your video
 							insertMode: 'APPEND',	// How the video is inserted in the target element 'video-container'
