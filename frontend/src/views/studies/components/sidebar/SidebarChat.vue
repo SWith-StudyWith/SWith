@@ -140,7 +140,7 @@ export default {
 <style scoped>
 .chatDiv{
   /* float: right; */
-  width: 90%;
+  width: 100%;
   text-align: left;
   flex-direction: column;
 
@@ -155,7 +155,7 @@ export default {
 .title{
   font-size: 25px;
   font-weight:500;
-  margin-top: 20px;
+  margin-top: 40px;
   margin-bottom: 30px;
 }
 img {
@@ -165,10 +165,11 @@ img {
 }
 .chat-input{
   display: flex;
+  opacity: 0.7;
 }
 .inputText{
   bottom: 0;
-  margin: 10px;
+  margin: 5px;
 
   display: flex;
   width: 100%;
@@ -178,6 +179,7 @@ input{
   height: 90px;
   border: none;
   border-radius: 10px;
+  padding: 15px;
 
   flex-grow: 1;
 
