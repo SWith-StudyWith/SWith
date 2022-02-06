@@ -90,7 +90,12 @@ function confirmpassword(payload, success, fail) {
     .then(success)
     .catch(fail)
 }
-
+function signOut(payload, success, fail) {
+  basicInstance
+    .delete(`/api/members`, payload)
+    .then(success)
+    .catch(fail)
+}
 export {
   signup,
   sendEmail,
@@ -103,4 +108,5 @@ export {
   updatePassword,
   confirmpassword,
   sendTemporaryPassword,
+  signOut
 }
