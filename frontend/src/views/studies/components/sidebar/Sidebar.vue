@@ -108,6 +108,11 @@ export default {
     };
     const onClickFileIcon = () => {
       state.isFile = !state.isFile;
+      // if(!collapsed.value){
+      //   state.isFile = !state.isFile;
+      // } else{
+      //   collapsed.value = !collapsed.value;
+      // }
     }
     const onClickChatIcon = () => {
       state.isChat = !state.isChat;
