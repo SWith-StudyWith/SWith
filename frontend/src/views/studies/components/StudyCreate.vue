@@ -88,12 +88,18 @@ export default {
     });
 
     const onClickUploadFile = (e) => {
-      console.log(e)
       const file = e.target.files[0]
-      state.value.studyImgURL = URL.createObjectURL(file);
-      state.value.studyImage = file;
+      if (file.size > 209715) {
+        e.preventDefault();
+        alert('파일 사이즈가 큽니다.😯 (최대 2MB)');
+        return;
+      } else {
+        state.value.studyImgURL = URL.createObjectURL(file);
+        state.value.studyImage = file;
+      }
     };
     const onClickDefaultImg = (e) => {
+      e.preventDefault();
       state.value.studyImgURL = '';
       state.value.studyImage = '';
       // state.value.updated = true;
