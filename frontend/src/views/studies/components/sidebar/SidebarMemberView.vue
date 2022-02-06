@@ -67,7 +67,7 @@ export default {
 .title{
   font-size: 25px;
   font-weight:500;
-  margin-top: 20px;
+  margin-top: 40px;
   margin-bottom: 30px;
 }
 .profile-img {

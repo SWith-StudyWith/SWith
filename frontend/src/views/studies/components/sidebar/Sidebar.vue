@@ -41,12 +41,12 @@
           </span>
         </div>
       </div>
-      <div v-if="!collapsed" class="offset-2 col-10 sidebar-main">
-        <!-- <div class="sidebar-main"> -->
+      <div v-if="!collapsed" class="col-10 sidebar-main" >
+        <div >
           <SidebarFile v-if="state.isFile"/>
           <SidebarChat v-if="state.isChat"/>
           <SidebarMemberView :members="state.memberList" v-if="state.isMemberList"/>
-        <!-- </div> -->
+        </div>
       </div>
     </div>
   </div>
@@ -228,5 +228,11 @@ export default {
   left: 8px;
   transform: rotate(180deg);
   font-size: 23px;
+}
+
+.sidebar-main{
+  margin-left: 54px;
+  margin-bottom: 20px;
+  margin-top: 20px;
 }
 </style>

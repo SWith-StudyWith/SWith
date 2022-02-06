@@ -10,7 +10,7 @@
     </div>
     <DropZone @drop.prevent="drop" @change="selectedFile" /> -->
 
-    <div class="member-body">
+  <div class="fileDiv">
     <!-- <div v-if="files.length" >
       <div class="row" v-for="file in state.fileList" :key="file.memberId">
         <div class="col-4">
@@ -129,6 +129,10 @@ export default {
   font-family:  'Noto Sans KR', 'Mulish';
 }
 
+.fileDiv {
+  width: 100%
+}
+
 /* .home h1 {
   font-size: 40px;
   margin-bottom: 32px;
@@ -157,14 +161,11 @@ export default {
   align-items: center;
   font-size: 13px;
 
-  padding: 5px;
+  padding: 10px;
 }
 
 .file-submit-icon {
   margin-right: 3px;
 }
 
-/* .file-type {
-  size: 10px;
-} */
 </style>
