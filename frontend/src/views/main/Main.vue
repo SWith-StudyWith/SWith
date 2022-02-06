@@ -33,23 +33,6 @@ export default {
         return store.state.study.studyInfo
       })
     });
-    // const error = ref(null);
-
-    // const load = () => {
-    //   axios.get('https://d82e66db-a86a-4041-9f92-ecedba015b47.mock.pstmn.io/studies')
-    //   // axios.get(`VUE_APP_LOCAL_URI/studies`)
-    //     .then((res) => studies.value = res.data.data.studies)
-    //     .catch((err) => console.log(err))
-    // };
-
-    // load();
-    // onCreated(
-    //   async () => {
-    //     await
-    //     console.log(store.state.study)
-    //     console.log(store.state.study.studyList)
-    //   }
-    // )
     return {
       state
     };

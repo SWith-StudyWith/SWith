@@ -47,6 +47,7 @@ export default {
     console.log(props.studies);
     let studyCode = ref('')
     const store = useStore();
+    store.dispatch('GET_STUDY_LIST')
     const router = useRouter();
     const onClickJoin = function () {
       if (!studyCode.value) {
