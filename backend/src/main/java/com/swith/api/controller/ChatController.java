@@ -1,7 +1,9 @@
 package com.swith.api.controller;
 
 import com.swith.api.dto.study.ChatDto;
+import com.swith.api.service.ChatService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -13,6 +15,9 @@ import java.time.format.DateTimeFormatter;
 @Controller
 @RequiredArgsConstructor
 public class ChatController {
+
+    @Autowired
+    private ChatService chatService;
 
     private final SimpMessagingTemplate template;
 
@@ -30,6 +35,7 @@ public class ChatController {
         String createdAt = now.format(DateTimeFormatter.ofPattern("a hh시 mm분"));
 
         ChatDto result = new ChatDto(studyId, memberId, imgUrl, nickname, content, createdAt);
+        chatService.insertChat(result);
         template.convertAndSend("/send/" + studyId, result);
     }
 }
