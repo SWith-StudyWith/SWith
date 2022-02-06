@@ -5,20 +5,7 @@
       <div class="col-4">
         <StudyDetailHeader :studyInfo="state.studyInfo"/>
         <StudyDetailCamera @setDevice="setDevice($event)"/>
-        <router-link
-          :to="{
-            name: 'Studies',
-            params: {
-              studyId: route.params.studyId,
-              studyCode: route.params.studyCode,
-              initVideoId: state.videoId,
-              initAudioId: state.audioId,
-              initVideoOn: state.videoOn,
-              initAudioOn: state.audioOn,
-            }
-          }">
-          <button class="btn btn-success my-3 text-white">입장하기</button>
-        </router-link>
+        <button class="btn btn-success my-3 text-white" :disabled="!state.videoId" @click="onClickEnterBtn">입장하기</button>
       </div>
       <div class="col-8">
         <StudyDetailKanbanBoard :studyInfo="state.studyInfo"/>
@@ -39,7 +26,7 @@ import StudyDetailCamera from '@/views/studies/components/detail/StudyDetailCame
 import StudyDetailExitModal from '@/views/studies/components/detail/StudyDetailExitModal';
 import StudyDetailKanbanBoard from '@/views/studies/components/detail/StudyDetailKanbanBoard';
 import { reactive, computed } from 'vue'
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex'
 
 export default {
@@ -52,6 +39,7 @@ export default {
     StudyDetailKanbanBoard,
   },
   setup() {
+    const router = useRouter();
     const route = useRoute();
     const store = useStore()
     store.dispatch('GET_STUDY_INFO', route.params.studyId)
@@ -70,9 +58,23 @@ export default {
       state.audioId = deviceSettings.audioId
       state.videoOn = deviceSettings.videoOn
       state.audioOn = deviceSettings.audioOn
-
     }
-    return { state, route, setDevice };
+    const onClickEnterBtn = function () {
+      router.push(
+        {
+          name: 'Studies',
+          params: {
+            studyId: route.params.studyId,
+            studyCode: route.params.studyCode,
+            initVideoId: state.videoId,
+            initAudioId: state.audioId,
+            initVideoOn: state.videoOn,
+            initAudioOn: state.audioOn,
+          }
+        }
+      )
+    }
+    return { state, route, setDevice, onClickEnterBtn };
   },
 }
 </script>

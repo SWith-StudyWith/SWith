@@ -505,10 +505,9 @@ export default {
 			this.OVForScreenShare = new OpenVidu();
 
 			this.sessionForScreenShare = this.OVForScreenShare.initSession();
-
 			var mySessionId = this.mySessionId;
 			this.getToken(mySessionId).then(token => {
-				this.sessionForScreenShare.connect(token, { clientData: this.screenShareName })
+				this.sessionForScreenShare.connect(token, { clientData: this.myUserName + ' 님의 화면공유' })
 				.then(() => {
 					let publisher = this.OVForScreenShare.initPublisher("sharingvideo", {
 						audioSource: false,
