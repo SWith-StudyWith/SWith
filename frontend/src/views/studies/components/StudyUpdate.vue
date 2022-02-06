@@ -88,9 +88,15 @@ export default {
 
     const onClickUploadFile = (e) => {
       const file = e.target.files[0]
+      if (file.size > 2097152) {
+        e.preventDefault();
+        alert('파일 사이즈가 큽니다.😯 (최대 2MB)');
+        return;
+      } else {
         state.value.studyInfo.studyImgUrl = URL.createObjectURL(file);
         state.value.studyImage = file;
         state.value.updated = true;
+      }
     };
     const onClickDefaultImg = () => {
       state.value.studyInfo.studyImgURL = '';
