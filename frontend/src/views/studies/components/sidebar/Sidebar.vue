@@ -40,7 +40,7 @@
       <div class="col-2">
         <!-- 사이드바 컨트롤 버튼들 자리차지 ? 가 안되서 만들어준 col...입니다 -->
       </div>
-      <div class="col-10 sidebar-main">
+      <div v-if="!collapsed" class="col-10 sidebar-main">
         <!-- <div class="sidebar-main"> -->
           <SidebarFile v-if="state.isFile"/>
           <SidebarChat v-if="state.isChat"/>
@@ -162,13 +162,14 @@ export default {
 .control-bottons {
   /* text-align: center; */
   color: rgba(255, 255, 255, 0.7);
-  /* position: fixed; */
-  /* left: 0x; */
-  /* bottom: 0px; */
-  /* width: 54px; */
+  position: fixed;
+  left: 0x;
+  bottom: 0px;
+  width: 54px;
   text-align: left;
   font-size: 23px;
   cursor: pointer;
+  z-index:500;
 }
 .sidebar h1 {
   height: 2.5em;
