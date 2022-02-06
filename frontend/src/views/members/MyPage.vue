@@ -2,9 +2,7 @@
   <div>
     <Navbar />
     <div class="container">
-      <!-- <header> -->
-        <h1 class="form-title">내 정보 수정</h1>
-      <!-- </header> -->
+      <h1 class="form-title">내 정보 수정</h1>
       <div class="row d-flex justify-content-center">
         <div class="col-4" style="">
           <form class="userInfo-wrapper" enctype="multipart/form-data">
@@ -39,7 +37,13 @@
             </div>
             <div class="row">
               <label for="nickname" class="form-label">닉네임</label>
-              <input type="text" class="form-control" id="nickname" v-model="state.nickname">
+              <input type="text" class="form-control" id="nickname" v-model="state.nickname" required placeholder="사용할 닉네임을 입력해주세요.">
+              <div
+                :style="{ visibility: (state.isValidNickname || !state.wasInputed.nickname)? 'hidden' : 'visible' }"
+                class="invalid-feedback"
+              >
+                닉네임을 입력해주세요.
+              </div>
             </div>
             <div class="row">
               <label for="goal" class="form-label">나의 목표</label>
@@ -69,7 +73,7 @@ import Navbar from '@/views/common/Navbar.vue';
 import Footer from '@/views/common/Footer.vue';
 import SignOutModal from '@/views/members/components/SignOutModal.vue';
 import ChangePasswordModal from './components/ChangePasswordModal.vue';
-// import { getUserInfo } from '../../api/user'
+
 export default {
   name: '',
   components: { Navbar, Footer, SignOutModal, ChangePasswordModal },
@@ -86,8 +90,19 @@ export default {
         } else {
           return require(`@/assets/img/navbar/profile.png`)
         }
-    })
-
+      }),
+      wasInputed: {
+        nickname: false,
+      },
+      isValidNickname: computed(() => {
+        if (state.value.nickname !== '') {
+          state.value.wasInputed.nickname = true;
+        }
+        if (state.value.nickname && validateNickname(state.value.nickname)) {
+          return true;
+        }
+        return false;
+      }),
     });
 
     const onClickUploadFile = function(e) {
@@ -106,16 +121,29 @@ export default {
 
     const onClickUpdateUserInfo = (e) => {
       e.preventDefault();
+      if (state.value.nickname === '') {
+        state.value.wasInputed.nickname = true;
+        return;
+      }
+      if (!state.value.isValidNickname ) {
+        return;
+      }
       const updateUserData = new FormData();
       updateUserData.append("nickname", state.value.nickname)
       updateUserData.append("goal", state.value.userInfo.goal)
       updateUserData.append("profileImg", state.value.profileImg)
       updateUserData.append("updated", state.value.updated)
-      //console.log(state.value.userInfo)
       store.dispatch('updateUserInfo', updateUserData)
     }
+
+    const validateNickname = function (nickname) {
+      if (nickname.length >= 2 && nickname.length <= 16) {
+        return true;
+      } return false;
+    };
+
     return {
-      state, onClickUpdateUserInfo, onClickUploadFile, onClickDefaultImg
+      state, onClickUpdateUserInfo, onClickUploadFile, onClickDefaultImg, validateNickname
     }
   },
 
@@ -189,7 +217,12 @@ p{
 .dropend{
   margin-left: 40px;
 }
-
+.invalid-feedback {
+  display: block;
+  font-size: 0.75rem;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
 /* setting */
 .form-label{
   margin-bottom: 3px;
