@@ -11,7 +11,7 @@
     <DropZone @drop.prevent="drop" @change="selectedFile" /> -->
 
     <div class="member-body">
-    <div v-if="files.length" >
+    <!-- <div v-if="files.length" >
       <div class="row" v-for="file in state.fileList" :key="file.memberId">
         <div class="col-4">
           <span>파일명</span>
@@ -22,7 +22,7 @@
           <button>다운로드</button>
         </div>
       </div>
-    </div>
+    </div> -->
     <!-- <h1>DropZone</h1> -->
     <div v-for="(dropzoneFile, index) in dropzoneFiles" v-bind:key="dropzoneFile.id" class="file-item">
       <span class="file-info"><img class="file-type" src="@/assets/img/icon_sidebar/file/file-type-img-DEE8F9.svg" alt=""> {{dropzoneFile.name}} </span>
