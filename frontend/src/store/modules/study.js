@@ -1,9 +1,10 @@
-import { getStudyInfo, getStudyList, getMemberList, updateStudy } from "../../api/study";
+import { getStudyInfo, getStudyList, getMemberList, updateStudy, getFileList } from "../../api/study";
 
 const state = () => ({
   studyInfo: {},
   studyList: [],
   memberList: [],
+  fileList: [],
 });
 
 const getters = {
@@ -70,6 +71,19 @@ const actions = {
       }
     )
   },
+  getFileListInfo({ commit }, studyId) {
+    getFileList(
+      studyId,
+      (res) => {
+        if (res.data.code === 200) {
+          commit('SET_FILE_LIST', res.data.data)
+        }
+      },
+      (err) => {
+        console.log(err)
+      }
+    )
+  },
 };
 
 const mutations = {
@@ -89,7 +103,10 @@ const mutations = {
   },
   UPDATE_STUDY_INFO(state, payload) {
     state.studyInfo = payload;
-  }
+  },
+  SET_FILE_LIST(state, payload) {
+    state.fileList = payload;
+  },
 };
 
 export default {

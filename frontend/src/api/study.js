@@ -62,6 +62,12 @@ function uploadFile(studyId, payload, success, fail) {
     .then(success)
     .catch(fail)
 }
+function getFileList(studyId, success, fail) {
+  basicInstance
+    .get(`api/studies/${studyId}/files`)
+    .then(success)
+    .catch(fail)
+}
 
 export {
   createStudy,
@@ -73,5 +79,6 @@ export {
   putKanban,
   checkKanban,
   getMemberList,
-  uploadFile
+  uploadFile,
+  getFileList,
 }

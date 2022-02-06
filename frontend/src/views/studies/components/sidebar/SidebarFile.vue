@@ -2,10 +2,14 @@
   <div>
     <div class="member-body">
     <div v-if="files.length" >
-      <div class="row" v-for="file in files" :key="file.memberId">
+      <div class="row" v-for="file in state.fileList" :key="file.memberId">
         <div class="col-4">
+          <span>파일명</span>
+          <span>파일크기</span>
+          <span>생성일자</span>
         </div>
         <div class="col-8">
+          <button>다운로드</button>
         </div>
       </div>
     </div>
@@ -23,6 +27,9 @@
 import DropZone from '@/views/studies/components/sidebar/SidebarFileDropzone.vue';
 import { ref } from "vue";
 import { uploadFile } from '@/api/study';
+import { computed, reactive } from 'vue';
+import { useStore } from 'vuex';
+import { useRoute } from 'vue-router';
 
 export default {
   name: "SidebarFile",
@@ -30,6 +37,15 @@ export default {
     DropZone,
   },
   setup() {
+    const store = useStore();
+    const route = useRoute();
+    store.dispatch('GET_FILE_LIST', route.params.studyId);
+    const state = reactive({
+      fileList : computed(() => {
+        return store.state.study.fileList;
+      }),
+    })
+
     let dropzoneFiles = ref([]);
 
     const drop = (e) => {
@@ -71,6 +87,7 @@ export default {
               alert('파일 업로드 실패')
               break;
           }
+          store.dispatch('GET_FILE_LIST', route.params.studyId);
         },
         (err) => {
           console.log(err)
@@ -79,7 +96,7 @@ export default {
       )
     }
 
-    return { dropzoneFiles, drop, selectedFile, onClickDeleteFile, onClickUploadFile };
+    return { state, dropzoneFiles, drop, selectedFile, onClickDeleteFile, onClickUploadFile };
   },
 }
 </script>
