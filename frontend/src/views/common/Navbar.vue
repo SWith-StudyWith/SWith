@@ -67,7 +67,7 @@ export default {
 
     const onClickLogout = function (e) {
       e.preventDefault();
-      store.commit('LOGOUT')
+      store.dispatch('LOGOUT')
       router.push({ name: 'Login' })
     };
 
