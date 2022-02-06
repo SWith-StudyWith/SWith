@@ -8,7 +8,7 @@
           </div>
           <div class="modal-body">
             <p>이용약관</p>
-            <div class="overflow-auto card fw-light" style="height: 10rem">
+            <div class="overflow-auto card fw-light p-2" style="height: 10rem">
               제 1 장 총 칙
               제1조 목적
               이 약관은 “주식회사 SWith(이하 “회사”)”이 제공하는 “SWith”와 관련하여 회사와 이용자 간의 권리와 의무 및 필요한 사항을 정하는데 그 목적이 있습니다.
@@ -77,7 +77,7 @@
               이용자는 계정 탈퇴 완료 이후에 서비스에 재가입이 가능합니다.
             </div>
             <p class="my-3">개인정보 처리방침</p>
-            <div class="overflow-auto card fw-light" style="height: 10rem">
+            <div class="overflow-auto card fw-light p-2" style="height: 10rem">
               [ SWith ] ('https://www.swith.com'이하 'SWith')은(는) 「개인정보 보호법」 제30조에 따라 정보주체의 개인정보를 보호하고 이와 관련한 고충을 신속하고 원활하게 처리할 수 있도록 하기 위하여 다음과 같이 개인정보 처리방침을 수립·공개합니다.
               ○ 이 개인정보처리방침은 2022년 1월 1부터 적용됩니다.
               제1조(개인정보의 처리 목적)
@@ -176,7 +176,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary" style="width: 6rem;" data-bs-dismiss="modal">닫기</button>
+            <button type="button" class="btn btn-primary btn-sm" style="width: 6rem;" data-bs-dismiss="modal">닫기</button>
           </div>
         </div>
       </div>
