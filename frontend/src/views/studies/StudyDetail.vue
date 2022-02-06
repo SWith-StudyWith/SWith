@@ -4,8 +4,19 @@
     <div class="row">
       <div class="col-4">
         <StudyDetailHeader :studyInfo="state.studyInfo"/>
-        <StudyDetailCamera/>
-        <router-link :to="{ name: 'Studies', params: { studyId: route.params.studyId, studyCode: route.params.studyCode } }">
+        <StudyDetailCamera @setDevice="setDevice($event)"/>
+        <router-link
+          :to="{
+            name: 'Studies',
+            params: {
+              studyId: route.params.studyId,
+              studyCode: route.params.studyCode,
+              initVideoId: state.videoId,
+              initAudioId: state.audioId,
+              initVideoOn: state.videoOn,
+              initAudioOn: state.audioOn,
+            }
+          }">
           <button class="btn btn-success my-3 text-white">입장하기</button>
         </router-link>
       </div>
@@ -47,10 +58,21 @@ export default {
 
     const state = reactive({
       studyInfo: computed(() => {
-        return store.state.study.studyInfo
-      })
+        return store.state.study.studyInfo;
+      }),
+      videoId: '',
+      audioId: '',
+      videoOn: false,
+      audioOn: false,
     });
-    return { state, route };
+    const setDevice = function (deviceSettings) {
+      state.videoId = deviceSettings.videoId
+      state.audioId = deviceSettings.audioId
+      state.videoOn = deviceSettings.videoOn
+      state.audioOn = deviceSettings.audioOn
+
+    }
+    return { state, route, setDevice };
   },
 }
 </script>

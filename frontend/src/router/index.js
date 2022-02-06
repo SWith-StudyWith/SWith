@@ -92,6 +92,7 @@ const routes = [
     name: 'Studies',
     component: () => import(/* webpackChunkName: "about" */ '@/views/studies/Studies.vue'),
     meta: { authRequired: true },
+    props: true,
   },
   // {
   //   path: '/studies/:studyCode/kanbanboard',
