@@ -205,13 +205,6 @@ p{
   margin-top: 0;
   margin-bottom: 0;
 }
-.valid-feedback {
-  display: block;
-  font-size: 0.75rem;
-  margin-top: 0;
-  margin-bottom: 0.2rem;
-  color: green;
-}
 /* basic setting */
 button{
   font-size: 14px;
