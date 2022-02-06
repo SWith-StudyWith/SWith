@@ -66,8 +66,8 @@ export default {
       studyImage: '',
       updated: false,
       studyImgSrc: computed(()=> {
-        if (state.value.studyInfo.studyImgURL) {
-          return state.value.studyInfo.studyImgURL
+        if (state.value.studyInfo.studyImgUrl) {
+          return state.value.studyInfo.studyImgUrl
         } else {
           return require(`@/assets/img/study_room/studyroom.png`)
         }
@@ -87,14 +87,14 @@ export default {
     });
 
     const onClickUploadFile = (e) => {
-      console.log(e)
       const file = e.target.files[0]
-      state.value.studyInfo.studyImgURL = URL.createObjectURL(file);
-      state.value.studyImage = file;
-      state.value.updated = true;
+        state.value.studyInfo.studyImgUrl = URL.createObjectURL(file);
+        state.value.studyImage = file;
+        state.value.updated = true;
     };
     const onClickDefaultImg = () => {
       state.value.studyInfo.studyImgURL = '';
+      state.value.studyInfo.studyImgUrl = '';
       state.value.updated = true;
     };
     const onClickUpdateStudy = (e) => {
