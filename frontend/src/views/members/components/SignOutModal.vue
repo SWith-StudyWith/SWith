@@ -19,28 +19,34 @@
   </div>
 </template>
 <script>
+import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
-import { signOut } from '@/api/user';
 
 export default {
   name: 'SignOut',
   setup() {
-    const router = useRouter();
+    const store = useStore()
+    const router = useRouter()
     const onClickSignOut = function (e) {
       e.preventDefault();
-      signOut(
-        (res) => {
-          console.log(res)
-          console.log(res.data)
-          console.log('탈퇴완료')
-          if (res.data.code === 200 ) {
-            router.push({ name: 'Login' })
-          }
-        },
-        (err) => {
-          console.log(err)
-        }
-      )
+      console.log(e)
+      console.log('버튼 클릭')
+      // signOut(
+      //   (res) => {
+      //     console.log(res)
+      //     console.log(res.data)
+      //     console.log('탈퇴완료')
+      //     if (res.data.code === 200 ) {
+      //       sessionStorage.removeItem('accessToken', res.data.data.accessToken)
+      //       router.push({ name: 'Login' })
+      //     }
+      //   },
+      //   (err) => {
+      //     console.log(err)
+      //   }
+      // )
+      store.dispatch('SIGNOUT')
+      router.push({ name: 'Login' })
     }
     return { onClickSignOut }
   }

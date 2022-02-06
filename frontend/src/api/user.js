@@ -90,9 +90,9 @@ function confirmpassword(payload, success, fail) {
     .then(success)
     .catch(fail)
 }
-function signOut(payload, success, fail) {
+function signOut(success, fail) {
   basicInstance
-    .delete(`/api/members`, payload)
+    .delete(`/api/members`)
     .then(success)
     .catch(fail)
 }
