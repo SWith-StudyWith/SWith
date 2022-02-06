@@ -8,26 +8,30 @@
       <span v-else>Swith Sidebar</span>
     </h1> -->
     <div class="row">
-      <div class="sidebar-left control-bottons ps-2">
-        <div class="icon-container" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="칸반보드">
-          <font-awesome-icon class="m-2" :class="{ 'font-active': screenMode === 0 }" @click="onClickKanbanBoardIcon" :icon="['fas', 'chalkboard']" />
+      <div class="icon-container exit-btn" @click="onClickExitIcon">
+        <font-awesome-icon class="m-2" :icon="['fas', 'sign-out-alt']" />
+      </div>
+      <div class="control-bottons">
+        <div class="icon-container" @click="onClickKanbanBoardIcon" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="칸반보드">
+          <font-awesome-icon class="m-2" :class="{ 'font-active': screenMode === 0 }" :icon="['fas', 'chalkboard']" />
         </div>
-        <div class="icon-container" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="화면공유">
-          <font-awesome-icon class="m-2" :class="{ 'font-active': isScreenShared }" @click="onClickScreenShareIcon" :icon="['fas', 'tv']" />
+        <div class="icon-container" @click="onClickScreenShareIcon" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="화면공유">
+          <font-awesome-icon class="m-2" :class="{ 'font-active': isScreenShared }"  :icon="['fas', 'tv']" />
         </div>
-        <div class="icon-container" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="화이트보드">
-          <font-awesome-icon class="m-2" :class="{ 'font-active': screenMode === 2 }" @click="onClickWhiteBoardIcon" :icon="['fas', 'pen']" />
+        <div class="icon-container" @click="onClickWhiteBoardIcon" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="화이트보드">
+          <font-awesome-icon class="m-2" :class="{ 'font-active': screenMode === 2 }"  :icon="['fas', 'pen']" />
         </div>
-        <div class="icon-container" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="파일공유">
-          <font-awesome-icon class="m-2" :class="{ 'font-active': state.isFile }" @click="onClickFileIcon()" :icon="['fas', 'file-upload']" />
+        <div class="icon-container" @click="onClickFileIcon()" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="파일공유">
+          <font-awesome-icon class="m-2" :class="{ 'font-active': state.isFile }"  :icon="['fas', 'file-upload']" />
         </div>
-        <div class="icon-container" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="채팅">
-          <font-awesome-icon class="m-2" :class="{ 'font-active': state.isChat }" @click="onClickChatIcon" :icon="['fas', 'comment']" />
+        <div class="icon-container" @click="onClickChatIcon" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="채팅">
+          <font-awesome-icon class="m-2" :class="{ 'font-active': state.isChat }" :icon="['fas', 'comment']" />
         </div>
-        <div class="icon-container" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="유저목록">
-          <font-awesome-icon class="m-2" :class="{ 'font-active': state.isMemberList }" @click="onClickMemberIcon" :icon="['fas', 'user-friends']"/>
+        <div class="icon-container" @click="onClickMemberIcon" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="유저목록">
+          <font-awesome-icon class="m-2" :class="{ 'font-active': state.isMemberList }" :icon="['fas', 'user-friends']"/>
         </div>
           <!-- toggle button -->
+        <div class="icon-container">
           <span
             class="collapse-icon"
             :class="{ 'rotate-180': collapsed }"
@@ -35,12 +39,9 @@
           >
             <i class="fas fa-angle-double-left" />
           </span>
+        </div>
       </div>
-
-      <div class="col-2">
-        <!-- 사이드바 컨트롤 버튼들 자리차지 ? 가 안되서 만들어준 col...입니다 -->
-      </div>
-      <div class="col-10 sidebar-main">
+      <div v-if="!collapsed" class="offset-2 col-10 sidebar-main">
         <!-- <div class="sidebar-main"> -->
           <SidebarFile v-if="state.isFile"/>
           <SidebarChat v-if="state.isChat"/>
@@ -59,7 +60,7 @@ import SidebarFile from '@/views/studies/components/sidebar/SidebarFile.vue';
 import SidebarMemberView from '@/views/studies/components/sidebar/SidebarMemberView.vue'
 import { computed, reactive } from 'vue';
 import { useStore } from 'vuex';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { Popover } from 'bootstrap';
 
 //
@@ -82,6 +83,7 @@ export default {
     // 스터디 회원 목록 조회
     const store = useStore();
     const route = useRoute();
+    const router = useRouter();
     store.dispatch('GET_MEMBER_LIST', route.params.studyId);
     const state = reactive({
       memberList : computed(() => {
@@ -112,7 +114,6 @@ export default {
     };
     const onClickMemberIcon = () => {
       state.isMemberList = !state.isMemberList;
-
       // test
       console.log('스터디 회원 목록 조회 테스트!');
       getMemberList(
@@ -129,11 +130,14 @@ export default {
         }
       );
     }
+    const onClickExitIcon = () => {
+      router.push({ name: 'StudyDetail', params: { studyId: route.params.studyId } })
+    }
 
     return {
       state, collapsed, toggleSidebar, sidebarWidth,
       onClickScreenShareIcon, onClickWhiteBoardIcon, onClickKanbanBoardIcon,
-      onClickChatIcon, onClickMemberIcon, onClickFileIcon
+      onClickChatIcon, onClickMemberIcon, onClickFileIcon, onClickExitIcon
     };
   },
   mounted() {
@@ -162,21 +166,21 @@ export default {
 .control-bottons {
   /* text-align: center; */
   color: rgba(255, 255, 255, 0.7);
-  /* position: fixed; */
-  /* left: 0x; */
-  /* bottom: 0px; */
-  /* width: 54px; */
+  position: fixed;
+  left: 0.5rem;
+  bottom: 0px;
+  width: 38px;
   text-align: left;
   font-size: 23px;
-  cursor: pointer;
+  z-index: 500;
+  padding: 0;
 }
 .sidebar h1 {
   height: 2.5em;
 }
 .collapse-icon {
   transition: 0.2s linear;
-  font-size: 30px;
-  margin-left: 7px;
+  /* font-size: 30px; */
 }
 .rotate-180 {
   transform: rotate(180deg);
@@ -193,11 +197,19 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 2.8rem;
   margin-top: 0.4rem;
   border-radius: 0.5rem;
+  width: 38px;
+  cursor: pointer;
 }
 .icon-container:hover {
   background-color: #334564;
+}
+.exit-btn {
+  position: fixed;
+  top: 0px;
+  left: 8px;
+  transform: rotate(180deg);
+  font-size: 23px;
 }
 </style>

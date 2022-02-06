@@ -87,6 +87,9 @@ import { checkKanban, putKanban } from '@/api/study'
 
 export default {
   name: 'KanbanBoard',
+  props: {
+    editPermit: Boolean,
+  },
   components: {
     // Sidebar,
     KanbanBoardCard,
@@ -94,13 +97,12 @@ export default {
     KanbanBoardCreateModal,
     draggable,
   },
-  setup() {
+  setup(props, { emit }) {
     const store = useStore();
     const kanbanBoard = computed(() => {
       return store.state.study.studyInfo.kanbanBoard;
     });
     const statusId = ref(null);
-    const editPermit = ref(false);
     const selectedTask = ref({});
     const updateTask = function(task) {
       kanbanBoard.value[task.value.taskId - 1].kanban.forEach((card) => {
@@ -126,10 +128,10 @@ export default {
           console.log(res.data);
           if (res.data.code === 200) {
             console.log('수정 가능');
-            editPermit.value = true;
+            emit('isEditPermit', true);
           } else if (res.data.code === 400) {
             console.log('누군가 수정 중');
-            editPermit.value = false;
+            emit('isEditPermit', false);
           }
         },
         (err) => {
@@ -164,7 +166,7 @@ export default {
           console.log(err)
         }
       )
-      editPermit.value = false;
+      emit('isEditPermit', false);
     };
     const createTask = function (task) {
       const taskId = task.taskId;
@@ -178,7 +180,6 @@ export default {
       selectedTask,
       updateTask,
       onClickEditBtn,
-      editPermit,
       onClickSaveBtn,
       deleteTask,
       statusId,
