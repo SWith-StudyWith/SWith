@@ -84,7 +84,7 @@
       </div>
       <!-- main container end -->
       <!-- 화면 모드 -->
-      <KanbanBoard v-if="screenMode === 0"/>
+      <KanbanBoard v-if="screenMode === 0" @isEditPermit="isEditPermit($event)" :editPermit="editPermit" ref="kanbanBoard"/>
       <MainScreen
         v-else-if="screenMode === 1"
         :streamManager="mainStreamManager"
@@ -101,10 +101,10 @@ import { sidebarWidth } from '@/views/studies/components/sidebar/state.js';
 import KanbanBoard from '@/views/studies/components/screen/KanbanBoard.vue';
 import MainScreen from '@/views/studies/components/screen/MainScreen.vue';
 import WhiteBoard from '@/views/studies/components/screen/WhiteBoard.vue';
+import UserVideo from "@/views/studies/components/room/video//UserVideo.vue";
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
 import { OpenVidu } from "openvidu-browser";
-import UserVideo from "@/views/studies/components/room/video//UserVideo.vue";
 import axios from "axios";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
@@ -123,32 +123,48 @@ export default {
   },
   beforeRouteLeave(to, from, next) {
     console.log(to.fullPath);
+    if (!this.canLeave) {
+      if (confirm('현재 칸반보드를 저장합니까?')) {
+        this.$refs.kanbanBoard.onClickSaveBtn()
+      } else {
+        return
+      }
+    }
     if (to.fullPath == `/studies/${this.$route.params.studyId}`) {
       if (this.session) {
         this.session.disconnect();
+      }
+      if (this.sessionForScreenShare) {
+        this.sessionForScreenShare.disconnect();
       }
       return next();
     } else {
       if (this.session) {
         this.session.disconnect();
       }
+      if (this.sessionForScreenShare) {
+        this.sessionForScreenShare.disconnect();
+      }
       this.session = undefined;
       this.mainStreamManager = undefined;
       this.publisher = undefined;
       this.subscribers = [];
       this.OV = undefined;
-
-      window.removeEventListener("beforeunload", this.leaveSession);
+      this.OVForScreenShare = undefined,
+			this.sessionForScreenShare = undefined,
+			this.mainStreamManager2 = undefined,
+			this.sharingPublisher = undefined,
+      window.removeEventListener("beforeunload", this.unloadEvent);
+      // window.removeEventListener("beforeunload", this.leaveSession);
       return next();
     }
+
   },
   setup() {
     const store = useStore();
     const route = useRoute();
     store.dispatch('GET_STUDY_INFO', route.params.studyId);
     // const screenMode = ref(0);
-
-
     return { sidebarWidth };
   },
   data () {
@@ -165,6 +181,9 @@ export default {
       myUserId: "",
       tg: false,
       screenMode: 0,
+
+      editPermit: false,
+      canLeave: true,
 
 			// 사용자 정보
 			// mySessionId: 'SessionA',
@@ -188,6 +207,10 @@ export default {
   },  // data end
   mounted() {
     this.joinSession()
+    window.addEventListener('beforeunload', this.unloadEvent)
+  },
+  unmounted() {
+    window.removeEventListener('beforeunload', this.unloadEvent)
   },
   computed: {
     mySessionId() {
@@ -198,6 +221,20 @@ export default {
     }
   },
   methods : {
+    unloadEvent(e) {
+      this.leaveSession()
+      this.leaveSessionForScreenSharing()
+      if (this.canLeave) {
+        return
+      }
+      e.preventDefault();
+      e.returnValue = '';
+    },
+    isEditPermit (permit) {
+      console.log(permit)
+      this.editPermit = permit;
+      this.canLeave = !permit;
+    },
     showScreenMode ( mode ) {
       // switch (screen)
       console.log(mode)
@@ -325,7 +362,7 @@ export default {
 						console.log('There was an error connecting to the session:', error.code, error.message);
 					});
 			});
-			window.addEventListener('beforeunload', this.leaveSession)
+			// window.addEventListener('beforeunload', this.leaveSession)
 		},
     // speechDetectIconOn() {
     //   if(this.isSpeak) {
@@ -364,7 +401,7 @@ export default {
 			this.subscribers = [];
 			this.OV = undefined;
 
-			window.removeEventListener('beforeunload', this.leaveSession);
+			// window.removeEventListener('beforeunload', this.leaveSession);
 		},
 
 		updateMainVideoStreamManager (stream) {
@@ -499,7 +536,7 @@ export default {
 				}));
 			});
 
-			window.addEventListener('beforeunload', this.leaveSessionForScreenSharing)
+			// window.addEventListener('beforeunload', this.leaveSessionForScreenSharing)
 		},
     stopScreenSharing() {
       this.isScreenShared = false;
@@ -514,7 +551,7 @@ export default {
       this.mainStreamManager = undefined;
       this.sharingPublisher = undefined;
       this.OVForScreenShare = undefined;
-      window.removeEventListener('beforeunload', this.leaveSessionForScreenSharing);
+      // window.removeEventListener('beforeunload', this.leaveSessionForScreenSharing);
 		},
 		checkScreenShared () {
 			var buf = 0;
