@@ -21,7 +21,7 @@
         <div class="icon-container" @click="onClickWhiteBoardIcon" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="화이트보드">
           <font-awesome-icon class="m-2" :class="{ 'font-active': screenMode === 2 }"  :icon="['fas', 'pen']" />
         </div>
-        <div class="icon-container" @click="onClickFileIcon()" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="파일공유">
+        <div class="icon-container" @click="onClickFileIcon" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="파일공유">
           <font-awesome-icon class="m-2" :class="{ 'font-active': state.isFile }"  :icon="['fas', 'file-upload']" />
         </div>
         <div class="icon-container" @click="onClickChatIcon" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="채팅">
@@ -107,6 +107,10 @@ export default {
       context.emit('show-screenmode', 2)
     };
     const onClickFileIcon = () => {
+      if (!state.isFile) {
+        state.isChat = false;
+        state.isMemberList = false;
+      }
       state.isFile = !state.isFile;
       // if(!collapsed.value){
       //   state.isFile = !state.isFile;
@@ -115,9 +119,17 @@ export default {
       // }
     }
     const onClickChatIcon = () => {
+      if (!state.isChat) {
+        state.isFile = false;
+        state.isMemberList = false;
+      }
       state.isChat = !state.isChat;
     };
     const onClickMemberIcon = () => {
+      if (!state.isMemberList) {
+        state.isFile = false;
+        state.isChat = false;
+      }
       state.isMemberList = !state.isMemberList;
       // test
       console.log('스터디 회원 목록 조회 테스트!');
