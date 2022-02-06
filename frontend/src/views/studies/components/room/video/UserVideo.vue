@@ -1,7 +1,7 @@
 <template>
   <div v-if="streamManager" id="UserVideo">
     <!-- <OvVideo :stream-manager="streamManager" :mainStream="mainStream" :is-speak="isSpeak"/> -->
-    <OvVideo :stream-manager="streamManager" :is-speak="isSpeak" :mainStream="mainStream"/>
+    <OvVideo :stream-manager="streamManager" :isSpeak="isSpeak" :mainStream="mainStream"/>
     <p style="margin:0px;">{{ clientData }}</p>
   </div>
 <!-- <div id="UserVideo" v-if="streamManager">

@@ -22,7 +22,7 @@
               <div class="video-box m-2 position-relative">
                 <div v-if="publisher">
                   <user-video id="my-video" :stream-manager="publisher"
-                      :class="{'video-isSpeak':isSpeakList.includes(publisher.stream.connection.connectionId)}"/>
+                    :isSpeak="isSpeakList.includes(publisher.stream.connection.connectionId)"/>
                 </div>
                 <div class="stream-btn-container" @click.self="updateMainVideoStreamManager(publisher)">
                   <button class="btn btn-primary mx-1 stream-onoff-btn" @click="videoOnOff(publisher)">
@@ -41,7 +41,7 @@
               </div>
               <div v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub">
                 <div class="video-box m-2 position-relative">
-                  <user-video :stream-manager="sub" :class="{'video-isSpeak':isSpeakList.includes(sub.stream.connection.connectionId)}"/>
+                  <user-video :stream-manager="sub" :isSpeak="isSpeakList.includes(publisher.stream.connection.connectionId)"/>
                   <div
                     class="mute-icon-container text-start"
                     v-if="JSON.parse(sub.stream.connection.data).clientData !== 'Screen Sharing'"

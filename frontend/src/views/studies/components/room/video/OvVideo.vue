@@ -1,6 +1,6 @@
 <template>
   <video v-if="mainStream" class="main" autoplay />
-  <video v-else class="sub" autoplay />
+  <video v-else class="sub" :class="{'video-isSpeak': isSpeak}" autoplay />
 </template>
 
 <script>
@@ -9,7 +9,8 @@ export default {
 
 	props: {
 		streamManager: Object,
-    mainStream: Boolean
+    mainStream: Boolean,
+    isSpeak: Boolean,
 	},
 
 	mounted () {
@@ -31,6 +32,10 @@ export default {
   height: 200px;
   overflow: hidden;
   object-fit: cover;
+  border-radius: 1rem;
+}
+.video-isSpeak {
+  border: solid 2.5px rgb(0, 242, 250);
   border-radius: 1rem;
 }
 </style>
