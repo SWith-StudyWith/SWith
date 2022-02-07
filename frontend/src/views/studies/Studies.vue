@@ -600,7 +600,7 @@ export default {
 
   height: 100%;
 
-  background-color: #7285A6;
+  background-color: #aebed4;
 }
 .stream-onoff-btn {
   width: 2.4rem;

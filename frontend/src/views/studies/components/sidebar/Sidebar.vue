@@ -224,7 +224,7 @@ export default {
 }
 .exit-btn {
   position: fixed;
-  top: 0px;
+  top: 8px;
   left: 8px;
   transform: rotate(180deg);
   font-size: 23px;
