@@ -22,7 +22,7 @@
     <section id="nav-list" v-else>
       <span style="font-weight:500;">{{ state.userInfo.nickname }} 님 환영합니다 !</span>
       <div class="dropdown">
-        <img class="profile-img" :src="state.profileImgSrc" alt="" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"  >
+        <img class="profile-img scale" :src="state.profileImgSrc" alt="" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"  >
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
           <li><router-link :to="{ name: 'MyPage' }">회원정보 수정</router-link></li>
           <li>
@@ -134,8 +134,23 @@ a{
   width: 50px;
   height: 50px;
   object-fit: cover;
-  background: #BDBDBD;
+  background: #FFFFFF;
   border-radius: 70%;
   overflow: hidden;
+}
+.scale {
+  transform: scale(1);
+  -webkit-transform: scale(1);
+  -moz-transform: scale(1);
+  -ms-transform: scale(1);
+  -o-transform: scale(1);
+  transition: all 0.3s ease-in-out;   /* 부드러운 모션을 위해 추가*/
+}
+.scale:hover {
+  transform: scale(1.1);
+  -webkit-transform: scale(1.1);
+  -moz-transform: scale(1.1);
+  -ms-transform: scale(1.1);
+  -o-transform: scale(1.1);
 }
 </style>
