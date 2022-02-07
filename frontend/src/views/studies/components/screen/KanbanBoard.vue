@@ -1,7 +1,19 @@
 <template>
   <div class="kanbanboard">
-    <button v-if="!editPermit" class="btn btn-primary" @click="onClickEditBtn">칸반보드 수정하기</button>
-    <button v-else class="btn btn-primary" @click="onClickSaveBtn">수정내용 저장하기</button>
+    <div class="text-end mx-3">
+      <button v-if="!editPermit" class="btn btn-primary mx-2" @click="onClickEditBtn">
+        칸반보드 수정하기
+        <font-awesome-icon :icon="['fas', 'edit']"></font-awesome-icon>
+      </button>
+      <button v-else class="btn btn-primary mx-2" @click="onClickSaveBtn">
+        수정내용 저장하기
+        <font-awesome-icon :icon="['fas', 'save']"></font-awesome-icon>
+      </button>
+      <button v-if="!editPermit" class="btn btn-primary mx-2" @click="onClickRefreshBtn">
+        칸반보드 불러오기
+        <font-awesome-icon :icon="['fas', 'sync-alt']"></font-awesome-icon>
+      </button>
+    </div>
     <div class="h-100">
       <div class="p-3 d-flex justify-content-center h-100">
         <div
@@ -168,6 +180,9 @@ export default {
       )
       emit('isEditPermit', false);
     };
+    const onClickRefreshBtn = function () {
+      store.dispatch('GET_STUDY_INFO', store.state.study.studyInfo.studyId)
+    };
     const createTask = function (task) {
       const taskId = task.taskId;
       kanbanBoard.value[taskId - 1].kanban.push({ content: task.content, kanbanId: task.kanbanId })
@@ -181,6 +196,7 @@ export default {
       updateTask,
       onClickEditBtn,
       onClickSaveBtn,
+      onClickRefreshBtn,
       deleteTask,
       statusId,
       createTask,
