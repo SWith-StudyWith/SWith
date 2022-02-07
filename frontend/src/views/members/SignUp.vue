@@ -398,7 +398,7 @@ button{
 }
 .container {
   margin-top: 100px;
-  margin-bottom: 180px;
+  /* margin-bottom: 180px; */
 }
 input::placeholder {
   font-size: 12px;

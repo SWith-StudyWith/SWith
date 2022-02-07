@@ -20,18 +20,16 @@ footer {
   font-size : 16px;
   color : #C3CBCD;
   /* margin : 100px 0 0 0; */
-  display: flex;
-  justify-content: center;
-  flex-direction: row;
+  /* display: flex; */
+  /* justify-content: center; */
+  /* flex-direction: row; */
   background-color : #373F41;
   height: 200px;
   position : relative;
-  /* position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0; */
-  /* clear : left; */
   clear : right;
+
+  /* position: fixed; */
+  transform : translateY(100%);
 }
 
 #footer-content {
