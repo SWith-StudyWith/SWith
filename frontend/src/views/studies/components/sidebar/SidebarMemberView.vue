@@ -41,7 +41,7 @@ export default {
 <style scoped>
 .memberDiv{
   /* float: right; */
-  width: 90%;
+  /* width: 90%; */
   text-align: left;
 
   height: 100vh;
@@ -53,14 +53,27 @@ export default {
 .member-body{
   flex-grow: 1;
   /* scroll */
-  overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: scroll;
   scroll-behavior: smooth;
+  width: 100%;
   /* overflow: auto; */
 }
 /* scroll 안보이게 */
 .member-body::-webkit-scrollbar {
-  display: none;
+  /* display: none; */
 }
+::-webkit-scrollbar{
+    width: 12px;
+}
+::-webkit-scrollbar-thumb{
+    background-color: #999;
+    border-radius: 10px;
+}
+::-webkit-scrollbar-track{
+    background-color: #1E304F;
+}
+
 .row{
   margin-bottom: 20px;
 }

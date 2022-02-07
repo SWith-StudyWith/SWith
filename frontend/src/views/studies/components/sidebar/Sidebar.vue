@@ -231,7 +231,7 @@ export default {
 }
 
 .sidebar-main{
-  margin-left: 54px;
+  margin-left: 60px;
   margin-bottom: 20px;
   margin-top: 20px;
 }
