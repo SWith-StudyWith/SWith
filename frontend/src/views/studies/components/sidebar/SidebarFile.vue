@@ -160,7 +160,7 @@ export default {
   justify-content: flex-end;
   align-items: center;
   font-size: 13px;
-
+  cursor: pointer;
   padding: 10px;
 }
 
