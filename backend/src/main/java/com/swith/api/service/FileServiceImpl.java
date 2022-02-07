@@ -38,8 +38,8 @@ public class FileServiceImpl implements FileService {
     private FileRepository fileRepository;
 
     @Override
-    public List<com.swith.db.entity.File> getStudyFileList() {
-        return null;
+    public List<com.swith.db.entity.File> getStudyFileList(Study study) {
+        return fileRepository.findByStudy(study);
     }
 
     @Override
