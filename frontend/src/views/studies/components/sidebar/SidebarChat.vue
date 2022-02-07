@@ -2,36 +2,7 @@
   <div class= "chatDiv">
     <p class="title">💬 채팅 </p>
 
-    <div class="chat-body" id="chat-body">
-      <div
-        v-for="(item, idx) in recvList"
-        :key="idx"
-        class="chat"
-      >
-
-        <!-- 내가 보낸 메세지 -->
-        <div class="chat-my-message" v-if="item.memberId==this.getUserInfo.memberId">
-          <p class="chat-my-message-time">{{ item.createdAt }}</p>
-          <p class="my-content">{{ item.content }}</p>
-        </div>
-
-        <!-- 상대가 보낸 메세지  -->
-        <div class="chat-other-message" v-else>
-          <div class="chat-other-img">
-            <img :src="item.imgUrl?item.imgUrl:require(`@/assets/img/navbar/profile.png`)" alt="" aria-expanded="false">
-          </div>
-          <div class="chat-other-content">
-            <div class="chat-other-content1">
-              <p class="chat-other-nickname">{{ item.nickname }}</p>
-              <p class="chat-other-message-time">{{ item.createdAt }}</p>
-            </div>
-            <div class="chat-other-content2">
-              <p class="other-content">{{ item.content }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <SidebarChatList :msgs="recvList"/>
     <hr>
     <div class="chat-input" id="chat-input">
       <div class="inputText">
@@ -40,7 +11,6 @@
           type="text"
           @keyup="sendMessage"
         >
-        <!-- <button :disabled='text === ""'>Send</button> -->
       </div>
     </div>
   </div>
@@ -50,6 +20,7 @@
 import Stomp from 'webstomp-client'
 import SockJS from 'sockjs-client'
 import { mapGetters } from 'vuex';
+import SidebarChatList from '@/views/studies/components/sidebar/SidebarChatList.vue';
 
 export default {
   name: 'App',
@@ -59,6 +30,9 @@ export default {
       recvList: [],
       memId: '',
     }
+  },
+  components:{
+    SidebarChatList,
   },
   created() {
     // App.vue가 생성되면 소켓 연결을 시도합니다.
@@ -86,15 +60,12 @@ export default {
           nickname: this.getUserInfo.nickname,
           content: this.message
         };
-        this.memId = this.getUserInfo.memberId,
+        this.memId = msg.memberId;
+        // console.log(this.memId);
         this.stompClient.send("/receive", JSON.stringify(msg), {});
 
         setTimeout(() => {
           const element = document.getElementById('chat-body');
-          //  300
-          console.log(element.scrollHeight);
-          // 0
-          console.log(element.scrollTop);
           element.scrollTop = element.scrollHeight;
         }, 0);
       }
@@ -119,10 +90,6 @@ export default {
             this.recvList.push(JSON.parse(res.body))
             setTimeout(() => {
               const element = document.getElementById('chat-body');
-              //  300
-              console.log(element.scrollHeight);
-              // 0
-              console.log(element.scrollTop);
               element.scrollTop = element.scrollHeight;
             }, 0);
           });
@@ -158,11 +125,6 @@ export default {
   margin-top: 40px;
   margin-bottom: 30px;
 }
-img {
-  width: 40px;
-  height: 40px;
-  border-radius: 70%;
-}
 .chat-input{
   display: flex;
 }
@@ -185,112 +147,5 @@ input{
 
   /* input 클릭 시, 테두리 없애기 */
   outline: none;
-}
-
-.chat-userinfo-box{
-  margin: 10px;
-}
-
-
-/*  */
-.chat-body{
-  flex-grow: 1;
-  /* overflow: auto; */
-  padding: 1rem;
-
-  overflow-y: scroll;
-  scroll-behavior: smooth;
-}
-.chat {
-  border-radius: 10px;
-  /* padding: 1rem; */
-  padding-bottom: 15px;
-  /* width: fit-content; */
-}
-.chat-body::-webkit-scrollbar {
-  /* display: none; */
-}
-::-webkit-scrollbar{
-    width: 12px;
-}
-::-webkit-scrollbar-thumb{
-    background-color: #999;
-    border-radius: 10px;
-}
-::-webkit-scrollbar-track{
-    background-color: #1E304F;
-}
-.chat-other-message{
-  display: flex;
-}
-.chat-other-img{
-  margin-right: 1rem;
-}
-.chat-other-nickname{
-  font-size: 14px;
-  font-weight: 700;
-  margin-top: 0;
-  margin-block-end: 0rem;
-}
-.chat-other-content{
-  width: 100%;
-}
-/* nickname + date */
-.chat-other-content1{
-  display: flex;
-  align-items: flex-end;
-  line-break: anywhere;
-  justify-content: flex-end;
-  width: 100%;
-}
-/* message content */
-.chat-other-content2{
-  display: flex;
-  align-items: flex-end;
-  line-break: anywhere;
-}
-.other-content{
-  margin: 0.4rem 1rem 0 0;
-  border-radius: 0px 20px 20px 20px;
-  background-color: #f3f3f3;
-  max-width: 180px;
-  color: #414141;
-  padding: 0.8rem;
-  font-size: 14px;
-}
-.chat-other-message-time {
-  margin: 0;
-  font-size: 10px;
-  font-weight: 500;
-  color: #9c9c9c;
-  margin-left: auto;
-  margin-right: 16px;
-}
-.chat-my-message{
-  display: flex;
-  justify-content: right;
-  align-items: flex-end;
-  margin: 0;
-  min-height: 40px;
-  line-break: anywhere;
-}
-.my-content{
-  margin: 0.4rem 0 0 1rem;
-  border-radius: 20px 20px 0px 20px;
-  max-width: 180px;
-  background-color: #acb5e4;
-  color: #ffffff;
-  /* color: #414141; */
-  padding: 0.8rem;
-  font-size: 14px;
-  font-weight: 500;
-  max-width: 170px;
-  margin-left: 3px;;
-}
-.chat-my-message-time{
-  margin: 0;
-  font-size: 10px;
-  color: #9c9c9c;
-  margin-right: auto;
 }
 </style>
