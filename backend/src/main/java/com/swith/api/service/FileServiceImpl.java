@@ -46,12 +46,13 @@ public class FileServiceImpl implements FileService {
     public void uploadStudyFiles(Member member, Study study, List<MultipartFile> files) throws IOException {
         for (MultipartFile multipartFile:files) {
             com.swith.db.entity.File file = com.swith.db.entity.File.builder()
-                    .originName(multipartFile.getName())
+                    .originName(multipartFile.getOriginalFilename())
                     .fileUrl(this.upload(multipartFile, firebaseConfig.getFile_storage_path(), null, "media"))
                     .fileSize(multipartFile.getSize())
                     .member(member)
                     .study(study)
                     .build();
+            fileRepository.save(file);
         }
     }
 
