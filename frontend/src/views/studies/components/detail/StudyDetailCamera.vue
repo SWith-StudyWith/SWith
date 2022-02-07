@@ -169,4 +169,7 @@ export default {
 }
 </script>
 <style scoped>
+video {
+  border-radius: 1rem;
+}
 </style>
