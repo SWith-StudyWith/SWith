@@ -3,6 +3,7 @@
     <!-- 내가 보낸 메세지 -->
     <div class="chat-my-message" v-if="msg.memberId==this.getUserInfo.memberId">
       <p class="chat-my-message-time">{{ msg.createdAt }}</p>
+      <!-- <p class="chat-my-message-time">{{ today }}</p> -->
       <p class="my-content">{{ msg.content }}</p>
     </div>
 
@@ -14,7 +15,8 @@
       <div class="chat-other-content">
         <div class="chat-other-content1">
           <p class="chat-other-nickname" v-if="!isSame">{{ msg.nickname }}</p>
-          <p class="chat-other-message-time">{{ msg.createdAt }}</p>
+          <!-- DB 날짜 불러올 땐 다시 수정 ! -->
+          <p class="chat-other-message-time" >{{ today == msg.createdAt ? "" : msg.createdAt }}</p>
         </div>
         <div class="chat-other-content2">
           <p class="other-content">{{ msg.content }}</p>
@@ -27,10 +29,15 @@
 <script>
 import { mapGetters } from 'vuex';
 import { reactive, computed } from 'vue'
+import dayjs from 'dayjs'
+
 export default {
   nane: '',
   props: ["msg","prev"]
   ,
+  components:{
+    // dayjs
+  },
   data() {
     return {
       sampleData: '',
@@ -39,6 +46,12 @@ export default {
       imgUrl: this.msg.imgUrl,
       memberId: this.msg.memberId,
       // prevList: Array,
+
+      // DB : 22/02/06 06:11 PM
+      today: dayjs().format('YY/MM/DD hh시 mm분 A'),
+      // today: dayjs().format('오전 hh시 mm분'),
+      isDate: false,
+      // msgDate: dayjs()
     };
   },
   setup(props){
@@ -50,6 +63,12 @@ export default {
       memId: computed(() => {
         return props.prev[0]?.memberId
       }),
+      // isDate: computed(() => {
+      //   alert(this.today)
+      //   if(this.today == props.prev[0].time)
+      //     return true
+      //   else return false
+      // })
     })
 
     return { state }
@@ -75,6 +94,7 @@ export default {
     if(this.msg?.imgUrl){
       this.img = this.msg?.imgUrl;
     }
+
   },
 }
 </script>
@@ -132,6 +152,7 @@ img {
   color: #414141;
   padding: 0.8rem;
   font-size: 14px;
+  font-weight: 500;
 }
 .chat-other-message-time {
   margin: 0;

@@ -44,7 +44,7 @@
       <div v-if="!state.collapsed" class="col-10 sidebar-main" >
         <div >
           <SidebarFile v-if="state.isFile"/>
-          <SidebarChat v-if="state.isChat"/>
+          <SidebarChat v-if="state.isChat" :chatList="state.chatList"/>
           <SidebarMemberView :members="state.memberList" v-if="state.isMemberList"/>
         </div>
       </div>
@@ -64,7 +64,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { Popover } from 'bootstrap';
 
 //
-import { getMemberList } from '@/api/study'
+import { getMemberList , getChatList} from '@/api/study'
 export default {
   name: 'Sidebar',
   components: {
@@ -91,7 +91,12 @@ export default {
       isMemberList : false,
       isFile : false,
       collapsed: true,
+      recvList: [],
+      chatList: computed(() => {
+        return store.state.study.chatList;
+      }),
     })
+
     const SIDEBAR_WIDTH = 400;
     const SIDEBAR_WIDTH_COLLAPSED = 54;
     const sidebarWidth = computed(
@@ -150,7 +155,31 @@ export default {
       if (!state.collapsed && state.isChat) {
         state.collapsed = true;
       }
+
       state.isChat = !state.isChat;
+
+      console.log('채팅 하자 ~');
+      // test
+      getChatList(
+        route.params.studyId,
+        0,
+        (res) => {
+          console.log(res.data);
+          if (res.data.code === 200) {
+            store.dispatch('GET_CHAT_LIST', route.params.studyId);
+
+            var size = res.data.data.length;
+            for(var i = 0; i < size; i++){
+              state.recvList.push(res.data.data[i])
+            }
+            // state.chatList.push(res.data)
+            state.chatList = [...state.recvList].reverse()
+          }
+        },
+        (err) => {
+          console.log(err);
+        }
+      )
     };
     const onClickMemberIcon = () => {
       if (!state.isMemberList) {
@@ -187,7 +216,7 @@ export default {
     return {
       state, toggleSidebar, sidebarWidth,
       onClickScreenShareIcon, onClickWhiteBoardIcon, onClickKanbanBoardIcon,
-      onClickChatIcon, onClickMemberIcon, onClickFileIcon, onClickExitIcon
+      onClickChatIcon, onClickMemberIcon, onClickFileIcon, onClickExitIcon,
     };
   },
   mounted() {

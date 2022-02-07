@@ -1,4 +1,4 @@
-import { getStudyInfo, getStudyList, getMemberList, updateStudy, getFileList } from "../../api/study";
+import { getStudyInfo, getStudyList, getMemberList, getChatList, updateStudy, getFileList } from "../../api/study";
 import router from '@/router';
 
 const state = () => ({
@@ -6,6 +6,7 @@ const state = () => ({
   studyList: [],
   memberList: [],
   fileList: [],
+  chatList: [],
 });
 
 const getters = {
@@ -60,6 +61,20 @@ const actions = {
       }
     )
   },
+  GET_CHAT_LIST({ commit }, studyId, index) {
+    getChatList(
+      studyId,
+      index,
+      (res) => {
+        if (res.data.code === 200) {
+          commit('SET_CHAT_LIST', res.data.data)
+        }
+      },
+      (err) => {
+        console.log(err)
+      }
+    )
+  },
   updateStudyInfo({ commit }, {studyId, payload}) {
     updateStudy(
       studyId,
@@ -102,6 +117,9 @@ const mutations = {
   },
   SET_MEMBER_LIST(state, payload) {
     state.memberList = payload;
+  },
+  SET_CHAT_LIST(state, payload) {
+    state.chatList = payload;
   },
   UPDATE_STUDY_INFO(state, payload) {
     console.log(payload)

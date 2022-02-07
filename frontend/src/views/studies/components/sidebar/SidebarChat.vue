@@ -2,7 +2,7 @@
   <div class= "chatDiv">
     <p class="title">💬 채팅 </p>
 
-    <SidebarChatList :msgs="recvList"/>
+    <SidebarChatList :msgs="chatList"/>
     <hr>
     <div class="chat-input" id="chat-input">
       <div class="inputText">
@@ -21,6 +21,9 @@ import Stomp from 'webstomp-client'
 import SockJS from 'sockjs-client'
 import { mapGetters } from 'vuex';
 import SidebarChatList from '@/views/studies/components/sidebar/SidebarChatList.vue';
+import { reactive, computed, onUpdated } from 'vue'
+import { useRoute, useRouter } from 'vue-router';
+import { useStore } from 'vuex'
 
 export default {
   name: 'App',
@@ -28,9 +31,10 @@ export default {
     return {
       message: "",
       recvList: [],
-      memId: '',
     }
   },
+  props:["chatList"]
+  ,
   components:{
     SidebarChatList,
   },
@@ -46,6 +50,7 @@ export default {
   methods: {
     sendMessage (e) {
       if(e.keyCode === 13 && this.userName !== '' && this.message !== ''){
+        // alert(this.message)
         this.send()
         this.message = ''
       }
@@ -60,8 +65,7 @@ export default {
           nickname: this.getUserInfo.nickname,
           content: this.message
         };
-        this.memId = msg.memberId;
-        // console.log(this.memId);
+        this.memId = this.getUserInfo.memberId,
         this.stompClient.send("/receive", JSON.stringify(msg), {});
 
         setTimeout(() => {
@@ -102,6 +106,7 @@ export default {
       );
     }
   }
+
 }
 </script>
 <style scoped>
@@ -147,5 +152,27 @@ input{
 
   /* input 클릭 시, 테두리 없애기 */
   outline: none;
+}
+/*  */
+.chat-body{
+  flex-grow: 1;
+  /* overflow: auto; */
+  padding: 1rem;
+
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+}
+.chat-body::-webkit-scrollbar {
+  /* display: none; */
+}
+::-webkit-scrollbar{
+    width: 12px;
+}
+::-webkit-scrollbar-thumb{
+    background-color: #999;
+    border-radius: 10px;
+}
+::-webkit-scrollbar-track{
+    background-color: #1E304F;
 }
 </style>
