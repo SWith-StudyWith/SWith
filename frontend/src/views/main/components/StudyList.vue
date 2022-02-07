@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <div class="row d-flex justify-content-between">
-      <p class="study-list-header col-6">스터디 목록</p>
-      <div class="col-6">
+      <p class="study-list-header col-5">스터디 목록</p>
+      <div class="col-6 join-study">
         <div class="row navbar">
           <div class="col col-6">
             <input type="text" class="form-control" v-model="studyCode" placeholder="스터디 URL">
@@ -81,31 +81,36 @@ export default {
 .container {
   margin-top: 90px;
   margin-bottom: 90px;
-  padding-inline: 100px;
+  padding-inline: 200px;
 }
 .study-list-header {
   font-weight: 600;
   font-size: 36px;
   text-align: left;
+  padding-left: 20px;
   margin-bottom: 40px;
+}
+.join-study {
+  margin-inline: 20px;
+  padding-inline: 12px;
 }
 .form-control {
   height: 42px;
   font-size: 15px;
-  margin-top:10px;
+  margin-top: 0;
 }
 .btn{
   width: 94%;
   height: 42px;
   color: #ffffff;
   font-size: 14px;
-  margin-top: 10px;
+  margin-top: 0;
 }
 .flex-wrap{
   padding: 0px;
 }
 .card-box{
-  padding: 10px;
+  padding: 20px
 }
 .searchbar{
   padding-top: 10px;
@@ -118,10 +123,13 @@ export default {
   padding-top: 150px;
   padding-bottom: 150px;
 }
-.navbar > .col{
+.navbar .col-3{
   margin-right: 0px;
   margin-left: 0px;
-  padding-right: 6px;
-  padding-left: 0px;
+  padding-right: 0px;
+}
+.navbar .col-6{
+  margin-right: 0px;
+  padding: 0px;
 }
 </style>
