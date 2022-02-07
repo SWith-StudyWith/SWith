@@ -1,18 +1,23 @@
 <template>
   <div class="kanbanboard">
     <div class="text-end mx-3">
-      <button v-if="!editPermit" class="btn btn-primary mx-2" @click="onClickEditBtn">
-        칸반보드 수정하기
-        <font-awesome-icon :icon="['fas', 'edit']"></font-awesome-icon>
-      </button>
-      <button v-else class="btn btn-primary mx-2" @click="onClickSaveBtn">
-        수정내용 저장하기
-        <font-awesome-icon :icon="['fas', 'save']"></font-awesome-icon>
-      </button>
-      <button v-if="!editPermit" class="btn btn-primary mx-2" @click="onClickRefreshBtn">
-        칸반보드 불러오기
-        <font-awesome-icon :icon="['fas', 'sync-alt']"></font-awesome-icon>
-      </button>
+      <div v-if="!editPermit">
+        <button class="btn btn-primary mx-2" @click="onClickEditBtn">
+          칸반보드 수정하기
+          <font-awesome-icon :icon="['fas', 'edit']"></font-awesome-icon>
+        </button>
+        <button  class="btn btn-primary mx-2" @click="onClickRefreshBtn">
+          칸반보드 불러오기
+          <font-awesome-icon :icon="['fas', 'sync-alt']"></font-awesome-icon>
+        </button>
+      </div>
+      <div v-else class="d-flex flex-row-reverse align-items-center">
+        <button class="btn btn-primary mx-2" @click="onClickSaveBtn">
+          수정내용 저장하기
+          <font-awesome-icon :icon="['fas', 'save']"></font-awesome-icon>
+        </button>
+        <!-- <Timer @timeStopped="timeOver"/> -->
+      </div>
     </div>
     <div class="h-100">
       <div class="p-3 d-flex justify-content-center h-100">
@@ -23,7 +28,7 @@
         >
           <p class="text-start mb-1">
               <span
-                class="taskname px-2 py-1 "
+                class="taskname px-2 py-1 user-select-none"
                 :class="{ 'bg-grey' : column.taskId === 1, 'bg-pink' : column.taskId === 2, 'bg-purple' : column.taskId === 3 }"
               >
                 {{ column.taskName }}
@@ -92,6 +97,7 @@ import { useStore } from 'vuex';
 import KanbanBoardCard from '@/views/studies/components/screen/KanbanBoardCard.vue';
 import KanbanBoardModal from '@/views/studies/components/screen/KanbanBoardModal.vue';
 import KanbanBoardCreateModal from '@/views/studies/components/screen/KanbanBoardCreateModal.vue';
+// import Timer from '@/views/studies/components/screen/Timer.vue';
 import { ref, computed } from 'vue';
 import draggable from 'vuedraggable'
 import { checkKanban, putKanban } from '@/api/study'
@@ -107,6 +113,7 @@ export default {
     KanbanBoardModal,
     KanbanBoardCreateModal,
     draggable,
+    // Timer,
   },
   setup(props, { emit }) {
     const store = useStore();
@@ -151,9 +158,6 @@ export default {
       );
     }
     const onClickSaveBtn = function() {
-      // if (!editPermit.value) {
-      //   return;
-      // }
       const studyId = store.state.study.studyInfo.studyId;
       console.log('저장할래!')
       // request payload 형태 만들기
@@ -186,6 +190,10 @@ export default {
       const taskId = task.taskId;
       kanbanBoard.value[taskId - 1].kanban.push({ content: task.content, kanbanId: task.kanbanId })
     };
+    // const timeOver = function () {
+    //   emit('isEditPermit', false);
+    //   onClickRefreshBtn()
+    // };
     return {
       kanbanBoard,
       selectedTask,
@@ -196,6 +204,7 @@ export default {
       deleteTask,
       statusId,
       createTask,
+      // timeOver,
     }
   },
 }
