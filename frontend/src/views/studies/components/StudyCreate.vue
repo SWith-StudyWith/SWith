@@ -21,7 +21,7 @@
               </div>
               <div class="d-flex justify-content-start mb-4">
                 <div class="dropend">
-                  <div class="image-wrapper" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" >
+                  <div class="image-wrapper scale" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" >
                     <img class="study-img" :src="state.studyImgSrc">
                   </div>
                   <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
@@ -177,12 +177,6 @@ p{
 .uploadImage{
   margin-bottom: 20px;
 }
-.box{
-    width: 240px;
-    height: 160px;
-    overflow: hidden;
-    background: #BDBDBD;
-}
 .profile-img{
     width: 100%;
     height: 100%;
@@ -251,12 +245,29 @@ textarea{
   width: 100%;
   height: 100%;
   object-fit: cover;
-  background: #BDBDBD;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 4%;
 }
 .dropdown-menu{
   text-align: center;
 }
 .dropdown-item{
   cursor: pointer;
+}
+.scale {
+  transform: scale(1);
+  -webkit-transform: scale(1);
+  -moz-transform: scale(1);
+  -ms-transform: scale(1);
+  -o-transform: scale(1);
+  transition: all 0.3s ease-in-out;   /* 부드러운 모션을 위해 추가*/
+}
+.scale:hover {
+  transform: scale(1.05);
+  -webkit-transform: scale(1.05);
+  -moz-transform: scale(1.05);
+  -ms-transform: scale(1.05);
+  -o-transform: scale(1.05);
 }
 </style>
