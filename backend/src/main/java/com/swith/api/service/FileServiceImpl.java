@@ -1,18 +1,24 @@
 package com.swith.api.service;
 
+import com.google.cloud.ReadChannel;
+import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import com.swith.common.util.FirebaseUtil;
 import com.swith.config.FirebaseConfig;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.channels.Channels;
 import java.nio.file.Files;
 import java.util.Date;
 import java.util.UUID;
@@ -37,6 +43,11 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
+    public ByteArrayResource download(String filePath) {
+        return null;
+    }
+
+    @Override
     public void deleteFile(String filePath) {
         Storage storage = FirebaseUtil.firebaseStorage;
         storage.delete(firebaseConfig.getBucket_name(), filePath);
@@ -49,6 +60,19 @@ public class FileServiceImpl implements FileService {
         Storage storage = FirebaseUtil.firebaseStorage;
         log.debug("uploadFile - storage: {}", storage);
         storage.create(blobInfo, Files.readAllBytes(file.toPath()));
+    }
+
+    @Override
+    public ByteArrayResource downloadFile(String filePath) throws IOException {
+        Storage storage = FirebaseUtil.firebaseStorage;
+        Blob blob = storage.get(BlobId.of(firebaseConfig.getBucket_name(), filePath));
+        ReadChannel reader = blob.reader();
+        InputStream inputStream = Channels.newInputStream(reader);
+
+        byte[] content = null;
+        log.info("File downloaded successfully.");
+        content = IOUtils.toByteArray(inputStream);
+        return new ByteArrayResource(content);
     }
 
     @Override

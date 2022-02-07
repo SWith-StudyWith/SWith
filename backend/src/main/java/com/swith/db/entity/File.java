@@ -16,9 +16,9 @@ public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long fileId;
-    private String path;
     private String originName;
-    private String saveName;
+    private String fileUrl;
+    private Long fileSize;
     @CreatedDate
     private LocalDateTime createdAt;
 
@@ -31,12 +31,10 @@ public class File {
     private Study study;
 
     @Builder
-    public File(String path, String originName, String saveName, LocalDateTime createdAt, Member member,
-                Study study) {
-        this.path = path;
+    public File(String originName, String fileUrl, Long fileSize, Member member, Study study) {
         this.originName = originName;
-        this.saveName = saveName;
-        this.createdAt = createdAt;
+        this.fileUrl = fileUrl;
+        this.fileSize = fileSize;
         this.member = member;
         this.study = study;
     }
