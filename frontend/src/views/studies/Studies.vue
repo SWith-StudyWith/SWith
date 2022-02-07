@@ -9,7 +9,7 @@
     />
     <div :style="{ 'margin-left': sidebarWidth }">
       <!-- main container start -->
-      <div id="main-container" class="container">
+      <div id="main-container" class="container mb-4">
         <!-- session start -->
         <div id="session" v-if="session">
           <!-- session header -->
@@ -19,6 +19,7 @@
           <!-- video-container start -->
           <div id="video-container">
             <div class="user-video-wrapper d-flex overflow-auto">
+              <!-- publisher -->
               <div class="video-box m-2 position-relative">
                 <div v-if="publisher">
                   <user-video id="my-video" :stream-manager="publisher"
@@ -39,12 +40,13 @@
                   </button>
                 </div>
               </div>
+              <!-- subcribers -->
               <div v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub">
                 <div class="video-box m-2 position-relative">
                   <user-video :stream-manager="sub" :isSpeak="isSpeakList.includes(publisher.stream.connection.connectionId)"/>
                   <div
                     class="mute-icon-container text-start"
-                    v-if="JSON.parse(sub.stream.connection.data).clientData !== 'Screen Sharing'"
+                    v-if="sub.stream.typeOfVideo !== 'SCREEN'"
                   >
                     <font-awesome-icon
                       v-if="!sub.stream.videoActive"
@@ -60,7 +62,7 @@
                   <div v-if="sub" class="stream-btn-container" @click.self="updateMainVideoStreamManager(sub)">
                     <button
                       class="btn btn-primary mx-1 stream-onoff-btn" @click="toggleVideoSub(sub)"
-                      v-if="JSON.parse(sub.stream.connection.data).clientData !== 'Screen Sharing'"
+                      v-if="sub.stream.typeOfVideo !== 'SCREEN'"
                     >
                       <font-awesome-icon
                         :icon="['fas', !sub.muteVideo ? 'video' : 'video-slash' ]"
@@ -69,7 +71,7 @@
                     </button>
                     <button
                       class="btn btn-primary mx-1 stream-onoff-btn" @click="toggleAudioSub(sub)"
-                      v-if="JSON.parse(sub.stream.connection.data).clientData !== 'Screen Sharing'"
+                      v-if="sub.stream.typeOfVideo !== 'SCREEN'"
                     >
                       <font-awesome-icon
                         :icon="['fas', !sub.muteAudio ? 'microphone' : 'microphone-slash']"
@@ -114,6 +116,15 @@ const OPENVIDU_SERVER_URL = "https://i6a501.p.ssafy.io:4443";
 const OPENVIDU_SERVER_SECRET = "MY_SECRET";
 // const OPENVIDU_SERVER_URL = "https://" + location.hostname + ":4443";
 // const OPENVIDU_SERVER_URL = "https://" + location.hostname + ":4443";
+const parsing = (string) => {
+    if (string === 'true') {
+      return true;
+    } else if (string === 'false') {
+      return false;
+    } else {
+      return undefined;
+    }
+  }
 export default {
   name: 'Studies',
   props: {
@@ -182,8 +193,8 @@ export default {
 			mainStreamManager: undefined,
 			publisher: undefined,
 			subscribers: [],
-      videoOn: this.initVideoOn,
-      audioOn: this.initAudioOn,
+      videoOn: parsing(this.initVideoOn),
+      audioOn: parsing(this.initAudioOn),
       // initVideoId: JSON.parse(this.initDeviceSetting).videoId,
       // initAudioId: JSON.parse(this.initDeviceSetting).audioId,
       connectionUser: false,
@@ -349,20 +360,6 @@ export default {
 				this.session.connect(token, { clientData: this.myUserName })
 					.then(() => {
 						// --- Get your own camera stream with the desired properties ---
-            console.log(typeof(initAudioOn))
-            const parsing = (string) => {
-              if (string === 'true') {
-                return true;
-              } else if (string === 'false') {
-                return false;
-              } else {
-                return undefined;
-              }
-            }
-            console.log(initAudioOn)
-            console.log(initVideoOn)
-            console.log(parsing(initAudioOn))
-            console.log(parsing(initVideoOn))
 						let publisher = this.OV.initPublisher(undefined, {
 							audioSource: this.initAudioId, // The source of audio. If undefined default microphone
 							videoSource: this.initVideoId, // The source of video. If undefined default webcam
@@ -638,10 +635,4 @@ export default {
   height: 200px;
   overflow: hidden;
 } */
-
-.video-isSpeak {
-  box-shadow:  0px 0px 10px rgb(0 255 0 / 1.0);
-  border-radius: 1rem;
-}
-
 </style>
