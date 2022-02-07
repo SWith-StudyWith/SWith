@@ -7,7 +7,7 @@
         <StudyDetailCamera @setDevice="setDevice($event)"/>
         <button class="btn btn-success my-3 text-white" :disabled="!state.videoId" @click="onClickEnterBtn">입장하기</button>
       </div>
-      <div class="col-8">
+      <div class="col-8 pt-5">
         <StudyDetailKanbanBoard :studyInfo="state.studyInfo"/>
       </div>
     </div>
@@ -18,9 +18,11 @@
     </div>
     <StudyDetailExitModal/>
   </div>
+  <Footer/>
 </template>
 <script>
 import Navbar from '@/views/common/Navbar.vue';
+import Footer from '@/views/common/Footer.vue';
 import StudyDetailHeader from '@/views/studies/components/detail/StudyDetailHeader';
 import StudyDetailCamera from '@/views/studies/components/detail/StudyDetailCamera';
 import StudyDetailExitModal from '@/views/studies/components/detail/StudyDetailExitModal';
@@ -37,6 +39,7 @@ export default {
     StudyDetailCamera,
     StudyDetailExitModal,
     StudyDetailKanbanBoard,
+    Footer,
   },
   setup() {
     const router = useRouter();
