@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 @Controller
 @RequiredArgsConstructor
@@ -31,7 +32,7 @@ public class ChatWebSocketController {
         String content = chatDto.getContent();
 
         LocalDateTime now = LocalDateTime.now();
-        String createdAt = now.format(DateTimeFormatter.ofPattern("yy/MM/dd a hh시 mm분"));
+        String createdAt = now.format(DateTimeFormatter.ofPattern("yy/MM/dd hh:mm a").withLocale(Locale.forLanguageTag("en")));
 
         ChatDto result = new ChatDto(studyId, memberId, imgUrl, nickname, content, createdAt);
         chatService.insertChat(result);
