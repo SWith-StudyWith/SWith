@@ -1,6 +1,7 @@
 package com.swith.api.controller;
 
 import com.swith.api.dto.study.request.KanbanUpdateReq;
+import com.swith.api.dto.study.response.KanbanIsUsedRes;
 import com.swith.api.dto.study.response.StudyMemberRes;
 import com.swith.api.service.*;
 import com.swith.common.response.BaseDataResponse;
@@ -67,16 +68,17 @@ public class StudyInnerController {
     }
 
     @GetMapping("/{studyId}/kanbans")
-    public ResponseEntity<BaseResponse> getStudyIsUsed(@PathVariable long studyId) {
+    public ResponseEntity<BaseDataResponse> getStudyIsUsed(@PathVariable long studyId) {
 
         //칸반보드가 수정중인지 확인
         Study study = studyService.getStudyById(studyId);
 
         if (study.getIsUsed().equals("N")) {
             studyService.updateStudyIsUsed(study, "Y");
-            return ResponseEntity.status(200).body(new BaseResponse(true, 200, "칸반보드 수정 가능"));
+            return ResponseEntity.status(200).body(new BaseDataResponse(true, 200, "칸반보드 수정 가능", null));
         } else {
-            return ResponseEntity.status(200).body(new BaseResponse(true, 400, "이미 칸반보드 수정중"));
+            KanbanIsUsedRes result = new KanbanIsUsedRes(study.getLockUseMember().getNickname());
+            return ResponseEntity.status(200).body(new BaseDataResponse(true, 400, "이미 칸반보드 수정중", result));
         }
     }
 
