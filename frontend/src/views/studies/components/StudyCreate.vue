@@ -162,9 +162,6 @@ export default {
 form{
   text-align: left;
 }
-section{
-  margin-bottom: 100px;
-}
 p{
   font-size: 18px;
   font-weight: 700;
@@ -214,7 +211,7 @@ button{
 }
 .container {
   margin-top: 100px;
-  margin-bottom: 120px;
+  /* margin-bottom: 120px; */
 }
 input::placeholder {
   font-size: 12px;

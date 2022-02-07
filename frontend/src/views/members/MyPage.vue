@@ -54,7 +54,7 @@
             </div>
           </form>
           <!-- Button trigger modal -->
-          <span class="text-decoration-underline signout-btn" data-bs-toggle="modal" data-bs-target="#signOutModal" style="margin-bottom: 100px;">
+          <span class="text-decoration-underline signout-btn" data-bs-toggle="modal" data-bs-target="#signOutModal">
             회원 탈퇴
           </span>
         </div>
@@ -158,9 +158,6 @@ export default {
 form{
   text-align: left;
 }
-section{
-  margin-bottom: 100px;
-}
 p{
   font-size: 18px;
   font-weight: 700;
@@ -239,7 +236,7 @@ p{
 }
 .container {
   margin-top: 100px;
-  margin-bottom: 120px;
+  /* margin-bottom: 120px; */
 }
 button{
   font-size: 14px;
