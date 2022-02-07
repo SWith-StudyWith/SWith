@@ -4,6 +4,7 @@
       @show-screenmode="showScreenMode($event)"
       @startScreenSharing="startScreenSharing"
       @stopScreenSharing="stopScreenSharing"
+      @toggleSidebar="toggleSidebar"
       :screenMode="screenMode"
       :isScreenShared="isScreenShared"
     />
@@ -99,7 +100,6 @@
 </template>
 <script>
 import Sidebar from '@/views/studies/components/sidebar/Sidebar.vue';
-import { sidebarWidth } from '@/views/studies/components/sidebar/state.js';
 import KanbanBoard from '@/views/studies/components/screen/KanbanBoard.vue';
 import MainScreen from '@/views/studies/components/screen/MainScreen.vue';
 import WhiteBoard from '@/views/studies/components/screen/WhiteBoard.vue';
@@ -107,6 +107,7 @@ import UserVideo from "@/views/studies/components/room/video//UserVideo.vue";
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
 import { OpenVidu } from "openvidu-browser";
+import { ref } from 'vue';
 import axios from "axios";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
@@ -173,7 +174,11 @@ export default {
     const route = useRoute();
     store.dispatch('GET_STUDY_INFO', route.params.studyId);
     // const screenMode = ref(0);
-    return { sidebarWidth };
+    const sidebarWidth = ref('54px');
+    const toggleSidebar = function (width) {
+      sidebarWidth.value = width;
+    };
+    return { toggleSidebar, sidebarWidth };
   },
   data () {
     return {

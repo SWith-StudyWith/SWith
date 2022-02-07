@@ -75,7 +75,6 @@
 </template>
 
 <script>
-import { collapsed, toggleSidebar, sidebarWidth } from '@/views/studies/components/sidebar/state.js';
 // import Sidebar from '@/views/studies/components/sidebar/Sidebar.vue';
 import { useStore } from 'vuex';
 import KanbanBoardCard from '@/views/studies/components/screen/KanbanBoardCard.vue';
@@ -173,9 +172,6 @@ export default {
       kanbanBoard.value[taskId - 1].kanban.push({ content: task.content, kanbanId: task.kanbanId })
     };
     return {
-      collapsed,
-      toggleSidebar,
-      sidebarWidth,
       kanbanBoard,
       selectedTask,
       updateTask,

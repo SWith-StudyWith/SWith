@@ -34,14 +34,14 @@
         <div class="icon-container">
           <span
             class="collapse-icon"
-            :class="{ 'rotate-180': collapsed }"
+            :class="{ 'rotate-180': state.collapsed }"
             @click="toggleSidebar"
           >
             <i class="fas fa-angle-double-left" />
           </span>
         </div>
       </div>
-      <div v-if="!collapsed" class="col-10 sidebar-main" >
+      <div v-if="!state.collapsed" class="col-10 sidebar-main" >
         <div >
           <SidebarFile v-if="state.isFile"/>
           <SidebarChat v-if="state.isChat"/>
@@ -54,7 +54,7 @@
 
 <script>
 // import SidebarLink from '@/views/studies/components/sidebar/SidebarLink.vue';
-import { collapsed, toggleSidebar, sidebarWidth } from '@/views/studies/components/sidebar/state.js';
+// import { collapsed, toggleSidebar, sidebarWidth } from '@/views/studies/components/sidebar/state.js';
 import SidebarChat from '@/views/studies/components/sidebar/SidebarChat.vue';
 import SidebarFile from '@/views/studies/components/sidebar/SidebarFile.vue';
 import SidebarMemberView from '@/views/studies/components/sidebar/SidebarMemberView.vue'
@@ -77,9 +77,7 @@ export default {
     screenMode: Number,
     isScreenShared: Boolean,
   },
-  setup( props, context ) {
-    // const isChat = ref(false);
-
+  setup( props, { emit } ) {
     // 스터디 회원 목록 조회
     const store = useStore();
     const route = useRoute();
@@ -92,26 +90,49 @@ export default {
       isChat : false,
       isMemberList : false,
       isFile : false,
+      collapsed: true,
     })
+    const SIDEBAR_WIDTH = 400;
+    const SIDEBAR_WIDTH_COLLAPSED = 54;
+    const sidebarWidth = computed(
+      () => `${state.collapsed ? SIDEBAR_WIDTH_COLLAPSED : SIDEBAR_WIDTH}px`
+    );
+    const toggleSidebar = () => {
+      state.collapsed = !state.collapsed;
+      if (!state.collapsed) {
+        onClickChatIcon()
+      } else {
+        state.isChat = false;
+        state.isMemberList = false;
+        state.isFile = false;
+      }
+      emit('toggleSidebar', sidebarWidth.value)
+    }
     const onClickKanbanBoardIcon = () => {
-      context.emit('show-screenmode', 0)
+      emit('show-screenmode', 0)
     };
     const onClickScreenShareIcon = () => {
       if (props.isScreenShared) {
-        context.emit('stopScreenSharing')
+        emit('stopScreenSharing')
       } else {
-        context.emit('startScreenSharing')
+        emit('startScreenSharing')
       }
     };
     const onClickWhiteBoardIcon = () => {
-      context.emit('show-screenmode', 2)
+      emit('show-screenmode', 2)
     };
     const onClickFileIcon = () => {
       if (!state.isFile) {
         state.isChat = false;
         state.isMemberList = false;
       }
-      state.isFile = !state.isFile;
+      if (state.collapsed) {
+        state.collapsed = false;
+      }
+      if (!state.collapsed && state.isFile) {
+        state.collapsed = true;
+      }
+        state.isFile = !state.isFile;
       // if(!collapsed.value){
       //   state.isFile = !state.isFile;
       // } else{
@@ -123,12 +144,24 @@ export default {
         state.isFile = false;
         state.isMemberList = false;
       }
+      if (state.collapsed) {
+        state.collapsed = false;
+      }
+      if (!state.collapsed && state.isChat) {
+        state.collapsed = true;
+      }
       state.isChat = !state.isChat;
     };
     const onClickMemberIcon = () => {
       if (!state.isMemberList) {
         state.isFile = false;
         state.isChat = false;
+      }
+      if (state.collapsed) {
+        state.collapsed = false;
+      }
+      if (!state.collapsed && state.isMemberList) {
+        state.collapsed = true;
       }
       state.isMemberList = !state.isMemberList;
       // test
@@ -152,7 +185,7 @@ export default {
     }
 
     return {
-      state, collapsed, toggleSidebar, sidebarWidth,
+      state, toggleSidebar, sidebarWidth,
       onClickScreenShareIcon, onClickWhiteBoardIcon, onClickKanbanBoardIcon,
       onClickChatIcon, onClickMemberIcon, onClickFileIcon, onClickExitIcon
     };
