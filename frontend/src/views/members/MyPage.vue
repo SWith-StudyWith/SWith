@@ -9,7 +9,7 @@
             <div class="d-flex justify-content-center">
               <div class="dropend">
                 <div class="image-wrapper" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" >
-                  <img class="profile-img" :src="state.profileImgSrc" alt=""  >
+                  <img class="profile-img scale" :src="state.profileImgSrc" alt=""  >
                 </div>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                   <li>
@@ -206,7 +206,7 @@ p{
   width: 100%;
   height: 100%;
   object-fit: cover;
-  background: #BDBDBD;
+  background: #ffffff;
 }
 .signout-btn:hover {
   cursor: pointer;
@@ -257,5 +257,20 @@ input {
 textarea {
   background-color: #F4F5F4;
   vertical-align: middle;
+}
+.scale {
+  transform: scale(1);
+  -webkit-transform: scale(1);
+  -moz-transform: scale(1);
+  -ms-transform: scale(1);
+  -o-transform: scale(1);
+  transition: all 0.3s ease-in-out;   /* 부드러운 모션을 위해 추가*/
+}
+.scale:hover {
+  transform: scale(1.05);
+  -webkit-transform: scale(1.05);
+  -moz-transform: scale(1.05);
+  -ms-transform: scale(1.05);
+  -o-transform: scale(1.05);
 }
 </style>
