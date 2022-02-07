@@ -1,10 +1,10 @@
 <template>
   <div class="chat-body" id="chat-body">
     <SidebarChatMessage
-      v-for="(msg, idx) in msgs"
+      v-for="(chat, idx) in chatList"
       :key="idx"
-      :msg = "msg"
-      :prev="[idx == 0 ? null : msgs[idx-1]]"
+      :chat = "chat"
+      :prev="[idx == 0 ? null : chatList[idx-1]]"
     >
     </SidebarChatMessage>
   </div>
@@ -18,7 +18,7 @@ export default {
   components: {
     SidebarChatMessage
   },
-  props: ["msgs"],
+  props: ["chatList"],
   data() {
     return {
       sampleData: '',

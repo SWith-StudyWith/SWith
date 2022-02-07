@@ -2,7 +2,7 @@
   <div class= "chatDiv">
     <p class="title">💬 채팅 </p>
 
-    <SidebarChatList :msgs="chatList"/>
+    <SidebarChatList :chatList="this.chatList"/>
     <hr>
     <div class="chat-input" id="chat-input">
       <div class="inputText">
@@ -21,9 +21,6 @@ import Stomp from 'webstomp-client'
 import SockJS from 'sockjs-client'
 import { mapGetters } from 'vuex';
 import SidebarChatList from '@/views/studies/components/sidebar/SidebarChatList.vue';
-import { reactive, computed, onUpdated } from 'vue'
-import { useRoute, useRouter } from 'vue-router';
-import { useStore } from 'vuex'
 
 export default {
   name: 'App',
@@ -31,9 +28,12 @@ export default {
     return {
       message: "",
       recvList: [],
+      chatList: this.chatLog,
     }
   },
-  props:["chatList"]
+  props:{
+    chatLog: Array,
+  }
   ,
   components:{
     SidebarChatList,
@@ -46,11 +46,11 @@ export default {
     ...mapGetters([
       'getUserInfo'
     ]),
+
   },
   methods: {
     sendMessage (e) {
       if(e.keyCode === 13 && this.userName !== '' && this.message !== ''){
-        // alert(this.message)
         this.send()
         this.message = ''
       }
@@ -65,9 +65,10 @@ export default {
           nickname: this.getUserInfo.nickname,
           content: this.message
         };
-        this.memId = this.getUserInfo.memberId,
-        this.stompClient.send("/receive", JSON.stringify(msg), {});
 
+        this.stompClient.send("/receive", JSON.stringify(msg), {});
+        this.recvList.push(msg)
+        this.chatList.push(this.recvList)
         setTimeout(() => {
           const element = document.getElementById('chat-body');
           element.scrollTop = element.scrollHeight;
@@ -85,13 +86,19 @@ export default {
           // 소켓 연결 성공
           this.connected = true;
           console.log('소켓 연결 성공', frame);
+
+          // 스크롤 하단 고정
+          // element.scrollTop = 99999;
+          // const element = document.getElementById('chat-body');
+
           // 서버의 메시지 전송 endpoint를 구독합니다.
           // 이런형태를 pub sub 구조라고 합니다.
           this.stompClient.subscribe("/send/" + this.$route.params.studyId, res => {
             console.log('구독으로 받은 메시지 입니다.', res.body);
 
             // 받은 데이터를 json으로 파싱하고 리스트에 넣어줍니다.
-            this.recvList.push(JSON.parse(res.body))
+
+
             setTimeout(() => {
               const element = document.getElementById('chat-body');
               element.scrollTop = element.scrollHeight;

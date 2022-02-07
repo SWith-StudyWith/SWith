@@ -1,25 +1,27 @@
 <template>
   <div class="chat">
+
+    <!-- <p>{{chat?.content}}</p> -->
     <!-- 내가 보낸 메세지 -->
-    <div class="chat-my-message" v-if="msg.memberId==this.getUserInfo.memberId">
-      <p class="chat-my-message-time">{{ msg.createdAt }}</p>
-      <!-- <p class="chat-my-message-time">{{ today }}</p> -->
-      <p class="my-content">{{ msg.content }}</p>
+    <div class="chat-my-message" v-if="chat?.memberId==this.getUserInfo.memberId">
+      <p class="chat-my-message-time">{{ chat?.createdAt }}</p>
+      <p class="my-content">{{ chat?.content }}</p>
     </div>
 
     <!-- 상대가 보낸 메세지  -->
     <div class="chat-other-message" v-else>
       <div class="chat-other-img">
-        <img :src="msg.imgUrl?msg.imgUrl:require(`@/assets/img/navbar/profile.png`)" alt="" aria-expanded="false" v-if="!isSame">
+        <img :src="this.img ? chat?.imgUrl : require(`@/assets/img/navbar/profile.png`)"  v-if="prev[0]==null || !isSame"
+          alt="" aria-expanded="false">
       </div>
       <div class="chat-other-content">
         <div class="chat-other-content1">
-          <p class="chat-other-nickname" v-if="!isSame">{{ msg.nickname }}</p>
+          <p class="chat-other-nickname" v-if="!isSame">{{ chat?.nickname }}</p>
           <!-- DB 날짜 불러올 땐 다시 수정 ! -->
-          <p class="chat-other-message-time" >{{ today == msg.createdAt ? "" : msg.createdAt }}</p>
+          <p class="chat-other-message-time" >{{ today == chat?.createdAt ? "" : chat?.createdAt }}</p>
         </div>
         <div class="chat-other-content2">
-          <p class="other-content">{{ msg.content }}</p>
+          <p class="other-content">{{ chat?.content }}</p>
         </div>
       </div>
     </div>
@@ -33,45 +35,32 @@ import dayjs from 'dayjs'
 
 export default {
   nane: '',
-  props: ["msg","prev"]
+  props: ["chat","prev"]
   ,
   components:{
     // dayjs
+  },
+  setup(){
+    const state = reactive({
+      // memberId: computed(() => {
+      //   return this.chat?.memberId
+      // }),
+    })
+    return { state, }
   },
   data() {
     return {
       sampleData: '',
       isSame: false,
       img: null,
-      imgUrl: this.msg.imgUrl,
-      memberId: this.msg.memberId,
-      // prevList: Array,
 
       // DB : 22/02/06 06:11 PM
       today: dayjs().format('YY/MM/DD hh시 mm분 A'),
       // today: dayjs().format('오전 hh시 mm분'),
       isDate: false,
       // msgDate: dayjs()
+
     };
-  },
-  setup(props){
-
-    const state = reactive({
-      prevList: computed(() => {
-        return props.prev[0]
-      }),
-      memId: computed(() => {
-        return props.prev[0]?.memberId
-      }),
-      // isDate: computed(() => {
-      //   alert(this.today)
-      //   if(this.today == props.prev[0].time)
-      //     return true
-      //   else return false
-      // })
-    })
-
-    return { state }
   },
   computed: {
     ...mapGetters([
@@ -79,10 +68,10 @@ export default {
     ]),
   },
   methods: {
-    isSameUser(msg, prev){
+    isSameUser(chat, prev){
       if(prev === null){
         return false;
-      }else if(this.prev[0]?.memberId == this.msg?.memberId){
+      }else if(prev[0]?.memberId == chat[0]?.memberId){
         return true;
       }else{
         return false;
@@ -90,11 +79,10 @@ export default {
     }
   },
   created() {
-    this.isSame = this.isSameUser(this.msg, this.prev);
-    if(this.msg?.imgUrl){
-      this.img = this.msg?.imgUrl;
+    this.isSame = this.isSameUser(this.chat, this.prev);
+    if(this.chat?.imgUrl){
+      this.img = this.chat?.imgUrl;
     }
-
   },
 }
 </script>

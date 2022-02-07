@@ -44,7 +44,7 @@
       <div v-if="!state.collapsed" class="col-10 sidebar-main" >
         <div >
           <SidebarFile v-if="state.isFile"/>
-          <SidebarChat v-if="state.isChat" :chatList="state.chatList"/>
+          <SidebarChat v-if="state.isChat" :chatLog="state.chatLog"/>
           <SidebarMemberView :members="state.memberList" v-if="state.isMemberList"/>
         </div>
       </div>
@@ -91,10 +91,13 @@ export default {
       isMemberList : false,
       isFile : false,
       collapsed: true,
-      recvList: [],
-      chatList: computed(() => {
+      recvList: computed(() => {
         return store.state.study.chatList;
       }),
+      chatLog: [],
+      // chatLog: computed(() => {
+      //   return store.state.study.chatList;
+      // }),
     })
 
     const SIDEBAR_WIDTH = 400;
@@ -158,28 +161,30 @@ export default {
 
       state.isChat = !state.isChat;
 
-      console.log('채팅 하자 ~');
-      // test
-      getChatList(
-        route.params.studyId,
-        0,
-        (res) => {
-          console.log(res.data);
-          if (res.data.code === 200) {
-            store.dispatch('GET_CHAT_LIST', route.params.studyId);
+      chat()
+      // console.log('채팅 하자 ~');
+      // // test
+      // getChatList(
+      //   route.params.studyId,
+      //   0,
+      //   (res) => {
+      //     console.log(res.data);
+      //     if (res.data.code === 200) {
 
-            var size = res.data.data.length;
-            for(var i = 0; i < size; i++){
-              state.recvList.push(res.data.data[i])
-            }
-            // state.chatList.push(res.data)
-            state.chatList = [...state.recvList].reverse()
-          }
-        },
-        (err) => {
-          console.log(err);
-        }
-      )
+      //       store.dispatch('GET_CHAT_LIST', route.params.studyId);
+      //       // alert('얍')
+      //       var size = res.data.data.length;
+      //       for(var i = 0; i < size; i++){
+      //         state.recvList.push(res.data.data[i])
+      //       }
+      //       // state.chatLog.push(res.data)
+      //       state.chatLog = [...state.recvList].reverse()
+      //     }
+      //   },
+      //   (err) => {
+      //     console.log(err);
+      //   }
+      // )
     };
     const onClickMemberIcon = () => {
       if (!state.isMemberList) {
@@ -213,10 +218,39 @@ export default {
       router.push({ name: 'StudyDetail', params: { studyId: route.params.studyId } })
     }
 
+    function chat() {
+      console.log('채팅 하자 ~');
+      // test
+      getChatList(
+        route.params.studyId,
+        0,
+        (res) => {
+          console.log(res.data);
+          if (res.data.code === 200) {
+            store.dispatch('GET_CHAT_LIST', route.params.studyId);
+
+            // alert('얍')
+            var size = res.data.data.length;
+            for(var i = 0; i < size; i++){
+              state.recvList.push(res.data.data[i])
+            }
+            // state.chatLog.push(res.data)
+            state.chatLog = [...state.recvList].reverse()
+          }
+        },
+        (err) => {
+          console.log(err);
+        }
+      )
+    }
+
+    chat()
+
     return {
       state, toggleSidebar, sidebarWidth,
       onClickScreenShareIcon, onClickWhiteBoardIcon, onClickKanbanBoardIcon,
       onClickChatIcon, onClickMemberIcon, onClickFileIcon, onClickExitIcon,
+      chat
     };
   },
   mounted() {
