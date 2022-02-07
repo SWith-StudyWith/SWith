@@ -1,19 +1,19 @@
 <template>
   <div class="chat">
-        <!-- 내가 보낸 메세지 -->
+    <!-- 내가 보낸 메세지 -->
     <div class="chat-my-message" v-if="msg.memberId==this.getUserInfo.memberId">
       <p class="chat-my-message-time">{{ msg.createdAt }}</p>
       <p class="my-content">{{ msg.content }}</p>
     </div>
 
-        <!-- 상대가 보낸 메세지  -->
+    <!-- 상대가 보낸 메세지  -->
     <div class="chat-other-message" v-else>
       <div class="chat-other-img">
-        <img :src="msg.imgUrl?msg.imgUrl:require(`@/assets/img/navbar/profile.png`)" alt="" aria-expanded="false">
+        <img :src="msg.imgUrl?msg.imgUrl:require(`@/assets/img/navbar/profile.png`)" alt="" aria-expanded="false" v-if="!isSame">
       </div>
       <div class="chat-other-content">
         <div class="chat-other-content1">
-          <p class="chat-other-nickname">{{ msg.nickname }}</p>
+          <p class="chat-other-nickname" v-if="!isSame">{{ msg.nickname }}</p>
           <p class="chat-other-message-time">{{ msg.createdAt }}</p>
         </div>
         <div class="chat-other-content2">
@@ -26,7 +26,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-
+import { reactive, computed } from 'vue'
 export default {
   nane: '',
   props: ["msg","prev"]
@@ -34,12 +34,47 @@ export default {
   data() {
     return {
       sampleData: '',
+      isSame: false,
+      img: null,
+      imgUrl: this.msg.imgUrl,
+      memberId: this.msg.memberId,
+      // prevList: Array,
     };
+  },
+  setup(props){
+
+    const state = reactive({
+      prevList: computed(() => {
+        return props.prev[0]
+      }),
+      memId: computed(() => {
+        return props.prev[0]?.memberId
+      }),
+    })
+
+    return { state }
   },
   computed: {
     ...mapGetters([
       'getUserInfo'
     ]),
+  },
+  methods: {
+    isSameUser(msg, prev){
+      if(prev === null){
+        return false;
+      }else if(this.prev[0]?.memberId == this.msg?.memberId){
+        return true;
+      }else{
+        return false;
+      }
+    }
+  },
+  created() {
+    this.isSame = this.isSameUser(this.msg, this.prev);
+    if(this.msg?.imgUrl){
+      this.img = this.msg?.imgUrl;
+    }
   },
 }
 </script>
@@ -63,6 +98,7 @@ img {
   display: flex;
 }
 .chat-other-img{
+  width: 51px;
   margin-right: 1rem;
 }
 .chat-other-nickname{
