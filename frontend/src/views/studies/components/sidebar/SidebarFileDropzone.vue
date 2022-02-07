@@ -65,6 +65,7 @@ export default {
   color: #fff;
   /* background-color: #7285A6; */
   transition: 0.3s ease all;
+  cursor: pointer;
 }
 .dropzone input {
   display: none;
