@@ -2,23 +2,28 @@ package com.swith.api.controller;
 
 import com.swith.api.dto.study.request.KanbanUpdateReq;
 import com.swith.api.dto.study.response.StudyMemberRes;
-import com.swith.api.service.KanbanService;
-import com.swith.api.service.MemberStudyService;
-import com.swith.api.service.StudyService;
+import com.swith.api.service.*;
 import com.swith.common.response.BaseDataResponse;
 import com.swith.common.response.BaseResponse;
+import com.swith.db.entity.Member;
 import com.swith.db.entity.Study;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @Slf4j
 @RestController
 @RequestMapping("/api/studies")
 public class StudyInnerController {
+
+    @Autowired
+    private MemberService memberService;
 
     @Autowired
     private StudyService studyService;
@@ -28,6 +33,38 @@ public class StudyInnerController {
 
     @Autowired
     private MemberStudyService memberStudyService;
+
+    @Autowired
+    private FileService fileService;
+
+    @GetMapping("/{studyId}/files")
+    public ResponseEntity<BaseResponse> getStudyFileList(@PathVariable long studyId) {
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{studyId}/files")
+    public ResponseEntity<BaseResponse> uploadStudyFiles(@PathVariable long studyId, @RequestParam("files") List<MultipartFile> files) {
+        log.debug("uploadStudyFiles - studyId: {}", studyId);
+        Member member = memberService.getMemberByAuthentication();
+        Study study = studyService.getStudyById(studyId);
+        // 다중 파일 업로드, file data 등록
+        try {
+            fileService.uploadStudyFiles(member, study, files);
+        } catch (IOException e) {
+            return ResponseEntity.status(200).body(new BaseResponse(false, 400, "스터디 파일 업로드 실패"));
+        }
+        File tempFile = new File("temp");
+        if (tempFile.exists() && !tempFile.delete()) log.debug("updateMember - tempFile.delete() failed");
+        // 다중 파일 업로드 성공
+        return ResponseEntity.status(200).body(new BaseResponse(true, 200, "스터디 파일 업로드 성공"));
+    }
+
+    @GetMapping("/{studyId}/files/{fileId}")
+    public ResponseEntity<BaseResponse> downloadStudyFile(@PathVariable long studyId, @PathVariable long fileId) {
+
+        return null;
+    }
 
     @GetMapping("/{studyId}/kanbans")
     public ResponseEntity<BaseResponse> getStudyIsUsed(@PathVariable long studyId) {

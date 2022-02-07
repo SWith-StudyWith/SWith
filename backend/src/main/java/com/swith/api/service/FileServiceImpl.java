@@ -7,6 +7,9 @@ import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import com.swith.common.util.FirebaseUtil;
 import com.swith.config.FirebaseConfig;
+import com.swith.db.entity.Member;
+import com.swith.db.entity.Study;
+import com.swith.db.repository.FileRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,7 @@ import java.io.InputStream;
 import java.nio.channels.Channels;
 import java.nio.file.Files;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -29,6 +33,27 @@ public class FileServiceImpl implements FileService {
 
     @Autowired
     private FirebaseConfig firebaseConfig;
+
+    @Autowired
+    private FileRepository fileRepository;
+
+    @Override
+    public List<com.swith.db.entity.File> getStudyFileList() {
+        return null;
+    }
+
+    @Override
+    public void uploadStudyFiles(Member member, Study study, List<MultipartFile> files) throws IOException {
+        for (MultipartFile multipartFile:files) {
+            com.swith.db.entity.File file = com.swith.db.entity.File.builder()
+                    .originName(multipartFile.getName())
+                    .fileUrl(this.upload(multipartFile, firebaseConfig.getFile_storage_path(), null, "media"))
+                    .fileSize(multipartFile.getSize())
+                    .member(member)
+                    .study(study)
+                    .build();
+        }
+    }
 
     @Override
     public String upload(MultipartFile multipartFile, String storagePath, String url, String type) throws IOException {
@@ -69,8 +94,8 @@ public class FileServiceImpl implements FileService {
         ReadChannel reader = blob.reader();
         InputStream inputStream = Channels.newInputStream(reader);
 
+        log.debug("downloadFile - success");
         byte[] content = null;
-        log.info("File downloaded successfully.");
         content = IOUtils.toByteArray(inputStream);
         return new ByteArrayResource(content);
     }
