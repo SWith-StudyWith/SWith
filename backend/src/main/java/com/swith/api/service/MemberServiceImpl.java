@@ -143,8 +143,8 @@ public class MemberServiceImpl implements MemberService {
             if (multipartFile != null && !multipartFile.isEmpty()) {
                 Tika tika = new Tika();
                 String mimeType = tika.detect(multipartFile.getInputStream());
-                // MIME type이 image인지 확인, file size가 1MB이내인지 확인
-                if (mimeType.startsWith("image") && multipartFile.getSize() < Math.pow(10, 6)) {
+                // MIME type이 image인지 확인, file size가 2MB이내인지 확인
+                if (mimeType.startsWith("image") && multipartFile.getSize() < 2 * Math.pow(10, 6)) {
                     member.setImgUrl(fileService.upload(multipartFile, firebaseConfig.getProfile_storage_path(),
                             member.getImgUrl(), "media"));
                 }else throw new IOException();

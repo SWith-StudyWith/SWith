@@ -32,6 +32,8 @@ public class FirebaseConfig {
     @JsonIgnore
     private String study_storage_path;
     @JsonIgnore
+    private String file_storage_path;
+    @JsonIgnore
     private String content_type_param;
     @JsonIgnore
     private String media_type;
