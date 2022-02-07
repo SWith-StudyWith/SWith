@@ -113,8 +113,8 @@
           !state.isChecked }"
           @submit.prevent
         >
-          <input type="checkbox" v-model="state.isChecked">
-          <span style="color:green;"> (필수)</span>
+          <input class="form-check-input mb-2 me-1" type="checkbox" v-model="state.isChecked" id="checkTerm">
+          <label style="color:green;" for="checkTerm"> (필수)</label>
           <span> SWith
           <span class="text-decoration-underline terms" data-bs-toggle="modal"
                 data-bs-target="#signupTermModal">

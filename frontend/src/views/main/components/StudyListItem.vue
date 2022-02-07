@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="{ name: 'StudyDetail', params: { studyId: study.studyId, studyCode: study.studyCode }}">
+  <router-link class="text-decoration-none" :to="{ name: 'StudyDetail', params: { studyId: study.studyId, studyCode: study.studyCode }}">
     <div class="card">
       <img :src="state.studyImgSrc" class="card-img-top" alt="study image">
       <div class="card-body">
