@@ -8,11 +8,15 @@
     class="dropzone"
   >
     <span id="title">Drag & Drop</span>
-    <span id="detail">or select files from device</span>
+    <!-- <span id="detail">or select files from device</span> -->
+    <label for="dropzoneFile">or select files from device</label>
+    <input type="file" multiple id="dropzoneFile" class="dropzoneFile" />
     <label for="dropzoneFile"><img src="@/assets/img/icon_sidebar/file/upload_icon.svg" alt=""></label>
     <input type="file" multiple id="dropzoneFile" class="dropzoneFile" />
     <!-- <img src="@/assets/img/icon_sidebar/upload_icon.svg" alt=""> -->
-    <span id="detail">max. 50MB</span>
+    <!-- <span id="detail">max. size : 30MB / upload : 5</span> -->
+    <label for="dropzoneFile">max. size : 30MB / upload : 5</label>
+    <input type="file" multiple id="dropzoneFile" class="dropzoneFile" />
   </div>
 </template>
 
@@ -62,7 +66,8 @@ export default {
 
 .dropzone label {
   padding: 8px 12px;
-  color: #fff;
+  font-size: 13px;
+  color: #474747;
   /* background-color: #7285A6; */
   transition: 0.3s ease all;
   cursor: pointer;
