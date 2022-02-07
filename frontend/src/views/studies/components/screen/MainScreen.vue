@@ -1,6 +1,5 @@
 <template>
   <div class="screenshare">
-    <h1>메인스크린 컴포넌트</h1>
     <div id="main-video">
       <user-video
         :stream-manager="streamManager"
@@ -8,6 +7,9 @@
         @dblclick="$emit('deleteMainVideoStreamManager')"
       />
     </div>
+  </div>
+  <!-- 빈 공간 채우기 -->
+  <div v-if="!streamManager" class="background">
   </div>
 </template>
 
@@ -23,3 +25,13 @@ export default {
   },
 }
 </script>
+<style scoped>
+.background {
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  background-color: #aebed4;
+}
+</style>
+
+

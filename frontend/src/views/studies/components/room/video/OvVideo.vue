@@ -25,7 +25,7 @@ export default {
 <style scoped>
 .main {
   width: 1080px;
-  border-radius: 0.5rem;
+  border-radius: 0.7rem;
 }
 .sub {
   width: 300px;
