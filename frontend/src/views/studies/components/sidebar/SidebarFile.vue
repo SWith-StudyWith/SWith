@@ -11,7 +11,7 @@
                     <div class="card-body-data">
                       <p><b>{{ file.originName }}</b></p>
                       <p>size | {{ file.fileSize }}</p>
-                      <!-- <span>생성일자</span> -->
+                      <p>createdAt | {{ file.createdAt }}</p>
                     </div>
                     <!-- <button>다운로드</button> -->
                     <!-- <img class="file-type" @click="onClickCancelFile(index)" src="@/assets/img/icon_sidebar/file/trash-1E304F.svg" alt=""> -->
