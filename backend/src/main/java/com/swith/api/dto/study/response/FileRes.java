@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -14,4 +16,5 @@ public class FileRes {
     private String originName;
     private String fileUrl;
     private Long fileSize;
+    private LocalDateTime createdAt;
 }

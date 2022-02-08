@@ -61,6 +61,15 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
+    public void deleteStudyFile(long fileId) throws IOException {
+        com.swith.db.entity.File file = fileRepository.findById(fileId).orElse(null);
+        if (file != null) {
+            this.deleteFile(FirebaseUtil.convertUrlToFilePath(file.getFileUrl()));
+            fileRepository.delete(file);
+        } else throw new IOException();
+    }
+
+    @Override
     public String upload(MultipartFile multipartFile, String storagePath, String url, String type) throws IOException {
         // String extension = "." + FilenameUtils.getExtension(multipartFile.getName());
         String fileName = UUID.randomUUID() + "_" + new Date().getTime();

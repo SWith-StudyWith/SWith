@@ -50,7 +50,7 @@ public class StudyInnerController {
     public ResponseEntity<BaseDataResponse<List<FileRes>>> getStudyFileList(@PathVariable long studyId) {
         List<com.swith.db.entity.File> fileList = fileService.getStudyFileList(studyService.getStudyById(studyId));
         List<FileRes> fileResList = fileList.stream().map(file -> new FileRes(file.getFileId(), file.getOriginName(),
-                file.getFileUrl(), file.getFileSize())).collect(Collectors.toList());
+                file.getFileUrl(), file.getFileSize(), file.getCreatedAt())).collect(Collectors.toList());
         log.debug("getStudyFileList - {}", fileResList);
         return ResponseEntity.status(200).body(new BaseDataResponse<>(true, 200, "스터디 파일 목록 조회 성공", fileResList));
     }
@@ -90,6 +90,16 @@ public class StudyInnerController {
                 .contentType(MediaType.parseMediaType("application/octet-stream"))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
                 .body(resource);
+    }
+
+    @DeleteMapping("/{studyId}/files/{fileId}")
+    public ResponseEntity<BaseResponse> deleteStudyFile(@PathVariable long studyId, @PathVariable long fileId) {
+        try {
+            fileService.deleteStudyFile(fileId);
+        } catch (IOException e) {
+            return ResponseEntity.status(200).body(new BaseResponse(false, 400, "스터디 파일 삭제 실패"));
+        }
+        return ResponseEntity.status(200).body(new BaseResponse(true, 200, "스터디 파일 삭제 성공"));
     }
 
     @GetMapping("/{studyId}/kanbans")
