@@ -14,6 +14,7 @@ public interface FileService {
     List<com.swith.db.entity.File> getStudyFileList(Study study);
     void uploadStudyFiles(Member member, Study study, List<MultipartFile> files) throws IOException;
     Map<String, ByteArrayResource> downloadStudyFile(Study study, long fileId) throws IOException;
+    void deleteStudyFile(long fileId) throws IOException;
     String upload(MultipartFile multipartFile, String storagePath, String url, String type) throws IOException;
     void deleteFile(String filePath);
     void uploadFile(File file, String filePath, String contentType) throws IOException;
