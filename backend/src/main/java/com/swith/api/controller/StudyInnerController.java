@@ -1,6 +1,7 @@
 package com.swith.api.controller;
 
 import com.swith.api.dto.study.request.KanbanUpdateReq;
+import com.swith.api.dto.study.response.FileRes;
 import com.swith.api.dto.study.response.StudyMemberRes;
 import com.swith.api.service.*;
 import com.swith.common.response.BaseDataResponse;
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -38,9 +40,12 @@ public class StudyInnerController {
     private FileService fileService;
 
     @GetMapping("/{studyId}/files")
-    public ResponseEntity<BaseResponse> getStudyFileList(@PathVariable long studyId) {
-
-        return ResponseEntity.ok().build();
+    public ResponseEntity<BaseDataResponse<List<FileRes>>> getStudyFileList(@PathVariable long studyId) {
+        List<com.swith.db.entity.File> fileList = fileService.getStudyFileList(studyService.getStudyById(studyId));
+        List<FileRes> fileResList = fileList.stream().map(file -> new FileRes(file.getFileId(), file.getOriginName(),
+                file.getFileUrl(), file.getFileSize())).collect(Collectors.toList());
+        log.debug("getStudyFileList - {}", fileResList);
+        return ResponseEntity.status(200).body(new BaseDataResponse<>(true, 200, "스터디 파일 목록 조회 성공", fileResList));
     }
 
     @PostMapping("/{studyId}/files")
