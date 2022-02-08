@@ -1,5 +1,8 @@
 import { getStudyInfo, getStudyList, getMemberList, updateStudy, getFileList } from "../../api/study";
 import router from '@/router';
+import notifications from '@/composables/notifications'
+
+const { notifyWarning } = notifications();
 
 const state = () => ({
   studyInfo: {},
@@ -9,22 +12,17 @@ const state = () => ({
 });
 
 const getters = {
-  // getStudyInfo: function (state) {
-  //   return state.studyInfo
-  // }
 };
 
 const actions = {
   GET_STUDY_INFO({ commit }, payload) {
-    // console.log(payload) // ID만 받아옴
-    // console.log("getStudyInfo들가기전~~")
     getStudyInfo(
       payload,
       (res) => {
         if (res.data.code === 200) {
           commit('SET_STUDY_INFO', res.data.data)
         } else if (res.data.code === 401) {
-          alert('접근 권한이 없습니다.')
+          notifyWarning('접근 권한이 없습니다.⛔')
           history.back()
         }
       },
@@ -37,8 +35,6 @@ const actions = {
     getStudyList(
       (res) => {
         if (res.data.code === 200) {
-          console.log(res)
-          console.log('스터디리스트 조회~~')
           commit('SET_STUDY_LIST', res.data.data)
         }
       },
@@ -65,13 +61,10 @@ const actions = {
       studyId,
       payload,
       (res) => {
-        console.log(res.data.data)
-        console.log('스터디 업데이트~~')
         commit('UPDATE_STUDY_INFO', res.data.data);
         router.push({ name: 'Main' })
       },
       () => {
-        alert('서버가 아파요.')
       }
     )
   },

@@ -62,6 +62,7 @@ export default {
         return false;
       }),
     })
+    const { notifyWarning, notifySuccess, notifySuccessDescription, notifyDanger } = notifications();
 
     const validateEmail = function (email) {
       const re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
@@ -71,7 +72,7 @@ export default {
     const onClickSendCode = function (e) {
       e.preventDefault();
       if (!state.isValidEmail) {
-        alert('이메일을 입력해주세요!');
+        notifyDanger('이메일을 입력해주세요!😮');
         return;
       }
       sendTemporaryPassword(
@@ -80,22 +81,26 @@ export default {
           console.log(res.data)
           switch (res.data.code) {
             case 400:
-              alert('가입된 이메일 내역이 없습니다.')
+              notifyDanger('가입된 이메일 내역이 없습니다.😅')
               break;
             case 200:
-              alert('임시 비밀번호 전송 성공!\n로그인 후, 비밀번호 변경해주세요.')
+              notifySuccessDescription('임시 비밀번호 전송 성공!😁','로그인 후 비밀번호를 변경해주세요.')
               router.push({ name: 'Login' })
               break;
           }
         },
         (err) => {
           console.log(err)
-          alert('서버가 아파요.')
+          notifyWarning('서버가 아파요.')
         }
       )
     }
     return{
-      state, onClickSendCode
+      state,
+      onClickSendCode,
+      notifySuccessDescription,
+      notifyWarning,
+      notifyDanger,
     }
   },
 };

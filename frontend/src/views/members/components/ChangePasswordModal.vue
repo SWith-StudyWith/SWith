@@ -65,6 +65,7 @@
 import { updatePassword, confirmpassword } from '@/api/user';
 import { reactive, computed } from 'vue';
 import { useRouter } from 'vue-router';
+import notifications from '@/composables/notifications'
 
 export default {
   name: '',
@@ -107,6 +108,7 @@ export default {
         return false;
       }),
     })
+    const { notifyWarning, notifySuccess } = notifications();
 
     const validatePassword = function (password) {
       const numberChar = /[0-9]/;
@@ -139,7 +141,7 @@ export default {
           console.log(res.data)
           switch (res.data.code) {
             case 200:
-              // alert('비밀번호 확인 성공!')
+              notifySuccess('비밀번호 확인 성공!🤗')
 
               // 비밀번호 수정
               updatePassword(
@@ -148,31 +150,31 @@ export default {
                   console.log(res.data)
                   switch (res.data.code) {
                     case 200:
-                      alert('비밀번호 수정 성공!')
+                      notifySuccess('비밀번호 수정 성공!🤗')
                       router.go({ name: 'MyPage' })
                       break;
                     case 404:
-                      alert('비밀번호 수정 실패')
+                      notifyWarning('비밀번호 수정 실패😰')
                       break;
                     case 400:
-                      alert('회원 인증 실패')
+                      notifyWarning('회원 인증 실패 😰');
                       break;
                   }
                 },
                 (err) => {
                   console.log(err)
-                  alert('(수정) 서버가 아파요.!!')
+                  notifyWarning('서버가 아파요 😰')
                 }
               )
               break;
             case 400:
-              alert('회원 인증 실패')
+              notifyWarning('회원 인증 실패 😰');
               break;
           }
         },
         (err) => {
           console.log(err)
-          alert('비밀번호 확인 실패')
+          notifyWarning('비밀번호 확인 실패😰')
           state.nowPassword = ''
           state.wasInputed.nowPassword = false
         },
@@ -197,7 +199,11 @@ export default {
     }
 
     return {
-      state, onClickChange, onClickCancle
+      state,
+      onClickChange,
+      onClickCancle,
+      notifySuccess,
+      notifyWarning,
     };
 
   },

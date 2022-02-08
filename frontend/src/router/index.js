@@ -1,4 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import notifications from '@/composables/notifications'
+
+const { notifyWarning } = notifications();
 
 // 전역 가드로 페이지 인증하기 위함 meta: {authRequired : true},
 const routes = [
@@ -157,7 +160,7 @@ router.beforeEach(function (to, from, next) {
     return routeInfo.meta.authRequired;
   })) {
     if (token == '' || token == undefined) {
-      alert('로그인이 필요한 페이지입니다.');
+      notifyWarning('로그인이 필요한 페이지입니다.')
       next('/members/login');
     } else {
       next()

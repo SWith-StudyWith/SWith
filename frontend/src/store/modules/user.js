@@ -1,11 +1,11 @@
 import { login, getUserInfo, loginKakao, loginGoogle, updateUserInfoAPI, signOut } from '../../api/user';
 import router from '@/router';
+import notifications from '@/composables/notifications'
+
+const { notifyWarning, notifyDanger } = notifications();
 
 const state = () => ({
   userInfo: {
-    // email : "ssafy@ssafy.com",
-    // nickname : "ssafy",
-    // goal : "내 꿈은 해적왕",
   },
 });
 
@@ -22,7 +22,7 @@ const actions = {
         commit('UPDATE_USER_INFO', res.data.data);
       },
       () => {
-        alert('서버가 아파요!')
+        notifyWarning('서버가 아파요!😰')
       }
     )
   },
@@ -36,12 +36,12 @@ const actions = {
           dispatch('GET_USER_INFO')
           router.push({ name: 'Main' })
         } else if (res.data.code === 404) {
-          alert('존재하지 않는 이메일입니다.')
+          notifyDanger('존재하지 않는 이메일입니다.😦')
           console.log(res.data)
         }
       },
       () => {
-        alert('로그인 정보가 맞지 않습니다.')
+        notifyDanger('로그인 정보가 맞지 않습니다.😅')
       }
     )
   },
@@ -58,7 +58,7 @@ const actions = {
       },
       (err) => {
         console.log(err)
-        alert('서버가 아파요.')
+        notifyWarning('서버가 아파요!😰')
       }
     )
   },
@@ -75,7 +75,7 @@ const actions = {
       },
       (err) => {
         console.log(err)
-        alert('서버가 아파요.')
+        notifyWarning('서버가 아파요!😰')
       }
     )
   },
@@ -88,7 +88,7 @@ const actions = {
         router.push({ name: 'Main' })
       },
       () => {
-        alert('서버가 아파요.')
+        notifyWarning('서버가 아파요!😰')
       }
     )
   },
@@ -103,7 +103,7 @@ const actions = {
           dispatch('LOGOUT')
           router.push({ name: 'Login' })
         }  else if ( res.data.code === 404) {
-          alert('회원 탈퇴 실패...ㅜ')
+        notifyWarning('회원 탈퇴 실패.😰')
         }
       },
     )

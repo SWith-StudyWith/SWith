@@ -73,6 +73,7 @@ import Navbar from '@/views/common/Navbar.vue';
 import Footer from '@/views/common/Footer.vue';
 import SignOutModal from '@/views/members/components/SignOutModal.vue';
 import ChangePasswordModal from './components/ChangePasswordModal.vue';
+import notifications from '@/composables/notifications'
 
 export default {
   name: '',
@@ -104,12 +105,13 @@ export default {
         return false;
       }),
     });
+    const { notifyDangerDescription, } = notifications();
 
     const onClickUploadFile = function(e) {
       const file = e.target.files[0];
       if (file.size > 2097152) {
         e.preventDefault();
-        alert('파일 사이즈가 큽니다.😯 (최대 2MB)');
+        notifyDangerDescription('파일 사이즈가 너무 큽니다.😯', '최대 2MB');
         return;
       } else {
         state.value.userInfo.profileImg = URL.createObjectURL(file);
@@ -147,7 +149,12 @@ export default {
     };
 
     return {
-      state, onClickUpdateUserInfo, onClickUploadFile, onClickDefaultImg, validateNickname
+      state,
+      onClickUpdateUserInfo,
+      onClickUploadFile,
+      onClickDefaultImg,
+      validateNickname,
+      notifyDangerDescription,
     }
   },
 
