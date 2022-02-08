@@ -2,6 +2,9 @@
   <div class="kanbanboard">
     <div class="text-end mx-3">
       <div v-if="!editPermit">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#KanbanWarningModal">
+          Launch demo modal
+        </button>
         <button class="btn btn-primary mx-2" @click="onClickEditBtn">
           칸반보드 수정하기
           <font-awesome-icon :icon="['fas', 'edit']"></font-awesome-icon>
@@ -16,7 +19,7 @@
           수정내용 저장하기
           <font-awesome-icon :icon="['fas', 'save']"></font-awesome-icon>
         </button>
-        <!-- <Timer @timeStopped="timeOver"/> -->
+        <Timer @timeStopped="timeOver"/>
       </div>
     </div>
     <div class="h-100">
@@ -89,6 +92,7 @@
     :taskId="statusId"
     @createTask="createTask($event)"
   />
+  <KanbanWarningModal :edittingUser="edittingUser"/>
 </template>
 
 <script>
@@ -97,10 +101,12 @@ import { useStore } from 'vuex';
 import KanbanBoardCard from '@/views/studies/components/screen/KanbanBoardCard.vue';
 import KanbanBoardModal from '@/views/studies/components/screen/KanbanBoardModal.vue';
 import KanbanBoardCreateModal from '@/views/studies/components/screen/KanbanBoardCreateModal.vue';
-// import Timer from '@/views/studies/components/screen/Timer.vue';
+import KanbanWarningModal from '@/views/studies/components/screen/KanbanWarningModal.vue';
+import Timer from '@/views/studies/components/screen/Timer.vue';
 import { ref, computed } from 'vue';
 import draggable from 'vuedraggable'
 import { checkKanban, putKanban } from '@/api/study'
+import { Modal } from 'bootstrap';
 
 export default {
   name: 'KanbanBoard',
@@ -113,7 +119,8 @@ export default {
     KanbanBoardModal,
     KanbanBoardCreateModal,
     draggable,
-    // Timer,
+    Timer,
+    KanbanWarningModal,
   },
   setup(props, { emit }) {
     const store = useStore();
@@ -132,12 +139,17 @@ export default {
     const deleteTask = function(task) {
       // 삭제할 인덱스 찾기
       const targetIndex = kanbanBoard.value[task.value.taskId - 1].kanban
-        .findIndex((card) => card.kanbanId === task.value.kanbanId)
-
+        .findIndex((card) => card.kanbanId === task.value.kanbanId);
       // 삭제
       kanbanBoard.value[task.value.taskId - 1].kanban
-        .splice(targetIndex, 1)
+        .splice(targetIndex, 1);
     };
+    const edittingUser = ref('');
+    const showWarningModal = function () {
+      let myModalEl = document.getElementById('KanbanWarningModal');
+      let modal = Modal.getOrCreateInstance(myModalEl);
+      modal.show();
+    }
     const onClickEditBtn = function() {
       console.log('수정할래!')
       checkKanban(
@@ -148,8 +160,10 @@ export default {
             console.log('수정 가능');
             emit('isEditPermit', true);
           } else if (res.data.code === 400) {
-            console.log('누군가 수정 중');
-            alert(`${res.data.data.nickname} 님이 수정 중입니다.`)
+            console.log(`${res.data.data.nickname} 님이 수정 중입니다.`);
+            edittingUser.value = res.data.data.nickname;
+            // alert(`${res.data.data.nickname} 님이 수정 중입니다.`)
+            showWarningModal();
             emit('isEditPermit', false);
           }
         },
@@ -191,10 +205,11 @@ export default {
       const taskId = task.taskId;
       kanbanBoard.value[taskId - 1].kanban.push({ content: task.content, kanbanId: task.kanbanId })
     };
-    // const timeOver = function () {
-    //   emit('isEditPermit', false);
-    //   onClickRefreshBtn()
-    // };
+    const timeOver = function () {
+      console.log('시간 다되서 저장해버리기~')
+      emit('isEditPermit', false);
+      onClickSaveBtn()
+    };
     return {
       kanbanBoard,
       selectedTask,
@@ -205,7 +220,8 @@ export default {
       deleteTask,
       statusId,
       createTask,
-      // timeOver,
+      timeOver,
+      edittingUser,
     }
   },
 }

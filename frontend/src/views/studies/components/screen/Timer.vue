@@ -5,14 +5,17 @@
   </span>
 </template>
 <script>
-import { ref, computed } from 'vue';
+import { ref, computed, reactive } from 'vue';
 
 export default {
   name: 'Timer',
-  setup(context) {
+  setup(props, { emit }) {
     const time = ref(300);
+    const timer = reactive({
+      timer: null,
+    })
     const startTimer = function () {
-      setInterval(
+      timer.timer = setInterval(
         () => countDown(),
         1000
       )
@@ -27,7 +30,8 @@ export default {
     }
     const stopTimer = function () {
       console.log('끝나따!')
-      context.emit('timeStopped')
+      emit('timeStopped')
+      clearInterval(timer.timer)
     }
     const parsingTime = computed(
       () => {
