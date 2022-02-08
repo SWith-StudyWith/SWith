@@ -149,6 +149,7 @@ export default {
             emit('isEditPermit', true);
           } else if (res.data.code === 400) {
             console.log('누군가 수정 중');
+            alert(`${res.data.data.nickname} 님이 수정 중입니다.`)
             emit('isEditPermit', false);
           }
         },
