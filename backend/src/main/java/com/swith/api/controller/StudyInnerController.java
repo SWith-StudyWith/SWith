@@ -11,6 +11,9 @@ import com.swith.db.entity.Member;
 import com.swith.db.entity.Study;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +23,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -69,9 +73,23 @@ public class StudyInnerController {
     }
 
     @GetMapping("/{studyId}/files/{fileId}")
-    public ResponseEntity<BaseResponse> downloadStudyFile(@PathVariable long studyId, @PathVariable long fileId) {
-
-        return null;
+    public ResponseEntity<Object> downloadStudyFile(@PathVariable long studyId, @PathVariable long fileId) {
+        log.debug("downloadStudyFile - studyId: {}, fileId: {}", studyId, fileId);
+        Map<String, ByteArrayResource> map;
+        try {
+            map = fileService.downloadStudyFile(studyService.getStudyById(studyId), fileId);
+            if (map == null) return ResponseEntity.status(200).body(new BaseDataResponse<>(false, 400, "스터디 파일 다운로드 실패", null));
+        } catch (IOException e) {
+            return ResponseEntity.status(200).body(new BaseResponse(false, 400, "스터디 파일 다운로드 실패"));
+        }
+        String fileName = String.valueOf(map.keySet().toArray()[0]);
+        ByteArrayResource resource = map.get(fileName);
+        log.debug("downloadStudyFile - fileName: {}", fileName);
+        return ResponseEntity.ok()
+                .contentLength(resource.contentLength())
+                .contentType(MediaType.parseMediaType("application/octet-stream"))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
+                .body(resource);
     }
 
     @GetMapping("/{studyId}/kanbans")

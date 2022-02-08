@@ -17,15 +17,10 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.channels.Channels;
 import java.nio.file.Files;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -57,6 +52,15 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
+    public Map<String, ByteArrayResource> downloadStudyFile(Study study, long fileId) throws IOException {
+        com.swith.db.entity.File file = fileRepository.findByStudyAndFileId(study, fileId).orElse(null);
+        if (file == null) return null;
+        Map<String, ByteArrayResource> map = new HashMap<>();
+        map.put(file.getOriginName(), this.downloadFile(FirebaseUtil.convertUrlToFilePath(file.getFileUrl())));
+        return map;
+    }
+
+    @Override
     public String upload(MultipartFile multipartFile, String storagePath, String url, String type) throws IOException {
         // String extension = "." + FilenameUtils.getExtension(multipartFile.getName());
         String fileName = UUID.randomUUID() + "_" + new Date().getTime();
@@ -66,11 +70,6 @@ public class FileServiceImpl implements FileService {
         this.uploadFile(file, filePath, multipartFile.getContentType());
         if (url != null) this.deleteFile(FirebaseUtil.convertUrlToFilePath(url));
         return FirebaseUtil.convertFilePathToUrl(filePath, type);
-    }
-
-    @Override
-    public ByteArrayResource download(String filePath) {
-        return null;
     }
 
     @Override
