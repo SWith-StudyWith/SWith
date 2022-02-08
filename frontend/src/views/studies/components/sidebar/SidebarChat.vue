@@ -1,7 +1,7 @@
 <template>
   <div class= "chatDiv">
     <p class="title">💬 채팅 </p>
-
+    <!-- <p>{{state.chatList}}</p> -->
     <SidebarChatList :chatList="chatLog"/>
     <hr>
     <div class="chat-input" id="chat-input">
@@ -22,6 +22,7 @@ import SockJS from 'sockjs-client'
 import { mapGetters } from 'vuex';
 import SidebarChatList from '@/views/studies/components/sidebar/SidebarChatList.vue';
 import dayjs from 'dayjs'
+import { computed, reactive } from '@vue/runtime-core';
 
 export default {
   name: 'App',
@@ -29,18 +30,23 @@ export default {
     return {
       message: "",
       recvList: [],
-      chatList: this.chatLog,
+      // chatList: [],
     }
   },
-  props:
-    // chatLog: Array,
-    ["chatLog"]
+  props:{
+    chatLog : Object
+  }
   ,
   components:{
     SidebarChatList,
   },
-  setup(){
-
+  setup(props){
+    const state = reactive({
+      chatList: computed(() => {
+        return props.chatLog
+      })
+    })
+    return {state,}
   },
   created() {
     // App.vue가 생성되면 소켓 연결을 시도합니다.
@@ -72,7 +78,8 @@ export default {
 
         this.stompClient.send("/receive", JSON.stringify(msg), {});
         // this.recvList.push(msg)
-        this.chatList.push(msg)
+        // this.chatList.push(this.recvList)
+        // this.$props.chatLog.push(msg)
         setTimeout(() => {
           const element = document.getElementById('chat-body');
           element.scrollTop = element.scrollHeight;
@@ -101,8 +108,8 @@ export default {
             console.log('구독으로 받은 메시지 입니다.', res.body);
 
             // 받은 데이터를 json으로 파싱하고 리스트에 넣어줍니다.
-
-
+            this.recvList.push(JSON.parse(res.body))
+            // this.$props.chatLog.push(JSON.parse(res.body))
             setTimeout(() => {
               const element = document.getElementById('chat-body');
               element.scrollTop = element.scrollHeight;

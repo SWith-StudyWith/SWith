@@ -11,14 +11,15 @@
     <!-- 상대가 보낸 메세지  -->
     <div class="chat-other-message" v-else>
       <div class="chat-other-img">
-        <img :src="this.img ? chat?.imgUrl : require(`@/assets/img/navbar/profile.png`)"  v-if="prev[0]==null || !isSame"
+        <img :src="this.img ? chat?.imgUrl : require(`@/assets/img/navbar/profile.png`)"
+          v-if="prev[0]==null || !isSame"
           alt="" aria-expanded="false">
       </div>
       <div class="chat-other-content">
         <div class="chat-other-content1">
           <p class="chat-other-nickname" v-if="!isSame">{{ chat?.nickname }}</p>
           <!-- DB 날짜 불러올 땐 다시 수정 ! -->
-          <p class="chat-other-message-time" >{{ chat?.createdAt }}</p>
+          <p class="chat-other-message-time">{{ chat?.createdAt }}</p>
         </div>
         <div class="chat-other-content2">
           <p class="other-content">{{ chat?.content }}</p>
@@ -30,23 +31,20 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { reactive, computed } from 'vue'
+// import { reactive, computed } from 'vue'
 import dayjs from 'dayjs'
 
 export default {
   nane: '',
-  props: ["chat","prev"]
+  props: {
+    chat : Object,
+    prev : Array
+    // ["chat","prev"]
+  }
+
   ,
   components:{
     // dayjs
-  },
-  setup(){
-    const state = reactive({
-      // memberId: computed(() => {
-      //   return this.chat?.memberId
-      // }),
-    })
-    return { state, }
   },
   data() {
     return {

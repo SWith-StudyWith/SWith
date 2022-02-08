@@ -18,7 +18,9 @@ export default {
   components: {
     SidebarChatMessage
   },
-  props: ["chatList"],
+  props: {
+    chatList: Object
+  },
   data() {
     return {
       sampleData: '',
