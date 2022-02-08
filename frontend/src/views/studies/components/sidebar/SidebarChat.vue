@@ -138,6 +138,7 @@ export default {
 
     // scrollTop == 0 (꼭대기), 다음 list 가져오기
     function scrollMove(){
+      state.prevScrollHeight = state.element.scrollHeight - state.element.scrollTop
       if(state.element.scrollTop == 0 && !state.isNoScroll){
 
         messageList()
@@ -160,6 +161,7 @@ export default {
           // 스크롤 있던 위치 받아오기 => 시작 위치
           state.element.scrollTop = state.element.scrollHeight - state.prevScrollHeight
         }
+
 
         state.prevScrollHeight = state.element.scrollHeight
       }
@@ -214,8 +216,8 @@ export default {
     },
     connect() {
       // 배포
-      // const serverURL = process.env.VUE_APP_SOCKET_URL
-      const serverURL = 'http://localhost:8080/api/ws/'
+      const serverURL = process.env.VUE_APP_SOCKET_URL
+      // const serverURL = 'http://localhost:8080/api/ws/'
       let socket = new SockJS(serverURL);
       this.stompClient = Stomp.over(socket);
       console.log(`소켓 연결을 시도합니다. 서버 주소: ${serverURL}`)

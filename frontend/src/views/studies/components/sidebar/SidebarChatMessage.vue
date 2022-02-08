@@ -53,8 +53,6 @@ export default {
 
       // DB : 22/02/06 06:11 PM
       today: dayjs().format('hh:mm A'),
-      // today: dayjs().format('오전 hh시 mm분'),
-
     };
   },
   computed: {
