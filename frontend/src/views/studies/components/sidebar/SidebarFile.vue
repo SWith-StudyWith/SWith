@@ -15,7 +15,9 @@
                     </div>
                     <!-- <button>다운로드</button> -->
                     <!-- <img class="file-type" @click="onClickDeleteFile(index)" src="@/assets/img/icon_sidebar/file/trash-1E304F.svg" alt=""> -->
-                    <img src="@/assets/img/icon_sidebar/file/download_1E304F.svg">
+                    <img
+                      src="@/assets/img/icon_sidebar/file/download_1E304F.svg"
+                      @click="onClickDownloadFile(file.fileId, file.originName)">
                     <img src="@/assets/img/icon_sidebar/file/trash-1E304F.svg">
                   </div>
         </div>
@@ -44,7 +46,7 @@
 
 <script>
 import { ref } from "vue";
-import { uploadFile } from '@/api/study';
+import { uploadFile, downloadFile } from '@/api/study';
 import { computed, reactive } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
@@ -122,6 +124,26 @@ export default {
       )
     }
 
+    const onClickDownloadFile = (fileId, fileName) => {
+      downloadFile(
+        route.params.studyId,
+        fileId,
+        (res) => {
+          console.log(res.data)
+          const url = window.URL.createObjectURL(new Blob([res.data]));
+          const link = document.createElement('a');
+          link.href = url;
+          link.setAttribute('download', fileName);
+          document.body.appendChild(link);
+          link.click();
+        },
+        (err) => {
+          console.log(err)
+          notifyWarning('서버가 아파요.😰')
+        },
+      )
+    }
+
     return {
       state,
       dropzoneFiles,
@@ -129,6 +151,7 @@ export default {
       selectedFile,
       onClickDeleteFile,
       onClickUploadFile,
+      onClickDownloadFile,
       notifyWarning,
       notifySuccess,
     };
