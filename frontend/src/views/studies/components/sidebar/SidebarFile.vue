@@ -9,9 +9,9 @@
         <div v-if="state.fileList" >
                   <div class="card-body" v-for="file in state.fileList" :key="file.memberId">
                     <div class="card-body-data">
-                      <p><b>{{ file.originName }}</b></p>
-                      <p>size | {{ file.fileSize }}</p>
-                      <p>createdAt | {{ file.createdAt }}</p>
+                      <p class="card-body-data-name"><b>{{ file.originName }}</b></p>
+                      <p class="card-body-data-size">size | {{ file.fileSize }}</p>
+                      <p class="card-body-data-createdAt">createdAt | {{ file.createdAt }}</p>
                     </div>
                     <!-- <button>다운로드</button> -->
                     <!-- <img class="file-type" @click="onClickCancelFile(index)" src="@/assets/img/icon_sidebar/file/trash-1E304F.svg" alt=""> -->
@@ -315,5 +315,22 @@ export default {
   flex-wrap: nowrap;
   align-items: flex-start;
   /* margin-bottom: 0px; */
+}
+
+.card-body-data-name {
+  font-size: 14px;
+  margin: 0;
+}
+
+.card-body-data-size {
+  /* color: #9c9c9c; */
+  margin: 0;
+  font-size: 12px;
+}
+
+.card-body-data-createdAt {
+  /* color: #9c9c9c; */
+  margin: 0;
+  font-size: 12px;
 }
 </style>
