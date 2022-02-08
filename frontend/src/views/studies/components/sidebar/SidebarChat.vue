@@ -18,8 +18,11 @@
         :prev="[idx == 0 ? null : state.chatList[idx-1]]"
       >
       </SidebarChatMessage>
-    </div>
 
+    <div class="init-btn" v-if="state.isScrollInit">
+        <button class="btn-primary" @click="scrollInit">↓</button>
+    </div>
+    </div>
     <hr>
     <div class="chat-input" id="chat-input">
       <div class="inputText">
@@ -91,6 +94,7 @@ export default {
       isTop: false,
       // 더이상 API 호출X  => 추가로 불러온 list들이 <15일 때,
       isNoScroll: false,
+      isScrollInit: false,
       // 스크롤 위치 저장하기 위함
       prevScrollHeight: 0,
       element: computed(() => {
@@ -126,7 +130,7 @@ export default {
             }
             state.loading = false
             state.loaded = true
-
+            state.isScrollInit = true
             state.loadList = null;
           }
         },
@@ -138,19 +142,31 @@ export default {
 
     // scrollTop == 0 (꼭대기), 다음 list 가져오기
     function scrollMove(){
+      // console.log('~~~~~~~~~~~~~~~~~~~~')
+      // console.log(state.element.scrollHeight)
+      // console.log(state.element.scrollTop)
+      // console.log(state.element.scrollHeight/2.0 + " " + state.prevScrollHeight + " " + state.element.scrollHeight)
+
       state.prevScrollHeight = state.element.scrollHeight - state.element.scrollTop
       if(state.element.scrollTop == 0 && !state.isNoScroll){
 
         messageList()
       }
+
+    }
+
+    // 버튼 클릭 시, 맨 아래로 내려가기
+    function scrollInit(){
+      state.isScrollInit = false
+      state.element.scrollTop = state.element.scrollHeight
     }
 
     onUpdated(() => {
       // 채팅창 열었을 때, 스크롤 맨 밑에 가도록
       if(state.init){
         state.init = false
-        state.element.scrollTop = 99999
-        // state.element.scrollTop = state.element.scrollHeight
+        // state.element.scrollTop = 99999
+        state.element.scrollTop = state.element.scrollHeight
       }
 
       // 이전 리스트 추가로 호출했을 때
@@ -162,15 +178,17 @@ export default {
           state.element.scrollTop = state.element.scrollHeight - state.prevScrollHeight
         }
 
-
         state.prevScrollHeight = state.element.scrollHeight
       }
+
+
     })
 
     return {
       state,
       messageList,
       scrollMove,
+      scrollInit,
 
     }
   },
@@ -216,8 +234,8 @@ export default {
     },
     connect() {
       // 배포
-      const serverURL = process.env.VUE_APP_SOCKET_URL
-      // const serverURL = 'http://localhost:8080/api/ws/'
+      // const serverURL = process.env.VUE_APP_SOCKET_URL
+      const serverURL = 'http://localhost:8080/api/ws/'
       let socket = new SockJS(serverURL);
       this.stompClient = Stomp.over(socket);
       console.log(`소켓 연결을 시도합니다. 서버 주소: ${serverURL}`)
@@ -266,7 +284,7 @@ export default {
 
   height: 100vh;
   display: flex;
-  flex-direction: column;
+
 }
 .row{
   margin-bottom: 20px;
@@ -306,8 +324,11 @@ input{
   flex-grow: 1;
   /* overflow: auto; */
   padding: 1rem;
+  padding-bottom: 0px;
   overflow-y: scroll;
   scroll-behavior: smooth;
+
+  z-index:3;
 }
 .chat-body::-webkit-scrollbar {
   /* display: none; */
@@ -332,5 +353,20 @@ input{
   line-break: anywhere;
   background-color: rgba(185, 175, 207, 0.2);
   border-radius: 10px;
+}
+.init-btn{
+  display: flex;
+  justify-content: right;
+  position: sticky;
+  z-index: 1;
+  bottom: 0;
+
+}
+.init-btn > button{
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border: 0px;
+  height: 40px;
+  width: 40px;
 }
 </style>
