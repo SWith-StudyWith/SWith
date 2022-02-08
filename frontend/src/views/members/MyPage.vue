@@ -4,7 +4,7 @@
     <div class="container">
       <h1 class="form-title">내 정보 수정</h1>
       <div class="row d-flex justify-content-center">
-        <div class="col-4" style="">
+        <div class="col-md-6 col-lg-5 col-xl-4" style="">
           <form class="userInfo-wrapper" enctype="multipart/form-data">
             <div class="d-flex justify-content-center">
               <div class="dropend">

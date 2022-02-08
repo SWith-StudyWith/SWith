@@ -1,16 +1,16 @@
 <template>
   <div class="container">
-    <div class="row d-flex justify-content-between">
-      <p class="study-list-header col-5">스터디 목록</p>
-      <div class="col-6 join-study">
+    <div class="row">
+      <p class="study-list-header col-sm-12 col-lg-5">스터디 목록</p>
+      <div class="col-12 offset-lg-0 col-lg-7 join-study">
         <div class="row navbar">
-          <div class="col col-6">
+          <div class="col-12 col-lg-6 mb-3">
             <input type="text" class="form-control" v-model="studyCode" placeholder="스터디 URL">
           </div>
-          <div class="col col-3">
+          <div class="col-12 col-md-5 offset-lg-0 col-lg-3 mb-3">
             <button class="btn btn-primary" @click="onClickJoin">참여하기</button>
           </div>
-          <div class="col col-3">
+          <div class="col-12 col-md-5 offset-lg-0 col-lg-3 mb-3">
             <router-link :to="{ name: 'StudyCreate'}">
               <button class="btn btn-success">만들기</button>
             </router-link>
@@ -18,7 +18,7 @@
         </div>
       </div>
       <div v-if="studies.length" class="d-flex flex-wrap">
-        <div v-for="study in studies" :key="study.studyId" class="col-4 card-box">
+        <div v-for="study in studies" :key="study.studyId" class="col-sm-12 col-lg-6 col-xl-4 card-box">
           <StudyListItem :study="study" />
         </div>
       </div>
@@ -91,12 +91,8 @@ export default {
   font-weight: 600;
   font-size: 36px;
   text-align: left;
-  padding-left: 20px;
-  margin-bottom: 40px;
-}
-.join-study {
-  margin-inline: 20px;
-  padding-inline: 12px;
+  /* padding-left: 20px;
+  margin-bottom: 40px; */
 }
 .form-control {
   height: 42px;

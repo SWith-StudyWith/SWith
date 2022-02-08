@@ -2,12 +2,12 @@
   <Navbar/>
   <div class="container mt-5">
     <div class="row">
-      <div class="col-4">
+      <div class="col-md-12 col-lg-4">
         <StudyDetailHeader :studyInfo="state.studyInfo"/>
         <StudyDetailCamera @setDevice="setDevice($event)"/>
         <button class="btn btn-success my-3 text-white" :disabled="!state.videoId" @click="onClickEnterBtn">입장하기</button>
       </div>
-      <div class="col-8 pt-5">
+      <div class="col-md-12 col-lg-8 pt-5">
         <StudyDetailKanbanBoard :studyInfo="state.studyInfo"/>
       </div>
     </div>
