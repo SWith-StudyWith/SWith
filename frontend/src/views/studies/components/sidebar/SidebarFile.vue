@@ -1,55 +1,62 @@
 <template>
-  <!-- <div> -->
-    <!-- <div v-for="(dropzoneFile, index) in dropzoneFiles" v-bind:key="dropzoneFile.id" class="file-item">
-      <span class="file-info"><img class="file-type" src="@/assets/img/icon_sidebar/file/file-type-img-DEE8F9.svg" alt=""> {{dropzoneFile.name}} </span>
-      <img class="file-type" @click="deleteFile(index)" src="@/assets/img/icon_sidebar/file/trash-DEE8F9.svg" alt="">
-    </div>
-    <div class="file-submit">
-      <img class="file-submit-icon" @click="uploadFile" src="@/assets/img/icon_sidebar/file/check-DEE8F9.svg" alt="">
-      <span @click="uploadFile"> submit</span>
-    </div>
-    <DropZone @drop.prevent="drop" @change="selectedFile" /> -->
-
   <div class="fileDiv">
-    <!-- <div v-if="files.length" >
-      <div class="row" v-for="file in state.fileList" :key="file.memberId">
-        <div class="col-4">
-          <span>파일명</span>
-          <span>파일크기</span>
-          <span>생성일자</span>
+    <p class="title">📑 첨부 파일 목록</p>
+    <!-- <SidebarFileList /> -->
+    <div class="file-body">
+      <!-- <p>SidebarFile.vue - file-body</p> -->
+
+      <div class="card">
+        <div v-if="state.fileList" >
+                  <div class="card-body" v-for="file in state.fileList" :key="file.memberId">
+                    <div>
+                      <p>파일명 : {{ file.originName }}</p>
+                      <p>파일크기 : {{ file.fileSize }}</p>
+                      <!-- <span>생성일자</span> -->
+                    </div>
+                    <!-- <button>다운로드</button> -->
+                    <!-- <img class="file-type" @click="onClickDeleteFile(index)" src="@/assets/img/icon_sidebar/file/trash-1E304F.svg" alt=""> -->
+                    <img src="@/assets/img/icon_sidebar/file/download_1E304F.svg">
+                    <img src="@/assets/img/icon_sidebar/file/trash-1E304F.svg">
+                  </div>
         </div>
-        <div class="col-8">
-          <button>다운로드</button>
+        <div v-else>
+          <p>등록된 파일이 없습니다.</p>
         </div>
       </div>
-    </div> -->
-    <!-- <h1>DropZone</h1> -->
-    <div v-for="(dropzoneFile, index) in dropzoneFiles" v-bind:key="dropzoneFile.id" class="file-item">
-      <span class="file-info"><img class="file-type" src="@/assets/img/icon_sidebar/file/file-type-img-DEE8F9.svg" alt=""> {{dropzoneFile.name}} </span>
-      <img class="file-type" @click="deleteFile(index)" src="@/assets/img/icon_sidebar/file/trash-DEE8F9.svg" alt="">
+
     </div>
-    <!-- <button @click="uploadFile"><img src="@/assets/img/icon_sidebar/file/check-DEE8F9.svg" alt="">전송</button> -->
-    <div class="file-submit">
-      <img class="file-submit-icon" @click="uploadFile" src="@/assets/img/icon_sidebar/file/check-DEE8F9.svg" alt="">
-      <span @click="uploadFile"> submit</span>
-    </div>
-    <DropZone @drop.prevent="drop" @change="selectedFile" />
+    <form enctype="multipart/form-data">
+      <!-- <span>fileList : {{ state.fileList }}</span> -->
+      <!-- <span>dropzoneFiles : {{ dropzoneFiles }}</span> -->
+      <div v-for="(dropzoneFile, index) in dropzoneFiles" v-bind:key="dropzoneFile.id" class="file-item">
+        <span class="file-info"><img class="file-type" src="@/assets/img/icon_sidebar/file/file-type-img-DEE8F9.svg" alt=""> {{dropzoneFile.name}} </span>
+        <img class="file-type" @click="onClickDeleteFile(index)" src="@/assets/img/icon_sidebar/file/trash-DEE8F9.svg" alt="">
+      </div>
+      <!-- <button @click="uploadFile"><img src="@/assets/img/icon_sidebar/file/check-DEE8F9.svg" alt="">전송</button> -->
+      <div class="file-submit">
+        <img class="file-submit-icon" @click="onClickUploadFile" src="@/assets/img/icon_sidebar/file/check-DEE8F9.svg" alt="">
+        <span @click="onClickUploadFile"> submit</span>
+      </div>
+      <DropZone @drop.prevent="drop" @change="selectedFile" />
+    </form>
   </div>
 </template>
 
 <script>
-import DropZone from '@/views/studies/components/sidebar/SidebarFileDropzone.vue';
 import { ref } from "vue";
 import { uploadFile } from '@/api/study';
 import { computed, reactive } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
 import notifications from '@/composables/notifications'
+import DropZone from '@/views/studies/components/sidebar/SidebarFileDropzone.vue';
+// import SidebarFileList from '@/views/studies/components/sidebar/SidebarFileList.vue';
 
 export default {
   name: "SidebarFile",
   components: {
     DropZone,
+    // SidebarFileList,
   },
   setup() {
     const store = useStore();
@@ -85,24 +92,27 @@ export default {
 
     const onClickUploadFile = (e) => {
       e.preventDefault();
-
       const uploadFileData = new FormData();
+      console.log('여기까지 오나');
+        console.log(dropzoneFiles.value.length);
       for (let i = 0; i < dropzoneFiles.value.length; i++) {
-        uploadFileData.append("studyFile", dropzoneFiles.value[i]);
+        uploadFileData.append("files", dropzoneFiles.value[i]);
       }
 
       uploadFile(
+        route.params.studyId,
         uploadFileData,
         (res) => {
           console.log(res.data)
           switch (res.data.code) {
             case 200:
-              notifySuccess('파일 업로드 완료')
+              alert('스터디 파일 업로드 성공')
               break;
             case 400:
-              notifyWarning('파일 업로드 실패')
+              alert('스터디 파일 업로드 실패')
               break;
           }
+          dropzoneFiles.value = [];
           store.dispatch('GET_FILE_LIST', route.params.studyId);
         },
         (err) => {
@@ -130,7 +140,7 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Alef&display=swap');
 
-.home {
+/* .home {
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -138,10 +148,29 @@ export default {
   align-items: center;
   background-color: #f1f1f1;
   font-family:  'Noto Sans KR', 'Mulish';
-}
+} */
 
 .fileDiv {
-  width: 100%
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  /* align-items: center; */
+  /* background-color: #f1f1f1; */
+  font-family:  'Noto Sans KR', 'Mulish';
+  width: 100%;
+  text-align: left;
+
+
+  /* scroll */
+}
+
+.title{
+  font-size: 25px;
+  font-weight:500;
+  margin-top: 40px;
+  margin-bottom: 30px;
+  /* position: fixed; */
 }
 
 /* .home h1 {
@@ -149,6 +178,28 @@ export default {
   margin-bottom: 32px;
 } */
 
+.file-body {
+  flex-grow: 1;
+  /* overflow: auto; */
+  /* padding: 1rem; */
+
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+}
+/* .file-body::-webkit-scrollbar {
+  display: none;
+} */
+::-webkit-scrollbar{
+  /* opacity: 0.7; */
+  width: 5px;
+}
+/* ::-webkit-scrollbar-thumb{
+    background-color: #999;
+    border-radius: 10px;
+} */
+/* ::-webkit-scrollbar-track{
+    background-color: #1E304F;
+} */
 .file-item {
   display: flex;
   flex-direction: row;
@@ -177,6 +228,26 @@ export default {
 
 .file-submit-icon {
   margin-right: 3px;
+}
+
+.card {
+  display: flex;
+  /* align-items: row; */
+  color: black;
+  background-color: antiquewhite;
+  margin-top: 2px;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  /* padding: 10px; */
+  /* margin-bottom: 5px; */
+
+  color: black;
+  font-size: 13px;
 }
 
 </style>
