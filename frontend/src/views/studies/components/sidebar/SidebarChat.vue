@@ -7,6 +7,10 @@
     <div class="chat-body" id="chat-body"
       @scroll="scrollMove">
 
+      <div v-if="state.isNoScroll">
+        <p class="chat-top">마지막 채팅 기록입니다.</p>
+      </div>
+
       <SidebarChatMessage
         v-for="(chat, idx) in state.chatList"
         :key="idx"
@@ -117,8 +121,9 @@ export default {
 
             console.log(state.loadList)
             // size < 15 면, 더이상 API 호출되지 않도록
-            if(size < 15) state.isNoScroll = true
-
+            if(size < 15) {
+              state.isNoScroll = true
+            }
             state.loading = false
             state.loaded = true
 
@@ -209,8 +214,8 @@ export default {
     },
     connect() {
       // 배포
-      const serverURL = process.env.VUE_APP_SOCKET_URL
-      // const serverURL = 'http://localhost:8080/api/ws/'
+      // const serverURL = process.env.VUE_APP_SOCKET_URL
+      const serverURL = 'http://localhost:8080/api/ws/'
       let socket = new SockJS(serverURL);
       this.stompClient = Stomp.over(socket);
       console.log(`소켓 연결을 시도합니다. 서버 주소: ${serverURL}`)
@@ -299,7 +304,6 @@ input{
   flex-grow: 1;
   /* overflow: auto; */
   padding: 1rem;
-
   overflow-y: scroll;
   scroll-behavior: smooth;
 }
@@ -315,5 +319,16 @@ input{
 }
 ::-webkit-scrollbar-track{
     background-color: #1E304F;
+}
+
+.chat-top{
+  font-size: 13px;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  padding: 1px;
+  line-break: anywhere;
+  background-color: rgba(185, 175, 207, 0.2);
+  border-radius: 10px;
 }
 </style>
