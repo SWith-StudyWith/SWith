@@ -69,7 +69,7 @@ export default {
     isSameUser(chat, prev){
       if(prev === null){
         return false;
-      }else if(prev[0]?.memberId == chat[0]?.memberId){
+      }else if(prev[0]?.memberId == chat?.memberId){
         return true;
       }else{
         return false;

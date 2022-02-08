@@ -77,7 +77,7 @@ export default {
         };
 
         this.stompClient.send("/receive", JSON.stringify(msg), {});
-        // this.recvList.push(msg)
+        this.recvList.push(msg)
         // this.chatList.push(this.recvList)
         // this.$props.chatLog.push(msg)
         setTimeout(() => {
@@ -108,8 +108,8 @@ export default {
             console.log('구독으로 받은 메시지 입니다.', res.body);
 
             // 받은 데이터를 json으로 파싱하고 리스트에 넣어줍니다.
-            this.recvList.push(JSON.parse(res.body))
-            // this.$props.chatLog.push(JSON.parse(res.body))
+            // this.recvList.push(JSON.parse(res.body))
+            this.$props.chatLog.push(JSON.parse(res.body))
             setTimeout(() => {
               const element = document.getElementById('chat-body');
               element.scrollTop = element.scrollHeight;
