@@ -3,7 +3,7 @@
   <div class="container">
     <h1 class="form-title">로그인</h1>
     <div class="row">
-      <div class="offset-4 col-4">
+      <div class="offset-3 col-6 offset-xl-4 col-xl-4">
         <form class="row" @submit.prevent>
           <label for="email" class="form-label">이메일</label>
           <div>

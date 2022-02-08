@@ -2,9 +2,6 @@
   <div class="kanbanboard">
     <div class="text-end mx-3">
       <div v-if="!editPermit">
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#KanbanWarningModal">
-          Launch demo modal
-        </button>
         <button class="btn btn-primary mx-2" @click="onClickEditBtn">
           칸반보드 수정하기
           <font-awesome-icon :icon="['fas', 'edit']"></font-awesome-icon>

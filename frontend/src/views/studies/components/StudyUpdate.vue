@@ -4,7 +4,7 @@
     <div class="container">
       <h1 class="form-title">스터디룸 수정</h1>
       <div class="row d-flex justify-content-center">
-        <div class="col-4">
+        <div class="col-md-6 col-lg-5 col-xl-4">
           <section>
             <form class="studyInfo-wrapper" enctype="multipart/form-data">
               <div>

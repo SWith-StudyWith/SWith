@@ -4,7 +4,7 @@
     <div class="container">
       <h1 class="form-title">스터디룸 만들기</h1>
       <div class="row d-flex justify-content-center">
-        <div class="col-4">
+        <div class="col-md-6 col-lg-5 col-xl-4">
           <section>
             <form class="studyInfo-wrapper" enctype="multipart/form-data">
               <div>
@@ -49,7 +49,6 @@
 
 <script>
 import { ref, computed } from 'vue';
-import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import { createStudy } from '@/api/study';
 import Navbar from '@/views/common/Navbar.vue';
@@ -60,7 +59,6 @@ export default {
   name: '',
   components: { Navbar, Footer },
   setup() {
-    const store = useStore();
     const router = useRouter();
     const state = ref({
       studyName: '',
