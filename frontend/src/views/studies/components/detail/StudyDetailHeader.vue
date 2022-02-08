@@ -4,11 +4,11 @@
       <span class="fs-2 me-2 fw-bold">{{ this.studyInfo.studyName }}</span>
       <router-link :to="{ name: 'StudyUpdate', params: this.$route.params }"><i class="fas fa-pen"></i></router-link>
     </div>
-    <div class="align-middle">
+    <div class="align-middle mt-2">
       <span class="text-muted pe-3">목표 </span>
       <span class="fs-5">{{ this.studyInfo.studyGoal }}</span>
     </div>
-    <div class="input-group-text p-0 mb-2">
+    <div class="input-group-text p-0 my-3">
       <div class="text-center w-100 bg-light py-1">
         {{ this.studyInfo.studyCode }}
       </div>

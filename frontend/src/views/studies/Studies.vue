@@ -10,7 +10,7 @@
     />
     <div :style="{ 'margin-left': sidebarWidth }">
       <!-- main container start -->
-      <div id="main-container" class="container mb-4">
+      <div id="main-container" class="mb-4 mx-4">
         <!-- session start -->
         <div id="session" v-if="session">
           <!-- session header -->
@@ -117,15 +117,8 @@ const OPENVIDU_SERVER_URL = "https://i6a501.p.ssafy.io:4443";
 const OPENVIDU_SERVER_SECRET = "MY_SECRET";
 // const OPENVIDU_SERVER_URL = "https://" + location.hostname + ":4443";
 // const OPENVIDU_SERVER_URL = "https://" + location.hostname + ":4443";
-const parsing = (string) => {
-    if (string === 'true') {
-      return true;
-    } else if (string === 'false') {
-      return false;
-    } else {
-      return undefined;
-    }
-  }
+const parsing = (string) => !(string === 'false')
+
 export default {
   name: 'Studies',
   props: {
@@ -514,11 +507,11 @@ export default {
 					let publisher = this.OVForScreenShare.initPublisher("sharingvideo", {
 						audioSource: false,
 						videoSource: "screen",
-                        publishVideo: true,
+            publishVideo: true,
 						resolution: "1920x1980",
 						frameRate: 10,
-                        insertMode: 'APPEND',
-                        mirror: false
+            insertMode: 'APPEND',
+            mirror: false
 					});
 					console.log("publisher",publisher);
 					publisher.once('accessAllowed', () => {
@@ -544,27 +537,22 @@ export default {
 							console.error('Error applying constraints: ', error);
 						}
 					});
-
 					publisher.once('accessDenied', () => {
 						console.warn('ScreenShare: Access Denied');
 					});
-
 					this.mainStreamManager = publisher;
           this.sharingPublisher = publisher;
           this.sessionForScreenShare.publish(this.sharingPublisher);
-
 				}).catch((error => {
 					console.warn('There was an error connecting to the session:', error.code, error.message);
 				}));
 			});
-
 			// window.addEventListener('beforeunload', this.leaveSessionForScreenSharing)
 		},
     stopScreenSharing() {
       this.isScreenShared = false;
       this.leaveSessionForScreenSharing()
     },
-
 		leaveSessionForScreenSharing () {
 			if (this.sessionForScreenShare) {
         this.sessionForScreenShare.disconnect();
@@ -578,7 +566,7 @@ export default {
 		checkScreenShared () {
 			var buf = 0;
 			this.subscribers.forEach((sub)=>{
-				if(JSON.parse(sub.stream.connection.data).clientData==="Screen Sharing") {
+				if(sub.stream.typeOfVideo==="SCREEN") {
 					buf+=1;
 				}
 			});
@@ -599,9 +587,7 @@ export default {
   justify-content: center;
   flex-wrap: nowrap;
   flex-direction: column;
-
   height: 100%;
-
   background-color: #aebed4;
 }
 .stream-onoff-btn {
@@ -634,10 +620,10 @@ export default {
 .font-red {
   color: red;
 }
-
-/* .video-box {
-  width: 300px;
-  height: 200px;
-  overflow: hidden;
-} */
+::-webkit-scrollbar {
+  height: 12px;
+}
+::-webkit-scrollbar-track{
+  background-color: #aebed4;
+}
 </style>

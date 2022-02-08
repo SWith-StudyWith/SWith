@@ -97,17 +97,6 @@ export default {
     const sidebarWidth = computed(
       () => `${state.collapsed ? SIDEBAR_WIDTH_COLLAPSED : SIDEBAR_WIDTH}px`
     );
-    const toggleSidebar = () => {
-      state.collapsed = !state.collapsed;
-      if (!state.collapsed) {
-        onClickChatIcon()
-      } else {
-        state.isChat = false;
-        state.isMemberList = false;
-        state.isFile = false;
-      }
-      emit('toggleSidebar', sidebarWidth.value)
-    }
     const onClickKanbanBoardIcon = () => {
       emit('show-screenmode', 0)
     };
@@ -121,6 +110,17 @@ export default {
     const onClickWhiteBoardIcon = () => {
       emit('show-screenmode', 2)
     };
+    const toggleSidebar = () => {
+      state.collapsed = !state.collapsed;
+      if (!state.collapsed) {
+        onClickChatIcon()
+      } else {
+        state.isChat = false;
+        state.isMemberList = false;
+        state.isFile = false;
+      }
+      emit('toggleSidebar', sidebarWidth.value)
+    }
     const onClickFileIcon = () => {
       if (!state.isFile) {
         state.isChat = false;
@@ -133,11 +133,7 @@ export default {
         state.collapsed = true;
       }
         state.isFile = !state.isFile;
-      // if(!collapsed.value){
-      //   state.isFile = !state.isFile;
-      // } else{
-      //   collapsed.value = !collapsed.value;
-      // }
+      emit('toggleSidebar', sidebarWidth.value)
     }
     const onClickChatIcon = () => {
       if (!state.isChat) {
@@ -151,6 +147,7 @@ export default {
         state.collapsed = true;
       }
       state.isChat = !state.isChat;
+      emit('toggleSidebar', sidebarWidth.value)
     };
     const onClickMemberIcon = () => {
       if (!state.isMemberList) {
@@ -164,6 +161,7 @@ export default {
         state.collapsed = true;
       }
       state.isMemberList = !state.isMemberList;
+      emit('toggleSidebar', sidebarWidth.value)
       // test
       console.log('스터디 회원 목록 조회 테스트!');
       getMemberList(
