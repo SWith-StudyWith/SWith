@@ -2,7 +2,7 @@
   <div class= "chatDiv">
     <p class="title">💬 채팅 </p>
 
-    <SidebarChatList :chatList="this.chatList"/>
+    <SidebarChatList :chatList="chatLog"/>
     <hr>
     <div class="chat-input" id="chat-input">
       <div class="inputText">
@@ -21,6 +21,7 @@ import Stomp from 'webstomp-client'
 import SockJS from 'sockjs-client'
 import { mapGetters } from 'vuex';
 import SidebarChatList from '@/views/studies/components/sidebar/SidebarChatList.vue';
+import dayjs from 'dayjs'
 
 export default {
   name: 'App',
@@ -31,12 +32,15 @@ export default {
       chatList: this.chatLog,
     }
   },
-  props:{
-    chatLog: Array,
-  }
+  props:
+    // chatLog: Array,
+    ["chatLog"]
   ,
   components:{
     SidebarChatList,
+  },
+  setup(){
+
   },
   created() {
     // App.vue가 생성되면 소켓 연결을 시도합니다.
@@ -46,7 +50,6 @@ export default {
     ...mapGetters([
       'getUserInfo'
     ]),
-
   },
   methods: {
     sendMessage (e) {
@@ -63,12 +66,13 @@ export default {
           memberId: this.getUserInfo.memberId,
           imgUrl: this.getUserInfo.profileImg,
           nickname: this.getUserInfo.nickname,
-          content: this.message
+          content: this.message,
+          createdAt: dayjs().format('YY/MM/DD hh:mm A'),
         };
 
         this.stompClient.send("/receive", JSON.stringify(msg), {});
-        this.recvList.push(msg)
-        this.chatList.push(this.recvList)
+        // this.recvList.push(msg)
+        this.chatList.push(msg)
         setTimeout(() => {
           const element = document.getElementById('chat-body');
           element.scrollTop = element.scrollHeight;
@@ -88,8 +92,8 @@ export default {
           console.log('소켓 연결 성공', frame);
 
           // 스크롤 하단 고정
-          // element.scrollTop = 99999;
-          // const element = document.getElementById('chat-body');
+          const element = document.getElementById('chat-body');
+          element.scrollTop = 99999;
 
           // 서버의 메시지 전송 endpoint를 구독합니다.
           // 이런형태를 pub sub 구조라고 합니다.

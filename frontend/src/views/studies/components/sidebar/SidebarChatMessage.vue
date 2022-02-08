@@ -18,7 +18,7 @@
         <div class="chat-other-content1">
           <p class="chat-other-nickname" v-if="!isSame">{{ chat?.nickname }}</p>
           <!-- DB 날짜 불러올 땐 다시 수정 ! -->
-          <p class="chat-other-message-time" >{{ today == chat?.createdAt ? "" : chat?.createdAt }}</p>
+          <p class="chat-other-message-time" >{{ chat?.createdAt }}</p>
         </div>
         <div class="chat-other-content2">
           <p class="other-content">{{ chat?.content }}</p>
@@ -55,7 +55,7 @@ export default {
       img: null,
 
       // DB : 22/02/06 06:11 PM
-      today: dayjs().format('YY/MM/DD hh시 mm분 A'),
+      today: dayjs().format('YY/MM/DD hh:mm A'),
       // today: dayjs().format('오전 hh시 mm분'),
       isDate: false,
       // msgDate: dayjs()

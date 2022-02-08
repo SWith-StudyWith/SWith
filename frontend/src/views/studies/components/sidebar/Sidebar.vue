@@ -82,7 +82,7 @@ export default {
     const store = useStore();
     const route = useRoute();
     const router = useRouter();
-    store.dispatch('GET_MEMBER_LIST', route.params.studyId);
+    // store.dispatch('GET_MEMBER_LIST', route.params.studyId);
     const state = reactive({
       memberList : computed(() => {
         return store.state.study.memberList;
@@ -91,13 +91,11 @@ export default {
       isMemberList : false,
       isFile : false,
       collapsed: true,
-      recvList: computed(() => {
-        return store.state.study.chatList;
-      }),
-      chatLog: [],
-      // chatLog: computed(() => {
+      // recvList: computed(() => {
       //   return store.state.study.chatList;
       // }),
+      recvList: [],
+      chatLog: [],
     })
 
     const SIDEBAR_WIDTH = 400;
@@ -159,32 +157,13 @@ export default {
         state.collapsed = true;
       }
 
+      console.log('클릭')
       state.isChat = !state.isChat;
 
+      console.log('되려나')
       chat()
-      // console.log('채팅 하자 ~');
-      // // test
-      // getChatList(
-      //   route.params.studyId,
-      //   0,
-      //   (res) => {
-      //     console.log(res.data);
-      //     if (res.data.code === 200) {
+      // state.chatLog = computed(() => store.state.study.chatList)
 
-      //       store.dispatch('GET_CHAT_LIST', route.params.studyId);
-      //       // alert('얍')
-      //       var size = res.data.data.length;
-      //       for(var i = 0; i < size; i++){
-      //         state.recvList.push(res.data.data[i])
-      //       }
-      //       // state.chatLog.push(res.data)
-      //       state.chatLog = [...state.recvList].reverse()
-      //     }
-      //   },
-      //   (err) => {
-      //     console.log(err);
-      //   }
-      // )
     };
     const onClickMemberIcon = () => {
       if (!state.isMemberList) {
@@ -221,6 +200,7 @@ export default {
     function chat() {
       console.log('채팅 하자 ~');
       // test
+
       getChatList(
         route.params.studyId,
         0,
@@ -236,6 +216,7 @@ export default {
             }
             // state.chatLog.push(res.data)
             state.chatLog = [...state.recvList].reverse()
+            state.recvList = null;
           }
         },
         (err) => {
@@ -244,7 +225,7 @@ export default {
       )
     }
 
-    chat()
+    // chat()
 
     return {
       state, toggleSidebar, sidebarWidth,
