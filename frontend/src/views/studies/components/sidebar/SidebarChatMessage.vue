@@ -1,10 +1,10 @@
 <template>
   <div class="chat">
 
-    <!-- <p>{{chat?.content}}</p> -->
     <!-- 내가 보낸 메세지 -->
     <div class="chat-my-message" v-if="chat?.memberId==this.getUserInfo.memberId">
-      <p class="chat-my-message-time">{{ chat?.createdAt }}</p>
+      <!-- <p>{{ isSame }} </p> -->
+      <p class="chat-my-message-time" >{{ chat?.createdAt }}</p>
       <p class="my-content">{{ chat?.content }}</p>
     </div>
 
@@ -12,7 +12,7 @@
     <div class="chat-other-message" v-else>
       <div class="chat-other-img">
         <img :src="this.img ? chat?.imgUrl : require(`@/assets/img/navbar/profile.png`)"
-          v-if="prev[0]==null || !isSame"
+          v-if="!isSame"
           alt="" aria-expanded="false">
       </div>
       <div class="chat-other-content">
@@ -41,7 +41,6 @@ export default {
     prev : Array
     // ["chat","prev"]
   }
-
   ,
   components:{
     // dayjs
@@ -53,10 +52,8 @@ export default {
       img: null,
 
       // DB : 22/02/06 06:11 PM
-      today: dayjs().format('YY/MM/DD hh:mm A'),
+      today: dayjs().format('hh:mm A'),
       // today: dayjs().format('오전 hh시 mm분'),
-      isDate: false,
-      // msgDate: dayjs()
 
     };
   },
@@ -74,7 +71,7 @@ export default {
       }else{
         return false;
       }
-    }
+    },
   },
   created() {
     this.isSame = this.isSameUser(this.chat, this.prev);

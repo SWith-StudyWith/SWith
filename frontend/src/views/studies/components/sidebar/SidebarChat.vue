@@ -46,6 +46,7 @@ export default {
     return {
       message: "",
       recvList: [],
+      msgDate: dayjs().format('hh:mm A'),
     }
   },
   props:{
@@ -120,10 +121,6 @@ export default {
 
             state.loading = false
             state.loaded = true
-            // state.chatLog.push(res.data)
-            // this.$props.chatLog.push(state.loadList)
-            // state.chatLog = [...state.recvList].reverse()
-            // state.chatList = [...state.loadList].reverse()
 
             state.loadList = null;
           }
@@ -136,25 +133,26 @@ export default {
 
     // scrollTop == 0 (꼭대기), 다음 list 가져오기
     function scrollMove(){
-      // console.log("scrolltop : " + state.element.scrollTop)
       if(state.element.scrollTop == 0 && !state.isNoScroll){
+
         messageList()
       }
     }
 
     onUpdated(() => {
-      // 채팅창 열었을 때 혹은 메세지 전송했을 때, 스크롤 맨 밑에 가도록
-      if(state.init || state.sended){
+      // 채팅창 열었을 때, 스크롤 맨 밑에 가도록
+      if(state.init){
         state.init = false
-        state.sended = false
         state.element.scrollTop = 99999
-        state.element.scrollTop = state.element.scrollHeight
+        // state.element.scrollTop = state.element.scrollHeight
       }
 
-      // 스크롤 올렸을 때, 리스트 추가로 호출했을 때
+      // 이전 리스트 추가로 호출했을 때
       if(state.loaded){
         state.loaded = false
         if(state.element.scrollTop == 0){
+
+          // 스크롤 있던 위치 받아오기 => 시작 위치
           state.element.scrollTop = state.element.scrollHeight - state.prevScrollHeight
         }
 
@@ -166,6 +164,7 @@ export default {
       state,
       messageList,
       scrollMove,
+
     }
   },
   created() {
@@ -184,7 +183,7 @@ export default {
         this.message = ''
       }
     },
-    send(state) {
+    send() {
       console.log("Send message:" + this.message);
       if (this.stompClient && this.stompClient.connected) {
         const msg = {
@@ -193,18 +192,25 @@ export default {
           imgUrl: this.getUserInfo.profileImg,
           nickname: this.getUserInfo.nickname,
           content: this.message,
-          createdAt: dayjs().format('YY/MM/DD hh:mm A'),
         };
 
         this.stompClient.send("/receive", JSON.stringify(msg), {});
         this.recvList.push(msg);
 
         // this.$state.value.sended = true;
-        state.sended = true;
+        // alert(this.$state.sended)
+        // this.$route.state.sended = true;
+        setTimeout(() => {
+          const element = document.getElementById('chat-body');
+          element.scrollTop = element.scrollHeight;
+        }, 0);
+
       }
     },
     connect() {
-      const serverURL = 'http://localhost:8080/api/ws/'
+      // 배포
+      const serverURL = process.env.VUE_APP_SOCKET_URL
+      // const serverURL = 'http://localhost:8080/api/ws/'
       let socket = new SockJS(serverURL);
       this.stompClient = Stomp.over(socket);
       console.log(`소켓 연결을 시도합니다. 서버 주소: ${serverURL}`)
@@ -227,10 +233,10 @@ export default {
             // 받은 데이터를 json으로 파싱하고 리스트에 넣어줍니다.
             // this.recvList.push(JSON.parse(res.body))
             this.$props.chatLog.push(JSON.parse(res.body))
-            // setTimeout(() => {
-            //   const element = document.getElementById('chat-body');
-            //   element.scrollTop = element.scrollHeight;
-            // }, 0);
+            setTimeout(() => {
+              const element = document.getElementById('chat-body');
+              element.scrollTop = element.scrollHeight;
+            }, 0);
           });
         },
         error => {
