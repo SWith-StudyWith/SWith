@@ -128,7 +128,8 @@
         <button class="btn btn-primary btn-lg col-12" @click="onClickSignup" style="margin-bottom:15px;">회원가입</button>
         <div class="socialLogin mt-2">
             <KakaoLoginBtn/>
-            <a :href="GOOGLE_GET_AUTH_CODE_URL"><img src="@/assets/img/icon_oauth_google/btn_google_signin_dark_normal_web.png" alt="google login button"></a>
+            <!-- <a :href="GOOGLE_GET_AUTH_CODE_URL"><img src="@/assets/img/icon_oauth_google/btn_google_signin_dark_normal_web.png" alt="google login button"></a> -->
+            <GoogleLoginBtn />
         </div>
         <div class="text-center">
           <span class="text-muted">이미 회원이신가요? </span>
@@ -151,8 +152,9 @@ import SignUpTerm from './components/SignUpTerm.vue';
 import Navbar from '../common/Navbar.vue';
 import Footer from '../common/Footer.vue';
 import KakaoLoginBtn from '@/views/members/components/KakaoLoginBtn.vue';
-import { GOOGLE_GET_AUTH_CODE_URL } from '@/api/gauth.js';
+// import { GOOGLE_GET_AUTH_CODE_URL } from '@/api/gauth.js';
 import notifications from '@/composables/notifications'
+import GoogleLoginBtn from './components/GoogleLoginBtn.vue';
 
 export default {
 
@@ -162,6 +164,7 @@ export default {
     Footer,
     // Test,
     KakaoLoginBtn,
+    GoogleLoginBtn,
   },
   methods: {
     GoogleLoginBtn() {
@@ -363,7 +366,7 @@ export default {
       } return false;
     };
     return {
-      state, onClickSendCode, onClickSignup, onClickConfirmAuthNum, GOOGLE_GET_AUTH_CODE_URL,
+      state, onClickSendCode, onClickSignup, onClickConfirmAuthNum, //GOOGLE_GET_AUTH_CODE_URL,
       notifyWarning, notifyDanger, notifySuccess
     };
   },
