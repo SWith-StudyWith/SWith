@@ -36,6 +36,7 @@ import Footer from '@/views/common/Footer.vue';
 import { reactive, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import {sendTemporaryPassword} from '@/api/user';
+import notifications from '@/composables/notifications'
 
 export default {
   name: 'FindPassword',
@@ -62,7 +63,7 @@ export default {
         return false;
       }),
     })
-    const { notifyWarning, notifySuccess, notifySuccessDescription, notifyDanger } = notifications();
+    const { notifySuccessDescription, notifyDanger } = notifications();
 
     const validateEmail = function (email) {
       const re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
@@ -91,16 +92,12 @@ export default {
         },
         (err) => {
           console.log(err)
-          notifyWarning('서버가 아파요.')
+          notifyDanger('서버가 아파요.')
         }
       )
     }
     return{
-      state,
-      onClickSendCode,
-      notifySuccessDescription,
-      notifyWarning,
-      notifyDanger,
+      state, onClickSendCode,
     }
   },
 };

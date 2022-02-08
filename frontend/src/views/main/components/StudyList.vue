@@ -48,9 +48,8 @@ export default {
     console.log(props.studies);
     let studyCode = ref('')
     const store = useStore();
-    // store.dispatch('GET_STUDY_LIST')
     const router = useRouter();
-    const { notifyWarning, notifyDanger } = notifications();
+    const { notifySuccess, notifyDanger } = notifications();
 
     const onClickJoin = function () {
       if (!studyCode.value) {
@@ -63,7 +62,7 @@ export default {
           console.log(res.data)
           if (res.data.code === 200) {
             store.dispatch('GET_STUDY_LIST')
-            router.push({ name: 'StudyMain', params: { studyCode: studyCode.value } })
+            notifySuccess('스터디 참여 완료!')
           } else if (res.data.code === 400) {
             notifyDanger('해당 스터디가 존재하지 않습니다.😯')
           } else if (res.data.code === 409) {
@@ -72,7 +71,7 @@ export default {
         },
         (err) => {
           console.log(err)
-          notifyWarning('서버가 아파요.😥')
+          notifyDanger('서버가 아파요😥')
         }
       )
     }

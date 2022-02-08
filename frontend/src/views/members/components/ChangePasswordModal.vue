@@ -108,7 +108,7 @@ export default {
         return false;
       }),
     })
-    const { notifyWarning, notifySuccess } = notifications();
+    const { notifyDanger, notifySuccess } = notifications();
 
     const validatePassword = function (password) {
       const numberChar = /[0-9]/;
@@ -154,27 +154,27 @@ export default {
                       router.go({ name: 'MyPage' })
                       break;
                     case 404:
-                      notifyWarning('비밀번호 수정 실패😰')
+                      notifyDanger('비밀번호 수정 실패😰')
                       break;
                     case 400:
-                      notifyWarning('회원 인증 실패 😰');
+                      notifyDanger('회원 인증 실패 😰');
                       break;
                   }
                 },
                 (err) => {
                   console.log(err)
-                  notifyWarning('서버가 아파요 😰')
+                  notifyDanger('서버가 아파요 😰')
                 }
               )
               break;
             case 400:
-              notifyWarning('회원 인증 실패 😰');
+              notifyDanger('회원 인증 실패 😰');
               break;
           }
         },
         (err) => {
           console.log(err)
-          notifyWarning('비밀번호 확인 실패😰')
+          notifyDanger('비밀번호 확인 실패😰')
           state.nowPassword = ''
           state.wasInputed.nowPassword = false
         },
@@ -202,8 +202,6 @@ export default {
       state,
       onClickChange,
       onClickCancle,
-      notifySuccess,
-      notifyWarning,
     };
 
   },

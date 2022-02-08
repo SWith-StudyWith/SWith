@@ -87,7 +87,7 @@ export default {
         return false;
       }),
     });
-    const { notifyWarning, notifySuccess, notifyDangerDescription } = notifications();
+    const { notifyDanger, notifySuccess, notifyDangerDescription } = notifications();
 
     const onClickUploadFile = (e) => {
       const file = e.target.files[0]
@@ -104,7 +104,6 @@ export default {
       e.preventDefault();
       state.value.studyImgURL = '';
       state.value.studyImage = '';
-      // state.value.updated = true;
     };
     const onClickCreateStudy = (e) => {
       e.preventDefault();
@@ -130,19 +129,13 @@ export default {
               break;
             case 400:
               console.log('실패')
-              // createToast('스터디룸 생성 실패 😥',
-              //   {
-              //   showIcon: 'true',
-              //   position: 'bottom-left',
-              //   type: 'danger',
-              //   transition: 'bounce',
-              //   })
+              notifyDanger('스터디룸 생성 실패 😥')
               break;
           }
         },
         (err) => {
           console.log(err)
-          notifyWarning('서버가 아파요.😥')
+          notifyDanger('서버가 아파요.😥')
           },
           router.push({ name: 'Main'})
       )
@@ -160,9 +153,6 @@ export default {
       onClickUploadFile,
       onClickDefaultImg,
       onClickCreateStudy,
-      notifyWarning,
-      notifySuccess,
-      notifyDangerDescription
     }
   },
 

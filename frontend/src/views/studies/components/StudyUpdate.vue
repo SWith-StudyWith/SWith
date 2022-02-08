@@ -124,7 +124,6 @@ export default {
     };
     return {
       state, onClickUploadFile, onClickDefaultImg, onClickUpdateStudy,
-      notifySuccess, notifyDangerDescription,
     }
   },
 
