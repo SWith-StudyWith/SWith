@@ -67,6 +67,12 @@ function getFileList(studyId, success, fail) {
     .then(success)
     .catch(fail)
 }
+function downloadFile(studyId, fileId, success, fail) {
+  basicInstance
+    .get(`api/studies/${studyId}/files/${fileId}`, { responseType: 'blob' })
+    .then(success)
+    .catch(fail)
+}
 
 export {
   createStudy,
@@ -80,4 +86,5 @@ export {
   getMemberList,
   uploadFile,
   getFileList,
+  downloadFile
 }
