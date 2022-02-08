@@ -1,5 +1,6 @@
 <template>
   <div class="chat-body" id="chat-body">
+
     <SidebarChatMessage
       v-for="(chat, idx) in chatList"
       :key="idx"
@@ -12,7 +13,6 @@
 
 <script>
 import SidebarChatMessage from '@/views/studies/components/sidebar/SidebarChatMessage.vue';
-
 export default {
   nane: '',
   components: {
@@ -26,7 +26,6 @@ export default {
       sampleData: '',
     };
   },
-
 }
 </script>
 

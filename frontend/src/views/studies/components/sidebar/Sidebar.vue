@@ -83,6 +83,7 @@ export default {
     const route = useRoute();
     const router = useRouter();
     // store.dispatch('GET_MEMBER_LIST', route.params.studyId);
+
     const state = reactive({
       memberList : computed(() => {
         return store.state.study.memberList;
@@ -157,12 +158,9 @@ export default {
         state.collapsed = true;
       }
 
-      console.log('클릭')
       state.isChat = !state.isChat;
 
-      console.log('되려나')
       chat()
-      // state.chatLog = computed(() => store.state.study.chatList)
 
     };
     const onClickMemberIcon = () => {
@@ -200,23 +198,24 @@ export default {
     function chat() {
       console.log('채팅 하자 ~');
       // test
-
       getChatList(
         route.params.studyId,
         0,
         (res) => {
           console.log(res.data);
           if (res.data.code === 200) {
-            store.dispatch('GET_CHAT_LIST', route.params.studyId);
+            store.dispatch('GET_CHAT_LIST', {studyId: route.params.studyId, index: 0});
 
-            // alert('얍')
             var size = res.data.data.length;
             for(var i = 0; i < size; i++){
               state.recvList.push(res.data.data[i])
             }
+            // console.log(state.recvList)
             // state.chatLog.push(res.data)
             state.chatLog = [...state.recvList].reverse()
             state.recvList = null;
+
+            // console.log(state.chatLog)
           }
         },
         (err) => {

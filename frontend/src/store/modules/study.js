@@ -48,7 +48,7 @@ const actions = {
       }
     )
   },
-  GET_MEMBER_LIST({ commit } ,studyId) {
+  GET_MEMBER_LIST({ commit }, studyId) {
     getMemberList(
       studyId,
       (res) => {
@@ -61,7 +61,9 @@ const actions = {
       }
     )
   },
-  GET_CHAT_LIST({ commit }, studyId, index) {
+  GET_CHAT_LIST({ commit }, { studyId, index }) {
+    console.log('modules id: ' + studyId)
+    console.log('modules idx: ' + index)
     getChatList(
       studyId,
       index,
@@ -71,6 +73,7 @@ const actions = {
         }
       },
       (err) => {
+        console.log('채팅 불러오기 실패')
         console.log(err)
       }
     )
