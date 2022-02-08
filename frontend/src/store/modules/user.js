@@ -22,7 +22,7 @@ const actions = {
         commit('UPDATE_USER_INFO', res.data.data);
       },
       () => {
-        notifyDanger('서버가 아파요!😰')
+        notifyDanger('서버에 문제가 발생했습니다.😰')
       }
     )
   },
@@ -58,7 +58,7 @@ const actions = {
       },
       (err) => {
         console.log(err)
-        notifyDanger('서버가 아파요!😰')
+        notifyDanger('서버에 문제가 발생했습니다.😰')
       }
     )
   },
@@ -75,7 +75,7 @@ const actions = {
       },
       (err) => {
         console.log(err)
-        notifyDanger('서버가 아파요!😰')
+        notifyDanger('서버에 문제가 발생했습니다.😰')
       }
     )
   },
@@ -88,7 +88,7 @@ const actions = {
         router.push({ name: 'Main' })
       },
       () => {
-        notifyDanger('서버가 아파요!😰')
+        notifyDanger('서버에 문제가 발생했습니다.😰')
       }
     )
   },
