@@ -33,7 +33,7 @@
         <button class="btn btn-primary btn-lg col-12" @click="onClickLogin" style="margin-bottom:15px; margin-top: 10px;">로그인</button>
         <div class="socialLogin mt-2">
           <KakaoLoginBtn/>
-          <a :href="GOOGLE_GET_AUTH_CODE_URL"><img src="@/assets/img/icon_oauth_google/btn_google_signin_dark_normal_web.png" alt="google login button"></a>
+          <GoogleLoginBtn />
         </div>
         <div class="text-center mt-5">
           <router-link class="text-muted px-3" :to="{ name: 'FindPassword' }">비밀번호 찾기</router-link>
@@ -53,7 +53,7 @@ import { useStore } from 'vuex';
 import Navbar from '../common/Navbar.vue';
 import Footer from '../common/Footer.vue';
 import KakaoLoginBtn from '@/views/members/components/KakaoLoginBtn.vue'
-import { GOOGLE_GET_AUTH_CODE_URL } from '@/api/gauth.js';
+import GoogleLoginBtn from './components/GoogleLoginBtn.vue';
 
 export default {
   name: '',
@@ -61,6 +61,7 @@ export default {
     Navbar,
     Footer,
     KakaoLoginBtn,
+    GoogleLoginBtn,
   },
   setup() {
     const store = useStore();
@@ -127,10 +128,9 @@ export default {
   };
 
     return {
-      state, onClickLogin, onSuccess, onFailure, signout, GOOGLE_GET_AUTH_CODE_URL,
+      state, onClickLogin, onSuccess, onFailure, signout,
     };
   },
-  created() {},
   mounted() {
     window.gapi.signin2.render('my-signin2', {
       scope: 'profile email',
@@ -141,9 +141,6 @@ export default {
       onsuccess: this.onSuccess,
       onfailure: this.onFailure,
     });
-  },
-  unmounted() {},
-  methods: {
   },
 };
 </script>
