@@ -152,7 +152,6 @@ export default {
 
         messageList()
       }
-
     }
 
     // 버튼 클릭 시, 맨 아래로 내려가기
@@ -177,11 +176,8 @@ export default {
           // 스크롤 있던 위치 받아오기 => 시작 위치
           state.element.scrollTop = state.element.scrollHeight - state.prevScrollHeight
         }
-
         state.prevScrollHeight = state.element.scrollHeight
       }
-
-
     })
 
     return {
@@ -189,7 +185,6 @@ export default {
       messageList,
       scrollMove,
       scrollInit,
-
     }
   },
   created() {
@@ -222,20 +217,16 @@ export default {
         this.stompClient.send("/receive", JSON.stringify(msg), {});
         this.recvList.push(msg);
 
-        // this.$state.value.sended = true;
-        // alert(this.$state.sended)
-        // this.$route.state.sended = true;
         setTimeout(() => {
           const element = document.getElementById('chat-body');
           element.scrollTop = element.scrollHeight;
         }, 0);
-
       }
     },
     connect() {
       // 배포
-      // const serverURL = process.env.VUE_APP_SOCKET_URL
-      const serverURL = 'http://localhost:8080/api/ws/'
+      const serverURL = process.env.VUE_APP_SOCKET_URL
+      // const serverURL = 'http://localhost:8080/api/ws/'
       let socket = new SockJS(serverURL);
       this.stompClient = Stomp.over(socket);
       console.log(`소켓 연결을 시도합니다. 서버 주소: ${serverURL}`)
