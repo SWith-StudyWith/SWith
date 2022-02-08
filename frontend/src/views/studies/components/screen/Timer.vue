@@ -1,5 +1,5 @@
 <template>
-  <span class="bg-primary fs-4 px-2 rounded text-light align-middle user-select-none">
+  <span class="bg-primary fs-5 px-2 py-1 rounded text-light align-middle user-select-none">
     <font-awesome-icon class="fs-5" :icon="['fas', 'hourglass-half']"></font-awesome-icon>
     {{ parsingTime }}
   </span>
