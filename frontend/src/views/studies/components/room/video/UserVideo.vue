@@ -1,6 +1,7 @@
 <template>
-  <div v-if="streamManager">
-    <OvVideo :stream-manager="streamManager" :mainStream="mainStream" />
+  <div v-if="streamManager" id="UserVideo">
+    <!-- <OvVideo :stream-manager="streamManager" :mainStream="mainStream" :is-speak="isSpeak"/> -->
+    <OvVideo :stream-manager="streamManager" :isSpeak="isSpeak" :mainStream="mainStream"/>
     <p style="margin:0px;">{{ clientData }}</p>
   </div>
 <!-- <div id="UserVideo" v-if="streamManager">
@@ -21,7 +22,8 @@ export default {
 
   props: {
     streamManager: Object,
-    mainStream: Boolean
+    mainStream: Boolean,
+    isSpeak: Boolean
   },
 
   computed: {
@@ -44,9 +46,7 @@ export default {
 
 <style>
 /* #UserVideo {
-  display: inline-block;
-  border: 1px black solid;
-  margin: 5px;
-
+  box-shadow:  0px 0px 10px rgb(0 255 0 / 1.0);
+  border-radius: 1rem;
 } */
 </style>

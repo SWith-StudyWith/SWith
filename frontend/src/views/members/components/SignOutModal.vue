@@ -12,15 +12,44 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">뒤로 가기</button>
-          <button type="button" class="btn btn-primary" @click="onClickSignOut">탈퇴 하기</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="onClickSignOut">탈퇴 하기</button>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
+
 export default {
   name: 'SignOut',
+  setup() {
+    const store = useStore()
+    const router = useRouter()
+    const onClickSignOut = function (e) {
+      e.preventDefault();
+      console.log(e)
+      console.log('버튼 클릭')
+      // signOut(
+      //   (res) => {
+      //     console.log(res)
+      //     console.log(res.data)
+      //     console.log('탈퇴완료')
+      //     if (res.data.code === 200 ) {
+      //       sessionStorage.removeItem('accessToken', res.data.data.accessToken)
+      //       router.push({ name: 'Login' })
+      //     }
+      //   },
+      //   (err) => {
+      //     console.log(err)
+      //   }
+      // )
+      store.dispatch('SIGNOUT')
+      router.push({ name: 'Login' })
+    }
+    return { onClickSignOut }
+  }
 }
 
 </script>

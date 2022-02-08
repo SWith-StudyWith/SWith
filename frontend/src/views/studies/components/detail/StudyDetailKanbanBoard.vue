@@ -1,6 +1,5 @@
 <template>
   <div style="height: 28rem;">
-    <h2 class="text-start px-4">StudyDetailKanbanBoard</h2>
     <div class="p-3 d-flex justify-content-center h-100">
       <div
         v-for="tasks in state.kanbanBoard"

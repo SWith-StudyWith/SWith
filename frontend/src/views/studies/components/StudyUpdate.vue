@@ -9,7 +9,7 @@
             <form class="studyInfo-wrapper" enctype="multipart/form-data">
               <div>
                 <label for="studyName" class="form-label">스터디 이름</label>
-                <input type="text" class="form-control" id="studyName" v-model="state.studyInfo.studyName" required placeholder="스터디 이름">
+                <input type="text" class="form-control" id="studyName" v-model="state.studyInfo.studyName" required>
                 <div :style="{ visibility: (state.isValidStudyName || !state.wasInputed.studyName )? 'hidden' : 'visible' }"
                   class="invalid-feedback">
                   2~20자 사이로 작성해주세요.
@@ -21,7 +21,7 @@
               </div>
               <div class="d-flex justify-content-start mb-4">
                 <div class="dropend">
-                  <div class="image-wrapper" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" >
+                  <div class="image-wrapper scale" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" >
                     <img class="study-img" :src="state.studyImgSrc">
                   </div>
                   <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
@@ -59,12 +59,15 @@ export default {
   setup() {
     const store = useStore();
     const state = ref({
-      studyInfo : store.getters.getStudyInfo,
+      // studyInfo : store.getters.getStudyInfo,
+      studyInfo : computed(() => {
+        return store.state.study.studyInfo
+      }),
       studyImage: '',
       updated: false,
       studyImgSrc: computed(()=> {
-        if (state.value.studyInfo.studyImgURL) {
-          return state.value.studyInfo.studyImgURL
+        if (state.value.studyInfo.studyImgUrl) {
+          return state.value.studyInfo.studyImgUrl
         } else {
           return require(`@/assets/img/study_room/studyroom.png`)
         }
@@ -84,40 +87,37 @@ export default {
     });
 
     const onClickUploadFile = (e) => {
-      console.log(e)
       const file = e.target.files[0]
-      state.value.studyInfo.studyImgURL = URL.createObjectURL(file);
-      state.value.studyImage = file;
-      state.value.updated = true;
+      if (file.size > 2097152) {
+        e.preventDefault();
+        alert('파일 사이즈가 큽니다.😯 (최대 2MB)');
+        return;
+      } else {
+        state.value.studyInfo.studyImgUrl = URL.createObjectURL(file);
+        state.value.studyImage = file;
+        state.value.updated = true;
+      }
     };
     const onClickDefaultImg = () => {
-      state.value.userInfo.studyImgURL = '';
+      state.value.studyInfo.studyImgURL = '';
+      state.value.studyInfo.studyImgUrl = '';
       state.value.updated = true;
     };
     const onClickUpdateStudy = (e) => {
       e.preventDefault();
-      if (state.value.studyInfo.studyName === '') {
-        state.value.wasInputed.studyName = true;
-        return;
-      }
-      if (!state.value.isValidStudyName) {
-        return;
-      }
       const updateStudyData = new FormData();
       updateStudyData.append("studyName", state.value.studyInfo.studyName)
       updateStudyData.append("studyGoal", state.value.studyInfo.studyGoal)
       updateStudyData.append("studyImage", state.value.studyImage)
       updateStudyData.append("updated", state.value.updated)
-      store.dispatch('updateStudyInfo', state.value.studyInfo.studyId, updateStudyData)
+      store.dispatch('updateStudyInfo', { studyId: state.value.studyInfo.studyId, payload:updateStudyData})
     }
-
     const validateStudyName = function (studyName) {
       if (studyName.length >= 2 && studyName.length <= 20) {
         return true;
       }
       return false;
     };
-
     return {
       state, onClickUploadFile, onClickDefaultImg, onClickUpdateStudy
     }
@@ -149,16 +149,14 @@ p{
 .uploadImage{
   margin-bottom: 20px;
 }
-.box{
-    width: 240px;
-    height: 160px;
-    overflow: hidden;
-    background: #BDBDBD;
-}
-.profile-img{
+
+.study-img{
     width: 100%;
     height: 100%;
     object-fit: cover;
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 4%;
 }
 .base-url{
   font-size: 14px;
@@ -176,13 +174,6 @@ p{
   font-size: 0.75rem;
   margin-top: 0;
   margin-bottom: 0;
-}
-.valid-feedback {
-  display: block;
-  font-size: 0.75rem;
-  margin-top: 0;
-  margin-bottom: 0.2rem;
-  color: green;
 }
 /* basic setting */
 button{
@@ -237,5 +228,20 @@ textarea{
 }
 .dropdown-item{
   cursor: pointer;
+}
+.scale {
+  transform: scale(1);
+  -webkit-transform: scale(1);
+  -moz-transform: scale(1);
+  -ms-transform: scale(1);
+  -o-transform: scale(1);
+  transition: all 0.3s ease-in-out;   /* 부드러운 모션을 위해 추가*/
+}
+.scale:hover {
+  transform: scale(1.05);
+  -webkit-transform: scale(1.05);
+  -moz-transform: scale(1.05);
+  -ms-transform: scale(1.05);
+  -o-transform: scale(1.05);
 }
 </style>

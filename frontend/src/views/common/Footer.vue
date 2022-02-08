@@ -16,23 +16,21 @@ export default {
 
 <style scoped>
 footer {
-  font-family:  'Mulish', 'Noto Sans KR', sans-serif;
   text-align : center;
   font-size : 16px;
   color : #C3CBCD;
   /* margin : 100px 0 0 0; */
-  display: flex;
-  justify-content: center;
-  flex-direction: row;
+  /* display: flex; */
+  /* justify-content: center; */
+  /* flex-direction: row; */
   background-color : #373F41;
-  height: 170px;
+  height: 200px;
   position : relative;
+  clear : right;
+
+  /* position: fixed; */
   transform : translateY(100%);
-  /* position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0; */
-  }
+}
 
 #footer-content {
   margin : auto;

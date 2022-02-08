@@ -1,4 +1,4 @@
-import { login, getUserInfo, loginKakao, loginGoogle, updateUserInfoAPI } from '../../api/user';
+import { login, getUserInfo, loginKakao, loginGoogle, updateUserInfoAPI, signOut } from '../../api/user';
 import router from '@/router';
 
 const state = () => ({
@@ -95,6 +95,19 @@ const actions = {
   LOGOUT({ commit }) {
     commit('LOGOUT')
   },
+  SIGNOUT({ dispatch }) {
+    signOut(
+      (res) => {
+        if (res.data.code === 200) {
+          console.log('탈퇴성공~')
+          dispatch('LOGOUT')
+          router.push({ name: 'Login' })
+        }  else if ( res.data.code === 404) {
+          alert('회원 탈퇴 실패...ㅜ')
+        }
+      },
+    )
+  }
 };
 
 const mutations = {

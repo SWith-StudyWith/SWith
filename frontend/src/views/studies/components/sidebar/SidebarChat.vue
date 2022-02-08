@@ -140,7 +140,7 @@ export default {
 <style scoped>
 .chatDiv{
   /* float: right; */
-  width: 90%;
+  width: 100%;
   text-align: left;
   flex-direction: column;
 
@@ -155,7 +155,7 @@ export default {
 .title{
   font-size: 25px;
   font-weight:500;
-  margin-top: 20px;
+  margin-top: 40px;
   margin-bottom: 30px;
 }
 img {
@@ -168,22 +168,23 @@ img {
 }
 .inputText{
   bottom: 0;
-  margin: 10px;
+  margin: 5px;
 
   display: flex;
   width: 100%;
 }
 input{
   /* width: 100%; */
-  height: 90px;
+  height: 100px;
   border: none;
   border-radius: 10px;
-
+  padding: 15px;
+  margin: 10px 0px;
+  background-color: #F8F8F8;
   flex-grow: 1;
 
   /* input 클릭 시, 테두리 없애기 */
   outline: none;
-  margin-bottom: 20px;
 }
 
 .chat-userinfo-box{
@@ -260,6 +261,7 @@ input{
 .chat-other-message-time {
   margin: 0;
   font-size: 10px;
+  font-weight: 500;
   color: #9c9c9c;
   margin-left: auto;
   margin-right: 16px;
@@ -278,8 +280,10 @@ input{
   max-width: 180px;
   background-color: #acb5e4;
   color: #ffffff;
+  /* color: #414141; */
   padding: 0.8rem;
   font-size: 14px;
+  font-weight: 500;
   max-width: 170px;
   margin-left: 3px;;
 }

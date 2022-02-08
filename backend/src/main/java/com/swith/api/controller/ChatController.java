@@ -1,35 +1,34 @@
 package com.swith.api.controller;
 
-import com.swith.api.dto.study.ChatDto;
-import lombok.RequiredArgsConstructor;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Controller;
+import com.swith.api.dto.study.response.ChatRes;
+import com.swith.api.service.ChatService;
+import com.swith.api.service.StudyService;
+import com.swith.common.response.BaseDataResponse;
+import com.swith.db.entity.Study;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.List;
 
-@Controller
-@RequiredArgsConstructor
+@Slf4j
+@RestController
+@RequestMapping("/api/studies")
 public class ChatController {
 
-    private final SimpMessagingTemplate template;
+    @Autowired
+    private ChatService chatService;
 
-//    @SendTo("/send")
+    @Autowired
+    private StudyService studyService;
 
-    @MessageMapping("/receive")
-    public void SocketHandler(ChatDto chatDto) {
-        String studyId = chatDto.getStudyId();
-        String memberId = chatDto.getMemberId();
-        String imgUrl = chatDto.getImgUrl();
-        String nickname = chatDto.getNickname();
-        String content = chatDto.getContent();
+    @GetMapping("/{studyId}/chat")
+    public ResponseEntity<BaseDataResponse> getStudyIsUsed(@PathVariable long studyId, @RequestParam long index) {
 
-        LocalDateTime now = LocalDateTime.now();
-        String createdAt = now.format(DateTimeFormatter.ofPattern("a hh시 mm분"));
+        Study study = studyService.getStudyById(studyId);
+        List<ChatRes> result = chatService.getChatList(study, index);
 
-        ChatDto result = new ChatDto(studyId, memberId, imgUrl, nickname, content, createdAt);
-        template.convertAndSend("/send/" + studyId, result);
+        return ResponseEntity.status(200).body(new BaseDataResponse(true, 200, "채팅 내역 조회 성공", result));
     }
 }

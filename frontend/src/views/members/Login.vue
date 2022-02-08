@@ -185,7 +185,12 @@ button{
 }
 .container {
   margin-top: 100px;
-  margin-bottom: 120px;
+  /* margin-bottom: 120px; */
+
+  /*  */
+  height: auto;
+  min-height: 100%;
+  padding-bottom: (200px);
 }
 input::placeholder {
   font-size: 12px;

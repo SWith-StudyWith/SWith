@@ -4,77 +4,80 @@
       @show-screenmode="showScreenMode($event)"
       @startScreenSharing="startScreenSharing"
       @stopScreenSharing="stopScreenSharing"
+      @toggleSidebar="toggleSidebar"
       :screenMode="screenMode"
       :isScreenShared="isScreenShared"
     />
     <div :style="{ 'margin-left': sidebarWidth }">
       <!-- main container start -->
-      <div id="main-container" class="container">
-        <!-- join session page -->
-        <!-- <div id="join" v-if="!session">
-          <div id="join-dialog" class="vertical-center">
-            <h1>Join a video session</h1>
-            <div class="form-group">
-              <p>
-                <label>Participant</label>
-                <input v-model="myUserName" class="form-control" type="text" required>
-              </p>
-              <p>
-                <label>Session</label>
-                <input v-model="mySessionId" class="form-control" type="text" required>
-              </p>
-              <p class="text-center">
-                <button class="btn btn-lg btn-success" @click="joinSession()">Join!</button>
-              </p>
-            </div>
-          </div>
-        </div> -->
+      <div id="main-container" class="mb-4 mx-4">
         <!-- session start -->
         <div id="session" v-if="session">
           <!-- session header -->
           <div id="session-header">
             <!-- leave session button -->
-            <input class="btn btn-large btn-danger" type="button" id="buttonLeaveSession" @click="leaveSession" value="Leave session">
           </div>
-          <!-- 더블 클릭해서 크게 보는 화면 -->
-          <!-- <div id="main-video">
-            <user-video
-              v-if="mainOnOff"
-              :stream-manager="mainStreamManager"
-              :mainStream="true"
-              v-on:dblclick="deleteMainVideoStreamManager"
-            />
-          </div> -->
           <!-- video-container start -->
-          <!-- 화면 공유할 때의 비디오 컨테이너 -->
           <div id="video-container">
             <div class="user-video-wrapper d-flex overflow-auto">
+              <!-- publisher -->
               <div class="video-box m-2 position-relative">
-                <user-video id="my-video" :stream-manager="publisher"/>
+                <div v-if="publisher">
+                  <user-video id="my-video" :stream-manager="publisher"
+                    :isSpeak="isSpeakList.includes(publisher.stream.connection.connectionId)"/>
+                </div>
                 <div class="stream-btn-container" @click.self="updateMainVideoStreamManager(publisher)">
-                  <button class="btn btn-primary mx-2 stream-onoff-btn" @click="videoOnOff(publisher)">
-                    <font-awesome-icon :icon="['fas', publisher&&publisher.stream.videoActive ? 'video' : 'video-slash' ]" />
+                  <button class="btn btn-primary mx-1 stream-onoff-btn" @click="videoOnOff(publisher)">
+                    <font-awesome-icon
+                      :icon="['fas', publisher&&publisher.stream.videoActive ? 'video' : 'video-slash' ]"
+                      :class="{'font-red' : !(publisher&&publisher.stream.videoActive)}"
+                    />
                   </button>
-                  <button class="btn btn-primary mx-2 stream-onoff-btn" @click="audioOnOff(sub)">
-                    <font-awesome-icon :icon="['fas', publisher&&publisher.stream.audioActive ? 'microphone' : 'microphone-slash']" />
+                  <button class="btn btn-primary mx-1 stream-onoff-btn" @click="audioOnOff(sub)">
+                    <font-awesome-icon
+                      :icon="['fas', publisher&&publisher.stream.audioActive ? 'microphone' : 'microphone-slash']"
+                      :class="{'font-red' : !(publisher&&publisher.stream.audioActive)}"
+                    />
                   </button>
                 </div>
               </div>
+              <!-- subcribers -->
               <div v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub">
                 <div class="video-box m-2 position-relative">
-                  <user-video :stream-manager="sub"/>
+                  <user-video :stream-manager="sub" :isSpeak="isSpeakList.includes(publisher.stream.connection.connectionId)"/>
+                  <div
+                    class="mute-icon-container text-start"
+                    v-if="sub.stream.typeOfVideo !== 'SCREEN'"
+                  >
+                    <font-awesome-icon
+                      v-if="!sub.stream.videoActive"
+                      :icon="['fas', 'video-slash']"
+                      class="font-red ms-2 mt-2"
+                    />
+                    <font-awesome-icon
+                      v-if="!sub.stream.audioActive"
+                      :icon="['fas', 'microphone-slash']"
+                      class="font-red ms-2 mt-2"
+                    />
+                  </div>
                   <div v-if="sub" class="stream-btn-container" @click.self="updateMainVideoStreamManager(sub)">
                     <button
-                      class="btn btn-primary mx-2 stream-onoff-btn" @click="toggleVideoSub(sub)"
-                      v-if="JSON.parse(sub.stream.connection.data).clientData !== 'Screen Sharing'"
+                      class="btn btn-primary mx-1 stream-onoff-btn" @click="toggleVideoSub(sub)"
+                      v-if="sub.stream.typeOfVideo !== 'SCREEN'"
                     >
-                      <font-awesome-icon :icon="['fas', sub.stream.videoActive ? 'video' : 'video-slash' ]" />
+                      <font-awesome-icon
+                        :icon="['fas', !sub.muteVideo ? 'video' : 'video-slash' ]"
+                        :class="{'font-red': sub.muteVideo}"
+                      />
                     </button>
                     <button
-                      class="btn btn-primary mx-2 stream-onoff-btn" @click="toggleAudioSub(sub)"
-                      v-if="JSON.parse(sub.stream.connection.data).clientData !== 'Screen Sharing'"
+                      class="btn btn-primary mx-1 stream-onoff-btn" @click="toggleAudioSub(sub)"
+                      v-if="sub.stream.typeOfVideo !== 'SCREEN'"
                     >
-                      <font-awesome-icon :icon="['fas', sub.stream.audioActive ? 'microphone' : 'microphone-slash']" />
+                      <font-awesome-icon
+                        :icon="['fas', !sub.muteAudio ? 'microphone' : 'microphone-slash']"
+                        :class="{'font-red': sub.muteAudio}"
+                      />
                     </button>
                   </div>
                 </div>
@@ -85,42 +88,28 @@
         <!-- session div end -->
       </div>
       <!-- main container end -->
-      <!-- buttons -->
-      <div id="btngroup">
-        <!-- <button @click="startScreenSharing()">
-          <font-awesome-icon :icon="['fas', 'desktop']"></font-awesome-icon>
-          화면 공유 on
-        </button>
-        <button @click="stopScreenSharing()">
-          <font-awesome-icon :icon="['fas', 'desktop']"></font-awesome-icon>
-          화면 공유 off
-        </button> -->
-        <button @click="leaveSession()">
-          <font-awesome-icon :icon="['fas', 'sign-out-alt']"></font-awesome-icon>
-          세션 나가기
-        </button>
-      </div>
       <!-- 화면 모드 -->
-      <KanbanBoard v-if="screenMode === 0"/>
+      <KanbanBoard v-if="screenMode === 0" @isEditPermit="isEditPermit($event)" :editPermit="editPermit" ref="kanbanBoard"/>
       <MainScreen
-        v-show="screenMode === 1"
+        v-else-if="screenMode === 1"
         :streamManager="mainStreamManager"
+        @deleteMainVideoStreamManager="deleteMainVideoStreamManager"
       />
-      <WhiteBoard v-show="screenMode === 2"/>
+      <WhiteBoard v-else-if="screenMode === 2"/>
     </div>
     <!-- sidebar end -->
   </div>
 </template>
 <script>
 import Sidebar from '@/views/studies/components/sidebar/Sidebar.vue';
-import { sidebarWidth } from '@/views/studies/components/sidebar/state.js';
 import KanbanBoard from '@/views/studies/components/screen/KanbanBoard.vue';
 import MainScreen from '@/views/studies/components/screen/MainScreen.vue';
 import WhiteBoard from '@/views/studies/components/screen/WhiteBoard.vue';
+import UserVideo from "@/views/studies/components/room/video//UserVideo.vue";
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
 import { OpenVidu } from "openvidu-browser";
-import UserVideo from "@/views/studies/components/room/video//UserVideo.vue";
+import { ref } from 'vue';
 import axios from "axios";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
@@ -128,8 +117,16 @@ const OPENVIDU_SERVER_URL = "https://i6a501.p.ssafy.io:4443";
 const OPENVIDU_SERVER_SECRET = "MY_SECRET";
 // const OPENVIDU_SERVER_URL = "https://" + location.hostname + ":4443";
 // const OPENVIDU_SERVER_URL = "https://" + location.hostname + ":4443";
+const parsing = (string) => !(string === 'false')
+
 export default {
   name: 'Studies',
+  props: {
+    initVideoId: String,
+    initAudioId: String,
+    initVideoOn: Boolean,
+    initAudioOn: Boolean,
+  },
   components: {
     Sidebar,
     KanbanBoard,
@@ -139,33 +136,53 @@ export default {
   },
   beforeRouteLeave(to, from, next) {
     console.log(to.fullPath);
+    if (!this.canLeave) {
+      if (confirm('현재 칸반보드를 저장합니까?')) {
+        this.$refs.kanbanBoard.onClickSaveBtn()
+      } else {
+        return
+      }
+    }
     if (to.fullPath == `/studies/${this.$route.params.studyId}`) {
       if (this.session) {
         this.session.disconnect();
+      }
+      if (this.sessionForScreenShare) {
+        this.sessionForScreenShare.disconnect();
       }
       return next();
     } else {
       if (this.session) {
         this.session.disconnect();
       }
+      if (this.sessionForScreenShare) {
+        this.sessionForScreenShare.disconnect();
+      }
       this.session = undefined;
       this.mainStreamManager = undefined;
       this.publisher = undefined;
       this.subscribers = [];
       this.OV = undefined;
-
-      window.removeEventListener("beforeunload", this.leaveSession);
+      this.OVForScreenShare = undefined,
+			this.sessionForScreenShare = undefined,
+			this.mainStreamManager2 = undefined,
+			this.sharingPublisher = undefined,
+      window.removeEventListener("beforeunload", this.unloadEvent);
+      // window.removeEventListener("beforeunload", this.leaveSession);
       return next();
     }
+
   },
   setup() {
     const store = useStore();
     const route = useRoute();
     store.dispatch('GET_STUDY_INFO', route.params.studyId);
     // const screenMode = ref(0);
-
-
-    return { sidebarWidth };
+    const sidebarWidth = ref('54px');
+    const toggleSidebar = function (width) {
+      sidebarWidth.value = width;
+    };
+    return { toggleSidebar, sidebarWidth };
   },
   data () {
     return {
@@ -174,14 +191,17 @@ export default {
 			mainStreamManager: undefined,
 			publisher: undefined,
 			subscribers: [],
-      videoOn: true,
-      audioOn: true,
+      videoOn: parsing(this.initVideoOn),
+      audioOn: parsing(this.initAudioOn),
+      // initVideoId: JSON.parse(this.initDeviceSetting).videoId,
+      // initAudioId: JSON.parse(this.initDeviceSetting).audioId,
       connectionUser: false,
       mainOnOff: false,
       myUserId: "",
       tg: false,
-
       screenMode: 0,
+      editPermit: false,
+      canLeave: true,
 
 			// 사용자 정보
 			// mySessionId: 'SessionA',
@@ -197,20 +217,42 @@ export default {
 			//menu: false,			// 메뉴 오픈상태
 			isScreenShared: false,	// 화면공유 상태
 			screenShareName: "Screen Sharing",	// 화면 공유 스트림의 이름
+
+      // 발언 확인
+      isSpeakList: [],
+      isSpeak : false,
     }
   },  // data end
   mounted() {
-    this.joinSession()
+    this.joinSession(this.initVideoOn, this.initAudioOn)
+    window.addEventListener('beforeunload', this.unloadEvent)
+  },
+  unmounted() {
+    window.removeEventListener('beforeunload', this.unloadEvent)
   },
   computed: {
     mySessionId() {
-      return this.$route.params.studyId
+      return this.$route.params.studyId;
     },
     myUserName() {
-      return this.$store.state.user.userInfo.nickname
-    }
+      return this.$store.state.user.userInfo.nickname;
+    },
   },
   methods : {
+    unloadEvent(e) {
+      if (this.canLeave) {
+        this.leaveSession()
+        this.leaveSessionForScreenSharing()
+        return
+      }
+      e.preventDefault();
+      e.returnValue = '';
+    },
+    isEditPermit (permit) {
+      console.log(permit)
+      this.editPermit = permit;
+      this.canLeave = !permit;
+    },
     showScreenMode ( mode ) {
       // switch (screen)
       console.log(mode)
@@ -224,12 +266,18 @@ export default {
       this.screenMode = mode;
     },
     toggleVideoSub(sub) {
-      sub.subscribeToVideo(!sub.stream.videoActive)
+      const now = sub.stream.videoActive;
+      sub.subscribeToVideo(sub.muteVideo);
+      sub.muteVideo = !sub.muteVideo;
+      sub.stream.videoActive = now;
     },
     toggleAudioSub(sub) {
-      sub.subscribeToAudio(!sub.stream.audioActive)
+      const now = sub.stream.audioActive;
+      sub.subscribeToAudio(sub.muteAudio);
+      sub.muteAudio = !sub.muteAudio;
+      sub.stream.audioActive = now;
     },
-    joinSession () {
+    joinSession (initVideoOn, initAudioOn) {
       // --- Get an OpenVidu object ---
       this.OV = new OpenVidu();
 
@@ -241,6 +289,8 @@ export default {
       // On every new Stream received...
       this.session.on('streamCreated', ({ stream }) => {
         const subscriber = this.session.subscribe(stream);
+        subscriber.muteVideo = false;
+        subscriber.muteAudio = false;
         this.subscribers.push(subscriber);
       });
 
@@ -267,6 +317,39 @@ export default {
 				this.isScreenShared = false;
 			})
 
+      // Speech Start Detection
+      this.session.on("publisherStartSpeaking", (event) => {
+        console.log(event);
+        console.log("User " + event.connection.data + " start speaking");
+        this.isSpeakList.push(event.connection.connectionId);
+        this.isSpeak = !this.isSpeak;
+        console.log(event.connection.connectionId);
+        console.log("isSpeak 상태 : " + this.isSpeak);
+        // alert("발언자 리스트 : " + this.isSpeakList);
+        // this.$store.dispatch('startSpeaking')
+        // this.$store.dispatch(
+        //   "addSpeaker",
+        //   JSON.parse(event.connection.data).clientData
+        // );
+      });
+
+      // Speech Stop Detection
+      this.session.on("publisherStopSpeaking", (event) => {
+        console.log("User " + event.connection.connectionId + " stop speaking");
+        let temp = this.isSpeakList;
+        let index = temp.indexOf(event.connection.connectionId, 0);
+        if (index >= 0) {
+          temp.splice(index, 1);
+          this.isSpeakList = temp;
+        }
+        this.isSpeak = !this.isSpeak;
+        console.log("isSpeak 상태 : " + this.isSpeak);
+        // this.$store.dispatch('stopSpeaking')
+        // this.$store.dispatch(
+        //   "removeSpeaker",
+        //   JSON.parse(event.connection.data).clientData
+        // );
+      });
 			// --- Connect to the session with a valid user token ---
 
 			// 'getToken' method is simulating what your server-side should do.
@@ -276,10 +359,10 @@ export default {
 					.then(() => {
 						// --- Get your own camera stream with the desired properties ---
 						let publisher = this.OV.initPublisher(undefined, {
-							audioSource: undefined, // The source of audio. If undefined default microphone
-							videoSource: undefined, // The source of video. If undefined default webcam
-							publishAudio: true,  	// Whether you want to start publishing with your audio unmuted or not
-							publishVideo: true,  	// Whether you want to start publishing with your video enabled or not
+							audioSource: this.initAudioId, // The source of audio. If undefined default microphone
+							videoSource: this.initVideoId, // The source of video. If undefined default webcam
+							publishAudio: parsing(initAudioOn),  	// Whether you want to start publishing with your audio unmuted or not
+							publishVideo: parsing(initVideoOn),  	// Whether you want to start publishing with your video enabled or not
 							resolution: '640x480',  // The resolution of your video
 							frameRate: 30,			// The frame rate of your video
 							insertMode: 'APPEND',	// How the video is inserted in the target element 'video-container'
@@ -295,8 +378,21 @@ export default {
 						console.log('There was an error connecting to the session:', error.code, error.message);
 					});
 			});
-			window.addEventListener('beforeunload', this.leaveSession)
+			// window.addEventListener('beforeunload', this.leaveSession)
 		},
+    // speechDetectIconOn() {
+    //   if(this.isSpeak) {
+
+    //   } else {
+
+    //   }
+    // },
+    // speechDetectIconOff() {
+    //   if(!this.isSpeak) {
+
+    //   }
+    //   this.connectionUser = !this.connectionUser;
+    // },
     connectionUserOnOff() {
       this.connectionUser = !this.connectionUser;
     },
@@ -321,7 +417,7 @@ export default {
 			this.subscribers = [];
 			this.OV = undefined;
 
-			window.removeEventListener('beforeunload', this.leaveSession);
+			// window.removeEventListener('beforeunload', this.leaveSession);
 		},
 
 		updateMainVideoStreamManager (stream) {
@@ -404,19 +500,18 @@ export default {
 			this.OVForScreenShare = new OpenVidu();
 
 			this.sessionForScreenShare = this.OVForScreenShare.initSession();
-
 			var mySessionId = this.mySessionId;
 			this.getToken(mySessionId).then(token => {
-				this.sessionForScreenShare.connect(token, { clientData: this.screenShareName })
+				this.sessionForScreenShare.connect(token, { clientData: this.myUserName + ' 님의 화면공유' })
 				.then(() => {
 					let publisher = this.OVForScreenShare.initPublisher("sharingvideo", {
 						audioSource: false,
 						videoSource: "screen",
-                        publishVideo: true,
+            publishVideo: true,
 						resolution: "1920x1980",
 						frameRate: 10,
-                        insertMode: 'APPEND',
-                        mirror: false
+            insertMode: 'APPEND',
+            mirror: false
 					});
 					console.log("publisher",publisher);
 					publisher.once('accessAllowed', () => {
@@ -442,27 +537,22 @@ export default {
 							console.error('Error applying constraints: ', error);
 						}
 					});
-
 					publisher.once('accessDenied', () => {
 						console.warn('ScreenShare: Access Denied');
 					});
-
 					this.mainStreamManager = publisher;
           this.sharingPublisher = publisher;
           this.sessionForScreenShare.publish(this.sharingPublisher);
-
 				}).catch((error => {
 					console.warn('There was an error connecting to the session:', error.code, error.message);
 				}));
 			});
-
-			window.addEventListener('beforeunload', this.leaveSessionForScreenSharing)
+			// window.addEventListener('beforeunload', this.leaveSessionForScreenSharing)
 		},
     stopScreenSharing() {
       this.isScreenShared = false;
       this.leaveSessionForScreenSharing()
     },
-
 		leaveSessionForScreenSharing () {
 			if (this.sessionForScreenShare) {
         this.sessionForScreenShare.disconnect();
@@ -471,12 +561,12 @@ export default {
       this.mainStreamManager = undefined;
       this.sharingPublisher = undefined;
       this.OVForScreenShare = undefined;
-      window.removeEventListener('beforeunload', this.leaveSessionForScreenSharing);
+      // window.removeEventListener('beforeunload', this.leaveSessionForScreenSharing);
 		},
 		checkScreenShared () {
 			var buf = 0;
 			this.subscribers.forEach((sub)=>{
-				if(JSON.parse(sub.stream.connection.data).clientData==="Screen Sharing") {
+				if(sub.stream.typeOfVideo==="SCREEN") {
 					buf+=1;
 				}
 			});
@@ -497,10 +587,8 @@ export default {
   justify-content: center;
   flex-wrap: nowrap;
   flex-direction: column;
-
   height: 100%;
-
-  background-color: #7285A6;
+  background-color: #aebed4;
 }
 .stream-onoff-btn {
   width: 2.4rem;
@@ -522,10 +610,20 @@ export default {
 .stream-btn-container:hover{
   cursor: pointer;
 }
-
-/* .video-box {
-  width: 300px;
+.mute-icon-container {
+  position: absolute;
+  width: 100%;
   height: 200px;
-  overflow: hidden;
-} */
+  top: 0;
+  font-size: 0.8rem;
+}
+.font-red {
+  color: red;
+}
+::-webkit-scrollbar {
+  height: 12px;
+}
+::-webkit-scrollbar-track{
+  background-color: #aebed4;
+}
 </style>

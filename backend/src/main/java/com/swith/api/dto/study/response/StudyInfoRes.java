@@ -14,6 +14,7 @@ public class StudyInfoRes {
     private String studyName;
     private String studyGoal;
     private String studyCode;
+    private String studyImgUrl;
     private List<KanbanBoardRes> kanbanBoard;
 
     public StudyInfoRes() {

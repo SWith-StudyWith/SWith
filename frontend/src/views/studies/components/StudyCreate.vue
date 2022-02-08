@@ -21,7 +21,7 @@
               </div>
               <div class="d-flex justify-content-start mb-4">
                 <div class="dropend">
-                  <div class="image-wrapper" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" >
+                  <div class="image-wrapper scale" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" >
                     <img class="study-img" :src="state.studyImgSrc">
                   </div>
                   <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
@@ -88,12 +88,18 @@ export default {
     });
 
     const onClickUploadFile = (e) => {
-      console.log(e)
       const file = e.target.files[0]
-      state.value.studyImgURL = URL.createObjectURL(file);
-      state.value.studyImage = file;
+      if (file.size > 209715) {
+        e.preventDefault();
+        alert('파일 사이즈가 큽니다.😯 (최대 2MB)');
+        return;
+      } else {
+        state.value.studyImgURL = URL.createObjectURL(file);
+        state.value.studyImage = file;
+      }
     };
     const onClickDefaultImg = (e) => {
+      e.preventDefault();
       state.value.studyImgURL = '';
       state.value.studyImage = '';
       // state.value.updated = true;
@@ -156,9 +162,6 @@ export default {
 form{
   text-align: left;
 }
-section{
-  margin-bottom: 100px;
-}
 p{
   font-size: 18px;
   font-weight: 700;
@@ -170,12 +173,6 @@ p{
 }
 .uploadImage{
   margin-bottom: 20px;
-}
-.box{
-    width: 240px;
-    height: 160px;
-    overflow: hidden;
-    background: #BDBDBD;
 }
 .profile-img{
     width: 100%;
@@ -199,13 +196,6 @@ p{
   margin-top: 0;
   margin-bottom: 0;
 }
-.valid-feedback {
-  display: block;
-  font-size: 0.75rem;
-  margin-top: 0;
-  margin-bottom: 0.2rem;
-  color: green;
-}
 /* basic setting */
 button{
   font-size: 14px;
@@ -221,7 +211,7 @@ button{
 }
 .container {
   margin-top: 100px;
-  margin-bottom: 120px;
+  /* margin-bottom: 120px; */
 }
 input::placeholder {
   font-size: 12px;
@@ -252,12 +242,29 @@ textarea{
   width: 100%;
   height: 100%;
   object-fit: cover;
-  background: #BDBDBD;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 4%;
 }
 .dropdown-menu{
   text-align: center;
 }
 .dropdown-item{
   cursor: pointer;
+}
+.scale {
+  transform: scale(1);
+  -webkit-transform: scale(1);
+  -moz-transform: scale(1);
+  -ms-transform: scale(1);
+  -o-transform: scale(1);
+  transition: all 0.3s ease-in-out;   /* 부드러운 모션을 위해 추가*/
+}
+.scale:hover {
+  transform: scale(1.05);
+  -webkit-transform: scale(1.05);
+  -moz-transform: scale(1.05);
+  -ms-transform: scale(1.05);
+  -o-transform: scale(1.05);
 }
 </style>

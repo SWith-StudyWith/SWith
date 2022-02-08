@@ -2,16 +2,14 @@
   <div>
     <Navbar />
     <div class="container">
-      <!-- <header> -->
-        <h1 class="form-title">내 정보 수정</h1>
-      <!-- </header> -->
+      <h1 class="form-title">내 정보 수정</h1>
       <div class="row d-flex justify-content-center">
         <div class="col-4" style="">
           <form class="userInfo-wrapper" enctype="multipart/form-data">
             <div class="d-flex justify-content-center">
               <div class="dropend">
                 <div class="image-wrapper" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" >
-                  <img class="profile-img" :src="state.profileImgSrc" alt=""  >
+                  <img class="profile-img scale" :src="state.profileImgSrc" alt=""  >
                 </div>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                   <li>
@@ -39,7 +37,13 @@
             </div>
             <div class="row">
               <label for="nickname" class="form-label">닉네임</label>
-              <input type="text" class="form-control" id="nickname" v-model="state.nickname">
+              <input type="text" class="form-control" id="nickname" v-model="state.nickname" required placeholder="사용할 닉네임을 입력해주세요.">
+              <div
+                :style="{ visibility: (state.isValidNickname || !state.wasInputed.nickname)? 'hidden' : 'visible' }"
+                class="invalid-feedback"
+              >
+                닉네임을 입력해주세요.
+              </div>
             </div>
             <div class="row">
               <label for="goal" class="form-label">나의 목표</label>
@@ -50,7 +54,7 @@
             </div>
           </form>
           <!-- Button trigger modal -->
-          <span class="text-decoration-underline signout-btn" data-bs-toggle="modal" data-bs-target="#signOutModal" style="margin-bottom: 100px;">
+          <span class="text-decoration-underline signout-btn" data-bs-toggle="modal" data-bs-target="#signOutModal">
             회원 탈퇴
           </span>
         </div>
@@ -69,7 +73,7 @@ import Navbar from '@/views/common/Navbar.vue';
 import Footer from '@/views/common/Footer.vue';
 import SignOutModal from '@/views/members/components/SignOutModal.vue';
 import ChangePasswordModal from './components/ChangePasswordModal.vue';
-// import { getUserInfo } from '../../api/user'
+
 export default {
   name: '',
   components: { Navbar, Footer, SignOutModal, ChangePasswordModal },
@@ -86,36 +90,64 @@ export default {
         } else {
           return require(`@/assets/img/navbar/profile.png`)
         }
-    })
-
+      }),
+      wasInputed: {
+        nickname: false,
+      },
+      isValidNickname: computed(() => {
+        if (state.value.nickname !== '') {
+          state.value.wasInputed.nickname = true;
+        }
+        if (state.value.nickname && validateNickname(state.value.nickname)) {
+          return true;
+        }
+        return false;
+      }),
     });
 
     const onClickUploadFile = function(e) {
-      console.log(e.target.value)
       const file = e.target.files[0];
-      state.value.userInfo.profileImg = URL.createObjectURL(file);
-      state.value.profileImg = file;
-      state.value.updated = true;
+      if (file.size > 2097152) {
+        e.preventDefault();
+        alert('파일 사이즈가 큽니다.😯 (최대 2MB)');
+        return;
+      } else {
+        state.value.userInfo.profileImg = URL.createObjectURL(file);
+        state.value.profileImg = file;
+        state.value.updated = true;
+      }
     };
 
-    const onClickDefaultImg = (e) => {
-      console.log(e.target.value)
+    const onClickDefaultImg = () => {
       state.value.userInfo.profileImg = '';
       state.value.updated = true;
     }
 
     const onClickUpdateUserInfo = (e) => {
       e.preventDefault();
+      if (state.value.nickname === '') {
+        state.value.wasInputed.nickname = true;
+        return;
+      }
+      if (!state.value.isValidNickname ) {
+        return;
+      }
       const updateUserData = new FormData();
       updateUserData.append("nickname", state.value.nickname)
       updateUserData.append("goal", state.value.userInfo.goal)
       updateUserData.append("profileImg", state.value.profileImg)
       updateUserData.append("updated", state.value.updated)
-      //console.log(state.value.userInfo)
       store.dispatch('updateUserInfo', updateUserData)
     }
+
+    const validateNickname = function (nickname) {
+      if (nickname.length >= 2 && nickname.length <= 16) {
+        return true;
+      } return false;
+    };
+
     return {
-      state, onClickUpdateUserInfo, onClickUploadFile, onClickDefaultImg
+      state, onClickUpdateUserInfo, onClickUploadFile, onClickDefaultImg, validateNickname
     }
   },
 
@@ -125,9 +157,6 @@ export default {
 <style scoped>
 form{
   text-align: left;
-}
-section{
-  margin-bottom: 100px;
 }
 p{
   font-size: 18px;
@@ -174,7 +203,7 @@ p{
   width: 100%;
   height: 100%;
   object-fit: cover;
-  background: #BDBDBD;
+  background: #ffffff;
 }
 .signout-btn:hover {
   cursor: pointer;
@@ -189,7 +218,12 @@ p{
 .dropend{
   margin-left: 40px;
 }
-
+.invalid-feedback {
+  display: block;
+  font-size: 0.75rem;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
 /* setting */
 .form-label{
   margin-bottom: 3px;
@@ -202,7 +236,7 @@ p{
 }
 .container {
   margin-top: 100px;
-  margin-bottom: 120px;
+  /* margin-bottom: 120px; */
 }
 button{
   font-size: 14px;
@@ -220,5 +254,20 @@ input {
 textarea {
   background-color: #F4F5F4;
   vertical-align: middle;
+}
+.scale {
+  transform: scale(1);
+  -webkit-transform: scale(1);
+  -moz-transform: scale(1);
+  -ms-transform: scale(1);
+  -o-transform: scale(1);
+  transition: all 0.3s ease-in-out;   /* 부드러운 모션을 위해 추가*/
+}
+.scale:hover {
+  transform: scale(1.05);
+  -webkit-transform: scale(1.05);
+  -moz-transform: scale(1.05);
+  -ms-transform: scale(1.05);
+  -o-transform: scale(1.05);
 }
 </style>

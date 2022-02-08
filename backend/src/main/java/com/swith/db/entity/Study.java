@@ -3,6 +3,7 @@ package com.swith.db.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,11 @@ public class Study {
     private String goal;
     private String imgUrl;
     private String isUsed;
+    private LocalDateTime lockCreatedAt;
+
+    @ManyToOne(targetEntity = Member.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member lockUseMember;
 
     @Builder
     public Study(String name, String code, String goal, String imgUrl, String isUsed) {

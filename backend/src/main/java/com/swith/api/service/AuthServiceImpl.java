@@ -91,7 +91,7 @@ public class AuthServiceImpl implements AuthService {
         params.add("grant_type", "authorization_code");
         params.add("client_id", "b87b2face727a7093e3816185ab2697c");
         params.add("code", authCode);
-        params.add("redirect_uri", "http://localhost:8081/members/kakao/callback");
+        params.add("redirect_uri", "https://i6a501.p.ssafy.io/members/kakao/callback");
 
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<MultiValueMap<String, String>> kakaoTokenReq = new HttpEntity<>(params, headers);
@@ -155,7 +155,7 @@ public class AuthServiceImpl implements AuthService {
             StringBuilder sb = new StringBuilder();
             sb.append("grant_type=authorization_code");
             sb.append("&client_id=343513890539-mvk01v00kfnp5vdcvfu95hrnh970mtsl.apps.googleusercontent.com");
-            sb.append("&redirect_uri=http://localhost:8081/login/oauth2/client/google");
+            sb.append("&redirect_uri=https://i6a501.p.ssafy.io/login/oauth2/client/google");
             sb.append("&client_secret=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");
             sb.append("&code=" + authCode);
             bw.write(sb.toString());

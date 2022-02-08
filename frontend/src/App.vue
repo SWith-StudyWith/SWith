@@ -35,8 +35,8 @@ $success: #F5CEC7;
     background-color: #ccc;
 }
 .popover {
+  font-family:  'Noto Sans KR', 'Mulish', sans-serif;
   font-size: 0.7rem;
-  max-width: 3.5rem;
 }
 .popover-body {
   padding: 0.3rem;
@@ -44,6 +44,6 @@ $success: #F5CEC7;
 .app {
   min-height: 100%;
   position: relative;
-  // padding-bottom: 170px; /* footer height */
+  // padding-bottom: 170px;
 }
 </style>

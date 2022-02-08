@@ -52,7 +52,18 @@ function putKanban(payload, studyId, success, fail) {
 function getMemberList(studyId, success, fail) {
   basicInstance
     .get(`api/studies/${studyId}/members`)
-    // .get(`api/studies/1/members`)
+    .then(success)
+    .catch(fail)
+}
+function uploadFile(studyId, payload, success, fail) {
+  basicInstance
+    .post(`api/studies/${studyId}/files`, payload)
+    .then(success)
+    .catch(fail)
+}
+function getFileList(studyId, success, fail) {
+  basicInstance
+    .get(`api/studies/${studyId}/files`)
     .then(success)
     .catch(fail)
 }
@@ -67,4 +78,6 @@ export {
   putKanban,
   checkKanban,
   getMemberList,
+  uploadFile,
+  getFileList,
 }
