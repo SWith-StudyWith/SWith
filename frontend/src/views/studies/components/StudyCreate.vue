@@ -54,6 +54,7 @@ import { useRouter } from 'vue-router';
 import { createStudy } from '@/api/study';
 import Navbar from '@/views/common/Navbar.vue';
 import Footer from '@/views/common/Footer.vue';
+import notifications from '@/composables/notifications'
 
 export default {
   name: '',
@@ -86,12 +87,13 @@ export default {
         return false;
       }),
     });
+    const { notifyWarning, notifySuccess, notifyDangerDescription } = notifications();
 
     const onClickUploadFile = (e) => {
       const file = e.target.files[0]
       if (file.size > 209715) {
         e.preventDefault();
-        alert('파일 사이즈가 큽니다.😯 (최대 2MB)');
+        notifyDangerDescription('파일 사이즈가 너무 큽니다.😯', '최대 2MB')
         return;
       } else {
         state.value.studyImgURL = URL.createObjectURL(file);
@@ -124,18 +126,25 @@ export default {
           console.log(res.data)
           switch (res.data.code) {
             case 200:
-              alert('스터디룸 생성 완료!🔨')
+              notifySuccess('스터디룸 생성 완료!🔨')
               break;
             case 400:
-              alert('스터디룸 생성 실패😥')
+              console.log('실패')
+              // createToast('스터디룸 생성 실패 😥',
+              //   {
+              //   showIcon: 'true',
+              //   position: 'bottom-left',
+              //   type: 'danger',
+              //   transition: 'bounce',
+              //   })
               break;
           }
         },
         (err) => {
           console.log(err)
-          alert('서버가 아파유~')
-        },
-        router.push({ name: 'Main'})
+          notifyWarning('서버가 아파요.😥')
+          },
+          router.push({ name: 'Main'})
       )
     }
 
@@ -147,7 +156,13 @@ export default {
     };
 
     return {
-      state, onClickUploadFile, onClickDefaultImg, onClickCreateStudy
+      state,
+      onClickUploadFile,
+      onClickDefaultImg,
+      onClickCreateStudy,
+      notifyWarning,
+      notifySuccess,
+      notifyDangerDescription
     }
   },
 

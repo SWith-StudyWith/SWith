@@ -35,6 +35,7 @@ import { ref } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router'
 import { joinStudy } from '@/api/study';
+import notifications from '@/composables/notifications'
 
 export default {
   props: {
@@ -47,8 +48,10 @@ export default {
     console.log(props.studies);
     let studyCode = ref('')
     const store = useStore();
-    store.dispatch('GET_STUDY_LIST')
+    // store.dispatch('GET_STUDY_LIST')
     const router = useRouter();
+    const { notifyWarning, notifyDanger } = notifications();
+
     const onClickJoin = function () {
       if (!studyCode.value) {
         return
@@ -62,13 +65,14 @@ export default {
             store.dispatch('GET_STUDY_LIST')
             router.push({ name: 'StudyMain', params: { studyCode: studyCode.value } })
           } else if (res.data.code === 400) {
-            alert('해당 스터디가 존재하지 않습니다.')
+            notifyDanger('해당 스터디가 존재하지 않습니다.😯')
           } else if (res.data.code === 409) {
-            alert('이미 참여중인 스터디입니다.')
+            notifyDanger('이미 참여중인 스터디입니다.😓')
           }
         },
         (err) => {
           console.log(err)
+          notifyWarning('서버가 아파요.😥')
         }
       )
     }

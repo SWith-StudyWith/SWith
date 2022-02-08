@@ -152,6 +152,7 @@ import Navbar from '../common/Navbar.vue';
 import Footer from '../common/Footer.vue';
 import KakaoLoginBtn from '@/views/members/components/KakaoLoginBtn.vue';
 import { GOOGLE_GET_AUTH_CODE_URL } from '@/api/gauth.js';
+import notifications from '@/composables/notifications'
 
 export default {
 
@@ -251,6 +252,7 @@ export default {
         return false;
       }),
     });
+    const { notifyWarning, notifySuccess, notifyDanger } = notifications();
 
     const onClickSendCode = function (e) {
       e.preventDefault();
@@ -263,17 +265,17 @@ export default {
           console.log(res.data)
           switch (res.data.code) {
             case 400:
-              alert('이미 가입된 이메일입니다.')
+              notifyDanger('이미 가입된 이메일입니다.😳')
               break;
             case 200:
-              alert('인증번호가 담긴 이메일을 전송했습니다.')
+              notifySuccess('인증번호가 담긴 이메일을 전송했습니다.💌')
               state.isDisableAuthNum = false;
               break;
           }
         },
         (err) => {
           console.log(err)
-          alert('서버가 아파요.')
+          notifyWarning('서버가 아파요.😥');
         }
       )
     }
@@ -286,17 +288,17 @@ export default {
           switch (res.data.code) {
             case 200:
               state.isAuthNumChecked = true;
-              alert('이메일 인증 성공!');
+              notifySuccess('이메일 인증 성공!🎉');
               break;
             case 409:
               state.isAuthNumChecked = false;
-              alert('인증번호가 맞지 않습니다.');
+              notifyDanger('인증번호가 맞지 않습니다.🙄');
               break;
           }
         },
         (err) => {
           console.log(err)
-          alert('서버가 아파요')
+          notifyWarning('서버가 아파요.😥');
         }
       )
     };
@@ -322,19 +324,19 @@ export default {
           console.log(res.data)
           switch (res.data.code) {
             case 200:
-              alert('회원가입 성공!')
+              notifySuccess('회원가입 성공!🎉');
               break;
             case 400:
-              alert('이미 존재하는 회원입니다.')
+              notifyDanger('이미 존재하는 회원입니다.😳')
               break;
             case 404:
-              alert('회원가입 실패...')
+              notifyWarning('회원가입 실패.😰')
               break;
           }
         },
         (err) => {
           console.log(err)
-          alert('서버가 아파요.')
+          notifyWarning('서버가 아파요.😥');
         }
       )
       router.push({ name: 'Login' })
@@ -362,6 +364,7 @@ export default {
     };
     return {
       state, onClickSendCode, onClickSignup, onClickConfirmAuthNum, GOOGLE_GET_AUTH_CODE_URL,
+      notifyWarning, notifyDanger, notifySuccess
     };
   },
   created() {},

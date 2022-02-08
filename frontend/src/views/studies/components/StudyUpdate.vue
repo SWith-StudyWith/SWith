@@ -52,6 +52,7 @@ import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
 import Navbar from '@/views/common/Navbar.vue';
 import Footer from '@/views/common/Footer.vue';
+import notifications from '@/composables/notifications'
 
 export default {
   name: '',
@@ -85,23 +86,26 @@ export default {
         return false;
       }),
     });
+    const { notifySuccess, notifyDangerDescription } = notifications();
 
     const onClickUploadFile = (e) => {
       const file = e.target.files[0]
       if (file.size > 2097152) {
         e.preventDefault();
-        alert('파일 사이즈가 큽니다.😯 (최대 2MB)');
+        notifyDangerDescription('파일 사이즈가 너무 큽니다.😯', '최대 2MB')
         return;
       } else {
         state.value.studyInfo.studyImgUrl = URL.createObjectURL(file);
         state.value.studyImage = file;
         state.value.updated = true;
+        notifySuccess('스터디 이미지 변경 완료!😙')
       }
     };
     const onClickDefaultImg = () => {
       state.value.studyInfo.studyImgURL = '';
       state.value.studyInfo.studyImgUrl = '';
       state.value.updated = true;
+      notifySuccess('스터디 이미지 변경 완료!😙')
     };
     const onClickUpdateStudy = (e) => {
       e.preventDefault();
@@ -119,7 +123,8 @@ export default {
       return false;
     };
     return {
-      state, onClickUploadFile, onClickDefaultImg, onClickUpdateStudy
+      state, onClickUploadFile, onClickDefaultImg, onClickUpdateStudy,
+      notifySuccess, notifyDangerDescription,
     }
   },
 

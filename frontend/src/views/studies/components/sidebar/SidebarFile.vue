@@ -44,6 +44,7 @@ import { uploadFile } from '@/api/study';
 import { computed, reactive } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
+import notifications from '@/composables/notifications'
 
 export default {
   name: "SidebarFile",
@@ -59,6 +60,7 @@ export default {
         return store.state.study.fileList;
       }),
     })
+    const { notifyWarning, notifySuccess } = notifications();
 
     let dropzoneFiles = ref([]);
 
@@ -95,22 +97,31 @@ export default {
           console.log(res.data)
           switch (res.data.code) {
             case 200:
-              alert('파일 업로드 완료')
+              notifySuccess('파일 업로드 완료')
               break;
             case 400:
-              alert('파일 업로드 실패')
+              notifyWarning('파일 업로드 실패')
               break;
           }
           store.dispatch('GET_FILE_LIST', route.params.studyId);
         },
         (err) => {
           console.log(err)
-          alert('서버가 아파유~')
+          notifyWarning('서버가 아파요.😰')
         },
       )
     }
 
-    return { state, dropzoneFiles, drop, selectedFile, onClickDeleteFile, onClickUploadFile };
+    return {
+      state,
+      dropzoneFiles,
+      drop,
+      selectedFile,
+      onClickDeleteFile,
+      onClickUploadFile,
+      notifyWarning,
+      notifySuccess,
+    };
   },
 }
 </script>
