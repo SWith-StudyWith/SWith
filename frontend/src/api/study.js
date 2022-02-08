@@ -55,6 +55,12 @@ function getMemberList(studyId, success, fail) {
     .then(success)
     .catch(fail)
 }
+function getChatList(studyId, index, success, fail) {
+  basicInstance
+    .get(`api/studies/${studyId}/chat?index=${index}`)
+    .then(success)
+    .catch(fail)
+}
 function uploadFile(studyId, payload, success, fail) {
   basicInstance
     .post(`api/studies/${studyId}/files`, payload)
@@ -90,6 +96,7 @@ export {
   putKanban,
   checkKanban,
   getMemberList,
+  getChatList,
   uploadFile,
   getFileList,
   downloadFile,

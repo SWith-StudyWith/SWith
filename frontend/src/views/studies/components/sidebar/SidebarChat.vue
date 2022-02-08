@@ -1,37 +1,21 @@
 <template>
   <div class= "chatDiv">
     <p class="title">💬 채팅 </p>
+    <!-- <div class="chat-body spinner-border text-light" role="status" v-if="state.loading">
+      <span class="visually-hidden">Loading...</span>
+    </div> -->
+    <div class="chat-body" id="chat-body"
+      @scroll="scrollMove">
 
-    <div class="chat-body" id="chat-body">
-      <div
-        v-for="(item, idx) in recvList"
+      <SidebarChatMessage
+        v-for="(chat, idx) in state.chatList"
         :key="idx"
-        class="chat"
+        :chat = "chat"
+        :prev="[idx == 0 ? null : state.chatList[idx-1]]"
       >
-
-        <!-- 내가 보낸 메세지 -->
-        <div class="chat-my-message" v-if="item.memberId==this.getUserInfo.memberId">
-          <p class="chat-my-message-time">{{ item.createdAt }}</p>
-          <p class="my-content">{{ item.content }}</p>
-        </div>
-
-        <!-- 상대가 보낸 메세지  -->
-        <div class="chat-other-message" v-else>
-          <div class="chat-other-img">
-            <img :src="item.imgUrl?item.imgUrl:require(`@/assets/img/navbar/profile.png`)" alt="" aria-expanded="false">
-          </div>
-          <div class="chat-other-content">
-            <div class="chat-other-content1">
-              <p class="chat-other-nickname">{{ item.nickname }}</p>
-              <p class="chat-other-message-time">{{ item.createdAt }}</p>
-            </div>
-            <div class="chat-other-content2">
-              <p class="other-content">{{ item.content }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
+      </SidebarChatMessage>
     </div>
+
     <hr>
     <div class="chat-input" id="chat-input">
       <div class="inputText">
@@ -40,7 +24,6 @@
           type="text"
           @keyup="sendMessage"
         >
-        <!-- <button :disabled='text === ""'>Send</button> -->
       </div>
     </div>
   </div>
@@ -50,6 +33,12 @@
 import Stomp from 'webstomp-client'
 import SockJS from 'sockjs-client'
 import { mapGetters } from 'vuex';
+import SidebarChatMessage from '@/views/studies/components/sidebar/SidebarChatMessage.vue';
+import dayjs from 'dayjs'
+import { computed, onUpdated, reactive } from '@vue/runtime-core';
+import { useStore } from 'vuex';
+import { useRoute } from 'vue-router';
+import { getChatList} from '@/api/study'
 
 export default {
   name: 'App',
@@ -57,7 +46,125 @@ export default {
     return {
       message: "",
       recvList: [],
-      memId: '',
+      msgDate: dayjs().format('hh:mm A'),
+    }
+  },
+  props:{
+    chatLog : Object
+  }
+  ,
+  components:{
+    SidebarChatMessage
+  },
+  setup(props){
+    const store = useStore();
+    const route = useRoute();
+
+    const state = reactive({
+      // chatList
+      chatList: computed(() => {
+        return props.chatLog
+      }),
+
+      // messageList에서 불러온 list
+      // loadList: [],
+      loadList: computed(() => {
+        return props.chatLog
+      }),
+
+      // 채팅창 열었을 때, 스크롤 맨 밑에 있도록
+      init: true,
+      // message 전송했을 때,
+      sended: false,
+
+      loaded: false,
+      loading: true,
+      isLoading: computed(() => {
+        return state.loding
+      }),
+
+      // 스크롤 상단에 도착했는지
+      isTop: false,
+      // 더이상 API 호출X  => 추가로 불러온 list들이 <15일 때,
+      isNoScroll: false,
+      // 스크롤 위치 저장하기 위함
+      prevScrollHeight: 0,
+      element: computed(() => {
+        return document.getElementById('chat-body')
+      }),
+    })
+
+    // 이전 채팅방 리스트 가져오기
+    function messageList() {
+      console.log('더 가져오자~');
+
+      getChatList(
+        route.params.studyId,
+        props.chatLog.length,
+        (res) => {
+          console.log(res.data)
+          // console.log("props.chatLog.length : " +props.chatLog.length);
+          if (res.data.code === 200) {
+            store.dispatch('GET_CHAT_LIST', {studyId: route.params.studyId, index: props.chatLog.length});
+
+            var size = res.data.data.length
+            // console.log("size : " + size)
+
+            for(var i = 0; i < size; i++){
+              // console.log(res.data.data[i])
+              state.loadList.unshift(res.data.data[i])
+            }
+
+            console.log(state.loadList)
+            // size < 15 면, 더이상 API 호출되지 않도록
+            if(size < 15) state.isNoScroll = true
+
+            state.loading = false
+            state.loaded = true
+
+            state.loadList = null;
+          }
+        },
+        (err) => {
+          console.log(err);
+        },
+      )
+    }
+
+    // scrollTop == 0 (꼭대기), 다음 list 가져오기
+    function scrollMove(){
+      if(state.element.scrollTop == 0 && !state.isNoScroll){
+
+        messageList()
+      }
+    }
+
+    onUpdated(() => {
+      // 채팅창 열었을 때, 스크롤 맨 밑에 가도록
+      if(state.init){
+        state.init = false
+        state.element.scrollTop = 99999
+        // state.element.scrollTop = state.element.scrollHeight
+      }
+
+      // 이전 리스트 추가로 호출했을 때
+      if(state.loaded){
+        state.loaded = false
+        if(state.element.scrollTop == 0){
+
+          // 스크롤 있던 위치 받아오기 => 시작 위치
+          state.element.scrollTop = state.element.scrollHeight - state.prevScrollHeight
+        }
+
+        state.prevScrollHeight = state.element.scrollHeight
+      }
+    })
+
+    return {
+      state,
+      messageList,
+      scrollMove,
+
     }
   },
   created() {
@@ -84,23 +191,26 @@ export default {
           memberId: this.getUserInfo.memberId,
           imgUrl: this.getUserInfo.profileImg,
           nickname: this.getUserInfo.nickname,
-          content: this.message
+          content: this.message,
         };
-        this.memId = this.getUserInfo.memberId,
-        this.stompClient.send("/receive", JSON.stringify(msg), {});
 
+        this.stompClient.send("/receive", JSON.stringify(msg), {});
+        this.recvList.push(msg);
+
+        // this.$state.value.sended = true;
+        // alert(this.$state.sended)
+        // this.$route.state.sended = true;
         setTimeout(() => {
           const element = document.getElementById('chat-body');
-          //  300
-          console.log(element.scrollHeight);
-          // 0
-          console.log(element.scrollTop);
           element.scrollTop = element.scrollHeight;
         }, 0);
+
       }
     },
     connect() {
-      const serverURL = 'http://localhost:8080/api/ws/'
+      // 배포
+      const serverURL = process.env.VUE_APP_SOCKET_URL
+      // const serverURL = 'http://localhost:8080/api/ws/'
       let socket = new SockJS(serverURL);
       this.stompClient = Stomp.over(socket);
       console.log(`소켓 연결을 시도합니다. 서버 주소: ${serverURL}`)
@@ -110,19 +220,21 @@ export default {
           // 소켓 연결 성공
           this.connected = true;
           console.log('소켓 연결 성공', frame);
+
+          // 스크롤 하단 고정
+          // const element = document.getElementById('chat-body');
+          // element.scrollTop = 99999;
+
           // 서버의 메시지 전송 endpoint를 구독합니다.
           // 이런형태를 pub sub 구조라고 합니다.
           this.stompClient.subscribe("/send/" + this.$route.params.studyId, res => {
             console.log('구독으로 받은 메시지 입니다.', res.body);
 
             // 받은 데이터를 json으로 파싱하고 리스트에 넣어줍니다.
-            this.recvList.push(JSON.parse(res.body))
+            // this.recvList.push(JSON.parse(res.body))
+            this.$props.chatLog.push(JSON.parse(res.body))
             setTimeout(() => {
               const element = document.getElementById('chat-body');
-              //  300
-              console.log(element.scrollHeight);
-              // 0
-              console.log(element.scrollTop);
               element.scrollTop = element.scrollHeight;
             }, 0);
           });
@@ -135,6 +247,7 @@ export default {
       );
     }
   }
+
 }
 </script>
 <style scoped>
@@ -157,11 +270,6 @@ export default {
   font-weight:500;
   margin-top: 40px;
   margin-bottom: 30px;
-}
-img {
-  width: 40px;
-  height: 40px;
-  border-radius: 70%;
 }
 .chat-input{
   display: flex;
@@ -186,12 +294,6 @@ input{
   /* input 클릭 시, 테두리 없애기 */
   outline: none;
 }
-
-.chat-userinfo-box{
-  margin: 10px;
-}
-
-
 /*  */
 .chat-body{
   flex-grow: 1;
@@ -200,12 +302,6 @@ input{
 
   overflow-y: scroll;
   scroll-behavior: smooth;
-}
-.chat {
-  border-radius: 10px;
-  /* padding: 1rem; */
-  padding-bottom: 15px;
-  /* width: fit-content; */
 }
 .chat-body::-webkit-scrollbar {
   /* display: none; */
@@ -219,78 +315,5 @@ input{
 }
 ::-webkit-scrollbar-track{
     background-color: #1E304F;
-}
-.chat-other-message{
-  display: flex;
-}
-.chat-other-img{
-  margin-right: 1rem;
-}
-.chat-other-nickname{
-  font-size: 14px;
-  font-weight: 700;
-  margin-top: 0;
-  margin-block-end: 0rem;
-}
-.chat-other-content{
-  width: 100%;
-}
-/* nickname + date */
-.chat-other-content1{
-  display: flex;
-  align-items: flex-end;
-  line-break: anywhere;
-  justify-content: flex-end;
-  width: 100%;
-}
-/* message content */
-.chat-other-content2{
-  display: flex;
-  align-items: flex-end;
-  line-break: anywhere;
-}
-.other-content{
-  margin: 0.4rem 1rem 0 0;
-  border-radius: 0px 20px 20px 20px;
-  background-color: #f3f3f3;
-  max-width: 180px;
-  color: #414141;
-  padding: 0.8rem;
-  font-size: 14px;
-}
-.chat-other-message-time {
-  margin: 0;
-  font-size: 10px;
-  font-weight: 500;
-  color: #9c9c9c;
-  margin-left: auto;
-  margin-right: 16px;
-}
-.chat-my-message{
-  display: flex;
-  justify-content: right;
-  align-items: flex-end;
-  margin: 0;
-  min-height: 40px;
-  line-break: anywhere;
-}
-.my-content{
-  margin: 0.4rem 0 0 1rem;
-  border-radius: 20px 20px 0px 20px;
-  max-width: 180px;
-  background-color: #acb5e4;
-  color: #ffffff;
-  /* color: #414141; */
-  padding: 0.8rem;
-  font-size: 14px;
-  font-weight: 500;
-  max-width: 170px;
-  margin-left: 3px;;
-}
-.chat-my-message-time{
-  margin: 0;
-  font-size: 10px;
-  color: #9c9c9c;
-  margin-right: auto;
 }
 </style>

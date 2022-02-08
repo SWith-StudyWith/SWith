@@ -1,4 +1,4 @@
-import { getStudyInfo, getStudyList, getMemberList, updateStudy, getFileList } from "../../api/study";
+import { getStudyInfo, getStudyList, getMemberList, getChatList, updateStudy, getFileList } from "../../api/study";
 import router from '@/router';
 import notifications from '@/composables/notifications'
 
@@ -9,6 +9,7 @@ const state = () => ({
   studyList: [],
   memberList: [],
   fileList: [],
+  chatList: [],
 });
 
 const getters = {
@@ -43,7 +44,7 @@ const actions = {
       }
     )
   },
-  GET_MEMBER_LIST({ commit } ,studyId) {
+  GET_MEMBER_LIST({ commit }, studyId) {
     getMemberList(
       studyId,
       (res) => {
@@ -52,6 +53,23 @@ const actions = {
         }
       },
       (err) => {
+        console.log(err)
+      }
+    )
+  },
+  GET_CHAT_LIST({ commit }, { studyId, index }) {
+    console.log('modules id: ' + studyId)
+    console.log('modules idx: ' + index)
+    getChatList(
+      studyId,
+      index,
+      (res) => {
+        if (res.data.code === 200) {
+          commit('SET_CHAT_LIST', res.data.data)
+        }
+      },
+      (err) => {
+        console.log('채팅 불러오기 실패')
         console.log(err)
       }
     )
@@ -95,6 +113,9 @@ const mutations = {
   },
   SET_MEMBER_LIST(state, payload) {
     state.memberList = payload;
+  },
+  SET_CHAT_LIST(state, payload) {
+    state.chatList = payload;
   },
   UPDATE_STUDY_INFO(state, payload) {
     console.log(payload)
