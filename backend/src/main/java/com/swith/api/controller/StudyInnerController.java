@@ -16,6 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Slf4j
@@ -72,13 +74,23 @@ public class StudyInnerController {
 
         //칸반보드가 수정중인지 확인
         Study study = studyService.getStudyById(studyId);
+        Member member = memberService.getMemberByAuthentication();
 
         if (study.getIsUsed().equals("N")) {
-            studyService.updateStudyIsUsed(study, "Y");
+            studyService.updateStudyIsUsed(study, "Y", member);
             return ResponseEntity.status(200).body(new BaseDataResponse(true, 200, "칸반보드 수정 가능", null));
         } else {
-            KanbanIsUsedRes result = new KanbanIsUsedRes(study.getLockUseMember().getNickname());
-            return ResponseEntity.status(200).body(new BaseDataResponse(true, 400, "이미 칸반보드 수정중", result));
+            LocalDateTime lockDateTime = study.getLockCreatedAt();
+            LocalDateTime now = LocalDateTime.now();
+            Long time = ChronoUnit.MINUTES.between(lockDateTime, now);
+
+            if (time >= 10) {
+                studyService.updateStudyIsUsed(study, "Y", member);
+                return ResponseEntity.status(200).body(new BaseDataResponse(true, 200, "칸반보드 수정 가능", null));
+            } else {
+                KanbanIsUsedRes result = new KanbanIsUsedRes(study.getLockUseMember().getNickname());
+                return ResponseEntity.status(200).body(new BaseDataResponse(true, 400, "이미 칸반보드 수정중", result));
+            }
         }
     }
 
@@ -94,7 +106,7 @@ public class StudyInnerController {
         kanbanService.insertKanban(kanbanUpdateReqList);
 
         //isUsed 변경
-        studyService.updateStudyIsUsed(study, "N");
+        studyService.updateStudyIsUsed(study, "N", null);
 
         return ResponseEntity.status(200).body(new BaseResponse(true, 200, "칸반보드 수정 성공"));
     }

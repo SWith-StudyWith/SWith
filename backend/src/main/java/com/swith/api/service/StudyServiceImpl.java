@@ -23,6 +23,7 @@ import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 
@@ -164,8 +165,12 @@ public class StudyServiceImpl implements StudyService {
     }
 
     @Override
-    public void updateStudyIsUsed(Study study, String isUsed) {
+    public void updateStudyIsUsed(Study study, String isUsed, Member member) {
         study.setIsUsed(isUsed);
+        if (member != null) {
+            study.setLockUseMember(member);
+            study.setLockCreatedAt(LocalDateTime.now());
+        }
     }
 
     @Override
