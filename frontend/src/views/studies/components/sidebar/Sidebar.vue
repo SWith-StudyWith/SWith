@@ -27,6 +27,9 @@
         <div class="icon-container" @click="onClickChatIcon" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="채팅">
           <font-awesome-icon class="m-2" :class="{ 'font-active': state.isChat }" :icon="['fas', 'comment']" />
         </div>
+        <div class="icon-container" @click="onClickPostItIcon" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="포스트잇">
+          <font-awesome-icon class="m-2" :class="{ 'font-active': screenMode === 3 }" :icon="['fas', 'sticky-note']"/>
+        </div>
         <div class="icon-container" @click="onClickMemberIcon" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="유저목록">
           <font-awesome-icon class="m-2" :class="{ 'font-active': state.isMemberList }" :icon="['fas', 'user-friends']"/>
         </div>
@@ -110,6 +113,9 @@ export default {
     const onClickWhiteBoardIcon = () => {
       emit('show-screenmode', 2)
     };
+    const onClickPostItIcon = () => {
+      emit('show-screenmode', 3)
+    };
     const toggleSidebar = () => {
       state.collapsed = !state.collapsed;
       if (!state.collapsed) {
@@ -185,7 +191,7 @@ export default {
     return {
       state, toggleSidebar, sidebarWidth,
       onClickScreenShareIcon, onClickWhiteBoardIcon, onClickKanbanBoardIcon,
-      onClickChatIcon, onClickMemberIcon, onClickFileIcon, onClickExitIcon
+      onClickChatIcon, onClickMemberIcon, onClickFileIcon, onClickExitIcon, onClickPostItIcon
     };
   },
   mounted() {

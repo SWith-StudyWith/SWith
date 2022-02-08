@@ -96,6 +96,7 @@
         @deleteMainVideoStreamManager="deleteMainVideoStreamManager"
       />
       <WhiteBoard v-else-if="screenMode === 2"/>
+      <PostIt v-else-if="screenMode === 3"/>
     </div>
     <!-- sidebar end -->
   </div>
@@ -105,6 +106,7 @@ import Sidebar from '@/views/studies/components/sidebar/Sidebar.vue';
 import KanbanBoard from '@/views/studies/components/screen/KanbanBoard.vue';
 import MainScreen from '@/views/studies/components/screen/MainScreen.vue';
 import WhiteBoard from '@/views/studies/components/screen/WhiteBoard.vue';
+import PostIt from '@/views/studies/components/screen/PostIt.vue';
 import UserVideo from "@/views/studies/components/room/video//UserVideo.vue";
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
@@ -133,6 +135,7 @@ export default {
     MainScreen,
     WhiteBoard,
     UserVideo,
+    PostIt,
   },
   beforeRouteLeave(to, from, next) {
     console.log(to.fullPath);
