@@ -8,15 +8,17 @@
       <div class="card">
         <div v-if="state.fileList" >
                   <div class="card-body" v-for="file in state.fileList" :key="file.memberId">
-                    <div>
-                      <p>파일명 : {{ file.originName }}</p>
-                      <p>파일크기 : {{ file.fileSize }}</p>
+                    <div class="card-body-data">
+                      <p><b>{{ file.originName }}</b></p>
+                      <p>size | {{ file.fileSize }}</p>
                       <!-- <span>생성일자</span> -->
                     </div>
                     <!-- <button>다운로드</button> -->
                     <!-- <img class="file-type" @click="onClickDeleteFile(index)" src="@/assets/img/icon_sidebar/file/trash-1E304F.svg" alt=""> -->
-                    <img src="@/assets/img/icon_sidebar/file/download_1E304F.svg">
-                    <img src="@/assets/img/icon_sidebar/file/trash-1E304F.svg">
+                    <div class="card-body-buttons">
+                      <img src="@/assets/img/icon_sidebar/file/download_1E304F.svg">
+                      <img src="@/assets/img/icon_sidebar/file/trash-1E304F.svg">
+                    </div>
                   </div>
         </div>
         <div v-else>
@@ -182,24 +184,25 @@ export default {
   flex-grow: 1;
   /* overflow: auto; */
   /* padding: 1rem; */
-
+  overflow-x: hidden;
   overflow-y: scroll;
   scroll-behavior: smooth;
+  width: 100%;
 }
 /* .file-body::-webkit-scrollbar {
   display: none;
 } */
 ::-webkit-scrollbar{
   /* opacity: 0.7; */
-  width: 5px;
+  width: 12px;
 }
-/* ::-webkit-scrollbar-thumb{
+::-webkit-scrollbar-thumb{
     background-color: #999;
     border-radius: 10px;
-} */
-/* ::-webkit-scrollbar-track{
+}
+::-webkit-scrollbar-track{
     background-color: #1E304F;
-} */
+}
 .file-item {
   display: flex;
   flex-direction: row;
@@ -234,8 +237,10 @@ export default {
   display: flex;
   /* align-items: row; */
   color: black;
-  background-color: antiquewhite;
+  /* background-color: antiquewhite; */
+  background-color: #1E304F;
   margin-top: 2px;
+  /* opacity: 0.7; */
 }
 
 .card-body {
@@ -245,9 +250,29 @@ export default {
   justify-content: space-between;
   /* padding: 10px; */
   /* margin-bottom: 5px; */
+  background-color: antiquewhite;
+  border: solid 4px #ffffff;
+  margin-top: 5px;
+  border-radius: 24px;
+  opacity: 0.85;
 
-  color: black;
+  font-family: 'Mulish', 'Alef', 'Noto Sans KR';
+  color: 1E304F;
   font-size: 13px;
 }
 
+.card-body-buttons {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.card-body-data {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  /* margin-bottom: 0px; */
+}
 </style>
