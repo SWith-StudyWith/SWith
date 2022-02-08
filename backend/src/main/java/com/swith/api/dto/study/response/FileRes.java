@@ -1,5 +1,6 @@
 package com.swith.api.dto.study.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,5 +17,6 @@ public class FileRes {
     private String originName;
     private String fileUrl;
     private Long fileSize;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime createdAt;
 }
