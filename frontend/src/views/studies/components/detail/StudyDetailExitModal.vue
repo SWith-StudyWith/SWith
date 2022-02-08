@@ -22,6 +22,7 @@ import { reactive, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router'
 import { exitStudy } from '@/api/study';
+import notifications from '@/composables/notifications'
 
 export default {
   name: 'StudyDetailExitModal',
@@ -34,41 +35,26 @@ export default {
         return store.state.study.studyInfo.studyId
       })
     })
+    const { notifySuccess, notifyDanger } = notifications();
+
     const onClickExitConfirmBtn = function () {
       exitStudy(
         state.studyId,
         (res) => {
           console.log(res.data)
           if (res.data.code === 200) {
-            createToast('스터디를 탈퇴했습니다!🤤',
-              {
-                showIcon: 'true',
-                position: 'bottom-left',
-                type: 'success',
-                transition: 'bounce',
-                // toastBackgroundColor: "#334666",
-              })
+            notifySuccess('스터디를 탈퇴했습니다.🤤')
             router.push({ name: 'Main' })
           }
         },
         (err) => {
           console.log(err)
-          createToast('서버가 아파요 😰',
-            {
-            showIcon: 'true',
-            position: 'bottom-left',
-            type: 'warning',
-            transition: 'bounce',
-          })
-        },
+          notifyDanger('서버가 아파요 😰')
+        }
       )
     }
     return { state, onClickExitConfirmBtn }
   },
-  created() {},
-  mounted() {},
-  unmounted() {},
-  methods: {}
 }
 </script>
 <style scoped>

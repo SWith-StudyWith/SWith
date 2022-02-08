@@ -2,7 +2,7 @@ import { login, getUserInfo, loginKakao, loginGoogle, updateUserInfoAPI, signOut
 import router from '@/router';
 import notifications from '@/composables/notifications'
 
-const { notifyWarning, notifyDanger } = notifications();
+const { notifyDanger } = notifications();
 
 const state = () => ({
   userInfo: {
@@ -22,7 +22,7 @@ const actions = {
         commit('UPDATE_USER_INFO', res.data.data);
       },
       () => {
-        notifyWarning('서버가 아파요!😰')
+        notifyDanger('서버가 아파요!😰')
       }
     )
   },
@@ -58,7 +58,7 @@ const actions = {
       },
       (err) => {
         console.log(err)
-        notifyWarning('서버가 아파요!😰')
+        notifyDanger('서버가 아파요!😰')
       }
     )
   },
@@ -75,7 +75,7 @@ const actions = {
       },
       (err) => {
         console.log(err)
-        notifyWarning('서버가 아파요!😰')
+        notifyDanger('서버가 아파요!😰')
       }
     )
   },
@@ -88,7 +88,7 @@ const actions = {
         router.push({ name: 'Main' })
       },
       () => {
-        notifyWarning('서버가 아파요!😰')
+        notifyDanger('서버가 아파요!😰')
       }
     )
   },
@@ -103,7 +103,7 @@ const actions = {
           dispatch('LOGOUT')
           router.push({ name: 'Login' })
         }  else if ( res.data.code === 404) {
-        notifyWarning('회원 탈퇴 실패.😰')
+        notifyDanger('회원 탈퇴 실패.😰')
         }
       },
     )

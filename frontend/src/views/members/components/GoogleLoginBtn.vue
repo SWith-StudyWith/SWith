@@ -27,7 +27,7 @@ export default {
       height: 45px;
       border-radius: 5px;
       border: thin solid rgb(223, 222, 222);
-      box-shadow: 1px 1px 1px grey;
+      /* box-shadow: 1px 1px 1px grey; */
       white-space: nowrap;
       padding-inline: 12px;
       padding-top: 8px;

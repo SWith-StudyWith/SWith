@@ -128,7 +128,6 @@
         <button class="btn btn-primary btn-lg col-12" @click="onClickSignup" style="margin-bottom:15px;">회원가입</button>
         <div class="socialLogin mt-2">
             <KakaoLoginBtn/>
-            <!-- <a :href="GOOGLE_GET_AUTH_CODE_URL"><img src="@/assets/img/icon_oauth_google/btn_google_signin_dark_normal_web.png" alt="google login button"></a> -->
             <GoogleLoginBtn />
         </div>
         <div class="text-center">
@@ -152,7 +151,6 @@ import SignUpTerm from './components/SignUpTerm.vue';
 import Navbar from '../common/Navbar.vue';
 import Footer from '../common/Footer.vue';
 import KakaoLoginBtn from '@/views/members/components/KakaoLoginBtn.vue';
-// import { GOOGLE_GET_AUTH_CODE_URL } from '@/api/gauth.js';
 import notifications from '@/composables/notifications'
 import GoogleLoginBtn from './components/GoogleLoginBtn.vue';
 
@@ -255,7 +253,7 @@ export default {
         return false;
       }),
     });
-    const { notifyWarning, notifySuccess, notifyDanger } = notifications();
+    const { notifySuccess, notifyDanger } = notifications();
 
     const onClickSendCode = function (e) {
       e.preventDefault();
@@ -278,7 +276,7 @@ export default {
         },
         (err) => {
           console.log(err)
-          notifyWarning('서버가 아파요.😥');
+          notifyDanger('서버가 아파요.😥');
         }
       )
     }
@@ -301,7 +299,7 @@ export default {
         },
         (err) => {
           console.log(err)
-          notifyWarning('서버가 아파요.😥');
+          notifyDanger('서버가 아파요.😥');
         }
       )
     };
@@ -333,13 +331,13 @@ export default {
               notifyDanger('이미 존재하는 회원입니다.😳')
               break;
             case 404:
-              notifyWarning('회원가입 실패.😰')
+              notifyDanger('회원가입 실패.😰')
               break;
           }
         },
         (err) => {
           console.log(err)
-          notifyWarning('서버가 아파요.😥');
+          notifyDanger('서버가 아파요.😥');
         }
       )
       router.push({ name: 'Login' })
@@ -366,8 +364,7 @@ export default {
       } return false;
     };
     return {
-      state, onClickSendCode, onClickSignup, onClickConfirmAuthNum, //GOOGLE_GET_AUTH_CODE_URL,
-      notifyWarning, notifyDanger, notifySuccess
+      state, onClickSendCode, onClickSignup, onClickConfirmAuthNum,
     };
   },
   created() {},

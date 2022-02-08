@@ -73,7 +73,7 @@ export default {
         return store.state.study.fileList;
       }),
     })
-    const { notifyWarning, notifySuccess } = notifications();
+    const { notifyDanger, notifySuccess } = notifications();
 
     let dropzoneFiles = ref([]);
 
@@ -123,7 +123,7 @@ export default {
         },
         (err) => {
           console.log(err)
-          notifyWarning('서버가 아파요.😰')
+          notifyDanger('서버가 아파요.😰')
         },
       )
     }
@@ -143,7 +143,7 @@ export default {
         },
         (err) => {
           console.log(err)
-          notifyWarning('서버가 아파요.😰')
+          notifyDanger('서버가 아파요.😰')
         },
       )
     }
@@ -158,7 +158,7 @@ export default {
         },
         (err) => {
           console.log(err)
-          notifyWarning('서버가 아파요.😰')
+          notifyDanger('서버가 아파요.😰')
         },
       )
     }
@@ -172,8 +172,6 @@ export default {
       onClickUploadFile,
       onClickDownloadFile,
       onClickDeleteFile,
-      notifyWarning,
-      notifySuccess,
     };
   },
 }
