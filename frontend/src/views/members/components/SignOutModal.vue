@@ -1,7 +1,7 @@
 <template>
   <!-- Modal -->
   <div class="modal fade" id="signOutModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="signOutModalLabel">회원 탈퇴</h5>
@@ -31,21 +31,8 @@ export default {
       e.preventDefault();
       console.log(e)
       console.log('버튼 클릭')
-      // signOut(
-      //   (res) => {
-      //     console.log(res)
-      //     console.log(res.data)
-      //     console.log('탈퇴완료')
-      //     if (res.data.code === 200 ) {
-      //       sessionStorage.removeItem('accessToken', res.data.data.accessToken)
-      //       router.push({ name: 'Login' })
-      //     }
-      //   },
-      //   (err) => {
-      //     console.log(err)
-      //   }
-      // )
       store.dispatch('SIGNOUT')
+
       router.push({ name: 'Login' })
     }
     return { onClickSignOut }
@@ -54,7 +41,4 @@ export default {
 
 </script>
 <style scoped>
-.modal-body{
-  font-size: 20px;
-}
 </style>
