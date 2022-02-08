@@ -14,12 +14,14 @@
                       <!-- <span>생성일자</span> -->
                     </div>
                     <!-- <button>다운로드</button> -->
-                    <!-- <img class="file-type" @click="onClickDeleteFile(index)" src="@/assets/img/icon_sidebar/file/trash-1E304F.svg" alt=""> -->
+                    <!-- <img class="file-type" @click="onClickCancelFile(index)" src="@/assets/img/icon_sidebar/file/trash-1E304F.svg" alt=""> -->
                     <div class="card-body-buttons">
                       <img
                         src="@/assets/img/icon_sidebar/file/download_1E304F.svg"
                         @click="onClickDownloadFile(file.fileId, file.originName)">
-                      <img src="@/assets/img/icon_sidebar/file/trash-1E304F.svg">
+                      <img
+                        src="@/assets/img/icon_sidebar/file/trash-1E304F.svg"
+                        @click="onClickDeleteFile(file.fileId)">
                     </div>
                   </div>
         </div>
@@ -30,11 +32,11 @@
 
     </div>
     <form enctype="multipart/form-data">
-      <!-- <span>fileList : {{ state.fileList }}</span> -->
+      <!-- <span>fileList : {{ state.fileList.createdAt }}</span> -->
       <!-- <span>dropzoneFiles : {{ dropzoneFiles }}</span> -->
       <div v-for="(dropzoneFile, index) in dropzoneFiles" v-bind:key="dropzoneFile.id" class="file-item">
-        <span class="file-info"><img class="file-type" src="@/assets/img/icon_sidebar/file/file-type-img-DEE8F9.svg" alt=""> {{dropzoneFile.name}} </span>
-        <img class="file-type" @click="onClickDeleteFile(index)" src="@/assets/img/icon_sidebar/file/trash-DEE8F9.svg" alt="">
+        <span class="file-info"><img class="file-type" src="@/assets/img/icon_sidebar/file/clip_light.svg" alt=""> {{dropzoneFile.name}} </span>
+        <img class="file-type" @click="onClickCancelFile(index)" src="@/assets/img/icon_sidebar/file/trash-DEE8F9.svg" alt="">
       </div>
       <!-- <button @click="uploadFile"><img src="@/assets/img/icon_sidebar/file/check-DEE8F9.svg" alt="">전송</button> -->
       <div class="file-submit">
@@ -48,7 +50,7 @@
 
 <script>
 import { ref } from "vue";
-import { uploadFile, downloadFile } from '@/api/study';
+import { uploadFile, downloadFile, deleteFile } from '@/api/study';
 import { computed, reactive } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
@@ -90,7 +92,7 @@ export default {
       }
     }
 
-    const onClickDeleteFile = (index) => {
+    const onClickCancelFile = (index) => {
       dropzoneFiles.value.splice(index, 1);
     }
 
@@ -146,14 +148,30 @@ export default {
       )
     }
 
+    const onClickDeleteFile = (fileId) => {
+      deleteFile(
+        route.params.studyId,
+        fileId,
+        (res) => {
+          console.log(res.data);
+          store.dispatch('GET_FILE_LIST', route.params.studyId);
+        },
+        (err) => {
+          console.log(err)
+          notifyWarning('서버가 아파요.😰')
+        },
+      )
+    }
+
     return {
       state,
       dropzoneFiles,
       drop,
       selectedFile,
-      onClickDeleteFile,
+      onClickCancelFile,
       onClickUploadFile,
       onClickDownloadFile,
+      onClickDeleteFile,
       notifyWarning,
       notifySuccess,
     };

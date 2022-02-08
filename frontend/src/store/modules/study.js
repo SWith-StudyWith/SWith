@@ -81,19 +81,6 @@ const actions = {
       }
     )
   },
-  // getFileListInfo({ commit }, studyId) {
-  //   getFileList(
-  //     studyId,
-  //     (res) => {
-  //       if (res.data.code === 200) {
-  //         commit('SET_FILE_LIST', res.data.data)
-  //       }
-  //     },
-  //     (err) => {
-  //       console.log(err)
-  //     }
-  //   )
-  // },
 };
 
 const mutations = {

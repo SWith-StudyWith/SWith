@@ -73,6 +73,12 @@ function downloadFile(studyId, fileId, success, fail) {
     .then(success)
     .catch(fail)
 }
+function deleteFile(studyId, fileId, success, fail) {
+  basicInstance
+    .delete(`api/studies/${studyId}/files/${fileId}`)
+    .then(success)
+    .catch(fail)
+}
 
 export {
   createStudy,
@@ -86,5 +92,6 @@ export {
   getMemberList,
   uploadFile,
   getFileList,
-  downloadFile
+  downloadFile,
+  deleteFile,
 }
