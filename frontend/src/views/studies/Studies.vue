@@ -240,9 +240,9 @@ export default {
   },
   methods : {
     unloadEvent(e) {
-      this.leaveSession()
-      this.leaveSessionForScreenSharing()
       if (this.canLeave) {
+        this.leaveSession()
+        this.leaveSessionForScreenSharing()
         return
       }
       e.preventDefault();
