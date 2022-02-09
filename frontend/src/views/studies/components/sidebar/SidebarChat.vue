@@ -1,11 +1,10 @@
 <template>
   <div class= "chatDiv">
-    <p class="title">💬 채팅 </p>
-    <!-- <div class="chat-body spinner-border text-light" role="status" v-if="state.loading">
-      <span class="visually-hidden">Loading...</span>
-    </div> -->
+    <div>
+      <p class="title">💬 채팅 </p>
+    </div>
     <div class="chat-body" id="chat-body"
-      @scroll="scrollMove">
+      @scroll="scrollMove" >
 
       <SidebarChatMessage
         v-for="(chat, idx) in state.chatList"
@@ -14,10 +13,20 @@
         :prev="[idx == 0 ? null : state.chatList[idx-1]]"
       >
       </SidebarChatMessage>
-
-    <div class="init-btn" v-if="state.isScrollInit">
-        <button class="btn-primary button" @click="scrollInit">↓</button>
-    </div>
+      <div class="init-btn" v-if="state.isScrollInit">
+          <button class="btn-primary button" @click="scrollInit">↓</button>
+      </div>
+      <loading v-model:active="state.loading"
+            :can-cancel="false"
+            :is-full-page="false"
+            :height="height"
+            :width="width"
+            :color="color"
+            :loader="loader"
+            :background-color="bgColor"
+            :blur="blur"
+            class="chat-loading"
+      ></loading>
     </div>
     <hr>
     <div class="chat-input" id="chat-input">
@@ -36,23 +45,30 @@
 <script>
 import Stomp from 'webstomp-client'
 import SockJS from 'sockjs-client'
-import { mapGetters } from 'vuex';
 import SidebarChatMessage from '@/views/studies/components/sidebar/SidebarChatMessage.vue';
 import dayjs from 'dayjs'
 import { computed, onUpdated, reactive } from '@vue/runtime-core';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
 import { getChatList } from '@/api/study'
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
 
 export default {
   name: 'App',
   data() {
     return {
-      msgDate: dayjs().format('hh:mm A'),
+      loader: 'dots',
+      color: '#F5CEC7',
+      bgColor: '#1E304F',
+      height: 80,
+      width: 80,
+      blur: '',
     }
   },
   components:{
-    SidebarChatMessage
+    SidebarChatMessage,
+    Loading
   },
   setup(){
     const store = useStore();
@@ -72,10 +88,7 @@ export default {
       init: true,
 
       loaded: false,
-      loading: true,
-      isLoading: computed(() => {
-        return state.loding
-      }),
+      loading: false,
 
       // 스크롤 상단에 도착했는지
       isTop: false,
@@ -106,6 +119,7 @@ export default {
               // .then(function(result){
                 console.log(res.data)
 
+
                 var size = res.data.data.length
                 for(var i = 0; i < size; i++){
                   state.recvList.push(res.data.data[i])
@@ -116,10 +130,10 @@ export default {
                   state.isNoScroll = true
                 }
 
-                state.loading = false
+                state.chatList = [...state.recvList].reverse()
+                // state.loading = false
                 state.loaded = true
                 state.isScrollInit = true
-                state.chatList = [...state.recvList].reverse()
 
                 // resolve(res)
               // })
@@ -132,6 +146,13 @@ export default {
           },
         )
       // })
+    }
+
+    function loadingCall(){
+      state.loading = true
+      setTimeout(() => {
+        state.loading = false
+      }, 1000)
     }
 
     // scrollTop == 0 (꼭대기), 다음 list 가져오기
@@ -153,7 +174,6 @@ export default {
       // 채팅창 열었을 때, 스크롤 맨 밑에 가도록
       if(state.init){
         state.init = false
-        // state.element.scrollTop = 99999
         state.element.scrollTop = state.element.scrollHeight
       }
 
@@ -255,15 +275,19 @@ export default {
       scrollMove,
       scrollInit,
       sendMessage,
+      loadingCall,
     }
   },
   created() {
     console.log('사이드바 생성 ~')
     this.init = true
-    setTimeout(() => {
-      const element = document.getElementById('chat-body');
-      element.scrollTop = element.scrollHeight;
-    }, 0);
+
+    this.loadingCall()
+    // setTimeout(() => {
+    //   const element = document.getElementById('chat-body');
+    //   element.scrollTop = element.scrollHeight;
+    // }, 0);
+
   },
 }
 </script>
@@ -317,10 +341,11 @@ input{
   /* overflow: auto; */
   padding: 1rem;
   padding-bottom: 0px;
+  padding-top: 0px;
   overflow-y: scroll;
   scroll-behavior: smooth;
 
-  z-index:3;
+  /* z-index:1; */
 }
 .chat-body::-webkit-scrollbar {
   /* display: none; */
@@ -350,7 +375,7 @@ input{
   display: flex;
   justify-content: right;
   position: sticky;
-  z-index: 1;
+  z-index: 2;
   bottom: 0;
 
 }
@@ -369,4 +394,9 @@ input{
   background-color: rgba(230, 196, 196, 0.7);
 }
 
+.chat-loading{
+  /* z-index: 999; */
+  margin-left: 60px;
+  /* background-color: #1E304F; */
+}
 </style>
