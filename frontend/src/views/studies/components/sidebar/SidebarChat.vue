@@ -27,7 +27,8 @@
     <div class="chat-input" id="chat-input">
       <div class="inputText">
         <input
-          v-model="message"
+          v-model="state.message"
+          id="message"
           type="text"
           @keyup="sendMessage"
         >
@@ -45,44 +46,34 @@ import dayjs from 'dayjs'
 import { computed, onUpdated, reactive } from '@vue/runtime-core';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
-import { getChatList} from '@/api/study'
+import { getChatList } from '@/api/study'
 
 export default {
   name: 'App',
   data() {
     return {
-      message: "",
-      recvList: [],
       msgDate: dayjs().format('hh:mm A'),
     }
   },
-  props:{
-    chatLog : Object
-  }
-  ,
   components:{
     SidebarChatMessage
   },
-  setup(props){
+  setup(){
     const store = useStore();
     const route = useRoute();
+    let socket, stompClient;
+
+    store.dispatch('GET_CHAT_LIST', {studyId: route.params.studyId, index: 0});
 
     const state = reactive({
-      // chatList
-      chatList: computed(() => {
-        return props.chatLog
-      }),
+      message: '',
 
-      // messageList에서 불러온 list
-      // loadList: [],
-      loadList: computed(() => {
-        return props.chatLog
-      }),
+      userInfo : store.getters.getUserInfo,
+      chatList: [],
+      recvList: [],
 
       // 채팅창 열었을 때, 스크롤 맨 밑에 있도록
       init: true,
-      // message 전송했을 때,
-      sended: false,
 
       loaded: false,
       loading: true,
@@ -106,51 +97,53 @@ export default {
     function messageList() {
       console.log('더 가져오자~');
 
-      getChatList(
-        route.params.studyId,
-        props.chatLog.length,
-        (res) => {
-          console.log(res.data)
-          // console.log("props.chatLog.length : " +props.chatLog.length);
-          if (res.data.code === 200) {
-            store.dispatch('GET_CHAT_LIST', {studyId: route.params.studyId, index: props.chatLog.length});
+      // return new Promise(function(resolve, reject){
+        getChatList(
+          route.params.studyId,
+          state.chatList.length,
+            (res) => {
+            store
+              .dispatch("GET_CHAT_LIST", {
+                studyId: route.params.studyId,
+                index: state.chatList.length
+              })
+              // .then(function(result){
+                console.log(res.data)
 
-            var size = res.data.data.length
-            // console.log("size : " + size)
+                var size = res.data.data.length
+                for(var i = 0; i < size; i++){
+                  state.recvList.push(res.data.data[i])
+                }
 
-            for(var i = 0; i < size; i++){
-              // console.log(res.data.data[i])
-              state.loadList.unshift(res.data.data[i])
-            }
+                // size < 15 면, 더이상 API 호출되지 않도록
+                if(size < 15) {
+                  state.isNoScroll = true
+                }
 
-            console.log(state.loadList)
-            // size < 15 면, 더이상 API 호출되지 않도록
-            if(size < 15) {
-              state.isNoScroll = true
-            }
-            state.loading = false
-            state.loaded = true
-            state.isScrollInit = true
-            state.loadList = null;
-          }
-        },
-        (err) => {
-          console.log(err);
-        },
-      )
+                state.loading = false
+                state.loaded = true
+                state.isScrollInit = true
+                state.chatList = [...state.recvList].reverse()
+
+                // resolve(res)
+              // })
+              // .catch(function(err){
+                // resolve(err)
+              // })
+            },
+          (err) => {
+            console.log(err);
+          },
+        )
+      // })
     }
 
     // scrollTop == 0 (꼭대기), 다음 list 가져오기
-    function scrollMove(){
-      // console.log('~~~~~~~~~~~~~~~~~~~~')
-      // console.log(state.element.scrollHeight)
-      // console.log(state.element.scrollTop)
-      // console.log(state.element.scrollHeight/2.0 + " " + state.prevScrollHeight + " " + state.element.scrollHeight)
-
+    async function scrollMove(){
       state.prevScrollHeight = state.element.scrollHeight - state.element.scrollTop
       if(state.element.scrollTop == 0 && !state.isNoScroll){
 
-        messageList()
+        await messageList()
       }
     }
 
@@ -180,90 +173,102 @@ export default {
       }
     })
 
-    return {
-      state,
-      messageList,
-      scrollMove,
-      scrollInit,
-    }
-  },
-  created() {
-    // App.vue가 생성되면 소켓 연결을 시도합니다.
-    this.connect()
-  },
-  computed: {
-    ...mapGetters([
-      'getUserInfo'
-    ]),
-  },
-  methods: {
-    sendMessage (e) {
-      if(e.keyCode === 13 && this.userName !== '' && this.message !== ''){
-        this.send()
-        this.message = ''
+    function sendMessage(e) {
+      // alert(state.message)
+      if(e.keyCode === 13 && this.userName !== '' && state.message !== ''){
+        send()
+        state.message = ''
       }
-    },
-    send() {
-      console.log("Send message:" + this.message);
-      if (this.stompClient && this.stompClient.connected) {
+    }
+
+    function send() {
+      console.log("Send message:" + state.message);
+      if (stompClient && stompClient.connected) {
         const msg = {
-          studyId: this.$route.params.studyId,
-          memberId: this.getUserInfo.memberId,
-          imgUrl: this.getUserInfo.profileImg,
-          nickname: this.getUserInfo.nickname,
-          content: this.message,
+          studyId: route.params.studyId,
+          memberId: state.userInfo.memberId,
+          imgUrl: state.userInfo.profileImg,
+          nickname: state.userInfo.nickname,
+          content: state.message,
+          created: dayjs().format('YY/MM/DD hh:mm A')
         };
 
-        this.stompClient.send("/receive", JSON.stringify(msg), {});
-        this.recvList.push(msg);
+        stompClient.send("/receive", JSON.stringify(msg), {});
+        console.log(msg)
+        state.recvList.unshift(msg);
 
         setTimeout(() => {
           const element = document.getElementById('chat-body');
           element.scrollTop = element.scrollHeight;
         }, 0);
       }
-    },
-    connect() {
+    }
+
+    // 웹 소켓 연결 성공 시, 콜백 함수
+    async function onConnected(){
+      var load = await messageList()
+      fetchList()
+    }
+
+    function connect() {
       // 배포
       const serverURL = `${process.env.VUE_APP_BASE_URL_DEV}/api/ws`
       // const serverURL = 'http://localhost:8080/api/ws/'
-      let socket = new SockJS(serverURL);
-      this.stompClient = Stomp.over(socket);
+      socket = new SockJS(serverURL);
+      stompClient = Stomp.over(socket);
       console.log(`소켓 연결을 시도합니다. 서버 주소: ${serverURL}`)
-      this.stompClient.connect(
+      stompClient.connect(
         {},
         frame => {
           // 소켓 연결 성공
-          this.connected = true;
+          stompClient.connected = true;
           console.log('소켓 연결 성공', frame);
 
-          // 스크롤 하단 고정
-          // const element = document.getElementById('chat-body');
-          // element.scrollTop = 99999;
+          onConnected()
 
-          // 서버의 메시지 전송 endpoint를 구독합니다.
-          // 이런형태를 pub sub 구조라고 합니다.
-          this.stompClient.subscribe("/send/" + this.$route.params.studyId, res => {
-            console.log('구독으로 받은 메시지 입니다.', res.body);
-
-            // 받은 데이터를 json으로 파싱하고 리스트에 넣어줍니다.
-            // this.recvList.push(JSON.parse(res.body))
-            this.$props.chatLog.push(JSON.parse(res.body))
-            setTimeout(() => {
-              const element = document.getElementById('chat-body');
-              element.scrollTop = element.scrollHeight;
-            }, 0);
-          });
         },
         error => {
           // 소켓 연결 실패
           console.log('소켓 연결 실패', error);
-          this.connected = false;
+          stompClient.connected = false;
         }
       );
     }
-  }
 
+    function fetchList(){
+      // 서버의 메시지 전송 endpoint를 구독합니다.
+      // 이런형태를 pub sub 구조라고 합니다.
+      stompClient.subscribe("/send/" + route.params.studyId, res => {
+        console.log('구독으로 받은 메시지 입니다.', res.body);
+
+        // 받은 데이터를 json으로 파싱하고 리스트에 넣어줍니다.
+        state.chatList.push(JSON.parse(res.body))
+
+        setTimeout(() => {
+          const element = document.getElementById('chat-body');
+          element.scrollTop = element.scrollHeight;
+        }, 0);
+      });
+    }
+
+    connect()
+
+    return {
+      state,
+      // messageList,
+      scrollMove,
+      scrollInit,
+      sendMessage,
+    }
+  },
+  created() {
+    console.log('사이드바 생성 ~')
+    this.init = true
+    setTimeout(() => {
+      const element = document.getElementById('chat-body');
+      element.scrollTop = element.scrollHeight;
+    }, 0);
+  },
 }
 </script>
 <style scoped>

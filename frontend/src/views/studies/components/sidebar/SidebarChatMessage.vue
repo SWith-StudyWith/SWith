@@ -62,10 +62,9 @@ export default {
     hhmm(){
       var value = this.chat?.createdAt
       // 22/02/08/ 06:24 PM
-
       if(value == '') return '';
 
-      var data = value.split(" ")
+      var data = (value||'').split(" ")
 
       var setTime = ""
 
