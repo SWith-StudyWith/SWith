@@ -95,9 +95,6 @@ export default {
       isMemberList : false,
       isFile : false,
       collapsed: true,
-      // recvList: computed(() => {
-      //   return store.state.study.chatList;
-      // }),
       recvList: [],
       chatLog: [],
     })
@@ -159,11 +156,10 @@ export default {
       if (!state.collapsed && state.isChat) {
         state.collapsed = true;
       }
-
       state.isChat = !state.isChat;
       emit('toggleSidebar', sidebarWidth.value)
 
-      chat()
+      chat();
 
     };
     const onClickMemberIcon = () => {

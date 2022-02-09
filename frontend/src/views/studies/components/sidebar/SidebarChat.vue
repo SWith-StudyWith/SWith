@@ -7,6 +7,10 @@
     <div class="chat-body" id="chat-body"
       @scroll="scrollMove">
 
+      <div v-if="state.isNoScroll">
+        <p class="chat-top">마지막 채팅 기록입니다.</p>
+      </div>
+
       <SidebarChatMessage
         v-for="(chat, idx) in state.chatList"
         :key="idx"
@@ -14,8 +18,11 @@
         :prev="[idx == 0 ? null : state.chatList[idx-1]]"
       >
       </SidebarChatMessage>
-    </div>
 
+    <div class="init-btn" v-if="state.isScrollInit">
+        <button class="btn-primary" @click="scrollInit">↓</button>
+    </div>
+    </div>
     <hr>
     <div class="chat-input" id="chat-input">
       <div class="inputText">
@@ -87,6 +94,7 @@ export default {
       isTop: false,
       // 더이상 API 호출X  => 추가로 불러온 list들이 <15일 때,
       isNoScroll: false,
+      isScrollInit: false,
       // 스크롤 위치 저장하기 위함
       prevScrollHeight: 0,
       element: computed(() => {
@@ -117,11 +125,12 @@ export default {
 
             console.log(state.loadList)
             // size < 15 면, 더이상 API 호출되지 않도록
-            if(size < 15) state.isNoScroll = true
-
+            if(size < 15) {
+              state.isNoScroll = true
+            }
             state.loading = false
             state.loaded = true
-
+            state.isScrollInit = true
             state.loadList = null;
           }
         },
@@ -133,18 +142,30 @@ export default {
 
     // scrollTop == 0 (꼭대기), 다음 list 가져오기
     function scrollMove(){
+      // console.log('~~~~~~~~~~~~~~~~~~~~')
+      // console.log(state.element.scrollHeight)
+      // console.log(state.element.scrollTop)
+      // console.log(state.element.scrollHeight/2.0 + " " + state.prevScrollHeight + " " + state.element.scrollHeight)
+
+      state.prevScrollHeight = state.element.scrollHeight - state.element.scrollTop
       if(state.element.scrollTop == 0 && !state.isNoScroll){
 
         messageList()
       }
     }
 
+    // 버튼 클릭 시, 맨 아래로 내려가기
+    function scrollInit(){
+      state.isScrollInit = false
+      state.element.scrollTop = state.element.scrollHeight
+    }
+
     onUpdated(() => {
       // 채팅창 열었을 때, 스크롤 맨 밑에 가도록
       if(state.init){
         state.init = false
-        state.element.scrollTop = 99999
-        // state.element.scrollTop = state.element.scrollHeight
+        // state.element.scrollTop = 99999
+        state.element.scrollTop = state.element.scrollHeight
       }
 
       // 이전 리스트 추가로 호출했을 때
@@ -155,7 +176,6 @@ export default {
           // 스크롤 있던 위치 받아오기 => 시작 위치
           state.element.scrollTop = state.element.scrollHeight - state.prevScrollHeight
         }
-
         state.prevScrollHeight = state.element.scrollHeight
       }
     })
@@ -164,7 +184,7 @@ export default {
       state,
       messageList,
       scrollMove,
-
+      scrollInit,
     }
   },
   created() {
@@ -197,14 +217,10 @@ export default {
         this.stompClient.send("/receive", JSON.stringify(msg), {});
         this.recvList.push(msg);
 
-        // this.$state.value.sended = true;
-        // alert(this.$state.sended)
-        // this.$route.state.sended = true;
         setTimeout(() => {
           const element = document.getElementById('chat-body');
           element.scrollTop = element.scrollHeight;
         }, 0);
-
       }
     },
     connect() {
@@ -259,7 +275,7 @@ export default {
 
   height: 100vh;
   display: flex;
-  flex-direction: column;
+
 }
 .row{
   margin-bottom: 20px;
@@ -299,9 +315,11 @@ input{
   flex-grow: 1;
   /* overflow: auto; */
   padding: 1rem;
-
+  padding-bottom: 0px;
   overflow-y: scroll;
   scroll-behavior: smooth;
+
+  z-index:3;
 }
 .chat-body::-webkit-scrollbar {
   /* display: none; */
@@ -315,5 +333,31 @@ input{
 }
 ::-webkit-scrollbar-track{
     background-color: #1E304F;
+}
+
+.chat-top{
+  font-size: 13px;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  padding: 1px;
+  line-break: anywhere;
+  background-color: rgba(185, 175, 207, 0.2);
+  border-radius: 10px;
+}
+.init-btn{
+  display: flex;
+  justify-content: right;
+  position: sticky;
+  z-index: 1;
+  bottom: 0;
+
+}
+.init-btn > button{
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border: 0px;
+  height: 40px;
+  width: 40px;
 }
 </style>
