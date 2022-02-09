@@ -81,8 +81,6 @@ export default {
 
       // 채팅창 열었을 때, 스크롤 맨 밑에 있도록
       init: true,
-      // message 전송했을 때,
-      sended: false,
 
       loaded: false,
       loading: true,
@@ -188,7 +186,8 @@ export default {
     }
   },
   created() {
-    // App.vue가 생성되면 소켓 연결을 시도합니다.
+    console.log('사이드바 생성 ~')
+    this.init = true
     this.connect()
   },
   computed: {
