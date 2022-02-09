@@ -24,12 +24,13 @@ export default {
 
 <style scoped>
 .main {
-  width: 1080px;
+  height: 70vh;
+  width: 100%;
   border-radius: 0.7rem;
 }
 .sub {
-  width: 300px;
-  height: 200px;
+  width: 30vh;
+  height: 20vh;
   overflow: hidden;
   object-fit: cover;
   border-radius: 1rem;

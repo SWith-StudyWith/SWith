@@ -8,30 +8,32 @@
       <span v-else>Swith Sidebar</span>
     </h1> -->
     <div class="row">
-      <div class="icon-container exit-btn" @click="onClickExitIcon">
-        <font-awesome-icon class="m-2" :icon="['fas', 'sign-out-alt']" />
+      <div>
+        <div class="icon-container exit-btn icon" @click="onClickExitIcon">
+          <font-awesome-icon class="icon" :icon="['fas', 'sign-out-alt']" />
+        </div>
       </div>
       <div class="control-bottons">
         <div class="icon-container" @click="onClickKanbanBoardIcon" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="칸반보드">
-          <font-awesome-icon class="m-2" :class="{ 'font-active': screenMode === 0 }" :icon="['fas', 'chalkboard']" />
+          <font-awesome-icon class="icon" :class="{ 'font-active': screenMode === 0 }" :icon="['fas', 'chalkboard']" />
         </div>
         <div class="icon-container" @click="onClickScreenShareIcon" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="화면공유">
-          <font-awesome-icon class="m-2" :class="{ 'font-active': isScreenShared }"  :icon="['fas', 'tv']" />
+          <font-awesome-icon class="icon" :class="{ 'font-active': isScreenShared }"  :icon="['fas', 'tv']" />
         </div>
         <div class="icon-container" @click="onClickWhiteBoardIcon" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="화이트보드">
-          <font-awesome-icon class="m-2" :class="{ 'font-active': screenMode === 2 }"  :icon="['fas', 'pen']" />
+          <font-awesome-icon class="icon" :class="{ 'font-active': screenMode === 2 }"  :icon="['fas', 'pen']" />
         </div>
         <div class="icon-container" @click="onClickFileIcon" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="파일공유">
-          <font-awesome-icon class="m-2" :class="{ 'font-active': state.isFile }"  :icon="['fas', 'file-upload']" />
+          <font-awesome-icon class="icon" :class="{ 'font-active': state.isFile }"  :icon="['fas', 'file-upload']" />
         </div>
         <div class="icon-container" @click="onClickChatIcon" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="채팅">
-          <font-awesome-icon class="m-2" :class="{ 'font-active': state.isChat }" :icon="['fas', 'comment']" />
+          <font-awesome-icon class="icon" :class="{ 'font-active': state.isChat }" :icon="['fas', 'comment']" />
         </div>
         <div class="icon-container" @click="onClickPostItIcon" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="포스트잇">
-          <font-awesome-icon class="m-2" :class="{ 'font-active': screenMode === 3 }" :icon="['fas', 'sticky-note']"/>
+          <font-awesome-icon class="icon" :class="{ 'font-active': screenMode === 3 }" :icon="['fas', 'sticky-note']"/>
         </div>
         <div class="icon-container" @click="onClickMemberIcon" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="유저목록">
-          <font-awesome-icon class="m-2" :class="{ 'font-active': state.isMemberList }" :icon="['fas', 'user-friends']"/>
+          <font-awesome-icon class="icon" :class="{ 'font-active': state.isMemberList }" :icon="['fas', 'user-friends']"/>
         </div>
           <!-- toggle button -->
         <div class="icon-container">
@@ -40,7 +42,7 @@
             :class="{ 'rotate-180': state.collapsed }"
             @click="toggleSidebar"
           >
-            <i class="fas fa-angle-double-left" />
+            <i class="fas fa-angle-double-left icon" />
           </span>
         </div>
       </div>
@@ -98,10 +100,10 @@ export default {
       chatLog: [],
     })
 
-    const SIDEBAR_WIDTH = 400;
-    const SIDEBAR_WIDTH_COLLAPSED = 54;
+    const SIDEBAR_WIDTH = 22;
+    const SIDEBAR_WIDTH_COLLAPSED = 4;
     const sidebarWidth = computed(
-      () => `${state.collapsed ? SIDEBAR_WIDTH_COLLAPSED : SIDEBAR_WIDTH}px`
+      () => `${state.collapsed ? SIDEBAR_WIDTH_COLLAPSED : SIDEBAR_WIDTH}vw`
     );
     const onClickKanbanBoardIcon = () => {
       emit('show-screenmode', 0)
@@ -227,7 +229,7 @@ export default {
   position: fixed;
   left: 0.5rem;
   bottom: 0px;
-  width: 38px;
+  width: 3vw;
   text-align: left;
   font-size: 23px;
   z-index: 500;
@@ -255,25 +257,40 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 0.4rem;
+  margin: 0;
   border-radius: 0.5rem;
-  width: 38px;
   cursor: pointer;
 }
 .icon-container:hover {
   background-color: #334564;
 }
+.icon {
+  /* width: 2.5vw; */
+  height: 3vh;
+  margin: 1vh;
+}
+
 .exit-btn {
   position: fixed;
   top: 8px;
   left: 8px;
   transform: rotate(180deg);
-  font-size: 23px;
+  font-size: 3vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+.exit-btn .icon {
+  /* margin-top: 1vh; */
 }
 
 .sidebar-main{
-  margin-left: 60px;
-  margin-bottom: 20px;
-  margin-top: 20px;
+  margin-left: 4vw;
+  margin-bottom: 2.8vh;
+  margin-top: 2.8vh;
+  padding-left: 0px;
 }
 </style>

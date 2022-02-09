@@ -78,22 +78,27 @@ export default {
   margin-bottom: 20px;
 }
 .title{
-  font-size: 25px;
+  font-size: 3vh;
   font-weight:500;
-  margin-top: 40px;
-  margin-bottom: 30px;
+  margin-top: 7vh;
+  margin-bottom: 5.5vh;
 }
 .profile-img {
-  width: 55px;
-  height: 55px;
+  width: 8vh;
+  height: 8vh;
   border-radius: 70%;
+  background-color: white;
 }
 .nickname{
-  font-size: 17px;
-  margin-bottom: 2px;
+  font-size: 2vh;
+  margin-top: 0.5vh;
+  margin-bottom: 0.2vh;
 }
 .email{
-  font-size: 13px;
+  font-size: 1.75vh;
   color: rgb(199, 199, 199);
+}
+.col-8 {
+  padding-left: 0;
 }
 </style>
