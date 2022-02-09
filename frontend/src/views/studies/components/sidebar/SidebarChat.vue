@@ -188,6 +188,10 @@ export default {
   created() {
     console.log('사이드바 생성 ~')
     this.init = true
+    setTimeout(() => {
+      const element = document.getElementById('chat-body');
+      element.scrollTop = element.scrollHeight;
+    }, 0);
     this.connect()
   },
   computed: {
