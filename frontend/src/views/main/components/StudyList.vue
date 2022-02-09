@@ -64,6 +64,7 @@ export default {
           if (res.data.code === 200) {
             store.dispatch('GET_STUDY_LIST')
             notifySuccess('스터디 참여 완료!')
+            studyCode.value =''
           } else if (res.data.code === 400) {
             notifyDanger('해당 스터디가 존재하지 않습니다.😯')
           } else if (res.data.code === 409) {
