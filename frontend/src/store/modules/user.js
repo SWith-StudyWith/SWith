@@ -2,7 +2,7 @@ import { login, getUserInfo, loginKakao, loginGoogle, updateUserInfoAPI, signOut
 import router from '@/router';
 import notifications from '@/composables/notifications'
 
-const { notifyDanger } = notifications();
+const { notifySuccess, notifyDanger } = notifications();
 
 const state = () => ({
   userInfo: {
@@ -83,9 +83,18 @@ const actions = {
     updateUserInfoAPI(
       payload,
       (res) => {
-        console.log(res)
-        commit('UPDATE_USER_INFO', res.data.data);
-        router.push({ name: 'Main' })
+        switch (res.data.code) {
+          case 200:
+            commit('UPDATE_USER_INFO', res.data.data);
+            router.push({ name: 'Main' })
+            notifySuccess('회원정보 수정 성공!😇')
+            break;
+          case 400:
+            notifyDanger('회원 인증 실패😰')
+            break;
+          case 404:
+            notifyDanger('회원정보 수정 실패😰')
+        }
       },
       () => {
         notifyDanger('서버에 문제가 발생했습니다.😰')
@@ -99,9 +108,9 @@ const actions = {
     signOut(
       (res) => {
         if (res.data.code === 200) {
-          console.log('탈퇴성공~')
           dispatch('LOGOUT')
           router.push({ name: 'Login' })
+          notifySuccess('떠나신다니 아쉽습니다.🥺')
         }  else if ( res.data.code === 404) {
         notifyDanger('회원 탈퇴 실패.😰')
         }
