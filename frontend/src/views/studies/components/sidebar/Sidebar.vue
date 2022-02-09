@@ -47,7 +47,8 @@
       <div v-if="!state.collapsed" class="col-10 sidebar-main" >
         <div >
           <SidebarFile v-if="state.isFile"/>
-          <SidebarChat v-if="state.isChat" :chatLog="state.chatLog"/>
+          <SidebarChat v-if="state.isChat"/>
+          <!-- <SidebarChat v-if="state.isChat" :chatLog="state.chatLog"/> -->
           <SidebarMemberView :members="state.memberList" v-if="state.isMemberList"/>
         </div>
       </div>
@@ -67,7 +68,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { Popover } from 'bootstrap';
 
 //
-import { getMemberList , getChatList} from '@/api/study'
+import { getMemberList } from '@/api/study'
 export default {
   name: 'Sidebar',
   components: {
@@ -85,8 +86,6 @@ export default {
     const store = useStore();
     const route = useRoute();
     const router = useRouter();
-    // store.dispatch('GET_MEMBER_LIST', route.params.studyId);
-
     const state = reactive({
       memberList : computed(() => {
         return store.state.study.memberList;
@@ -159,8 +158,6 @@ export default {
       state.isChat = !state.isChat;
       emit('toggleSidebar', sidebarWidth.value)
 
-      chat();
-
     };
     const onClickMemberIcon = () => {
       if (!state.isMemberList) {
@@ -195,42 +192,10 @@ export default {
       router.push({ name: 'StudyDetail', params: { studyId: route.params.studyId } })
     }
 
-    function chat() {
-      console.log('채팅 하자 ~');
-      // test
-      getChatList(
-        route.params.studyId,
-        0,
-        (res) => {
-          console.log(res.data);
-          if (res.data.code === 200) {
-            store.dispatch('GET_CHAT_LIST', {studyId: route.params.studyId, index: 0});
-
-            var size = res.data.data.length;
-            for(var i = 0; i < size; i++){
-              state.recvList.push(res.data.data[i])
-            }
-            // console.log(state.recvList)
-            // state.chatLog.push(res.data)
-            state.chatLog = [...state.recvList].reverse()
-            state.recvList = null;
-
-            // console.log(state.chatLog)
-          }
-        },
-        (err) => {
-          console.log(err);
-        }
-      )
-    }
-
-    // chat()
-
     return {
       state, toggleSidebar, sidebarWidth,
       onClickScreenShareIcon, onClickWhiteBoardIcon, onClickKanbanBoardIcon,
       onClickChatIcon, onClickMemberIcon, onClickFileIcon, onClickExitIcon, onClickPostItIcon,
-      chat
     };
   },
   mounted() {
