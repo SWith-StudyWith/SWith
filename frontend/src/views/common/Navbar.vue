@@ -86,7 +86,7 @@ export default {
 #nav {
   top: 0;
   position: sticky;
-  background-color: #FFF7F6;
+  background-color: #fdedeb;
   display: flex;
   justify-content: space-between;
   padding: 0px 200px;
