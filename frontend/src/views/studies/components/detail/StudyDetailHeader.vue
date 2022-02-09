@@ -1,15 +1,15 @@
 <template>
   <div>
-    <div class="text-center">
-      <span class="fs-2 me-2 fw-bold">{{ this.studyInfo.studyName }}</span>
+    <div class="text-center mt-3">
+      <span class="fs-2 me-2 fw-bold ">{{ this.studyInfo.studyName }}</span>
       <router-link :to="{ name: 'StudyUpdate', params: this.$route.params }"><i class="fas fa-pen"></i></router-link>
     </div>
     <div class="align-middle mt-2">
-      <span class="text-muted pe-3">목표 </span>
-      <span class="fs-5">{{ this.studyInfo.studyGoal }}</span>
+      <span class="text-muted pe-3 fs-6">목표 </span>
+      <span class="my-goal">{{ this.studyInfo.studyGoal }}</span>
     </div>
     <div class="input-group-text p-0 my-3">
-      <div class="text-center w-100 bg-light py-1">
+      <div class="study-code text-center w-100 bg-light py-1">
         {{ this.studyInfo.studyCode }}
       </div>
       <a tabindex="0" class="copy-btn text-center border border-top-0 border-end-0 border-bottom-0 px-2 fs-5"
@@ -50,5 +50,14 @@ export default {
 .code-container {
   border: solid #ced4da 1px;
   border-radius: 3px;
+}
+.study-code{
+  font-size: 0.8rem;
+}
+.my-goal {
+  font-size: 0.9rem;
+}
+.fa-copy {
+  color: #8a96ac;
 }
 </style>

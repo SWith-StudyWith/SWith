@@ -3,13 +3,13 @@
     <video class="myVideo" autoplay style="width: 100%"></video>
   </div>
   <div class="text-center mt-3">
-    <button class="btn btn-primary mx-3" @click="this.onClickCameraBtn">
+    <button class="btn btn-secondary" @click="this.onClickCameraBtn">
       <font-awesome-icon :icon="['fas', this.cameraIcon]" />
     </button>
-    <button class="btn btn-primary mx-3"  @click="this.onClickMuteBtn">
+    <button class="btn btn-secondary"  @click="this.onClickMuteBtn">
       <font-awesome-icon :icon="['fas', this.mutedIcon]" />
     </button>
-    <button class="btn btn-primary mx-3" @click="this.selectsOn = !this.selectsOn">
+    <button class="btn btn-secondary" @click="this.selectsOn = !this.selectsOn">
       <font-awesome-icon :icon="['fas', 'cog']" />
     </button>
     <div v-if="this.selectsOn" class="select-container my-2">
@@ -170,6 +170,14 @@ export default {
 </script>
 <style scoped>
 video {
+  margin-top: 1rem;
   border-radius: 1rem;
+}
+button {
+  border-radius: 70%;
+  height: 3rem;
+  width: 3rem;
+  margin: 0 0.5rem 0px;
+  color: white
 }
 </style>
