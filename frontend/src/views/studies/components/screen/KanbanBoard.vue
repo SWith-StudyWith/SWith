@@ -149,6 +149,7 @@ export default {
     }
     const onClickEditBtn = function() {
       console.log('수정할래!')
+      store.dispatch('GET_STUDY_INFO', store.state.study.studyInfo.studyId)
       checkKanban(
         store.state.study.studyInfo.studyId,
         (res) => {
