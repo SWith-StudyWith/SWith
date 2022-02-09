@@ -149,6 +149,14 @@ export default {
         fileId,
         (res) => {
           console.log(res.data);
+          switch (res.data.code) {
+            case 200:
+              notifySuccess('스터디 파일 삭제 성공')
+              break;
+            case 400:
+              notifyDanger('스터디 파일 삭제 실패')
+              break;
+          }
           store.dispatch('GET_FILE_LIST', route.params.studyId);
         },
         (err) => {
