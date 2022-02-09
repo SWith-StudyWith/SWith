@@ -7,10 +7,6 @@
     <div class="chat-body" id="chat-body"
       @scroll="scrollMove">
 
-      <div v-if="state.isNoScroll">
-        <p class="chat-top">마지막 채팅 기록입니다.</p>
-      </div>
-
       <SidebarChatMessage
         v-for="(chat, idx) in state.chatList"
         :key="idx"
