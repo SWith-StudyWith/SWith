@@ -7,9 +7,10 @@
         <div v-if="state.fileList" >
                   <div class="card-body" v-for="file in state.fileList" :key="file.memberId">
                     <div class="card-body-data">
-                      <p class="card-body-data-name"><b>{{ file.originName }}</b></p>
-                      <p class="card-body-data-size">size | {{ file.fileSize }}</p>
-                      <p class="card-body-data-createdAt">createdAt | {{ file.createdAt }}</p>
+                      <!-- <p class="card-body-data-name" text-truncate>{{ file.originName }}</p> -->
+                      <p class="card-body-data-name" text-truncate><b>{{ file.originName }}</b></p>
+                      <p class="card-body-data-size" text-truncate>size | {{ file.fileSize }}</p>
+                      <p class="card-body-data-createdAt" text-truncate>createdAt | {{ file.createdAt }}</p>
                     </div>
                     <div class="card-body-buttons">
                       <img
@@ -331,11 +332,20 @@ export default {
   flex-wrap: nowrap;
   align-items: flex-start;
   /* margin-bottom: 0px; */
+  /* width: 222px; */
 }
 
 .card-body-data-name {
   font-size: 14px;
   margin: 0;
+  width: 222px;
+  height: 42px;
+  overflow: hidden;
+  /* white-space: nowrap; */
+  display: -webkit-box;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
 }
 .card-body-none-data {
   display: flex;
