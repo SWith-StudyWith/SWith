@@ -12,12 +12,13 @@
       <div class="chat-other-img">
         <!--  v-if="!isSame" 수정해야.. -->
         <img :src="chat?.imgUrl ? chat?.imgUrl : require(`@/assets/img/navbar/profile.png`)"
-          alt="" aria-expanded="false" v-if="!isSame">
+          alt="" aria-expanded="false" v-if="chat?.memberId != prev[0]?.memberId">
       </div>
       <div class="chat-other-content">
         <div class="chat-other-content1">
-          <!--  v-if="!isSame" -->
-          <p class="chat-other-nickname" v-if="!isSame">{{ chat?.nickname }}</p>
+          <p class="chat-other-nickname" v-if="chat?.memberId != prev[0]?.memberId">
+            {{ chat?.nickname }}
+          </p>
           <p class="chat-other-message-time">{{ hhmm }}</p>
         </div>
         <div class="chat-other-content2">
@@ -38,7 +39,6 @@ export default {
   props: {
     chat : Object,
     prev : Array
-    // ["chat","prev"]
   }
   ,
   components:{
@@ -48,7 +48,7 @@ export default {
     return {
       sampleData: '',
       isSame: false,
-      img: null,
+      isFirst: true,
 
       // DB : 22/02/06 06:11 PM
       todayDate: dayjs().format('YY/MM/DD'),
@@ -80,20 +80,10 @@ export default {
     }
   },
   methods: {
-    isSameUser(chat, prev){
-      if(prev === null){
-        return false;
-      }else if(prev[0]?.memberId == chat?.memberId){
-        return true;
-      }else{
-        return false;
-      }
-    },
   },
   created() {
-    this.isSame = this.isSameUser(this.chat, this.prev);
-    if(this.chat?.imgUrl){
-      this.img = this.chat?.imgUrl;
+    if(this.prev == null){
+      this.isFirst = false
     }
   },
 }
