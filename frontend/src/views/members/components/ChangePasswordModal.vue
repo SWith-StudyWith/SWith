@@ -1,24 +1,39 @@
 <template>
 <!-- Modal -->
-<div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="changePasswordModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-body">
         <div class="row modalHeader">
             <h5 class="modal-title" id="exampleModalLabel">비밀번호 변경</h5>
         </div>
-        <form action="" class="row g-3"  style="text-align: left;">
+        <form action="" class="row g-3" style="text-align: left;">
           <div class="col-12" >
             <!-- nowPassword -->
-            <label for="inputAddress" class="form-label">현재 비밀번호</label>
-            <div class="input-group has-validation">
-              <input type="password" class="form-control" id="nowPassword" v-model="state.nowPassword"
-              placeholder="현재 비밀번호 입력" required autofocus>
-            </div>
-            <div
-            :style="{ visibility: (state.isValidNowPassword || !state.wasInputed.nowPassword)? 'hidden' : 'visible' }"
-            class="invalid-feedback">
-              유효하지 않은 비밀번호입니다.
+            <div class="row p-0 mb-0 justify-content-between">
+              <div class="col-8">
+                <label for="inputAddress" class="form-label">현재 비밀번호</label>
+                <div class="input-group has-validation">
+                  <input type="password" class="form-control" id="nowPassword"
+                  v-model="state.nowPassword"
+                  placeholder="현재 비밀번호 입력"
+                  :disabled="state.isValidNowPassword"
+                  required
+                  autofocus>
+                </div>
+              </div>
+              <div class="col-4 d-flex justify-content-end">
+                <button class="btn btn-success text-black  btn-sm"
+                  :disabled="!state.nowPassword || state.isValidNowPassword"
+                  @click="onClickConfirmNowPassword"
+                >비밀번호 확인
+                </button>
+              </div>
+              <div
+              :style="{ visibility: (!state.isValidNowPassword )? 'hidden' : 'visible' }"
+              class="valid-feedback">
+                비밀번호가 확인되었습니다.
+              </div>
             </div>
           </div>
 
@@ -51,7 +66,7 @@
         <div class="row modalFooter">
           <div class="col" style="margin: 10px;">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="onClickCancle">취소</button>
-            <button button type="button" class="btn btn-primary" @click="onClickChange">비밀번호 변경</button>
+            <button type="button" class="btn btn-primary" @click="onClickChange">비밀번호 변경</button>
           </div>
         </div>
       </div>
@@ -74,21 +89,13 @@ export default {
       nowPassword: '',
       newPassword: '',
       passwordConfirm: '',
-
       wasInputed: {
         nowPassword: false,
         newPassword: false,
         passwordConfirm: false,
       },
-      isValidNowPassword: computed(() => {
-        if (state.nowPassword !== '') {
-          state.wasInputed.nowPassword = true
-        }
-        if (state.nowPassword && validatePassword(state.nowPassword)) {
-          return true;
-        }
-        return false;
-      }),
+      isValidNowPassword: false,
+
       isValidNewPassword: computed(() => {
         if (state.newPassword !== '') {
           state.wasInputed.newPassword = true
@@ -122,6 +129,35 @@ export default {
     };
 
     const router = useRouter();
+
+// 비밀번호 확인
+    const onClickConfirmNowPassword = function(e) {
+      e.preventDefault()
+      confirmpassword(
+        { password: state.nowPassword },
+        (res) => {
+          console.log(res.data)
+          switch (res.data.code) {
+            case 200:
+              state.isValidNowPassword = true;
+              notifySuccess('비밀번호 확인 완료!😀')
+              break;
+            case 400:
+              state.isValidNowPassword = false;
+              notifyDanger('비밀번호 확인 실패😰')
+              break;
+          }
+        },
+        (err) => {
+          console.log(err)
+          notifyDanger('비밀번호 불일치😰')
+          state.nowPassword = ''
+          state.wasInputed.nowPassword = false
+          state.isValidNowPassword = false
+        },
+      )
+    }
+
     const onClickChange = function(e){
       e.preventDefault();
       if (state.nowPassword === '' || state.newPassword === '' || state.passwordConfirm === '' ) {
@@ -134,65 +170,39 @@ export default {
         return;
       }
 
-      // 비밀번호 확인
-      confirmpassword(
-        { password: state.nowPassword },
+
+      // 비밀번호 수정
+      updatePassword(
+        { password: state.passwordConfirm },
         (res) => {
           console.log(res.data)
           switch (res.data.code) {
             case 200:
-              notifySuccess('비밀번호 확인 성공!🤗')
-
-              // 비밀번호 수정
-              updatePassword(
-                { password: state.passwordConfirm },
-                (res) => {
-                  console.log(res.data)
-                  switch (res.data.code) {
-                    case 200:
-                      notifySuccess('비밀번호 수정 성공!🤗')
-                      router.go({ name: 'MyPage' })
-                      break;
-                    case 404:
-                      notifyDanger('비밀번호 수정 실패😰')
-                      break;
-                    case 400:
-                      notifyDanger('회원 인증 실패 😰');
-                      break;
-                  }
-                },
-                (err) => {
-                  console.log(err)
-                  notifyDanger('서버에 문제가 발생했습니다.😰')
-                }
-              )
+              router.go({ name: 'MyPage' })
+              notifySuccess('비밀번호 수정 성공!🤗')
+              break;
+            case 404:
+              notifyDanger('비밀번호 수정 실패😰')
               break;
             case 400:
-              notifyDanger('회원 인증 실패 😰');
+              notifyDanger('회원 인증 실패😰');
               break;
           }
+
         },
         (err) => {
           console.log(err)
-          notifyDanger('비밀번호 확인 실패😰')
-          state.nowPassword = ''
-          state.wasInputed.nowPassword = false
-        },
+          notifyDanger('서버에 문제가 발생했습니다.😰')
+        }
       )
-
-      // state.nowPassword = ''
-      // state.newPassword = ''
-      // state.passwordConfirm = ''
-      // state.wasInputed.nowPassword = false
-      // state.wasInputed.newPassword = false
-      // state.wasInputed.passwordConfirm = false
-      router.push({ name: 'MyPage' })
     }
 
     const onClickCancle = function(e){
+      e.preventDefault()
       state.nowPassword = ''
       state.newPassword = ''
       state.passwordConfirm = ''
+      state.isValidNowPassword = false
       state.wasInputed.nowPassword = false
       state.wasInputed.newPassword = false
       state.wasInputed.passwordConfirm = false
@@ -200,11 +210,11 @@ export default {
 
     return {
       state,
+      onClickConfirmNowPassword,
       onClickChange,
       onClickCancle,
     };
-
-  },
+  }
 }
 </script>
 
@@ -250,7 +260,16 @@ input[type="password"]{
   margin-bottom: 0.5rem;
   color: green;
 }
-button{
-  margin: 10px;
+.btn-success{
+  margin-top: 1.7rem;
+  height: 2.4rem;
+}
+.modalFooter{
+  padding: 0px;
+  margin-top: 0px;
+
+}
+.modalFooter button {
+  margin-inline: 0.5rem
 }
 </style>
