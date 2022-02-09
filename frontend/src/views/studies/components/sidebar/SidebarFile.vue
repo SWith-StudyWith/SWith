@@ -289,7 +289,7 @@ export default {
   justify-content: space-between;
   /* padding: 10px; */
   /* margin-bottom: 5px; */
-  background-color: antiquewhite;
+  background-color: #F5CEC7;
   border: solid 4px #ffffff;
   margin-top: 5px;
   border-radius: 24px;
@@ -306,10 +306,10 @@ export default {
   justify-content: space-between;
   /* padding: 10px; */
   /* margin-bottom: 5px; */
-  background-color: antiquewhite;
+  background-color: #F5CEC7;
   border: solid 4px #ffffff;
   margin-top: 5px;
-  border-radius: 24px;
+  border-radius: 15px;
   opacity: 0.5;
 
   font-family: 'Mulish', 'Alef', 'Noto Sans KR';
