@@ -58,8 +58,6 @@ const actions = {
     )
   },
   GET_CHAT_LIST({ commit }, { studyId, index }) {
-    console.log('modules id: ' + studyId)
-    console.log('modules idx: ' + index)
     getChatList(
       studyId,
       index,
