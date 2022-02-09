@@ -44,7 +44,7 @@
               <!-- subcribers -->
               <div v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub">
                 <div class="video-box m-2 position-relative">
-                  <user-video :stream-manager="sub" :isSpeak="isSpeakList.includes(publisher.stream.connection.connectionId)"/>
+                  <user-video :stream-manager="sub" :isSpeak="isSpeakList.includes(sub.stream.connection.connectionId)"/>
                   <div
                     class="mute-icon-container text-start"
                     v-if="sub.stream.typeOfVideo !== 'SCREEN'"
@@ -625,6 +625,9 @@ export default {
 }
 ::-webkit-scrollbar {
   height: 12px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: #777;
 }
 ::-webkit-scrollbar-track{
   background-color: #aebed4;
