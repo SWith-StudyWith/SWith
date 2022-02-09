@@ -1,13 +1,16 @@
 package com.swith.api.controller;
 
 import com.swith.api.dto.study.request.KanbanUpdateReq;
+import com.swith.api.dto.study.request.MemoUpdateReq;
 import com.swith.api.dto.study.response.FileRes;
 import com.swith.api.dto.study.response.KanbanIsUsedRes;
+import com.swith.api.dto.study.response.MemoRes;
 import com.swith.api.dto.study.response.StudyMemberRes;
 import com.swith.api.service.*;
 import com.swith.common.response.BaseDataResponse;
 import com.swith.common.response.BaseResponse;
 import com.swith.db.entity.Member;
+import com.swith.db.entity.Memo;
 import com.swith.db.entity.Study;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +48,9 @@ public class StudyInnerController {
 
     @Autowired
     private FileService fileService;
+
+    @Autowired
+    private MemoService memoService;
 
     @GetMapping("/{studyId}/files")
     public ResponseEntity<BaseDataResponse<List<FileRes>>> getStudyFileList(@PathVariable long studyId) {
@@ -151,5 +157,32 @@ public class StudyInnerController {
         List<StudyMemberRes> list = memberStudyService.getStudyMemberList(study);
 
         return ResponseEntity.status(200).body(new BaseDataResponse<>(true, 200, "스터디 회원 목록 조회 성공", list));
+    }
+
+    @GetMapping("/{studyId}/memos")
+    public ResponseEntity<BaseDataResponse<List<MemoRes>>> getMemoList(@PathVariable long studyId) {
+
+        Study study = studyService.getStudyById(studyId);
+        Member member = memberService.getMemberByAuthentication();
+        List<Memo> list = memoService.getMemoList(study, member);
+        List<MemoRes> result = list.stream().map(memo -> new MemoRes(memo.getContent(),
+                memo.getColor(), memo.getTransform())).collect(Collectors.toList());
+
+        return ResponseEntity.status(200).body(new BaseDataResponse<>(true, 200, "스터디 메모 조회 성공", result));
+    }
+
+    @PutMapping("/{studyId}/memos")
+    public ResponseEntity<BaseResponse> updateMemo(@PathVariable long studyId, @RequestBody List<MemoUpdateReq> memoList) {
+
+        Study study = studyService.getStudyById(studyId);
+        Member member = memberService.getMemberByAuthentication();
+
+        // 메모 모두 삭제
+        memoService.deleteMemo(study, member);
+
+        // 메모 등록
+        memoService.insertMemo(study, member, memoList);
+
+        return ResponseEntity.status(200).body(new BaseResponse(true, 200, "스터디 메모 수정 성공"));
     }
 }

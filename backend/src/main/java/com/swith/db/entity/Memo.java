@@ -19,7 +19,7 @@ public class Memo {
     @JoinColumn(name = "study_id")
     private Study study;
 
-    @ManyToOne(targetEntity = Study.class, fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = Member.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
