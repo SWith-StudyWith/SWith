@@ -79,18 +79,28 @@ export default {
     },
     hhmm(){
       // 22/02/08/ 06:24 PM
-      var value = this.chat?.createdAt
 
-      if(value == '') return '';
+      // 이전 메세지 시간 format
+      var prevTime = (this.prev[0]?.createdAt||'').split(" ")
 
-      var data = (value||'').split(" ")
+      var preValue = ""
+      preValue += prevTime[1] + " "
+      preValue += prevTime[2]
 
-      // hh:mm A
-      var setTime = ""
+      // 현재 메세지 시간 format
+      var chatTime = (this.chat?.createdAt||'').split(" ")
 
-      setTime += data[1] + " "
-      setTime += data[2]
-      return setTime
+      var chatValue = ""
+      chatValue += chatTime[1] + " "
+      chatValue += chatTime[2]
+
+      // console.log(preValue + ", " + chatValue)
+
+      // 나는 하고싶었다 .... 시간 없애는 걸 ...
+      if(preValue == chatValue){
+        return chatValue
+      }
+      return chatValue
     }
   },
   methods: {
@@ -109,7 +119,6 @@ export default {
       var chatValue = ""
       chatValue += chatDate[0]
 
-      console.log(preValue + ", " + chatValue)
       // 이전 값이 널이면 채팅 처음 시작한 것 -> 날짜 표시 true
       if(preValue == null){
         return false
