@@ -71,7 +71,7 @@ export default {
         },
         (err) => {
           console.log(err)
-          notifyDanger('서버가 아파요😥')
+          notifyDanger('서버에 문제가 발생했습니다.😰')
         }
       )
     }

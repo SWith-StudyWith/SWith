@@ -127,13 +127,13 @@ export default {
               break;
             case 400:
               console.log('실패')
-              notifyDanger('스터디룸 생성 실패 😥')
+              notifyDanger('스터디룸 생성 실패😥')
               break;
           }
         },
         (err) => {
           console.log(err)
-          notifyDanger('서버가 아파요.😥')
+          notifyDanger('서버에 문제가 발생했습니다.😰')
           },
           router.push({ name: 'Main'})
       )
