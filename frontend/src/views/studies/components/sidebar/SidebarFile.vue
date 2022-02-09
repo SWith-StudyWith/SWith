@@ -3,8 +3,6 @@
     <p class="title">📑 첨부 파일 목록</p>
     <!-- <SidebarFileList /> -->
     <div class="file-body">
-      <!-- <p>SidebarFile.vue - file-body</p> -->
-
       <div class="card">
         <div v-if="state.fileList" >
                   <div class="card-body" v-for="file in state.fileList" :key="file.memberId">
@@ -13,8 +11,6 @@
                       <p class="card-body-data-size">size | {{ file.fileSize }}</p>
                       <p class="card-body-data-createdAt">createdAt | {{ file.createdAt }}</p>
                     </div>
-                    <!-- <button>다운로드</button> -->
-                    <!-- <img class="file-type" @click="onClickCancelFile(index)" src="@/assets/img/icon_sidebar/file/trash-1E304F.svg" alt=""> -->
                     <div class="card-body-buttons">
                       <img
                         src="@/assets/img/icon_sidebar/file/download_1E304F.svg"
@@ -25,8 +21,12 @@
                     </div>
                   </div>
         </div>
-        <div v-else>
-          <p>등록된 파일이 없습니다.</p>
+        <div v-if="state.fileList == 0">
+          <div class="card-body-none">
+            <div class="card-body-none-data">
+            <p class="card-body-none-data-name">등록된 파일이 없습니다.</p>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -38,10 +38,9 @@
         <span class="file-info"><img class="file-type" src="@/assets/img/icon_sidebar/file/clip_light.svg" alt=""> {{dropzoneFile.name}} </span>
         <img class="file-type" @click="onClickCancelFile(index)" src="@/assets/img/icon_sidebar/file/trash-DEE8F9.svg" alt="">
       </div>
-      <!-- <button @click="uploadFile"><img src="@/assets/img/icon_sidebar/file/check-DEE8F9.svg" alt="">전송</button> -->
       <div class="file-submit">
         <img class="file-submit-icon" @click="onClickUploadFile" src="@/assets/img/icon_sidebar/file/check-DEE8F9.svg" alt="">
-        <span @click="onClickUploadFile"> submit</span>
+        <span class="file-submit-name" @click="onClickUploadFile">submit</span>
       </div>
       <DropZone @drop.prevent="drop" @change="selectedFile" />
     </form>
@@ -154,6 +153,14 @@ export default {
         fileId,
         (res) => {
           console.log(res.data);
+          switch (res.data.code) {
+            case 200:
+              notifySuccess('스터디 파일 삭제 성공')
+              break;
+            case 400:
+              notifyDanger('스터디 파일 삭제 실패')
+              break;
+          }
           store.dispatch('GET_FILE_LIST', route.params.studyId);
         },
         (err) => {
@@ -181,16 +188,6 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Alef&display=swap');
 
-/* .home {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: #f1f1f1;
-  font-family:  'Noto Sans KR', 'Mulish';
-} */
-
 .fileDiv {
   height: 100vh;
   display: flex;
@@ -201,9 +198,6 @@ export default {
   font-family:  'Noto Sans KR', 'Mulish';
   width: 100%;
   text-align: left;
-
-
-  /* scroll */
 }
 
 .title{
@@ -272,6 +266,12 @@ export default {
   margin-right: 3px;
 }
 
+.file-submit-name {
+  margin-right: 3px;
+  font-size: 18px;
+  font-family: 'Mulish';
+}
+
 .card {
   display: flex;
   /* align-items: row; */
@@ -289,11 +289,28 @@ export default {
   justify-content: space-between;
   /* padding: 10px; */
   /* margin-bottom: 5px; */
-  background-color: antiquewhite;
+  background-color: #F5CEC7;
   border: solid 4px #ffffff;
   margin-top: 5px;
   border-radius: 24px;
   opacity: 0.85;
+
+  font-family: 'Mulish', 'Alef', 'Noto Sans KR';
+  color: 1E304F;
+  font-size: 13px;
+}
+.card-body-none {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  /* padding: 10px; */
+  /* margin-bottom: 5px; */
+  background-color: #F5CEC7;
+  border: solid 4px #ffffff;
+  margin-top: 5px;
+  border-radius: 15px;
+  opacity: 0.5;
 
   font-family: 'Mulish', 'Alef', 'Noto Sans KR';
   color: 1E304F;
@@ -319,6 +336,19 @@ export default {
 .card-body-data-name {
   font-size: 14px;
   margin: 0;
+}
+.card-body-none-data {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  margin-top: 16px;
+  margin-left: 10px;
+}
+
+.card-body-data-none-name {
+  font-size: 14px;
+
 }
 
 .card-body-data-size {
