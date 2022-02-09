@@ -1,12 +1,17 @@
 <template>
+<div class="StudyDetailKanbanBoard">
+  <div class="kanban-title">
+    <h1>Todo List</h1>
+    <p>A board to keep track of your study progress.</p>
+  </div>
   <div style="height: 28rem;">
-    <div class="p-3 d-flex justify-content-center h-100">
+    <div class="p-3 d-flex bg-light-grey tasks justify-content-center h-100">
       <div
         v-for="tasks in state.kanbanBoard"
         :key="tasks.taskId"
-        class="mx-2 w-100 bg-light-grey p-2 rounded-3"
+        class="w-100 p-2"
       >
-        <p class="text-start mb-2">
+        <p class="text-start">
           <span class="taskname px-2 py-1"
             :class="{ 'bg-grey' : tasks.taskId === 1, 'bg-pink' : tasks.taskId === 2, 'bg-purple' : tasks.taskId === 3 }">
             {{ tasks.taskName }}
@@ -17,7 +22,7 @@
             v-for="(task) in tasks.kanban"
             :key="task.kanbanId"
             :task="task"
-            class="mb-2 align-items-center"
+            class="align-items-center"
             @onClickCard="selectedTask.value=$event"
           />
         </div>
@@ -25,6 +30,7 @@
     </div>
   </div>
   <StudyDetailKanbanBoardModal :selectedTask="selectedTask"/>
+</div>
 </template>
 <script>
 import { ref, reactive, computed } from 'vue'
@@ -53,6 +59,20 @@ export default {
 }
 </script>
 <style scoped>
+.kanban-title h1 {
+  font-family: 'Mulish';
+  font-size: 32px;
+  font-weight: 700;
+  display: block;
+  text-align: start;
+}
+.kanban-title p {
+  font-family: 'Mulish';
+  text-align: start;
+}
+.tasks {
+  border-radius: 1rem;
+}
 .taskname {
   border-radius: 3rem;
   font-size: 0.8rem;

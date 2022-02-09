@@ -1,6 +1,6 @@
 <template>
   <div @click="onClickCard"
-    class="bg-white card-shadow rounded p-2 text-start align-top border border-white"
+    class="StudyDetailKanbanBoardCard"
     data-bs-toggle="modal" data-bs-target="#kanbanCardModal"
   >
     <span class="d-inline-block font-small">{{ task.content }}</span>
@@ -31,11 +31,17 @@ span {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  line-height: 1.2rem;
+  line-height: 1.7rem;
   max-height: 2.4rem;
 }
-.card-shadow {
-  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+.StudyDetailKanbanBoardCard {
+  background-color: white;
+  padding: 8px;
+  margin: 0 8px 8px 0;
+  text-align: start;
+  border: solid 1.5px #DDDDDD;
+  border-radius: 0.4rem;
+  box-shadow: 1px 1px .4em #DDDDDD;
 }
 .font-small {
   font-size: 0.9rem;
