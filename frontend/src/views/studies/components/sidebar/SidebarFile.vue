@@ -3,8 +3,6 @@
     <p class="title">📑 첨부 파일 목록</p>
     <!-- <SidebarFileList /> -->
     <div class="file-body">
-      <!-- <p>SidebarFile.vue - file-body</p> -->
-
       <div class="card">
         <div v-if="state.fileList" >
                   <div class="card-body" v-for="file in state.fileList" :key="file.memberId">
@@ -13,8 +11,6 @@
                       <p class="card-body-data-size">size | {{ file.fileSize }}</p>
                       <p class="card-body-data-createdAt">createdAt | {{ file.createdAt }}</p>
                     </div>
-                    <!-- <button>다운로드</button> -->
-                    <!-- <img class="file-type" @click="onClickCancelFile(index)" src="@/assets/img/icon_sidebar/file/trash-1E304F.svg" alt=""> -->
                     <div class="card-body-buttons">
                       <img
                         src="@/assets/img/icon_sidebar/file/download_1E304F.svg"
@@ -38,7 +34,6 @@
         <span class="file-info"><img class="file-type" src="@/assets/img/icon_sidebar/file/clip_light.svg" alt=""> {{dropzoneFile.name}} </span>
         <img class="file-type" @click="onClickCancelFile(index)" src="@/assets/img/icon_sidebar/file/trash-DEE8F9.svg" alt="">
       </div>
-      <!-- <button @click="uploadFile"><img src="@/assets/img/icon_sidebar/file/check-DEE8F9.svg" alt="">전송</button> -->
       <div class="file-submit">
         <img class="file-submit-icon" @click="onClickUploadFile" src="@/assets/img/icon_sidebar/file/check-DEE8F9.svg" alt="">
         <span @click="onClickUploadFile"> submit</span>
