@@ -36,7 +36,7 @@
       </div>
       <div class="file-submit">
         <img class="file-submit-icon" @click="onClickUploadFile" src="@/assets/img/icon_sidebar/file/check-DEE8F9.svg" alt="">
-        <span @click="onClickUploadFile"> submit</span>
+        <span class="file-submit-name" @click="onClickUploadFile">submit</span>
       </div>
       <DropZone @drop.prevent="drop" @change="selectedFile" />
     </form>
@@ -184,16 +184,6 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Alef&display=swap');
 
-/* .home {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: #f1f1f1;
-  font-family:  'Noto Sans KR', 'Mulish';
-} */
-
 .fileDiv {
   height: 100vh;
   display: flex;
@@ -204,9 +194,6 @@ export default {
   font-family:  'Noto Sans KR', 'Mulish';
   width: 100%;
   text-align: left;
-
-
-  /* scroll */
 }
 
 .title{
@@ -273,6 +260,12 @@ export default {
 
 .file-submit-icon {
   margin-right: 3px;
+}
+
+.file-submit-name {
+  margin-right: 3px;
+  font-size: 18px;
+  font-family: 'Mulish';
 }
 
 .card {
