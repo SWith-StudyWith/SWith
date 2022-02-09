@@ -3,23 +3,22 @@
 
     <!-- 내가 보낸 메세지 -->
     <div class="chat-my-message" v-if="chat?.memberId==this.getUserInfo.memberId">
-      <!-- <p>{{ isSame }} </p> -->
-      <p class="chat-my-message-time" >{{ chat?.createdAt }}</p>
+      <p class="chat-my-message-time" >{{ hhmm }}</p>
       <p class="my-content">{{ chat?.content }}</p>
     </div>
 
     <!-- 상대가 보낸 메세지  -->
     <div class="chat-other-message" v-else>
       <div class="chat-other-img">
-        <img :src="this.img ? chat?.imgUrl : require(`@/assets/img/navbar/profile.png`)"
-          v-if="!isSame"
-          alt="" aria-expanded="false">
+        <!--  v-if="!isSame" 수정해야.. -->
+        <img :src="chat?.imgUrl ? chat?.imgUrl : require(`@/assets/img/navbar/profile.png`)"
+          alt="" aria-expanded="false" v-if="!isSame">
       </div>
       <div class="chat-other-content">
         <div class="chat-other-content1">
+          <!--  v-if="!isSame" -->
           <p class="chat-other-nickname" v-if="!isSame">{{ chat?.nickname }}</p>
-          <!-- DB 날짜 불러올 땐 다시 수정 ! -->
-          <p class="chat-other-message-time">{{ chat?.createdAt }}</p>
+          <p class="chat-other-message-time">{{ hhmm }}</p>
         </div>
         <div class="chat-other-content2">
           <p class="other-content">{{ chat?.content }}</p>
@@ -52,13 +51,34 @@ export default {
       img: null,
 
       // DB : 22/02/06 06:11 PM
-      today: dayjs().format('hh:mm A'),
+      todayDate: dayjs().format('YY/MM/DD'),
+      todayTime: dayjs().format('hh:mm A'),
     };
   },
   computed: {
     ...mapGetters([
       'getUserInfo'
     ]),
+    hhmm(){
+      var value = this.chat?.createdAt
+      // 22/02/08/ 06:24 PM
+
+      if(value == '') return '';
+
+      var data = value.split(" ")
+
+      var setTime = ""
+
+      // 오늘 날짜이면 시간만
+      if(data[0] == this.todayDate){
+        setTime += data[1] + " "
+        setTime += data[2]
+      }else{
+        setTime += data[0]
+      }
+
+      return setTime
+    }
   },
   methods: {
     isSameUser(chat, prev){
