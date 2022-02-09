@@ -225,7 +225,7 @@ export default {
     },
     connect() {
       // 배포
-      const serverURL = process.env.VUE_APP_SOCKET_URL
+      const serverURL = `${process.env.VUE_APP_BASE_URL_DEV}/api/ws`
       // const serverURL = 'http://localhost:8080/api/ws/'
       let socket = new SockJS(serverURL);
       this.stompClient = Stomp.over(socket);
