@@ -21,8 +21,12 @@
                     </div>
                   </div>
         </div>
-        <div v-else>
-          <p>등록된 파일이 없습니다.</p>
+        <div v-if="state.fileList == 0">
+          <div class="card-body-none">
+            <div class="card-body-none-data">
+            <p class="card-body-none-data-name">등록된 파일이 없습니다.</p>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -295,6 +299,23 @@ export default {
   color: 1E304F;
   font-size: 13px;
 }
+.card-body-none {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  /* padding: 10px; */
+  /* margin-bottom: 5px; */
+  background-color: antiquewhite;
+  border: solid 4px #ffffff;
+  margin-top: 5px;
+  border-radius: 24px;
+  opacity: 0.5;
+
+  font-family: 'Mulish', 'Alef', 'Noto Sans KR';
+  color: 1E304F;
+  font-size: 13px;
+}
 
 .card-body-buttons {
   display: flex;
@@ -315,6 +336,19 @@ export default {
 .card-body-data-name {
   font-size: 14px;
   margin: 0;
+}
+.card-body-none-data {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  margin-top: 16px;
+  margin-left: 10px;
+}
+
+.card-body-data-none-name {
+  font-size: 14px;
+
 }
 
 .card-body-data-size {
