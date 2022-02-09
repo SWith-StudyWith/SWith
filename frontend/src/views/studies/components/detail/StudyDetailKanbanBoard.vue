@@ -22,7 +22,7 @@
             v-for="(task) in tasks.kanban"
             :key="task.kanbanId"
             :task="task"
-            class="align-items-center"
+            class="align-items-center kanban-card"
             @onClickCard="selectedTask.value=$event"
           />
         </div>
@@ -91,5 +91,8 @@ export default {
 }
 ::-webkit-scrollbar{
   width: 6px;
+}
+.kanban-card {
+  cursor: pointer;
 }
 </style>

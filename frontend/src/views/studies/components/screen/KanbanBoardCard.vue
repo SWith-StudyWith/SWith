@@ -1,6 +1,6 @@
 <template>
     <!-- class="bg-white card-shadow rounded p-2 text-start align-top border border-white" -->
-  <div @click="onClickCard"
+  <div @click="onClickCard" class="user-select-none"
     data-bs-toggle="modal" data-bs-target="#kanbanCardUpdateModal"
   >
     <span class="d-inline-block">{{ task.content }}</span>

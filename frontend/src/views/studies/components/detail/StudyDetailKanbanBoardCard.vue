@@ -1,6 +1,6 @@
 <template>
   <div @click="onClickCard"
-    class="StudyDetailKanbanBoardCard"
+    class="StudyDetailKanbanBoardCard user-select-none"
     data-bs-toggle="modal" data-bs-target="#kanbanCardModal"
   >
     <span class="d-inline-block font-small">{{ task.content }}</span>
