@@ -20,7 +20,7 @@
       </SidebarChatMessage>
 
     <div class="init-btn" v-if="state.isScrollInit">
-        <button class="btn-primary" @click="scrollInit">↓</button>
+        <button class="btn-primary button" @click="scrollInit">↓</button>
     </div>
     </div>
     <hr>
@@ -354,10 +354,18 @@ input{
 
 }
 .init-btn > button{
-  background-color: rgba(255, 255, 255, 0.3);
+  font-size: 20px;
+  font-weight: 800;
+  background-color: rgba(255, 224, 224, 0.4);
   border-radius: 50%;
   border: 0px;
   height: 40px;
   width: 40px;
 }
+
+.button:hover {
+  transition-duration: 0.1s;
+  background-color: rgba(230, 196, 196, 0.7);
+}
+
 </style>
