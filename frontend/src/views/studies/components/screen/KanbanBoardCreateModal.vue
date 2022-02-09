@@ -20,6 +20,7 @@
 <script>
 import { reactive } from 'vue';
 import { Modal } from 'bootstrap';
+import notifications from '@/composables/notifications'
 
 export default {
   name: 'KanbanBoardCreateModal',
@@ -29,6 +30,7 @@ export default {
   },
   emits: ['createTask'],
   setup(props, { emit }) {
+    const { notifyDanger } = notifications();
     const state = reactive({
       content: '',
     })
@@ -36,7 +38,11 @@ export default {
       state.content = '';
     }
     const onClickCreate = function () {
-      emit('createTask', { taskId: props.taskId, content: state.content, kanbanId: Date.now() })
+      if (state.content) {
+        emit('createTask', { taskId: props.taskId, content: state.content, kanbanId: Date.now() })
+      } else {
+        notifyDanger('입력 값이 없습니다.😥')
+      }
       state.content = '';
       let myModalEl = document.getElementById('kanbanCardCreateModal')
       let modal = Modal.getInstance(myModalEl)

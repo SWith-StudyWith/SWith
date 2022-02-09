@@ -26,6 +26,7 @@
 <script>
 import { reactive, ref } from 'vue';
 import { Modal } from 'bootstrap';
+import notifications from '@/composables/notifications'
 
 export default {
   name: 'KanbanBoardModal',
@@ -36,13 +37,19 @@ export default {
   },
   emits: ['updateTask', 'deleteTask'],
   setup(props, { emit }) {
+    const { notifyDanger } = notifications();
     const state = reactive({
       isEdit: false,
       task: props.selectedTask,
     })
     const closeInput = function() {
       state.isEdit = false;
-      emit('updateTask', state.task);
+      if (state.task.value.content) {
+        emit('updateTask', state.task);
+      } else {
+        notifyDanger('입력 값이 없습니다.😥')
+        return
+      }
       let myModalEl = document.getElementById('kanbanCardUpdateModal');
       let modal = Modal.getInstance(myModalEl);
       modal.hide();
