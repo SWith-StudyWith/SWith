@@ -1,7 +1,7 @@
 <template>
   <!-- Modal -->
   <div class="modal fade" id="KanbanWarningModal" tabindex="-1" aria-labelledby="KanbanWarningModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered modal-md">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="KanbanWarningModalLabel">칸반 보드 수정 불가!</h5>

@@ -147,8 +147,16 @@ export default {
       let modal = Modal.getOrCreateInstance(myModalEl);
       modal.show();
     }
-    const onClickEditBtn = function() {
+    const onClickEditBtn = async function() {
       console.log('수정할래!')
+      const getStudyInfo = () => {
+        return new Promise((resolve) => {
+          store.dispatch('GET_STUDY_INFO', store.state.study.studyInfo.studyId);
+          console.log('불러오기 완료!')
+          resolve();
+        })
+      }
+      await getStudyInfo();
       checkKanban(
         store.state.study.studyInfo.studyId,
         (res) => {
