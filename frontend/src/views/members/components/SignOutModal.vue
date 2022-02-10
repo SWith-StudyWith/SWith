@@ -11,8 +11,8 @@
           정말 탈퇴하시겠어요? 😥
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">뒤로 가기</button>
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="onClickSignOut">탈퇴 하기</button>
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">뒤로 가기</button>
+          <button type="button" class="btn btn-primary btn-sm" data-bs-dismiss="modal" @click="onClickSignOut">탈퇴 하기</button>
         </div>
       </div>
     </div>

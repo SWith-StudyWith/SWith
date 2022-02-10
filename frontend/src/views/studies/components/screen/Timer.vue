@@ -1,6 +1,6 @@
 <template>
-  <span class="bg-primary fs-5 px-2 py-1 rounded text-light align-middle user-select-none">
-    <font-awesome-icon class="fs-5" :icon="['fas', 'hourglass-half']"></font-awesome-icon>
+  <span class="bg-primary">
+    <font-awesome-icon class="time" :icon="['fas', 'hourglass-half']"></font-awesome-icon>
     {{ parsingTime }}
   </span>
 </template>
@@ -52,5 +52,20 @@ export default {
 }
 </script>
 <style scoped>
-
+/* fs-5 px-2 py-1 rounded text-light align-middle user-select-none */
+.bg-primary {
+  height: 5vh;
+  width: 22vh;
+  font-size: .8vmax;
+  padding: 1.2vh 0vw ;
+  border-radius: 0.5vh;
+  color: white;
+  text-align: center;
+  margin-right: 1.3vh;
+}
+.btn-primary > .icon {
+  height: 2vh;
+  width: 2vh;
+  padding: 1vh;
+}
 </style>

@@ -14,7 +14,7 @@
           <font-awesome-icon class="icon" :icon="['fas', 'sync-alt']"></font-awesome-icon>
         </button>
       </div>
-      <div v-else class="d-flex flex-row-reverse align-items-center">
+      <div v-else class="d-flex flex-row-reverse align-items-center kanban-button">
         <button class="btn btn-primary mx-2" @click="onClickSaveBtn">
           수정내용 저장하기
           <font-awesome-icon class="icon" :icon="['fas', 'save']"></font-awesome-icon>
@@ -237,7 +237,7 @@ export default {
 <style scoped>
 .kanbanboard {
   background-color: white;
-  margin: 1vh 5vw 0;
+  margin: 1vh 2.1vw 0;
   height: 70vh;
   border-radius: 0.8rem;
 }

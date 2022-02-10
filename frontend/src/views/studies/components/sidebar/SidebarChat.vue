@@ -292,26 +292,26 @@ export default {
 .title{
   font-size: 3vh;
   font-weight:500;
-  margin-top: 7vh;
-  margin-bottom: 5.5vh;
+  margin-top: 6vh;
+  margin-bottom: 1vh;
 }
 .chat-input{
   display: flex;
+  margin: 1vh 0.5vw 1vh;
 }
 .inputText{
-  bottom: 0;
-  margin: 5px;
-
   display: flex;
   width: 100%;
 }
-input{
-  width: 100%;
+#message{
+  display: flex;
   height: 10vh;
+  width: 100%;
   border: none;
   border-radius: 10px;
   padding: 2vh;
-  margin: 1vh 0;
+  /* margin: 1vh 0; */
+  margin-bottom: 1vh;
   background-color: #F8F8F8;
   flex-grow: 1;
 
@@ -322,13 +322,19 @@ input{
 .chat-body{
   flex-grow: 1;
   /* overflow: auto; */
-  height: 70vh;
-  padding: 1rem;
-  padding-bottom: 0px;
+  height: 76vh;
+  padding-top: 1vh;
+  padding-right: 1vw;
+  padding-bottom: 0;
+  margin-left: 1vw;
   overflow-y: scroll;
   scroll-behavior: smooth;
 
   z-index:3;
+}
+hr {
+  margin-top: 2vh;
+  margin-bottom: 2vh;
 }
 .chat-body::-webkit-scrollbar {
   /* display: none; */

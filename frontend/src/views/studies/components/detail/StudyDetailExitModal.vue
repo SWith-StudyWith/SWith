@@ -11,6 +11,7 @@
           정말로 스터디를 탈퇴하시겠습니까?
         </div>
         <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">뒤로 가기</button>
           <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal" @click="onClickExitConfirmBtn">탈퇴하기</button>
         </div>
       </div>

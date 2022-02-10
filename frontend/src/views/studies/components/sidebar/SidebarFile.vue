@@ -213,8 +213,8 @@ export default {
 .title{
   font-size: 3vh;
   font-weight:500;
-  margin-top: 7vh;
-  margin-bottom: 5.5vh;
+  margin-top: 6vh;
+  margin-bottom: 2vh;
 }
 /* .home h1 {
   font-size: 40px;
