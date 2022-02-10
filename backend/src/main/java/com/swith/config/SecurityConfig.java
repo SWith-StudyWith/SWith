@@ -48,6 +48,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors()
 
                 .and()
+                .headers()
+                .frameOptions()
+                .sameOrigin()
+
+                .and()
                 .csrf().disable()   // rest api이므로 csrf 보안이 필요X, token 사용 -> disable
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)  // jwt token 인증 -> session 생성 설정 해제(stateless)
 
