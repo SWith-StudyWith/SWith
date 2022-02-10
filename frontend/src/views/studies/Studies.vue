@@ -10,7 +10,7 @@
     />
     <div :style="{ 'margin-left': sidebarWidth }">
       <!-- main container start -->
-      <div id="main-container" class="mb-4 mx-4">
+      <div id="main-container" class="mx-4" >
         <!-- session start -->
         <div id="session" v-if="session">
           <!-- session header -->
@@ -19,9 +19,9 @@
           </div>
           <!-- video-container start -->
           <div id="video-container">
-            <div class="user-video-wrapper d-flex overflow-auto">
+            <div class="user-video-wrapper d-flex">
               <!-- publisher -->
-              <div class="video-box m-2 position-relative">
+              <div class="video-box position-relative">
                 <div v-if="publisher">
                   <user-video id="my-video" :stream-manager="publisher"
                     :isSpeak="isSpeakList.includes(publisher.stream.connection.connectionId)"/>
@@ -43,7 +43,7 @@
               </div>
               <!-- subcribers -->
               <div v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub">
-                <div class="video-box m-2 position-relative">
+                <div class="video-box position-relative">
                   <user-video :stream-manager="sub" :isSpeak="isSpeakList.includes(publisher.stream.connection.connectionId)"/>
                   <div
                     class="mute-icon-container text-start"
@@ -586,25 +586,43 @@ export default {
 
 <style scoped>
 .study-base-page {
-  display: flex;
+  display: block;
   justify-content: center;
   flex-wrap: nowrap;
   flex-direction: column;
-  height: 100%;
+  height: 100vh;
+  /* width: 100vw; */
   background-color: #aebed4;
 }
-.stream-onoff-btn {
-  width: 2.4rem;
-  font-size:0.7rem;
-  margin-top: 160px;
+#main-container {
+  height: 25vh;
+  margin-bottom: 1vh;
+}
+.video-container{
+  height: 25vh;
+}
+.user-video-wrapper{
+  height: 25vh
+}
+.video-box{
+  height: 25vh
 }
 .stream-btn-container {
   position: absolute;
-  width: 100%;
-  height: 200px;
+  width: 30vh;
+  height: 20vh;
   top: 0;
   visibility: collapse;
   border-radius: 1rem;
+}
+.stream-onoff-btn {
+  width: 2.5vw;
+  font-size: 2vh;
+  border-radius: 70%;
+  margin-top: 15vh;
+}
+.video-box {
+  margin: 1.5vh;
 }
 .video-box:hover .stream-btn-container {
   visibility: visible;
@@ -627,6 +645,6 @@ export default {
   height: 12px;
 }
 ::-webkit-scrollbar-track{
-  background-color: #aebed4;
+  /* background-color: #aebed4; */
 }
 </style>

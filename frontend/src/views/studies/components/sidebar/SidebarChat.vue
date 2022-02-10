@@ -1,5 +1,6 @@
 <template>
   <div class= "chatDiv">
+    <div>
     <p class="title">💬 채팅 </p>
     <!-- <div class="chat-body spinner-border text-light" role="status" v-if="state.loading">
       <span class="visually-hidden">Loading...</span>
@@ -33,6 +34,7 @@
           @keyup="sendMessage"
         >
       </div>
+    </div>
     </div>
   </div>
 </template>
@@ -276,8 +278,9 @@ export default {
   /* float: right; */
   width: 100%;
   text-align: left;
+  display: inline-flex;
   flex-direction: column;
-
+  justify-content: space-between;
   height: 100vh;
   display: flex;
 
@@ -287,10 +290,10 @@ export default {
   border: 1px solid;
 }
 .title{
-  font-size: 25px;
+  font-size: 3vh;
   font-weight:500;
-  margin-top: 40px;
-  margin-bottom: 30px;
+  margin-top: 7vh;
+  margin-bottom: 5.5vh;
 }
 .chat-input{
   display: flex;
@@ -303,12 +306,12 @@ export default {
   width: 100%;
 }
 input{
-  /* width: 100%; */
-  height: 100px;
+  width: 100%;
+  height: 10vh;
   border: none;
   border-radius: 10px;
-  padding: 15px;
-  margin: 10px 0px;
+  padding: 2vh;
+  margin: 1vh 0;
   background-color: #F8F8F8;
   flex-grow: 1;
 
@@ -319,6 +322,7 @@ input{
 .chat-body{
   flex-grow: 1;
   /* overflow: auto; */
+  height: 70vh;
   padding: 1rem;
   padding-bottom: 0px;
   overflow-y: scroll;
