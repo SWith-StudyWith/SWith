@@ -36,8 +36,8 @@
       <!-- <span>fileList : {{ state.fileList.createdAt }}</span> -->
       <!-- <span>dropzoneFiles : {{ dropzoneFiles }}</span> -->
       <div v-for="(dropzoneFile, index) in dropzoneFiles" v-bind:key="dropzoneFile.id" class="file-item">
-        <span class="file-info"><img class="file-type" src="@/assets/img/icon_sidebar/file/clip_light.svg" alt=""> {{dropzoneFile.name}} </span>
-        <img class="file-type" @click="onClickCancelFile(index)" src="@/assets/img/icon_sidebar/file/trash-DEE8F9.svg" alt="">
+        <span class="file-info"><img class="file-type" src="@/assets/img/icon_sidebar/file/clip_dark.svg" alt=""> {{dropzoneFile.name}} </span>
+        <img class="file-type" @click="onClickCancelFile(index)" src="@/assets/img/icon_sidebar/file/trash-1E304F.svg" alt="">
       </div>
       <div class="file-submit">
         <img class="file-submit-icon" @click="onClickUploadFile" src="@/assets/img/icon_sidebar/file/check-DEE8F9.svg" alt="">
@@ -72,7 +72,15 @@ export default {
       fileList : computed(() => {
         return store.state.study.fileList;
       }),
+      isAttached : false, // 파일 첨부 여부
+      maxSize : 30 * 1024 * 1024, // 30MB = 31457280 byte
+      // fileSize : null,  //
     })
+
+    const filesArray = ref([]);
+    const uploading = ref(false);
+    const percentage = ref(0);
+
     const { notifyDanger, notifySuccess } = notifications();
     const convertFileSize = function (fileSize) {
       if (fileSize < 1024) {
@@ -86,14 +94,14 @@ export default {
     let dropzoneFiles = ref([]);
 
     const drop = (e) => {
-      // dropzoneFiles.value = e.dataTransfer.files;
+      // dropzoneFiles.value = e.dataTransfer.files[0];
       for (let i = 0; i < e.dataTransfer.files.length; i++) {
         dropzoneFiles.value.push(e.dataTransfer.files[i]);
       }
     };
 
     const selectedFile = () => {
-      // dropzoneFiles.value = document.querySelector('.dropzoneFile').files;
+      // dropzoneFiles.value = document.querySelector('.dropzoneFile').files[0];
       let files = document.querySelector('.dropzoneFile').files;
       for (let i = 0; i < files.length; i++) {
         dropzoneFiles.value.push(files[i]);
@@ -104,16 +112,49 @@ export default {
       dropzoneFiles.value.splice(index, 1);
     }
 
-    const onClickUploadFile = (e) => {
+    const onClickUploadFile = async (e) => {
       e.preventDefault();
-      const uploadFileData = new FormData();
+      var uploadFileData = new FormData();
       console.log('여기까지 오나');
-        console.log(dropzoneFiles.value.length);
+      console.log(dropzoneFiles.value.length);
+        // 첨부한 파일 없을 경우
+        if(dropzoneFiles.value.length == 0) { // === 써야되나
+          notifyDanger('첨부한 파일이 없습니다.');
+          // 끝내기 <= return 써야되남..
+          return;
+        } else {
+        // 첨부한 파일 있을 경우
+
+            // 첨부한 파일 개수가 5개 이상일 경우
+          if(dropzoneFiles.value.length > 5) {  // 5개 이상 올ㄹ렸을 때 잘라서 5개만 올려야되나 아니면 5개 이상은 다 목록에 띄워지고 서브밋 눌렀을 떄 안된다고 alert 띄우남..
+            notifyDanger('최대 5개까지 첨부할 수 있습니다.');
+            // 돌아가!
+            return;
+          }
+
+            // 첨부한 파일 크기가 30MB 이상일 경우
+                // 개당? or 전체 합산해서? ㅂㄷㅂㄷ..
+          if(dropzoneFiles.value.fileSize > 31457280) {
+            notifyDanger('최대 30MB만큼 첨부할 수 있습니다.');
+            return;
+          }
+          // if(files.value.fileSize)
+          // for (let i = 0; i < files.length; i++) {
+          //   dropzoneFiles.value.push(files[i]);
+          // }
+
+        }
+
+
+
+            // 모두 충족할 경우, 30MB / 5개 => 아래 함수들 실행.
       for (let i = 0; i < dropzoneFiles.value.length; i++) {
         uploadFileData.append("files", dropzoneFiles.value[i]);
+        // const temp = dropzoneFiles.value[i];
+
       }
 
-      uploadFile(
+      await uploadFile(
         route.params.studyId,
         uploadFileData,
         (res) => {
@@ -131,9 +172,10 @@ export default {
         },
         (err) => {
           console.log(err)
-          notifyDanger('서버에 문제가 발생했습니다.😥')
+          notifyDanger('서버에 문제가 발생했습니다.ㅇㄹㄴㅇㄹㄴㅇㄹㄴㅇㄹㄴㅇㄹㅇ😥')
         },
       )
+      uploadFileData = '';
     }
 
     const onClickDownloadFile = (fileId, fileName) => {
@@ -189,6 +231,10 @@ export default {
       onClickDownloadFile,
       onClickDeleteFile,
       convertFileSize,
+
+      filesArray,
+      uploading,
+      percentage
     };
   },
 }
@@ -251,8 +297,26 @@ export default {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  opacity: 0.5;
+  background-color: #F5CEC7;
+  /* background-color: antiquewhite; */
+  /* padding: 5px; */
 
-  padding: 5px;
+  /* display: flex; */
+  /* flex-direction: row; */
+  /* align-items: center; */
+  /* justify-content: space-between; */
+  padding: 10px;
+  /* margin-bottom: 5px; */
+  /* background-color: #F5CEC7; */
+  border: solid 4px #ffffff;
+  margin-top: 5px;
+  border-radius: 15px;
+  /* opacity: 0.5; */
+
+  font-family: 'Mulish', 'Alef', 'Noto Sans KR';
+  color: #1E304F;
+  font-size: 13px;
 }
 
 .file-info {
