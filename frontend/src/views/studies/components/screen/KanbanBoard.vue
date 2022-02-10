@@ -258,4 +258,7 @@ export default {
 .kanban-card {
   cursor: pointer;
 }
+.kanban-card:hover {
+  background: #ccc;
+}
 </style>
