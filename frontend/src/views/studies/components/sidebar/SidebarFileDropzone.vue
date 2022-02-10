@@ -12,7 +12,7 @@
     <label for="dropzoneFile">or select files from device</label>
     <input type="file" multiple id="dropzoneFile" class="dropzoneFile" />
     <label for="dropzoneFile"><img src="@/assets/img/icon_sidebar/file/upload_icon.svg" alt=""></label>
-    <input type="file" multiple id="dropzoneFile" class="dropzoneFile" />
+    <input type="file" multiple id="dropzoneFile" class="dropzoneFile"/>
     <!-- <img src="@/assets/img/icon_sidebar/upload_icon.svg" alt=""> -->
     <!-- <span id="detail">max. size : 30MB / upload : 5</span> -->
     <label for="dropzoneFile">max. size : 30MB / upload : 5</label>
@@ -22,6 +22,7 @@
 
 <script>
 import { ref } from "vue";
+
 export default {
   name: "SidebarFileDropzone",
   setup() {
@@ -31,7 +32,8 @@ export default {
       active.value = !active.value;
     };
 
-    return { active, toggleActive }
+
+    return { active, toggleActive,    }
   },
 };
 </script>
@@ -83,8 +85,8 @@ export default {
 }
 
 .active-dropzone label {
-  background-color: #fff;
-  color: #7285A6;;
+  /* background-color: #fff; */
+  color: #474747;;
 }
 
 </style>
