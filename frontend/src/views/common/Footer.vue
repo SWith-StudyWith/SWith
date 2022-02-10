@@ -17,7 +17,7 @@ export default {
 <style scoped>
 footer {
   text-align : center;
-  font-size : 16px;
+  font-size : 13px;
   color : #C3CBCD;
   /* margin : 100px 0 0 0; */
   /* display: flex; */

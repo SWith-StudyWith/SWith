@@ -172,9 +172,12 @@ section{
   background-color: #F1F6FF;
 }
 .section4{
+  display: flex;
   height: 400px;
   margin-top: 200px;
-  margin-bottom: 0px;
+  margin-bottom: 100px;
+  flex-direction: column;
+  align-items: flex-end;
 }
 
 .btn{
