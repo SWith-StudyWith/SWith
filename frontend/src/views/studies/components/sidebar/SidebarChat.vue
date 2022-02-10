@@ -158,14 +158,17 @@ export default {
       }, 2000)
     }
 
-    // scrollTop == 0 (꼭대기), 다음 list 가져오기
     function scrollMove(){
-      console.log('store : ' + state.storeScrollHeight +', height : ' + state.element.scrollHeight + ', top : ' + state.element.scrollTop + ', prev : ' + state.prevScrollHeight )
+      // console.log('store : ' + state.storeScrollHeight +', height : ' + state.element.scrollHeight + ', top : ' + state.element.scrollTop + ', prev : ' + state.prevScrollHeight )
+
       state.prevScrollHeight = state.element.scrollHeight - state.element.scrollTop
+
+      // scrollTop == 0 (꼭대기), 다음 list 가져오기
       if(state.element.scrollTop == 0 && !state.isNoScroll){
         messageList()
       }
-      //
+
+      // 저장된 스크롤 높이 도달 시, 스크롤 내리는 버튼 활성화 되도록
       if(state.storeScrollHeight < state.prevScrollHeight && state.storeScrollHeight != 0){
         state.isScrollInit = true
       }
