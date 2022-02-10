@@ -24,6 +24,7 @@
     "sockjs-client": "^1.5.2",
     "sortablejs": "^1.14.0",
     "vue": "^3.0.0",
+    "vue-dragscroll": "^3.0.1",
     "vue-moment": "^4.1.0",
     "vue-router": "^4.0.0-0",
     "vue3-moveable": "^0.2.3",
