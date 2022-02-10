@@ -1,6 +1,7 @@
 <template>
   <div class= "chatDiv">
       <p class="title">💬 채팅 </p>
+      <p>{{ state.isScrollInit}}</p>
     <loading v-model:active="state.loading"
           :can-cancel="false"
           :is-full-page="false"
@@ -22,9 +23,10 @@
         :prev="[idx == 0 ? null : state.chatList[idx-1]]"
       >
       </SidebarChatMessage>
-      <!-- <div class="init-btn" v-if="state.isScrollInit">
+
+      <div class="init-btn" v-if="state.isScrollInit">
           <button class="btn-primary button" @click="scrollInit">↓</button>
-      </div> -->
+      </div>
 
     </div>
     <hr>
@@ -88,7 +90,6 @@ export default {
       loaded: false,
       loading: false,
 
-      page: 0,
       // 스크롤 상단에 도착했는지
       isTop: false,
       // 더이상 API 호출X  => 추가로 불러온 list들이 <15일 때,
@@ -96,6 +97,8 @@ export default {
       isScrollInit: false,
       // 스크롤 위치 저장하기 위함
       prevScrollHeight: 0,
+      // 맨 처음 스크롤 위치 가져오자
+      storeScrollHeight: 0,
       element: computed(() => {
         return document.getElementById('chat-body')
       }),
@@ -108,14 +111,12 @@ export default {
       // return new Promise(function(resolve, reject){
         getChatList(
           route.params.studyId,
-          state.page,
-          // state.chatList.length,
+          state.chatList.length,
             (res) => {
             store
               .dispatch("GET_CHAT_LIST", {
                 studyId: route.params.studyId,
-                index: state.page
-                // index: state.chatList.length
+                index: state.chatList.length
               })
               // .then(function(result){
                 console.log(res.data)
@@ -127,14 +128,13 @@ export default {
                 }
 
                 // size < 15 면, 더이상 API 호출되지 않도록
-                if(size < 10) {
+                if(size < 15) {
                   state.isNoScroll = true
                 }
 
                 state.chatList = [...state.recvList].reverse()
-                // state.loading = false
                 state.loaded = true
-                state.isScrollInit = true
+                // state.isScrollInit = true
 
                 // resolve(res)
               // })
@@ -150,26 +150,32 @@ export default {
     }
 
     function loadingCall(){
+      // 처음 scrollHeight 받아오고, 이상이 될 때마다 scrollInit 호출되도록 ?
       state.loading = true
       setTimeout(() => {
         state.loading = false
+        state.storeScrollHeight = state.element.scrollHeight
       }, 2000)
     }
 
     // scrollTop == 0 (꼭대기), 다음 list 가져오기
     function scrollMove(){
-      console.log('height : ' + state.element.scrollHeight + ', top : ' + state.element.scrollTop + ', prev : ' + state.prevScrollHeight )
+      console.log('store : ' + state.storeScrollHeight +', height : ' + state.element.scrollHeight + ', top : ' + state.element.scrollTop + ', prev : ' + state.prevScrollHeight )
       state.prevScrollHeight = state.element.scrollHeight - state.element.scrollTop
       if(state.element.scrollTop == 0 && !state.isNoScroll){
-        state.page +=1
         messageList()
+      }
+      //
+      if(state.storeScrollHeight < state.prevScrollHeight && state.storeScrollHeight != 0){
+        state.isScrollInit = true
       }
     }
 
     // 버튼 클릭 시, 맨 아래로 내려가기
     function scrollInit(){
-      state.isScrollInit = false
       state.element.scrollTop = state.element.scrollHeight
+      state.isScrollInit = false
+      state.prevScrollHeight = 0
     }
 
     onUpdated(() => {
@@ -189,6 +195,12 @@ export default {
         }
         state.prevScrollHeight = state.element.scrollHeight
       }
+
+      //
+      if(state.storeScrollHeight < state.prevScrollHeight && state.storeScrollHeight != 0){
+        state.isScrollInit = true
+      }
+
     })
 
     function sendMessage(e) {
