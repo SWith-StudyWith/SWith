@@ -23,6 +23,7 @@ footer {
   /* display: flex; */
   /* justify-content: center; */
   /* flex-direction: row; */
+  display: flex;
   background-color : #373F41;
   height: 200px;
   position : relative;
