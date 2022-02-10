@@ -104,6 +104,7 @@ img {
   width: 40px;
   height: 40px;
   border-radius: 70%;
+  background-color: white;
 }
 .chat-userinfo-box{
   margin: 10px;
@@ -122,7 +123,7 @@ img {
   margin-right: 1rem;
 }
 .chat-other-nickname{
-  font-size: 2vh;
+  font-size: 1.7vh;
   font-weight: 700;
   margin-top: 0;
   margin-block-end: 0rem;
@@ -135,7 +136,7 @@ img {
   display: flex;
   align-items: flex-end;
   line-break: anywhere;
-  justify-content: flex-end;
+  justify-content: flex-start;
   width: 100%;
 }
 /* message content */
@@ -148,45 +149,44 @@ img {
   margin: 0.4rem 1rem 0 0;
   border-radius: 0px 20px 20px 20px;
   background-color: #f3f3f3;
-  max-width: 180px;
+  max-width: 10vw;
   color: #414141;
-  padding: 1.5vh;
+  padding: 1vh 1vw 1vh;
   font-size: 2vh;
   font-weight: 500;
 }
 .chat-other-message-time {
   margin: 0;
-  font-size: 2vh;
+  font-size: 1.2vh;
   font-weight: 500;
   color: #9c9c9c;
   margin-left: auto;
-  margin-right: 16px;
+  padding-right: 1vw;
 }
 .chat-my-message{
   display: flex;
   justify-content: right;
   align-items: flex-end;
   margin: 0;
-  min-height: 40px;
+  min-height: 6vh;
   line-break: anywhere;
 }
 .my-content{
   margin: 0.4rem 0 0 1rem;
   border-radius: 20px 20px 0px 20px;
-  max-width: 180px;
+  max-width: 12vw;
   background-color: #acb5e4;
   color: #ffffff;
   /* color: #414141; */
-  padding: 1.5vh;
-  padding-top: 1vh;
+  padding: 1vh 1vw 1vh;
   font-size: 2vh;
   font-weight: 500;
   max-width: 170px;
-  margin-left: 3px;;
+  margin-left: 0.3vw;
 }
 .chat-my-message-time{
   margin: 0;
-  font-size: 1vh;
+  font-size: 1.2vh;
   color: #9c9c9c;
   margin-right: auto;
 }
