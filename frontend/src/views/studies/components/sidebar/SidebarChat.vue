@@ -346,7 +346,6 @@ export default {
   border: none;
   border-radius: 10px;
   padding: 2vh;
-  /* margin: 1vh 0; */
   margin-bottom: 1vh;
   background-color: #F8F8F8;
   flex-grow: 1;
