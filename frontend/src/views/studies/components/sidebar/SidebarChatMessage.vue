@@ -149,7 +149,7 @@ img {
 .chat {
   border-radius: 10px;
   /* padding: 1rem; */
-  padding-bottom: 15px;
+  padding-bottom: 1vh;
   /* width: fit-content; */
 }
 .chat-other-message{
@@ -160,7 +160,7 @@ img {
   margin-right: 1rem;
 }
 .chat-other-nickname{
-  font-size: 14px;
+  font-size: 2vh;
   font-weight: 700;
   margin-top: 0;
   margin-block-end: 0rem;
@@ -188,13 +188,13 @@ img {
   background-color: #f3f3f3;
   max-width: 180px;
   color: #414141;
-  padding: 0.8rem;
-  font-size: 14px;
+  padding: 1.5vh;
+  font-size: 2vh;
   font-weight: 500;
 }
 .chat-other-message-time {
   margin: 0;
-  font-size: 10px;
+  font-size: 2vh;
   font-weight: 500;
   color: #c0c0c0;
   margin-left: auto;
@@ -215,17 +215,17 @@ img {
   background-color: #acb5e4;
   color: #ffffff;
   /* color: #414141; */
-  padding: 0.8rem;
-  font-size: 14px;
+  padding: 1.5vh;
+  padding-top: 1vh;
+  font-size: 2vh;
   font-weight: 500;
   max-width: 170px;
   margin-left: 3px;;
 }
 .chat-my-message-time{
   margin: 0;
-  font-size: 10px;
-  font-weight: 500;
-  color: #c0c0c0;
+  font-size: 1vh;
+  color: #9c9c9c;
   margin-right: auto;
 }
 

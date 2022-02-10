@@ -211,13 +211,11 @@ export default {
 }
 
 .title{
-  font-size: 25px;
+  font-size: 3vh;
   font-weight:500;
-  margin-top: 40px;
-  margin-bottom: 30px;
-  /* position: fixed; */
+  margin-top: 7vh;
+  margin-bottom: 5.5vh;
 }
-
 /* .home h1 {
   font-size: 40px;
   margin-bottom: 32px;
@@ -380,5 +378,9 @@ export default {
   /* color: #9c9c9c; */
   margin: 0;
   font-size: 12px;
+}
+
+form{
+  padding-inline: 1vh;
 }
 </style>

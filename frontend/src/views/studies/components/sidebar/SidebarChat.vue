@@ -1,7 +1,6 @@
 <template>
   <div class= "chatDiv">
       <p class="title">💬 채팅 </p>
-      <p>{{ state.isScrollInit}}</p>
     <loading v-model:active="state.loading"
           :can-cancel="false"
           :is-full-page="false"
@@ -12,7 +11,7 @@
           :background-color="bgColor"
           class="vld-overlay"
       ></loading>
-
+    <div>
     <div class="chat-body" id="chat-body"
       @scroll="scrollMove" :style="state.loading ? 'filter: blur(5px); -webkit-filter: blur(5px);' : ''">
 
@@ -39,6 +38,7 @@
           @keyup="sendMessage"
         >
       </div>
+    </div>
     </div>
   </div>
 </template>
@@ -314,8 +314,9 @@ export default {
   /* float: right; */
   width: 100%;
   text-align: left;
+  display: inline-flex;
   flex-direction: column;
-
+  justify-content: space-between;
   height: 100vh;
   display: flex;
 
@@ -325,10 +326,10 @@ export default {
   border: 1px solid;
 }
 .title{
-  font-size: 25px;
+  font-size: 3vh;
   font-weight:500;
-  margin-top: 40px;
-  margin-bottom: 30px;
+  margin-top: 7vh;
+  margin-bottom: 5.5vh;
 }
 .chat-input{
   display: flex;
@@ -341,12 +342,12 @@ export default {
   width: 100%;
 }
 input{
-  /* width: 100%; */
-  height: 100px;
+  width: 100%;
+  height: 10vh;
   border: none;
   border-radius: 10px;
-  padding: 15px;
-  margin: 10px 0px;
+  padding: 2vh;
+  margin: 1vh 0;
   background-color: #F8F8F8;
   flex-grow: 1;
 
@@ -357,6 +358,7 @@ input{
 .chat-body{
   flex-grow: 1;
   /* overflow: auto; */
+  height: 70vh;
   padding: 1rem;
   padding-bottom: 0px;
   padding-top: 0px;

@@ -40,7 +40,7 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Alef&display=swap');
 .dropzone {
   width: 100%;
-  height: 200px;
+  height: 29vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
