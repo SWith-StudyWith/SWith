@@ -1,30 +1,33 @@
 <template>
   <div class="kanbanboard">
-    <div class="text-end mx-3">
-      <div v-if="!editPermit">
+    <div class="kanbanboard-header text-end mx-3">
+      <div class="kanbanboard-title">
+        <h1>Todo List</h1>
+      </div>
+      <div v-if="!editPermit" class="kanban-button">
         <button class="btn btn-primary mx-2" @click="onClickEditBtn">
           칸반보드 수정하기
-          <font-awesome-icon :icon="['fas', 'edit']"></font-awesome-icon>
+          <font-awesome-icon class="icon" :icon="['fas', 'edit']"></font-awesome-icon>
         </button>
         <button  class="btn btn-primary mx-2" @click="onClickRefreshBtn">
           칸반보드 불러오기
-          <font-awesome-icon :icon="['fas', 'sync-alt']"></font-awesome-icon>
+          <font-awesome-icon class="icon" :icon="['fas', 'sync-alt']"></font-awesome-icon>
         </button>
       </div>
-      <div v-else class="d-flex flex-row-reverse align-items-center">
+      <div v-else class="d-flex flex-row-reverse align-items-center kanban-button">
         <button class="btn btn-primary mx-2" @click="onClickSaveBtn">
           수정내용 저장하기
-          <font-awesome-icon :icon="['fas', 'save']"></font-awesome-icon>
+          <font-awesome-icon class="icon" :icon="['fas', 'save']"></font-awesome-icon>
         </button>
         <Timer @timeStopped="timeOver"/>
       </div>
     </div>
-    <div class="h-100">
-      <div class="p-3 d-flex justify-content-center h-100">
+    <div>
+      <div class="kanban-wrapper d-flex justify-content-center">
         <div
           v-for="column in kanbanBoard"
           :key="column.taskId"
-          class="mx-2 w-100 bg-light-grey p-2 rounded-3 d-flex flex-column"
+          class="task-column"
         >
           <p class="text-start mb-1">
               <span
@@ -34,7 +37,7 @@
                 {{ column.taskName }}
               </span>
           </p>
-          <div class="overflow-auto my-2" style="height: 30rem;">
+          <div class="overflow-auto my-2" style="height: 40vh">
             <div v-if="editPermit">
               <draggable
                 class="list-group"
@@ -232,9 +235,63 @@ export default {
 }
 </script>
 <style scoped>
+.kanbanboard {
+  background-color: white;
+  margin: 1vh 2.1vw 0;
+  height: 70vh;
+  border-radius: 0.8rem;
+}
+.kanban-wrapper {
+  margin: 0 10vh 0;
+  border-radius: 0.7rem;
+  padding: 1.4vh 0.7vh 1.4vh 0.7vh;
+  height: 58vh;
+}
 .taskname {
   border-radius: 3rem;
   font-size: 0.8rem;
+}
+.kanbanboard-header{
+  display: flex;
+  justify-content: space-between;
+  height: 10vh;
+  padding: 2vh;
+}
+.kanbanboard-header > * {
+  font-size: 7vh;
+}
+h1 {
+  font-family: 'Mulish';
+  font-size: 4vh;
+  font-weight: 700;
+  margin-left: 4vw;
+  margin-top: 1vh;
+  display: flex;
+  text-align: start;
+}
+.kanban-button{
+  display: flex;
+  margin-top: 1vh;
+  margin-right: 3vw;
+}
+.btn-primary {
+  height: 5vh;
+  width: 22vh;
+  font-size: .8vmax
+}
+.btn-primary > .icon {
+  height: 2vh;
+  width: 2vh;
+}
+.task-column{
+  /* mx-2 w-100 bg-light-grey p-2 rounded-3 d-flex flex-column */
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-radius: 0.5rem;
+  background-color: #F8F8F8;
+  padding: 1vh;
+  margin-inline: 0.5vw;
 }
 .bg-grey {
   background-color: #E1E4E8;

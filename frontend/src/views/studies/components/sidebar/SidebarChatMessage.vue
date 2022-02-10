@@ -1,6 +1,11 @@
 <template>
-  <div class="chat">
+<div>
+  <!-- 날짜 구분선 -->
+  <div class="dateLine" v-if="!isDateConfirm()">
+    {{ yymmdd }}
+  </div>
 
+  <div class="chat">
     <!-- 내가 보낸 메세지 -->
     <div class="chat-my-message" v-if="chat?.memberId==this.getUserInfo.memberId">
       <p class="chat-my-message-time" >{{ hhmm }}</p>
@@ -9,23 +14,26 @@
 
     <!-- 상대가 보낸 메세지  -->
     <div class="chat-other-message" v-else>
-      <div class="chat-other-img">
+      <!-- <div class="chat-other-content1" v-if="chat?.memberId != prev[0]?.memberId"> -->
+      <div class="chat-other-content1" v-if="chat?.memberId != prev[0]?.memberId">
         <!--  v-if="!isSame" 수정해야.. -->
         <img :src="chat?.imgUrl ? chat?.imgUrl : require(`@/assets/img/navbar/profile.png`)"
-          alt="" aria-expanded="false" v-if="!isSame">
+          alt="" aria-expanded="false" >
+        <p class="chat-other-nickname" >
+          {{ chat?.nickname }}
+        </p>
       </div>
-      <div class="chat-other-content">
-        <div class="chat-other-content1">
-          <!--  v-if="!isSame" -->
-          <p class="chat-other-nickname" v-if="!isSame">{{ chat?.nickname }}</p>
-          <p class="chat-other-message-time">{{ hhmm }}</p>
-        </div>
-        <div class="chat-other-content2">
+      <div class="chat-other-content2">
+        <!-- <div class="chat-other-content1"> -->
           <p class="other-content">{{ chat?.content }}</p>
-        </div>
+          <p class="chat-other-message-time">{{ hhmm }}</p>
+        <!-- </div> -->
+        <!-- <div class="chat-other-content2">
+        </div> -->
       </div>
     </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -38,7 +46,6 @@ export default {
   props: {
     chat : Object,
     prev : Array
-    // ["chat","prev"]
   }
   ,
   components:{
@@ -48,7 +55,7 @@ export default {
     return {
       sampleData: '',
       isSame: false,
-      img: null,
+      isFirst: true,
 
       // DB : 22/02/06 06:11 PM
       todayDate: dayjs().format('YY/MM/DD'),
@@ -59,41 +66,74 @@ export default {
     ...mapGetters([
       'getUserInfo'
     ]),
-    hhmm(){
+    yymmdd(){
       var value = this.chat?.createdAt
-      // 22/02/08/ 06:24 PM
+
       if(value == '') return '';
 
       var data = (value||'').split(" ")
 
+      // YY/MM/DD
       var setTime = ""
 
-      // 오늘 날짜이면 시간만
-      if(data[0] == this.todayDate){
-        setTime += data[1] + " "
-        setTime += data[2]
-      }else{
-        setTime += data[0]
-      }
-
+      setTime += data[0]
       return setTime
+    },
+    hhmm(){
+      // 22/02/08/ 06:24 PM
+
+      // 이전 메세지 시간 format
+      var prevTime = (this.prev[0]?.createdAt||'').split(" ")
+
+      var preValue = ""
+      preValue += prevTime[1] + " "
+      preValue += prevTime[2]
+
+      // 현재 메세지 시간 format
+      var chatTime = (this.chat?.createdAt||'').split(" ")
+
+      var chatValue = ""
+      chatValue += chatTime[1] + " "
+      chatValue += chatTime[2]
+
+      // console.log(preValue + ", " + chatValue)
+
+      // 나는 하고싶었다 .... 시간 없애는 걸 ...
+      if(preValue == chatValue){
+        return chatValue
+      }
+      return chatValue
     }
   },
   methods: {
-    isSameUser(chat, prev){
-      if(prev === null){
-        return false;
-      }else if(prev[0]?.memberId == chat?.memberId){
-        return true;
-      }else{
-        return false;
+    // 오늘 날짜인지 확인하기 위한 메소드
+    isDateConfirm(){
+
+      // 이전 메세지 날짜 format
+      var prevDate = (this.prev[0]?.createdAt||'').split(" ")
+
+      var preValue = ""
+      preValue += prevDate[0]
+
+      // 현재 메세지 날짜
+      var chatDate = (this.chat?.createdAt||'').split(" ")
+
+      var chatValue = ""
+      chatValue += chatDate[0]
+
+      // 이전 값이 널이면 채팅 처음 시작한 것 -> 날짜 표시 true
+      if(preValue == null){
+        return false
       }
-    },
+      // 이전 메세지 날짜와 현재 메세지 날짜가 다르면,
+      else if(preValue != chatValue){
+        return false
+      }else return true
+    }
   },
   created() {
-    this.isSame = this.isSameUser(this.chat, this.prev);
-    if(this.chat?.imgUrl){
-      this.img = this.chat?.imgUrl;
+    if(this.prev == null){
+      this.isFirst = false
     }
   },
 }
@@ -104,6 +144,7 @@ img {
   width: 40px;
   height: 40px;
   border-radius: 70%;
+  background-color: white;
 }
 .chat-userinfo-box{
   margin: 10px;
@@ -111,82 +152,112 @@ img {
 .chat {
   border-radius: 10px;
   /* padding: 1rem; */
-  padding-bottom: 15px;
+  padding-bottom: 1vh;
   /* width: fit-content; */
 }
 .chat-other-message{
   display: flex;
+  flex-direction: column;
 }
-.chat-other-img{
-  width: 51px;
-  margin-right: 1rem;
+.chat-other-content1{
+  width: 100%;
+  margin: 1vh 0;
+  display: flex;
+  flex-direction: row;
 }
 .chat-other-nickname{
-  font-size: 14px;
+  font-size: 1.7vh;
   font-weight: 700;
   margin-top: 0;
   margin-block-end: 0rem;
+  display: block;
+  padding: 1vh 0 0 0.7vw;
 }
-.chat-other-content{
-  width: 100%;
-}
-/* nickname + date */
-.chat-other-content1{
-  display: flex;
-  align-items: flex-end;
-  line-break: anywhere;
-  justify-content: flex-end;
-  width: 100%;
-}
-/* message content */
+
+/* message + time */
 .chat-other-content2{
   display: flex;
   align-items: flex-end;
   line-break: anywhere;
+  justify-content: flex-start;
+  width: 100%;
 }
+/* message content */
+/* .chat-other-content2{
+  display: flex;
+  align-items: flex-end;
+  line-break: anywhere;
+} */
 .other-content{
-  margin: 0.4rem 1rem 0 0;
+  margin: 0.8vh 0.3vw 0 0.3vw;
   border-radius: 0px 20px 20px 20px;
   background-color: #f3f3f3;
-  max-width: 180px;
+  max-width: 11vw;
   color: #414141;
-  padding: 0.8rem;
-  font-size: 14px;
+  padding: 1vh 1vw 1vh;
+  font-size: 1.6vh;
   font-weight: 500;
 }
+
 .chat-other-message-time {
   margin: 0;
-  font-size: 10px;
-  font-weight: 500;
+  font-size: 1.2vh;
   color: #9c9c9c;
   margin-left: auto;
-  margin-right: 16px;
 }
 .chat-my-message{
   display: flex;
   justify-content: right;
   align-items: flex-end;
   margin: 0;
-  min-height: 40px;
+  min-height: 6vh;
   line-break: anywhere;
 }
 .my-content{
-  margin: 0.4rem 0 0 1rem;
+  margin: 0.8vh 0 0 1vw;
   border-radius: 20px 20px 0px 20px;
-  max-width: 180px;
-  background-color: #acb5e4;
+  max-width: 12vw;
+  background-color: #ffe3de;
   color: #ffffff;
-  /* color: #414141; */
-  padding: 0.8rem;
-  font-size: 14px;
+  color: #414141;
+  padding: 1vh 1vw 1vh;
+  font-size: 1.6vh;
   font-weight: 500;
-  max-width: 170px;
-  margin-left: 3px;;
+  margin-left: 0.3vw;
 }
 .chat-my-message-time{
   margin: 0;
-  font-size: 10px;
+  font-size: 1.2vh;
   color: #9c9c9c;
   margin-right: auto;
+}
+
+.dateLine{
+  display: flex;
+  flex-basis: 100%;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 2vh;
+  /* font-weight: 500; */
+  margin-top: 1vh;
+  /* margin-bottom: 0.7vh; */
+}
+.dateLine::before{
+  content: "";
+  flex-grow: 1;
+  margin-right: 15px;
+  background: rgba(255, 255, 255, 0.7);
+  height: 1px;
+  font-size: 0;
+  line-height: 0;
+}
+.dateLine::after{
+  content: "";
+  flex-grow: 1;
+  margin-left: 15px;
+  background: rgba(255, 255, 255, 0.7);
+  height: 1px;
+  font-size: 0;
+  line-height: 0;
 }
 </style>

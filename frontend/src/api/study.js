@@ -61,8 +61,8 @@ function getChatList(studyId, index, success, fail) {
     .then(success)
     .catch(fail)
 }
-function uploadFile(studyId, payload, success, fail) {
-  basicInstance
+async function uploadFile(studyId, payload, success, fail) {
+  await basicInstance
     .post(`api/studies/${studyId}/files`, payload)
     .then(success)
     .catch(fail)
