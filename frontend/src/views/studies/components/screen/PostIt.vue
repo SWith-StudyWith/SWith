@@ -1,11 +1,28 @@
 <template>
-  <div class="back">
-  </div>
+  <!-- <div class="back"> -->
+    <div class="container">
+      <div class="target">Vue Moveable</div>
+        <Moveable
+          className="moveable"
+          v-bind:target="['.target']"
+          v-bind:draggable="true"
+          v-bind:scalable="true"
+          v-bind:rotatable="true"
+          @drag="onDrag"
+          @scale="onScale"
+          @rotate="onRotate"
+        />
+    </div>
+  <!-- </div> -->
 </template>
 <script>
+import Moveable from "vue3-moveable";
+
 export default {
   name: 'PostIt',
-  components: {},
+  components: {
+    Moveable,
+  },
   data() {
     return {
     }
@@ -14,7 +31,17 @@ export default {
   created() {},
   mounted() {},
   unmounted() {},
-  methods: {}
+  methods: {
+    onDrag({ target, transform }) {
+      target.style.transform = transform;
+    },
+    onScale({ target, drag }) {
+      target.style.transform = drag.transform;
+    },
+    onRotate({ target, drag }) {
+      target.style.transform = drag.transform;
+    },
+  }
 }
 </script>
 <style scoped>

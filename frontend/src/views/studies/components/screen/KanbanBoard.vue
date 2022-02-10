@@ -47,7 +47,7 @@
                 ghost-class="ghost"
               >
                 <template #item="{ element }">
-                  <div class="list-group-item rounded mt-1 p-3">
+                  <div class="list-group-item rounded mt-1 p-3 kanban-card">
                     <KanbanBoardCard
                       :task="element"
                       :taskId="column.taskId"
@@ -59,7 +59,7 @@
               </draggable>
             </div>
             <div v-else>
-              <div v-for="task in column.kanban" :key="task.kanbanId" class="list-group-item rounded mt-1 p-3">
+              <div v-for="task in column.kanban" :key="task.kanbanId" class="list-group-item rounded mt-1 p-3 kanban-card">
                 <KanbanBoardCard
                   :task="task"
                   :taskId="column.taskId"
@@ -311,5 +311,8 @@ h1 {
 .ghost {
   opacity: 0.5;
   background: #c8ebfb;
+}
+.kanban-card {
+  cursor: pointer;
 }
 </style>

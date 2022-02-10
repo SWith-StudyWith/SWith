@@ -9,7 +9,7 @@
                     <div class="card-body-data">
                       <!-- <p class="card-body-data-name" text-truncate>{{ file.originName }}</p> -->
                       <p class="card-body-data-name" text-truncate><b>{{ file.originName }}</b></p>
-                      <p class="card-body-data-size" text-truncate>size | {{ file.fileSize }}</p>
+                      <p class="card-body-data-size" text-truncate>size | {{ convertFileSize(file.fileSize) }}</p>
                       <p class="card-body-data-createdAt" text-truncate>createdAt | {{ file.createdAt }}</p>
                     </div>
                     <div class="card-body-buttons">
@@ -74,7 +74,15 @@ export default {
       }),
     })
     const { notifyDanger, notifySuccess } = notifications();
-
+    const convertFileSize = function (fileSize) {
+      if (fileSize < 1024) {
+        return `${fileSize}B`;
+      } else if (fileSize < 1024 * 1024) {
+        return `${(fileSize / 1024).toFixed(1)}KB`;
+      } else {
+        return `${(fileSize / (1024 * 1024)).toFixed(1)}MB`;
+      }
+    }
     let dropzoneFiles = ref([]);
 
     const drop = (e) => {
@@ -180,6 +188,7 @@ export default {
       onClickUploadFile,
       onClickDownloadFile,
       onClickDeleteFile,
+      convertFileSize,
     };
   },
 }
