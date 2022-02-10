@@ -44,7 +44,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 /* #UserVideo {
   box-shadow:  0px 0px 10px rgb(0 255 0 / 1.0);
   border-radius: 1rem;
