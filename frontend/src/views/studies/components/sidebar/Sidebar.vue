@@ -9,28 +9,28 @@
     </h1> -->
     <div class="row">
       <div>
-        <div class="icon-container exit-btn icon" @click="onClickExitIcon">
-          <font-awesome-icon class="icon" :icon="['fas', 'sign-out-alt']" />
+        <div class="icon-container icon" @click="onClickExitIcon">
+          <font-awesome-icon class="exit-btn" :icon="['fas', 'home']" />
         </div>
       </div>
       <div class="control-bottons">
         <div class="icon-container" @click="onClickKanbanBoardIcon" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="칸반보드">
-          <font-awesome-icon class="icon" :class="{ 'font-active': screenMode === 0 }" :icon="['fas', 'chalkboard']" />
+          <font-awesome-icon class="icon" :class="{ 'font-active': screenMode === 0 }" :icon="['fas', 'tasks']" />
         </div>
         <div class="icon-container" @click="onClickScreenShareIcon" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="화면공유">
-          <font-awesome-icon class="icon" :class="{ 'font-active': isScreenShared }"  :icon="['fas', 'tv']" />
+          <font-awesome-icon class="icon" :class="{ 'font-active': isScreenShared }"  :icon="['fas', 'chalkboard-teacher']" />
         </div>
         <div class="icon-container" @click="onClickWhiteBoardIcon" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="화이트보드">
-          <font-awesome-icon class="icon" :class="{ 'font-active': screenMode === 2 }"  :icon="['fas', 'pen']" />
-        </div>
-        <div class="icon-container" @click="onClickFileIcon" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="파일공유">
-          <font-awesome-icon class="icon" :class="{ 'font-active': state.isFile }"  :icon="['fas', 'file-upload']" />
-        </div>
-        <div class="icon-container" @click="onClickChatIcon" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="채팅">
-          <font-awesome-icon class="icon" :class="{ 'font-active': state.isChat }" :icon="['fas', 'comment']" />
+          <font-awesome-icon class="icon" :class="{ 'font-active': screenMode === 2 }"  :icon="['fas', 'highlighter']" />
         </div>
         <div class="icon-container" @click="onClickPostItIcon" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="포스트잇">
           <font-awesome-icon class="icon" :class="{ 'font-active': screenMode === 3 }" :icon="['fas', 'sticky-note']"/>
+        </div>
+        <div class="icon-container" @click="onClickFileIcon" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="파일공유">
+          <font-awesome-icon class="icon" :class="{ 'font-active': state.isFile }"  :icon="['fas', 'paperclip']" />
+        </div>
+        <div class="icon-container" @click="onClickChatIcon" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="채팅">
+          <font-awesome-icon class="icon" :class="{ 'font-active': state.isChat }" :icon="['fas', 'comment']" />
         </div>
         <div class="icon-container" @click="onClickMemberIcon" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="유저목록">
           <font-awesome-icon class="icon" :class="{ 'font-active': state.isMemberList }" :icon="['fas', 'user-friends']"/>
@@ -269,24 +269,20 @@ export default {
   height: 3vh;
   margin: 1vh;
 }
-
 .exit-btn {
   position: fixed;
   top: 8px;
   left: 8px;
-  transform: rotate(180deg);
+  /* transform: rotate(180deg); */
   font-size: 3vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 0;
   border-radius: 0.5rem;
   cursor: pointer;
+  margin: 1vh 0 0 1vh;
+  color: rgba(255, 255, 255, 0.7);
 }
-.exit-btn .icon {
-  /* margin-top: 1vh; */
-}
-
 .sidebar-main{
   margin-left: 4vw;
   margin-bottom: 2.8vh;

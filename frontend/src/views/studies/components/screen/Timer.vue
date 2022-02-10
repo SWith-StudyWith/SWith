@@ -1,5 +1,5 @@
 <template>
-  <span class="bg-primary">
+  <span class="btn btn-primary">
     <font-awesome-icon class="time" :icon="['fas', 'hourglass-half']"></font-awesome-icon>
     {{ parsingTime }}
   </span>
@@ -53,15 +53,24 @@ export default {
 </script>
 <style scoped>
 /* fs-5 px-2 py-1 rounded text-light align-middle user-select-none */
-.bg-primary {
-  height: 5vh;
-  width: 22vh;
+/* .bg-primary {
+  height: 4.5vh;
+  width: 7vw;
   font-size: .8vmax;
-  padding: 1.2vh 0vw ;
+  padding: 1.1vh 0vw ;
   border-radius: 0.5vh;
   color: white;
   text-align: center;
-  margin-right: 1.3vh;
+  margin-right: 0.6vw;
+} */
+
+.btn-primary {
+  height: 4.5vh;
+  width: 7vw;
+  font-size: .8vmax;
+  cursor:text;
+  margin-left: 0.3vw;
+  margin-right: 0.3vw;
 }
 .btn-primary > .icon {
   height: 2vh;

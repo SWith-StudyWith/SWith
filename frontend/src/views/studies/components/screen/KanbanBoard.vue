@@ -5,18 +5,18 @@
         <h1>Todo List</h1>
       </div>
       <div v-if="!editPermit" class="kanban-button">
-        <button class="btn btn-primary mx-2" @click="onClickEditBtn">
-          칸반보드 수정하기
+        <button class="btn btn-primary" @click="onClickEditBtn">
+          수정하기
           <font-awesome-icon class="icon" :icon="['fas', 'edit']"></font-awesome-icon>
         </button>
-        <button  class="btn btn-primary mx-2" @click="onClickRefreshBtn">
-          칸반보드 불러오기
+        <button  class="btn btn-primary" @click="onClickRefreshBtn">
+          불러오기
           <font-awesome-icon class="icon" :icon="['fas', 'sync-alt']"></font-awesome-icon>
         </button>
       </div>
       <div v-else class="d-flex flex-row-reverse align-items-center kanban-button">
-        <button class="btn btn-primary mx-2" @click="onClickSaveBtn">
-          수정내용 저장하기
+        <button class="btn btn-primary" @click="onClickSaveBtn">
+          저장하기
           <font-awesome-icon class="icon" :icon="['fas', 'save']"></font-awesome-icon>
         </button>
         <Timer @timeStopped="timeOver"/>
@@ -275,9 +275,10 @@ h1 {
   margin-right: 3vw;
 }
 .btn-primary {
-  height: 5vh;
-  width: 22vh;
-  font-size: .8vmax
+  height: 4.5vh;
+  width: 7vw;
+  margin: 0 0.3vw;
+  font-size: .8vmax;
 }
 .btn-primary > .icon {
   height: 2vh;

@@ -328,7 +328,8 @@ export default {
 .title{
   font-size: 3vh;
   font-weight:500;
-  margin-top: 6vh;
+  margin-top: 5vh;
+  margin-left: 1vw;
   margin-bottom: 1vh;
 }
 .chat-input{
@@ -338,7 +339,8 @@ export default {
 .inputText{
   display: flex;
   width: 100%;
-  vertical-align: top
+  vertical-align: top;
+  margin-right: 0.5vw;
 }
 #message{
   display: flex;
@@ -358,8 +360,7 @@ export default {
 .chat-body{
   flex-grow: 1;
   /* overflow: auto; */
-  height: 76vh;
-  padding-top: 1vh;
+  height: 77vh;
   padding-right: 1vw;
   padding-bottom: 0;
   margin-left: 1vw;
