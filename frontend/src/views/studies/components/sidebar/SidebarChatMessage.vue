@@ -1,6 +1,11 @@
 <template>
-  <div class="chat">
 
+  <!-- 날짜 구분선 -->
+  <div class="dateLine" v-if="!isDateConfirm()">
+    {{ yymmdd }}
+  </div>
+
+  <div class="chat">
     <!-- 내가 보낸 메세지 -->
     <div class="chat-my-message" v-if="chat?.memberId==this.getUserInfo.memberId">
       <p class="chat-my-message-time" >{{ hhmm }}</p>
@@ -12,12 +17,13 @@
       <div class="chat-other-img">
         <!--  v-if="!isSame" 수정해야.. -->
         <img :src="chat?.imgUrl ? chat?.imgUrl : require(`@/assets/img/navbar/profile.png`)"
-          alt="" aria-expanded="false" v-if="!isSame">
+          alt="" aria-expanded="false" v-if="chat?.memberId != prev[0]?.memberId">
       </div>
       <div class="chat-other-content">
         <div class="chat-other-content1">
-          <!--  v-if="!isSame" -->
-          <p class="chat-other-nickname" v-if="!isSame">{{ chat?.nickname }}</p>
+          <p class="chat-other-nickname" v-if="chat?.memberId != prev[0]?.memberId">
+            {{ chat?.nickname }}
+          </p>
           <p class="chat-other-message-time">{{ hhmm }}</p>
         </div>
         <div class="chat-other-content2">
@@ -38,7 +44,6 @@ export default {
   props: {
     chat : Object,
     prev : Array
-    // ["chat","prev"]
   }
   ,
   components:{
@@ -48,7 +53,7 @@ export default {
     return {
       sampleData: '',
       isSame: false,
-      img: null,
+      isFirst: true,
 
       // DB : 22/02/06 06:11 PM
       todayDate: dayjs().format('YY/MM/DD'),
@@ -59,41 +64,74 @@ export default {
     ...mapGetters([
       'getUserInfo'
     ]),
-    hhmm(){
+    yymmdd(){
       var value = this.chat?.createdAt
-      // 22/02/08/ 06:24 PM
+
       if(value == '') return '';
 
       var data = (value||'').split(" ")
 
+      // YY/MM/DD
       var setTime = ""
 
-      // 오늘 날짜이면 시간만
-      if(data[0] == this.todayDate){
-        setTime += data[1] + " "
-        setTime += data[2]
-      }else{
-        setTime += data[0]
-      }
-
+      setTime += data[0]
       return setTime
+    },
+    hhmm(){
+      // 22/02/08/ 06:24 PM
+
+      // 이전 메세지 시간 format
+      var prevTime = (this.prev[0]?.createdAt||'').split(" ")
+
+      var preValue = ""
+      preValue += prevTime[1] + " "
+      preValue += prevTime[2]
+
+      // 현재 메세지 시간 format
+      var chatTime = (this.chat?.createdAt||'').split(" ")
+
+      var chatValue = ""
+      chatValue += chatTime[1] + " "
+      chatValue += chatTime[2]
+
+      // console.log(preValue + ", " + chatValue)
+
+      // 나는 하고싶었다 .... 시간 없애는 걸 ...
+      if(preValue == chatValue){
+        return chatValue
+      }
+      return chatValue
     }
   },
   methods: {
-    isSameUser(chat, prev){
-      if(prev === null){
-        return false;
-      }else if(prev[0]?.memberId == chat?.memberId){
-        return true;
-      }else{
-        return false;
+    // 오늘 날짜인지 확인하기 위한 메소드
+    isDateConfirm(){
+
+      // 이전 메세지 날짜 format
+      var prevDate = (this.prev[0]?.createdAt||'').split(" ")
+
+      var preValue = ""
+      preValue += prevDate[0]
+
+      // 현재 메세지 날짜
+      var chatDate = (this.chat?.createdAt||'').split(" ")
+
+      var chatValue = ""
+      chatValue += chatDate[0]
+
+      // 이전 값이 널이면 채팅 처음 시작한 것 -> 날짜 표시 true
+      if(preValue == null){
+        return false
       }
-    },
+      // 이전 메세지 날짜와 현재 메세지 날짜가 다르면,
+      else if(preValue != chatValue){
+        return false
+      }else return true
+    }
   },
   created() {
-    this.isSame = this.isSameUser(this.chat, this.prev);
-    if(this.chat?.imgUrl){
-      this.img = this.chat?.imgUrl;
+    if(this.prev == null){
+      this.isFirst = false
     }
   },
 }
@@ -158,7 +196,7 @@ img {
   margin: 0;
   font-size: 10px;
   font-weight: 500;
-  color: #9c9c9c;
+  color: #c0c0c0;
   margin-left: auto;
   margin-right: 16px;
 }
@@ -186,7 +224,37 @@ img {
 .chat-my-message-time{
   margin: 0;
   font-size: 10px;
-  color: #9c9c9c;
+  font-weight: 500;
+  color: #c0c0c0;
   margin-right: auto;
+}
+
+.dateLine{
+  display: flex;
+  flex-basis: 100%;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 15px;
+  /* font-weight: 500; */
+  margin-top: 10px;
+  margin-bottom: 22px;
+}
+.dateLine::before{
+  content: "";
+  flex-grow: 1;
+  margin-right: 15px;
+  background: rgba(255, 255, 255, 0.7);
+  height: 1px;
+  font-size: 0;
+  line-height: 0;
+}
+.dateLine::after{
+  content: "";
+  flex-grow: 1;
+  margin-left: 15px;
+  background: rgba(255, 255, 255, 0.7);
+  height: 1px;
+  font-size: 0;
+  line-height: 0;
 }
 </style>

@@ -1,15 +1,20 @@
 <template>
   <div class= "chatDiv">
-    <p class="title">💬 채팅 </p>
-    <!-- <div class="chat-body spinner-border text-light" role="status" v-if="state.loading">
-      <span class="visually-hidden">Loading...</span>
-    </div> -->
-    <div class="chat-body" id="chat-body"
-      @scroll="scrollMove">
+      <p class="title">💬 채팅 </p>
+      <p>{{ state.isScrollInit}}</p>
+    <loading v-model:active="state.loading"
+          :can-cancel="false"
+          :is-full-page="false"
+          :height="height"
+          :width="width"
+          :color="color"
+          :loader="loader"
+          :background-color="bgColor"
+          class="vld-overlay"
+      ></loading>
 
-      <div v-if="state.isNoScroll">
-        <p class="chat-top">마지막 채팅 기록입니다.</p>
-      </div>
+    <div class="chat-body" id="chat-body"
+      @scroll="scrollMove" :style="state.loading ? 'filter: blur(5px); -webkit-filter: blur(5px);' : ''">
 
       <SidebarChatMessage
         v-for="(chat, idx) in state.chatList"
@@ -19,9 +24,10 @@
       >
       </SidebarChatMessage>
 
-    <div class="init-btn" v-if="state.isScrollInit">
-        <button class="btn-primary button" @click="scrollInit">↓</button>
-    </div>
+      <div class="init-btn" v-if="state.isScrollInit">
+          <button class="btn-primary button" @click="scrollInit">↓</button>
+      </div>
+
     </div>
     <hr>
     <div class="chat-input" id="chat-input">
@@ -40,23 +46,29 @@
 <script>
 import Stomp from 'webstomp-client'
 import SockJS from 'sockjs-client'
-import { mapGetters } from 'vuex';
 import SidebarChatMessage from '@/views/studies/components/sidebar/SidebarChatMessage.vue';
 import dayjs from 'dayjs'
 import { computed, onUpdated, reactive } from '@vue/runtime-core';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
 import { getChatList } from '@/api/study'
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
 
 export default {
   name: 'App',
   data() {
     return {
-      msgDate: dayjs().format('hh:mm A'),
+      loader: 'dots',
+      color: '#F5CEC7',
+      bgColor: '#1E304F',
+      height: 80,
+      width: 80,
     }
   },
   components:{
-    SidebarChatMessage
+    SidebarChatMessage,
+    Loading
   },
   setup(){
     const store = useStore();
@@ -76,10 +88,7 @@ export default {
       init: true,
 
       loaded: false,
-      loading: true,
-      isLoading: computed(() => {
-        return state.loding
-      }),
+      loading: false,
 
       // 스크롤 상단에 도착했는지
       isTop: false,
@@ -88,6 +97,8 @@ export default {
       isScrollInit: false,
       // 스크롤 위치 저장하기 위함
       prevScrollHeight: 0,
+      // 맨 처음 스크롤 위치 가져오자
+      storeScrollHeight: 0,
       element: computed(() => {
         return document.getElementById('chat-body')
       }),
@@ -110,6 +121,7 @@ export default {
               // .then(function(result){
                 console.log(res.data)
 
+
                 var size = res.data.data.length
                 for(var i = 0; i < size; i++){
                   state.recvList.push(res.data.data[i])
@@ -120,10 +132,9 @@ export default {
                   state.isNoScroll = true
                 }
 
-                state.loading = false
-                state.loaded = true
-                state.isScrollInit = true
                 state.chatList = [...state.recvList].reverse()
+                state.loaded = true
+                // state.isScrollInit = true
 
                 // resolve(res)
               // })
@@ -138,26 +149,42 @@ export default {
       // })
     }
 
-    // scrollTop == 0 (꼭대기), 다음 list 가져오기
-    async function scrollMove(){
-      state.prevScrollHeight = state.element.scrollHeight - state.element.scrollTop
-      if(state.element.scrollTop == 0 && !state.isNoScroll){
+    function loadingCall(){
+      // 처음 scrollHeight 받아오고, 이상이 될 때마다 scrollInit 호출되도록 ?
+      state.loading = true
+      setTimeout(() => {
+        state.loading = false
+        state.storeScrollHeight = state.element.scrollHeight
+      }, 2000)
+    }
 
-        await messageList()
+    function scrollMove(){
+      // console.log('store : ' + state.storeScrollHeight +', height : ' + state.element.scrollHeight + ', top : ' + state.element.scrollTop + ', prev : ' + state.prevScrollHeight )
+
+      state.prevScrollHeight = state.element.scrollHeight - state.element.scrollTop
+
+      // scrollTop == 0 (꼭대기), 다음 list 가져오기
+      if(state.element.scrollTop == 0 && !state.isNoScroll){
+        messageList()
+      }
+
+      // 저장된 스크롤 높이 도달 시, 스크롤 내리는 버튼 활성화 되도록
+      if(state.storeScrollHeight < state.prevScrollHeight && state.storeScrollHeight != 0){
+        state.isScrollInit = true
       }
     }
 
     // 버튼 클릭 시, 맨 아래로 내려가기
     function scrollInit(){
-      state.isScrollInit = false
       state.element.scrollTop = state.element.scrollHeight
+      state.isScrollInit = false
+      state.prevScrollHeight = 0
     }
 
     onUpdated(() => {
       // 채팅창 열었을 때, 스크롤 맨 밑에 가도록
       if(state.init){
         state.init = false
-        // state.element.scrollTop = 99999
         state.element.scrollTop = state.element.scrollHeight
       }
 
@@ -165,12 +192,18 @@ export default {
       if(state.loaded){
         state.loaded = false
         if(state.element.scrollTop == 0){
-
+          // console.log('height : ' + state.element.scrollHeight + ', top : ' + state.element.scrollTop + ', prev : ' + state.prevScrollHeight )
           // 스크롤 있던 위치 받아오기 => 시작 위치
           state.element.scrollTop = state.element.scrollHeight - state.prevScrollHeight
         }
         state.prevScrollHeight = state.element.scrollHeight
       }
+
+      //
+      if(state.storeScrollHeight < state.prevScrollHeight && state.storeScrollHeight != 0){
+        state.isScrollInit = true
+      }
+
     })
 
     function sendMessage(e) {
@@ -205,8 +238,9 @@ export default {
     }
 
     // 웹 소켓 연결 성공 시, 콜백 함수
-    async function onConnected(){
-      var load = await messageList()
+    function onConnected(){
+      messageList()
+      // var load = messageList()
       fetchList()
     }
 
@@ -259,15 +293,19 @@ export default {
       scrollMove,
       scrollInit,
       sendMessage,
+      loadingCall,
     }
   },
   created() {
     console.log('사이드바 생성 ~')
     this.init = true
-    setTimeout(() => {
-      const element = document.getElementById('chat-body');
-      element.scrollTop = element.scrollHeight;
-    }, 0);
+
+    this.loadingCall()
+    // setTimeout(() => {
+    //   const element = document.getElementById('chat-body');
+    //   element.scrollTop = element.scrollHeight;
+    // }, 0);
+
   },
 }
 </script>
@@ -321,10 +359,11 @@ input{
   /* overflow: auto; */
   padding: 1rem;
   padding-bottom: 0px;
+  padding-top: 0px;
   overflow-y: scroll;
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
 
-  z-index:3;
+  /* z-index:1; */
 }
 .chat-body::-webkit-scrollbar {
   /* display: none; */
@@ -354,7 +393,7 @@ input{
   display: flex;
   justify-content: right;
   position: sticky;
-  z-index: 1;
+  z-index: 2;
   bottom: 0;
 
 }
@@ -373,4 +412,7 @@ input{
   background-color: rgba(230, 196, 196, 0.7);
 }
 
+.vld-overlay{
+  margin-left: 60px;
+}
 </style>
