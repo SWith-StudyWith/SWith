@@ -9,7 +9,6 @@ const port = process.env.PORT || 3000;
 // app.use(express.static(__dirname + '/public'));
 var dataMap = {}
 
-
 io.on('connection', (socket) => {
 
     // 연결 확인 event
