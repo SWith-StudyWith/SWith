@@ -1,5 +1,5 @@
 <template>
-
+<div>
   <!-- 날짜 구분선 -->
   <div class="dateLine" v-if="!isDateConfirm()">
     {{ yymmdd }}
@@ -14,24 +14,26 @@
 
     <!-- 상대가 보낸 메세지  -->
     <div class="chat-other-message" v-else>
-      <div class="chat-other-img">
+      <!-- <div class="chat-other-content1" v-if="chat?.memberId != prev[0]?.memberId"> -->
+      <div class="chat-other-content1" v-if="chat?.memberId != prev[0]?.memberId">
         <!--  v-if="!isSame" 수정해야.. -->
         <img :src="chat?.imgUrl ? chat?.imgUrl : require(`@/assets/img/navbar/profile.png`)"
-          alt="" aria-expanded="false" v-if="chat?.memberId != prev[0]?.memberId">
+          alt="" aria-expanded="false" >
+        <p class="chat-other-nickname" >
+          {{ chat?.nickname }}
+        </p>
       </div>
-      <div class="chat-other-content">
-        <div class="chat-other-content1">
-          <p class="chat-other-nickname" v-if="chat?.memberId != prev[0]?.memberId">
-            {{ chat?.nickname }}
-          </p>
-          <p class="chat-other-message-time">{{ hhmm }}</p>
-        </div>
-        <div class="chat-other-content2">
+      <div class="chat-other-content2">
+        <!-- <div class="chat-other-content1"> -->
           <p class="other-content">{{ chat?.content }}</p>
-        </div>
+          <p class="chat-other-message-time">{{ hhmm }}</p>
+        <!-- </div> -->
+        <!-- <div class="chat-other-content2">
+        </div> -->
       </div>
     </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -155,22 +157,25 @@ img {
 }
 .chat-other-message{
   display: flex;
+  flex-direction: column;
 }
-.chat-other-img{
-  width: 51px;
-  margin-right: 1rem;
+.chat-other-content1{
+  width: 100%;
+  margin: 1vh 0;
+  display: flex;
+  flex-direction: row;
 }
 .chat-other-nickname{
   font-size: 1.7vh;
   font-weight: 700;
   margin-top: 0;
   margin-block-end: 0rem;
+  display: block;
+  padding: 1vh 0 0 0.7vw;
 }
-.chat-other-content{
-  width: 100%;
-}
-/* nickname + date */
-.chat-other-content1{
+
+/* message + time */
+.chat-other-content2{
   display: flex;
   align-items: flex-end;
   line-break: anywhere;
@@ -178,28 +183,27 @@ img {
   width: 100%;
 }
 /* message content */
-.chat-other-content2{
+/* .chat-other-content2{
   display: flex;
   align-items: flex-end;
   line-break: anywhere;
-}
+} */
 .other-content{
-  margin: 0.4rem 1rem 0 0;
+  margin: 0.8vh 0.3vw 0 0.3vw;
   border-radius: 0px 20px 20px 20px;
   background-color: #f3f3f3;
-  max-width: 10vw;
+  max-width: 11vw;
   color: #414141;
   padding: 1vh 1vw 1vh;
-  font-size: 2vh;
+  font-size: 1.6vh;
   font-weight: 500;
 }
+
 .chat-other-message-time {
   margin: 0;
   font-size: 1.2vh;
-  font-weight: 500;
-  color: #c0c0c0;
+  color: #9c9c9c;
   margin-left: auto;
-  padding-right: 1vw;
 }
 .chat-my-message{
   display: flex;
@@ -210,16 +214,15 @@ img {
   line-break: anywhere;
 }
 .my-content{
-  margin: 0.4rem 0 0 1rem;
+  margin: 0.8vh 0 0 1vw;
   border-radius: 20px 20px 0px 20px;
   max-width: 12vw;
-  background-color: #acb5e4;
+  background-color: #ffe3de;
   color: #ffffff;
-  /* color: #414141; */
+  color: #414141;
   padding: 1vh 1vw 1vh;
-  font-size: 2vh;
+  font-size: 1.6vh;
   font-weight: 500;
-  max-width: 170px;
   margin-left: 0.3vw;
 }
 .chat-my-message-time{
@@ -234,10 +237,10 @@ img {
   flex-basis: 100%;
   align-items: center;
   color: rgba(255, 255, 255, 0.7);
-  font-size: 15px;
+  font-size: 2vh;
   /* font-weight: 500; */
-  margin-top: 10px;
-  margin-bottom: 22px;
+  margin-top: 1vh;
+  /* margin-bottom: 0.7vh; */
 }
 .dateLine::before{
   content: "";
