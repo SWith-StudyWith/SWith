@@ -184,7 +184,7 @@ export default {
 
         // receive canvas data from server
         receiveCanvas(data) {
-            console.log(data.studyId);
+            // console.log(data.studyId);
             this.canvas.loadFromJSON(data.canvas, this.canvas.renderAll.bind(this.canvas));
         },
 
