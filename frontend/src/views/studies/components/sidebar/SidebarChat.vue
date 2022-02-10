@@ -31,12 +31,12 @@
     <hr>
     <div class="chat-input" id="chat-input">
       <div class="inputText">
-        <input
+        <textarea
           v-model="state.message"
           id="message"
           type="text"
-          @keyup="sendMessage"
-        >
+          @keydown.enter.exact.prevent="sendMessage"
+        ></textarea>
       </div>
     </div>
     </div>
@@ -338,6 +338,7 @@ export default {
 .inputText{
   display: flex;
   width: 100%;
+  vertical-align: top
 }
 #message{
   display: flex;
