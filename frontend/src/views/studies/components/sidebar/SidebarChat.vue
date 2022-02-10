@@ -1,10 +1,19 @@
 <template>
   <div class= "chatDiv">
-    <div>
       <p class="title">💬 채팅 </p>
-    </div>
+    <loading v-model:active="state.loading"
+          :can-cancel="false"
+          :is-full-page="false"
+          :height="height"
+          :width="width"
+          :color="color"
+          :loader="loader"
+          :background-color="bgColor"
+          class="vld-overlay"
+      ></loading>
+
     <div class="chat-body" id="chat-body"
-      @scroll="scrollMove" >
+      @scroll="scrollMove" :style="state.loading ? 'filter: blur(5px); -webkit-filter: blur(5px);' : ''">
 
       <SidebarChatMessage
         v-for="(chat, idx) in state.chatList"
@@ -13,20 +22,10 @@
         :prev="[idx == 0 ? null : state.chatList[idx-1]]"
       >
       </SidebarChatMessage>
-      <div class="init-btn" v-if="state.isScrollInit">
+      <!-- <div class="init-btn" v-if="state.isScrollInit">
           <button class="btn-primary button" @click="scrollInit">↓</button>
-      </div>
-      <loading v-model:active="state.loading"
-            :can-cancel="false"
-            :is-full-page="false"
-            :height="height"
-            :width="width"
-            :color="color"
-            :loader="loader"
-            :background-color="bgColor"
-            :blur="blur"
-            class="chat-loading"
-      ></loading>
+      </div> -->
+
     </div>
     <hr>
     <div class="chat-input" id="chat-input">
@@ -63,7 +62,6 @@ export default {
       bgColor: '#1E304F',
       height: 80,
       width: 80,
-      blur: '',
     }
   },
   components:{
@@ -90,6 +88,7 @@ export default {
       loaded: false,
       loading: false,
 
+      page: 0,
       // 스크롤 상단에 도착했는지
       isTop: false,
       // 더이상 API 호출X  => 추가로 불러온 list들이 <15일 때,
@@ -109,12 +108,14 @@ export default {
       // return new Promise(function(resolve, reject){
         getChatList(
           route.params.studyId,
-          state.chatList.length,
+          state.page,
+          // state.chatList.length,
             (res) => {
             store
               .dispatch("GET_CHAT_LIST", {
                 studyId: route.params.studyId,
-                index: state.chatList.length
+                index: state.page
+                // index: state.chatList.length
               })
               // .then(function(result){
                 console.log(res.data)
@@ -126,7 +127,7 @@ export default {
                 }
 
                 // size < 15 면, 더이상 API 호출되지 않도록
-                if(size < 15) {
+                if(size < 10) {
                   state.isNoScroll = true
                 }
 
@@ -152,15 +153,16 @@ export default {
       state.loading = true
       setTimeout(() => {
         state.loading = false
-      }, 1000)
+      }, 2000)
     }
 
     // scrollTop == 0 (꼭대기), 다음 list 가져오기
-    async function scrollMove(){
+    function scrollMove(){
+      console.log('height : ' + state.element.scrollHeight + ', top : ' + state.element.scrollTop + ', prev : ' + state.prevScrollHeight )
       state.prevScrollHeight = state.element.scrollHeight - state.element.scrollTop
       if(state.element.scrollTop == 0 && !state.isNoScroll){
-
-        await messageList()
+        state.page +=1
+        messageList()
       }
     }
 
@@ -181,7 +183,7 @@ export default {
       if(state.loaded){
         state.loaded = false
         if(state.element.scrollTop == 0){
-
+          // console.log('height : ' + state.element.scrollHeight + ', top : ' + state.element.scrollTop + ', prev : ' + state.prevScrollHeight )
           // 스크롤 있던 위치 받아오기 => 시작 위치
           state.element.scrollTop = state.element.scrollHeight - state.prevScrollHeight
         }
@@ -221,8 +223,9 @@ export default {
     }
 
     // 웹 소켓 연결 성공 시, 콜백 함수
-    async function onConnected(){
-      var load = await messageList()
+    function onConnected(){
+      messageList()
+      // var load = messageList()
       fetchList()
     }
 
@@ -343,7 +346,7 @@ input{
   padding-bottom: 0px;
   padding-top: 0px;
   overflow-y: scroll;
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
 
   /* z-index:1; */
 }
@@ -394,9 +397,7 @@ input{
   background-color: rgba(230, 196, 196, 0.7);
 }
 
-.chat-loading{
-  /* z-index: 999; */
+.vld-overlay{
   margin-left: 60px;
-  /* background-color: #1E304F; */
 }
 </style>
