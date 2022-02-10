@@ -85,6 +85,11 @@ const actions = {
     )
   },
   GET_FILE_LIST({ commit }, studyId) {
+    // return new Promise(async (resolve, reject) => {
+    //   try {
+
+    //   }
+    // })
     getFileList(
       studyId,
       (res) => {
@@ -97,6 +102,17 @@ const actions = {
       }
     )
   },
+  // uploadMultiFile({ commit }, params) {
+  //   return new Promise( async (resolve, reject) => {
+  //     try {
+  //       const rs = await this.$axios.post('/api/v1/file/file_multi_upload', params);
+  //       resolve(true);
+  //     } catch (err) {
+  //       console.error(err);
+  //       reject(err);
+  //     }
+  //   })
+  // },
 };
 
 const mutations = {
