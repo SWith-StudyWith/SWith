@@ -2,6 +2,7 @@
   <!-- <div class="back"> -->
     <button @click="isEditting = !isEditting"> 버튼</button>
     <button class="btn btn-primary" @click="onClickCreateBtn">새 메모</button>
+    <button class="btn btn-primary" @click="onClickSaveBtn">저장하기</button>
     <div v-dragscroll:nochilddrag class="container position-relative back overflow-hidden mb-4" id="memoContainer">
       <div
         v-for="(memo, idx) in memoList"
@@ -40,6 +41,7 @@
 import Moveable from "vue3-moveable";
 // import { Modal } from 'bootstrap';
 import MemoModal from '@/views/studies/components/screen/MemoModal.vue'
+import { mapState } from 'vuex';
 
 export default {
   name: 'Memo',
@@ -61,23 +63,23 @@ export default {
       ),
       containerWidth: 0,
       containerHeight: 0,
-      memoList: [
-        {
-          content: 'A',
-          color: 'red',
-          transform: 'matrix(1, 0, 0, 1, 0, 0) translate(162px, 0px)',
-        },
-        {
-          content: 'B',
-          color: 'blue',
-          transform: 'matrix(1, 0, 0, 1, 0, 0) translate(162px, 80px)',
-        },
-        {
-          content: 'C',
-          color: 'green',
-          transform: 'matrix(1, 0, 0, 1, 0, 0) translate(162px, 160px)',
-        }
-      ],
+      // memoList: [
+      //   {
+      //     content: 'A',
+      //     color: 'red',
+      //     transform: 'matrix(1, 0, 0, 1, 0, 0) translate(162px, 0px)',
+      //   },
+      //   {
+      //     content: 'B',
+      //     color: 'blue',
+      //     transform: 'matrix(1, 0, 0, 1, 0, 0) translate(162px, 80px)',
+      //   },
+      //   {
+      //     content: 'C',
+      //     color: 'green',
+      //     transform: 'matrix(1, 0, 0, 1, 0, 0) translate(162px, 160px)',
+      //   }
+      // ],
     }
   },
   setup() {},
@@ -108,14 +110,32 @@ export default {
     },
     onClickCreateBtn() {
       console.log('새 메모 만들기')
-      this.memoList.push(
+      this.$store.commit(
+        'ADD_MEMO',
         {
           content: '',
           color: 'yellow',
+          zIndex: ++this.zIndexCount,
         }
       )
     },
-  }
+    onClickSaveBtn() {
+      console.log('저장하기')
+      this.$store.dispatch(
+        'UPDATE_MEMO_LIST',
+        {
+          studyId: this.$route.params.studyId,
+          memoList: this.memoList
+        }
+      )
+    }
+  },
+  computed: {
+    ...mapState({
+      memoList: (state) => state.memo.memoList,
+      zIndexCount:(state) => state.memo.zIndexCount,
+    }),
+  },
 }
 </script>
 <style scoped>
@@ -144,5 +164,4 @@ export default {
 .yellow {
   background-color: rgb(255, 255, 147);
 }
-
 </style>
