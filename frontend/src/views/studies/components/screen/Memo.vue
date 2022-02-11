@@ -1,6 +1,7 @@
 <template>
   <!-- <div class="back"> -->
     <div v-dragscroll:nochilddrag class="container position-relative back overflow-hidden mb-4" id="memoContainer">
+      <span>타인에게 보이지 않는 개인 공간입니다.</span>
       <span v-if="isEditting" class="btn-container">
         <button class="btn btn-primary ms-2 shadow" @click="onClickCreateBtn">
           <font-awesome-icon :icon="['fas', 'plus']"></font-awesome-icon>
@@ -13,7 +14,7 @@
         </button>
       </span>
       <span v-else class="btn-container">
-        <button class="btn btn-primary" @click="isEditting = true">
+        <button class="btn btn-primary shadow" @click="isEditting = true">
           <font-awesome-icon :icon="['fas', 'edit']"></font-awesome-icon>
         </button>
       </span>
@@ -83,7 +84,9 @@ export default {
     this.memoContainer = document.getElementById('memoContainer')
     this.resizeObserver.observe(this.memoContainer)
   },
-  unmounted() {},
+  beforeUnmount() {
+    this.onClickSaveBtn()
+  },
   methods: {
     handleSelectedMemo(idx) {
       this.$store.commit('SET_SELECTED_MEMO_INDEX', idx)

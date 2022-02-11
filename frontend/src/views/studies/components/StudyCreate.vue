@@ -9,7 +9,7 @@
             <form class="studyInfo-wrapper" enctype="multipart/form-data">
               <div>
                 <label for="studyName" class="form-label">스터디 이름</label>
-                <input type="text" class="form-control" id="studyName" v-model="state.studyName" required placeholder="스터디 이름">
+                <input type="text" class="form-control" id="studyName" v-model="state.studyName" required placeholder="스터디 이름" maxlength="20">
                 <div :style="{ visibility: (state.isValidStudyName || !state.wasInputed.studyName )? 'hidden' : 'visible' }"
                   class="invalid-feedback">
                   2~20자 사이로 작성해주세요.
@@ -17,7 +17,14 @@
               </div>
               <div class="mb-3">
                 <label for="goal" class="form-label">스터디 목표</label>
-                <textarea class="form-control form-goal" id="studyGoal" rows="3" v-model="state.studyGoal" placeholder="스터디 목표를 한 줄로 표현해 보세요!"></textarea>
+                <textarea
+                  class="form-control form-goal"
+                  id="studyGoal" rows="3"
+                  v-model="state.studyGoal"
+                  placeholder="스터디 목표를 한 줄로 표현해 보세요!"
+                  maxlength="40"
+                >
+                </textarea>
               </div>
               <div class="d-flex justify-content-start mb-4">
                 <div class="dropend">

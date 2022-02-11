@@ -17,8 +17,7 @@
             >
           </div>
           <div class="col-4">
-            <button class="btn btn-primary"
-              style="width:100%"
+            <button class="btn btn-primary h-100 w-100"
               :disabled="!state.isValidEmail || state.isAuthNumChecked"
               @click="onClickSendCode"
             >이메일 인증
@@ -42,7 +41,7 @@
             >
           </div>
           <div class="col-4">
-            <button class="btn btn-primary" style="width:100%"
+            <button class="btn btn-primary h-100 w-100"
               :disabled="state.isDisableAuthNum"
               @click="onClickConfirmAuthNum"
             >인증 확인</button>
@@ -69,7 +68,7 @@
             :style="{ visibility: (state.isValidPassword || !state.wasInputed.password)? 'hidden' : 'visible' }"
             class="invalid-feedback"
           >
-            유효하지 않은 비밀번호입니다.
+            숫자, 영문, 특수문자를 모두 포함해 8 ~ 16 글자를 입력해주세요.
           </div>
         </form>
 
@@ -103,7 +102,7 @@
             :style="{ visibility: (state.isValidNickname || !state.wasInputed.nickname)? 'hidden' : 'visible' }"
             class="invalid-feedback"
           >
-            닉네임을 입력해주세요.
+            2 ~ 16자 사이의 닉네임을 입력해주세요.
           </div>
         </form>
 
