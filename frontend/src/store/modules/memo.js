@@ -1,13 +1,19 @@
 import { setMemoList, getMemoList } from "../../api/memo";
 
-
 const state = () => ({
   memoList: [],
+  memo: {},
   selectedIdx: -1,
   zIndexCount: 0,
 });
 
 const getters = {
+  selectedMemo(state) {
+    if (state.selectedIdx < 0) {
+      return null;
+    }
+    return state.memoList.selectedIdx;
+  }
 };
 
 const actions = {
@@ -63,6 +69,15 @@ const mutations = {
   },
   ADD_MEMO(state, memo) {
     state.memoList.push(memo)
+  },
+  SET_SELECTED_MEMO_INDEX(state, index) {
+    state.selectedIdx = index;
+  },
+  SET_MEMO_BY_INDEX(state, { index, memo }) {
+    state.memoList[index] = { ...state.memoList[index], ...memo };
+  },
+  SET_SELECTED_MEMO(state, memo) {
+    state.memo = memo;
   }
 };
 

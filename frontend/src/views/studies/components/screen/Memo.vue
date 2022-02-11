@@ -8,13 +8,11 @@
         v-for="(memo, idx) in memoList"
         :key="idx" class="postit position-absolute m-0"
         :class="['target'+ idx, colorList[memo.color]]"
-        :style="{ 'z-index': idx, transform : memo.transform }"
+        :style="{ transform : memo.transform }"
         data-bs-toggle="modal" data-bs-target="#memoModal"
       >
         {{ memo.content }}
       </div>
-        <!-- :moveable="moveableState" -->
-        <!-- v-bind:target="[isEditting ? '.target'+idx : null]" -->
       <Moveable
         v-for="(memo, idx) in memoList" :key="idx"
         v-if="isEditting"
@@ -29,17 +27,15 @@
         @drag="onDrag"
         @scale="onScale"
         @rotate="onRotate"
-        @click="onClick(memo)"
+        @click="onClick(memo, idx)"
         @renderEnd="handleRenderEnd(idx, $event)"
       />
-          <!-- @dblclick="onDblClick(memo)" -->
       </div>
   <!-- </div> -->
   <MemoModal/>
 </template>
 <script>
 import Moveable from "vue3-moveable";
-// import { Modal } from 'bootstrap';
 import MemoModal from '@/views/studies/components/screen/MemoModal.vue'
 import { mapState } from 'vuex';
 
@@ -51,7 +47,7 @@ export default {
   },
   data() {
     return {
-      colorList: ['red', 'blue', 'green', 'yellow'],
+      colorList: ['red', 'blue', 'yellow'],
       imgSrc: require('@/assets/img/landing/icon_download.png'),
       isEditting: true,
       memoContainer: null,
@@ -64,23 +60,6 @@ export default {
       ),
       containerWidth: 0,
       containerHeight: 0,
-      // memoList: [
-      //   {
-      //     content: 'A',
-      //     color: 'red',
-      //     transform: 'matrix(1, 0, 0, 1, 0, 0) translate(162px, 0px)',
-      //   },
-      //   {
-      //     content: 'B',
-      //     color: 'blue',
-      //     transform: 'matrix(1, 0, 0, 1, 0, 0) translate(162px, 80px)',
-      //   },
-      //   {
-      //     content: 'C',
-      //     color: 'green',
-      //     transform: 'matrix(1, 0, 0, 1, 0, 0) translate(162px, 160px)',
-      //   }
-      // ],
     }
   },
   setup() {},
@@ -102,10 +81,11 @@ export default {
     onRotate({ target, drag }) {
       target.style.transform = drag.transform;
     },
-    onClick(memo) {
+    onClick(memo, idx) {
       console.log(memo.color)
       console.log(memo.content)
-
+      this.$store.commit('SET_SELECTED_MEMO_INDEX', idx)
+      this.$store.commit('SET_SELECTED_MEMO', memo)
     },
     handleRenderEnd(idx, event) {
       console.log(event.target.style.transform)
@@ -136,7 +116,8 @@ export default {
   computed: {
     ...mapState({
       memoList: (state) => state.memo.memoList,
-      zIndexCount:(state) => state.memo.zIndexCount,
+      zIndexCount: (state) => state.memo.zIndexCount,
+      selectedIdx: (state) => state.memo.selectedIdx,
     }),
   },
 }
@@ -149,22 +130,21 @@ export default {
   width: 90%;
   background-image: url("../../../../assets/img/study_room/paper_texture.png");
   cursor: grab;
+  border-radius: 0.8rem;
 }
 .postit {
   width: 10rem;
   height: 10rem;
   background-color: burlywood;
+  box-shadow: 0 5px 5px 0 rgb(0 0 0 / 0.1), 0 5px 5px -1px rgb(0 0 0 / 0.1);
 }
 .red {
-  background-color: rgb(211, 97, 97);
+  background-color: #F1D4D4;
 }
 .blue {
-  background-color: rgb(115, 115, 218);
-}
-.green {
-  background-color: rgb(94, 187, 94);
+  background-color: #D4EAF1;
 }
 .yellow {
-  background-color: rgb(255, 255, 147);
+  background-color: #FFF9BE;
 }
 </style>
