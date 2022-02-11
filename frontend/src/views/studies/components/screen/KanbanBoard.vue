@@ -103,7 +103,7 @@ import KanbanBoardModal from '@/views/studies/components/screen/KanbanBoardModal
 import KanbanBoardCreateModal from '@/views/studies/components/screen/KanbanBoardCreateModal.vue';
 import KanbanWarningModal from '@/views/studies/components/screen/KanbanWarningModal.vue';
 import Timer from '@/views/studies/components/screen/Timer.vue';
-import { ref, computed } from 'vue';
+import { ref, computed, onBeforeUnmount } from 'vue';
 import draggable from 'vuedraggable'
 import { checkKanban, putKanban } from '@/api/study'
 import { Modal } from 'bootstrap';
@@ -218,6 +218,9 @@ export default {
       emit('isEditPermit', false);
       onClickSaveBtn()
     };
+    onBeforeUnmount(() => {
+      onClickSaveBtn()
+    })
     return {
       kanbanBoard,
       selectedTask,

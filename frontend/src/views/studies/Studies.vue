@@ -140,11 +140,8 @@ export default {
   beforeRouteLeave(to, from, next) {
     console.log(to.fullPath);
     if (!this.canLeave) {
-      if (confirm('현재 칸반보드를 저장합니까?')) {
-        this.$refs.kanbanBoard.onClickSaveBtn()
-      } else {
-        return
-      }
+      this.$refs.kanbanBoard.onClickSaveBtn()
+      return next();
     }
     if (to.fullPath == `/studies/${this.$route.params.studyId}`) {
       if (this.session) {
