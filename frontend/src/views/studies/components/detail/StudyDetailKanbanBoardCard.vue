@@ -3,7 +3,7 @@
     class="StudyDetailKanbanBoardCard user-select-none"
     data-bs-toggle="modal" data-bs-target="#kanbanCardModal"
   >
-    <span class="d-inline-block font-small">{{ task.content }}</span>
+    <span class="card-body-data-content font-small" text-truncate>{{ task.content }}</span>
   </div>
 </template>
 <script>
@@ -25,15 +25,6 @@ export default {
 </script>
 
 <style scoped>
-span {
-  display: -webkit-box;
-  text-overflow: ellipsis;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  /* overflow: hidden; */
-  line-height: 1.7rem;
-  max-height: 2.4rem;
-}
 .StudyDetailKanbanBoardCard {
   background-color: white;
   padding: 8px;
@@ -47,8 +38,22 @@ span {
 .StudyDetailKanbanBoardCard:hover {
   transition-duration: 0.1s;
   background-color: rgba(238, 238, 238, 0.301);
+  display: flex;
+  flex-wrap: nowrap;
 }
+
+.card-body-data-content {
+  overflow : hidden;
+  text-overflow : ellipsis;
+  word-wrap : brek-word;
+  display : -webkit-box;
+  -webkit-line-clamp : 2;
+  -webkit-box-orient: vertical;
+  min-height: 2vh;
+}
+
 .font-small {
   font-size: 0.9rem;
 }
+
 </style>
