@@ -117,8 +117,6 @@ import axios from "axios";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 const OPENVIDU_SERVER_URL = "https://i6a501.p.ssafy.io:4443";
 const OPENVIDU_SERVER_SECRET = "MY_SECRET";
-// const OPENVIDU_SERVER_URL = "https://" + location.hostname + ":4443";
-// const OPENVIDU_SERVER_URL = "https://" + location.hostname + ":4443";
 const parsing = (string) => !(string === 'false')
 
 export default {
@@ -138,7 +136,7 @@ export default {
     PostIt,
   },
   beforeRouteLeave(to, from, next) {
-    console.log(to.fullPath);
+    // console.log(to.fullPath);
     if (!this.canLeave) {
       if (confirm('현재 칸반보드를 저장합니까?')) {
         this.$refs.kanbanBoard.onClickSaveBtn()
@@ -180,7 +178,6 @@ export default {
     const store = useStore();
     const route = useRoute();
     store.dispatch('GET_STUDY_INFO', route.params.studyId);
-    // const screenMode = ref(0);
     const sidebarWidth = ref('54px');
     const toggleSidebar = function (width) {
       sidebarWidth.value = width;
@@ -196,8 +193,6 @@ export default {
 			subscribers: [],
       videoOn: parsing(this.initVideoOn),
       audioOn: parsing(this.initAudioOn),
-      // initVideoId: JSON.parse(this.initDeviceSetting).videoId,
-      // initAudioId: JSON.parse(this.initDeviceSetting).audioId,
       connectionUser: false,
       mainOnOff: false,
       myUserId: "",
@@ -252,20 +247,20 @@ export default {
       e.returnValue = '';
     },
     isEditPermit (permit) {
-      console.log(permit)
+      // console.log(permit)
       this.editPermit = permit;
       this.canLeave = !permit;
     },
     showScreenMode ( mode ) {
       // switch (screen)
-      console.log(mode)
-      if(mode === 0){
-        console.log('0 칸반보드 true 보여조라~');
-      } else if(mode === 1){
-        console.log('1 화면공유 true 보여조라~');
-      } else if(mode === 2) {
-        console.log('2 화이트보드 true니깐 보여주라~');
-      }
+      // console.log(mode)
+      // if(mode === 0){
+      //   console.log('0 칸반보드 true 보여조라~');
+      // } else if(mode === 1){
+      //   console.log('1 화면공유 true 보여조라~');
+      // } else if(mode === 2) {
+      //   console.log('2 화이트보드 true니깐 보여주라~');
+      // }
       this.screenMode = mode;
     },
     toggleVideoSub(sub) {
@@ -281,53 +276,36 @@ export default {
       sub.stream.audioActive = now;
     },
     joinSession (initVideoOn, initAudioOn) {
-      // --- Get an OpenVidu object ---
       this.OV = new OpenVidu();
-
-      // --- Init a session ---
       this.session = this.OV.initSession();
-
-      // --- Specify the actions when events take place in the session ---
-
-      // On every new Stream received...
       this.session.on('streamCreated', ({ stream }) => {
         const subscriber = this.session.subscribe(stream);
         subscriber.muteVideo = false;
         subscriber.muteAudio = false;
         this.subscribers.push(subscriber);
       });
-
-			// On every Stream destroyed...
 			this.session.on('streamDestroyed', ({ stream }) => {
 				const index = this.subscribers.indexOf(stream.streamManager, 0);
 				if (index >= 0) {
 					this.subscribers.splice(index, 1);
 				}
 			});
-
-			// On every asynchronous exception...
 			this.session.on('exception', ({ exception }) => {
 				console.warn(exception);
 			});
-
-			// On start screen share
 			this.session.on('signal:startScreenSharing', ()=>{
 				this.isScreenShared = true;
 			})
-
-			// On stop screen share
 			this.session.on('signal:stopScreenSharing', ()=>{
 				this.isScreenShared = false;
 			})
-
-      // Speech Start Detection
       this.session.on("publisherStartSpeaking", (event) => {
-        console.log(event);
-        console.log("User " + event.connection.data + " start speaking");
+        // console.log(event);
+        // console.log("User " + event.connection.data + " start speaking");
         this.isSpeakList.push(event.connection.connectionId);
         this.isSpeak = !this.isSpeak;
-        console.log(event.connection.connectionId);
-        console.log("isSpeak 상태 : " + this.isSpeak);
+        // console.log(event.connection.connectionId);
+        // console.log("isSpeak 상태 : " + this.isSpeak);
         // alert("발언자 리스트 : " + this.isSpeakList);
         // this.$store.dispatch('startSpeaking')
         // this.$store.dispatch(
@@ -335,10 +313,8 @@ export default {
         //   JSON.parse(event.connection.data).clientData
         // );
       });
-
-      // Speech Stop Detection
       this.session.on("publisherStopSpeaking", (event) => {
-        console.log("User " + event.connection.connectionId + " stop speaking");
+        // console.log("User " + event.connection.connectionId + " stop speaking");
         let temp = this.isSpeakList;
         let index = temp.indexOf(event.connection.connectionId, 0);
         if (index >= 0) {
@@ -346,7 +322,7 @@ export default {
           this.isSpeakList = temp;
         }
         this.isSpeak = !this.isSpeak;
-        console.log("isSpeak 상태 : " + this.isSpeak);
+        // console.log("isSpeak 상태 : " + this.isSpeak);
         // this.$store.dispatch('stopSpeaking')
         // this.$store.dispatch(
         //   "removeSpeaker",
@@ -431,9 +407,9 @@ export default {
         width: 960,
         height: 600
       };
-      console.log("바뀐 메인스트림정보");
-      console.log(this.mainStreamManager);
-      console.log(this.mainStreamManager.stream.videoDimensions);
+      // console.log("바뀐 메인스트림정보");
+      // console.log(this.mainStreamManager);
+      // console.log(this.mainStreamManager.stream.videoDimensions);
       // this.mainOnOff = true;
 		},
     deleteMainVideoStreamManager() {
@@ -516,10 +492,10 @@ export default {
             insertMode: 'APPEND',
             mirror: false
 					});
-					console.log("publisher",publisher);
+					// console.log("publisher",publisher);
 					publisher.once('accessAllowed', () => {
 						try {
-							console.log("subscriber >>>>> ", this.subscribers);
+							// console.log("subscriber >>>>> ", this.subscribers);
 							this.isScreenShared=true;
 							this.session.signal({
 								data: JSON.stringify(status),  // Any string (optional)
@@ -527,7 +503,7 @@ export default {
 								type: 'startScreenSharing'             // The type of message (optional)
 							})
 							publisher.stream.getMediaStream().getVideoTracks()[0].addEventListener('ended', () => {
-								console.log('User pressed the "Stop sharing" button');
+								// console.log('User pressed the "Stop sharing" button');
 								this.session.signal({
 									data: JSON.stringify(status),  // Any string (optional)
 									to: [],

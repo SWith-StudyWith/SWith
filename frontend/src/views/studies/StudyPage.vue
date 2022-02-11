@@ -40,30 +40,30 @@ export default {
     const screenMode = ref(1);
     const onClickKanbanBoard = () => {
       isKanbanBoard.value = !isKanbanBoard.value;
-      console.log(isKanbanBoard);
+      // console.log(isKanbanBoard);
     };
     const onClickWhiteBoard = () => {
       isWhiteBoard.value = !isWhiteBoard.value;
-      console.log(isWhiteBoard);
+      // console.log(isWhiteBoard);
     };
     const onClickScreenShare = () => {
       isScreenShare.value = !isScreenShare.value;
-      console.log(isScreenShare);
+      // console.log(isScreenShare);
     };
     const onClickScreenMode = () => {
-      screenMode.value = screenMode.value*  (-1);
+      // screenMode.value = screenMode.value*  (-1);
     };
 
     const showScreenMode = ( screen ) => {
       // switch (screen)
       if(screen==1){
-        console.log('1 칸반보드 true 보여조라~');
+        // console.log('1 칸반보드 true 보여조라~');
         isKanbanBoard.value = !isKanbanBoard.value;
       } else if(screen==2){
-        console.log('2 화면공유 true 보여조라~');
+        // console.log('2 화면공유 true 보여조라~');
         isScreenShare.value = !isScreenShare.value;
       } else if( screen ==3) {
-        console.log('3 화이트보드 true니깐 보여주라~');
+        // console.log('3 화이트보드 true니깐 보여주라~');
         isWhiteBoard.value = !isWhiteBoard.value;
       }
     }
