@@ -193,7 +193,7 @@ export default {
               route.params.studyId,
               uploadFileData,
               (res) => {
-                console.log(res.data)
+                // console.log(res.data)
                 switch (res.data.code) {
                   case 200:
                     notifySuccess('스터디 파일 업로드 성공')
@@ -220,7 +220,7 @@ export default {
         route.params.studyId,
         fileId,
         (res) => {
-          console.log(res.data)
+          // console.log(res.data)
           const url = window.URL.createObjectURL(new Blob([res.data]));
           const link = document.createElement('a');
           link.href = url;
@@ -240,7 +240,7 @@ export default {
         route.params.studyId,
         fileId,
         (res) => {
-          console.log(res.data);
+          // console.log(res.data);
           switch (res.data.code) {
             case 200:
               notifySuccess('스터디 파일 삭제 성공')
