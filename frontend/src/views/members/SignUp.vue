@@ -68,7 +68,7 @@
             :style="{ visibility: (state.isValidPassword || !state.wasInputed.password)? 'hidden' : 'visible' }"
             class="invalid-feedback"
           >
-            영어, 숫자, 특수문자 포함 8 ~ 16자를 입력해주세요.
+            숫자, 영문, 특수문자를 모두 포함해 8 ~ 16 글자를 입력해주세요.
           </div>
         </form>
 
