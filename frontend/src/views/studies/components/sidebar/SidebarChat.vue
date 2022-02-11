@@ -297,7 +297,7 @@ export default {
     }
   },
   created() {
-    console.log('사이드바 생성 ~')
+    // console.log('사이드바 생성 ~')
     this.init = true
 
     this.loadingCall()
