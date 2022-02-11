@@ -80,25 +80,36 @@ export default {
 .title{
   font-size: 3vh;
   font-weight:500;
-  margin-top: 7vh;
-  margin-bottom: 5.5vh;
+  margin: 5.5vh 0 1vh 1vw;
 }
 .profile-img {
-  width: 8vh;
-  height: 8vh;
-  border-radius: 70%;
+  width: 5.5vh;
+  height: 5.5vh;
+  border-radius: 50%;
   background-color: white;
 }
 .nickname{
-  font-size: 2vh;
-  margin-top: 0.5vh;
+  font-size: 1.7vh;
   margin-bottom: 0.2vh;
 }
 .email{
-  font-size: 1.75vh;
+  font-size: 1.5vh;
   color: rgb(199, 199, 199);
+  margin-bottom: 0;
+}
+.row{
+  margin-top: 1vh;
+}
+.col-4 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 .col-8 {
   padding-left: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 </style>

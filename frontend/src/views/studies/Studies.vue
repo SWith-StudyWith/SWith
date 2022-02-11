@@ -19,7 +19,7 @@
           </div>
           <!-- video-container start -->
           <div id="video-container">
-            <div class="user-video-wrapper d-flex">
+            <div class="user-video-wrapper d-flex overflow-auto">
               <!-- publisher -->
               <div class="video-box position-relative">
                 <div v-if="publisher">
@@ -605,12 +605,12 @@ export default {
   height: 25vh
 }
 .video-box{
-  height: 25vh
+  height: 20vh
 }
 .stream-btn-container {
   position: absolute;
-  width: 30vh;
-  height: 20vh;
+  width: 29vh;
+  height: 18vh;
   top: 0;
   visibility: collapse;
   border-radius: 1rem;
@@ -634,7 +634,7 @@ export default {
 .mute-icon-container {
   position: absolute;
   width: 100%;
-  height: 200px;
+  height: 18vh;
   top: 0;
   font-size: 0.8rem;
 }

@@ -328,19 +328,16 @@ export default {
 .title{
   font-size: 3vh;
   font-weight:500;
-  margin-top: 5vh;
-  margin-left: 1vw;
-  margin-bottom: 1vh;
+  margin: 5.5vh 0 1vh 1vw;
 }
 .chat-input{
   display: flex;
-  margin: 1vh 0.5vw 1vh;
+  margin: 1vh 1vw 1vh 0.5vw;
 }
 .inputText{
   display: flex;
   width: 100%;
   vertical-align: top;
-  margin-right: 0.5vw;
 }
 #message{
   display: flex;
@@ -372,6 +369,7 @@ export default {
 hr {
   margin-top: 2vh;
   margin-bottom: 2vh;
+  margin: 2vh 1vw 2vh 0.5vw;
 }
 .chat-body::-webkit-scrollbar {
   /* display: none; */

@@ -199,6 +199,7 @@ p{
   cursor: pointer;
 }
 .image-wrapper{
+  display: flex;
   margin-bottom: 30px;
   width: 150px;
   height: 150px;
@@ -221,9 +222,6 @@ p{
 }
 .dropdown-menu{
   text-align: center;
-}
-.dropend{
-  margin-left: 40px;
 }
 .invalid-feedback {
   display: block;

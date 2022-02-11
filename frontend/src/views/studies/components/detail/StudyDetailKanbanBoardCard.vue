@@ -30,7 +30,7 @@ span {
   text-overflow: ellipsis;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
-  overflow: hidden;
+  /* overflow: hidden; */
   line-height: 1.7rem;
   max-height: 2.4rem;
 }
@@ -42,6 +42,11 @@ span {
   border: solid 1.5px #DDDDDD;
   border-radius: 0.4rem;
   box-shadow: 1px 1px .4em #DDDDDD;
+  /* cursor: pointer; */
+}
+.StudyDetailKanbanBoardCard:hover {
+  transition-duration: 0.1s;
+  background-color: rgba(238, 238, 238, 0.301);
 }
 .font-small {
   font-size: 0.9rem;
