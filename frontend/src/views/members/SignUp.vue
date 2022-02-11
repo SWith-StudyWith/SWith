@@ -69,7 +69,7 @@
             :style="{ visibility: (state.isValidPassword || !state.wasInputed.password)? 'hidden' : 'visible' }"
             class="invalid-feedback"
           >
-            유효하지 않은 비밀번호입니다.
+            영어, 숫자, 특수문자 포함 8 ~ 16자를 입력해주세요.
           </div>
         </form>
 
