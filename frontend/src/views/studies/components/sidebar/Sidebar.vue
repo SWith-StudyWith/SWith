@@ -175,7 +175,7 @@ export default {
       state.isMemberList = !state.isMemberList;
       emit('toggleSidebar', sidebarWidth.value)
       // test
-      console.log('스터디 회원 목록 조회 테스트!');
+      // console.log('스터디 회원 목록 조회 테스트!');
       getMemberList(
         route.params.studyId,
         (res) => {
