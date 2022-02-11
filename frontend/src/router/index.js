@@ -142,6 +142,12 @@ const routes = [
   },
 ];
 const router = createRouter({
+  scrollBehavior() {
+    return {
+      el: '#app',
+      top: 0
+    }
+  },
   history: createWebHistory(),
   routes,
 });
