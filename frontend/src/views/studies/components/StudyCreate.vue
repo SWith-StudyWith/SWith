@@ -126,7 +126,7 @@ export default {
               notifySuccess('스터디룸 생성 완료!🔨')
               break;
             case 400:
-              console.log('실패')
+              console.log('스터디룸 생성 실패')
               notifyDanger('스터디룸 생성 실패😥')
               break;
           }
