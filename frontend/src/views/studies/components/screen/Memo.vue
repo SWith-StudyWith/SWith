@@ -6,19 +6,19 @@
     <div v-dragscroll:nochilddrag class="container position-relative back overflow-hidden mb-4" id="memoContainer">
       <div
         v-for="(memo, idx) in memoList"
-        :key="idx" class="postit position-absolute m-0"
+        :key="idx" class="postit position-absolute m-0 py-4"
         :class="['target'+ idx, colorList[memo.color]]"
-        :style="{ transform : memo.transform }"
-        data-bs-toggle="modal" data-bs-target="#memoModal"
+        :style="{ 'z-index': memo.zIndex, transform : memo.transform }"
+        @dblclick="onDblClick"
+        @click="handleSelectedMemo(idx)"
       >
         {{ memo.content }}
       </div>
       <Moveable
-        v-for="(memo, idx) in memoList" :key="idx"
-        v-if="isEditting"
+        v-if="selectedIdx !== -1"
         className="moveable"
         v-bind:draggable="true"
-        v-bind:target="['.target'+idx]"
+        :target="['.target'+selectedIdx]"
         v-bind:rotatable="true"
         v-bind:scalable="true"
         v-bind:snappable="true"
@@ -27,17 +27,18 @@
         @drag="onDrag"
         @scale="onScale"
         @rotate="onRotate"
-        @click="onClick(memo, idx)"
-        @renderEnd="handleRenderEnd(idx, $event)"
+        @renderEnd="handleRenderEnd(selectedIdx, $event)"
       />
       </div>
   <!-- </div> -->
-  <MemoModal/>
+  <!-- <MemoModal v-ifisEditting=""/> -->
+  <MemoModal />
 </template>
 <script>
 import Moveable from "vue3-moveable";
 import MemoModal from '@/views/studies/components/screen/MemoModal.vue'
 import { mapState } from 'vuex';
+import { Modal } from 'bootstrap';
 
 export default {
   name: 'Memo',
@@ -49,7 +50,7 @@ export default {
     return {
       colorList: ['red', 'blue', 'yellow'],
       imgSrc: require('@/assets/img/landing/icon_download.png'),
-      isEditting: true,
+      // isEditting: true,
       memoContainer: null,
       initZIndex: 0,
       resizeObserver: new ResizeObserver(
@@ -72,6 +73,14 @@ export default {
   },
   unmounted() {},
   methods: {
+    handleSelectedMemo(idx) {
+      this.$store.commit('SET_SELECTED_MEMO_INDEX', idx)
+    },
+    onDblClick() {
+      let myModalEl = document.getElementById('memoModal');
+      let modal = Modal.getOrCreateInstance(myModalEl);
+      modal.show();
+    },
     onDrag({ target, transform }) {
       target.style.transform = transform;
     },
@@ -81,11 +90,8 @@ export default {
     onRotate({ target, drag }) {
       target.style.transform = drag.transform;
     },
-    onClick(memo, idx) {
-      console.log(memo.color)
-      console.log(memo.content)
+    onClick(idx) {
       this.$store.commit('SET_SELECTED_MEMO_INDEX', idx)
-      this.$store.commit('SET_SELECTED_MEMO', memo)
     },
     handleRenderEnd(idx, event) {
       console.log(event.target.style.transform)
@@ -97,8 +103,9 @@ export default {
         'ADD_MEMO',
         {
           content: '',
-          color: 3,
-          zIndex: ++this.zIndexCount,
+          color: 0,
+          // isEditting: true,
+          zIndex: this.zIndexCount++,
         }
       )
     },

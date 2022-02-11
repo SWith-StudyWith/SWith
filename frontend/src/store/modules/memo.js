@@ -4,7 +4,7 @@ const state = () => ({
   memoList: [],
   memo: {},
   selectedIdx: -1,
-  zIndexCount: 0,
+  zIndexCount: 1,
 });
 
 const getters = {
@@ -21,7 +21,8 @@ const actions = {
     getMemoList(
       studyId,
       (res) => {
-        console.log(res)
+        console.log(res.data)
+        // res.data.data.forEach((memo) => memo.isEditting = false)
         commit('SET_MEMO_LIST', res.data.data)
       },
       (err) => {
@@ -61,7 +62,7 @@ const actions = {
         console.log(err)
       }
     )
-  }
+  },
 };
 const mutations = {
   SET_MEMO_LIST(state, memoList) {
@@ -72,12 +73,22 @@ const mutations = {
   },
   SET_SELECTED_MEMO_INDEX(state, index) {
     state.selectedIdx = index;
+    state.zIndexCount++;
+    state.memoList[index].zIndex = state.zIndexCount;
+    // state.memoList[index].isEditting = true;
   },
   SET_MEMO_BY_INDEX(state, { index, memo }) {
-    state.memoList[index] = { ...state.memoList[index], ...memo };
+    state.memoList[index] = memo;
   },
-  SET_SELECTED_MEMO(state, memo) {
-    state.memo = memo;
+  UPDATE_SELECTED_MEMO_CONTENT(state, { index, content }) {
+    state.memoList[index] = { ...state.memoList[index], ...{ content } };
+  },
+  UPDATE_SELECTED_MEMO_COLOR(state, { index, color }) {
+    state.memoList[index] = { ...state.memoList[index], ...{ color } };
+  },
+  DELETE_SELECTED_MEMO(state, index) {
+    state.memoList.splice(index, 1);
+    state.selectedIdx = -1;
   }
 };
 
