@@ -29,8 +29,8 @@ export default {
   border-radius: 0.7rem;
 }
 .sub {
-  width: 30vh;
-  height: 20vh;
+  width: 29vh;
+  height: 18vh;
   overflow: hidden;
   object-fit: cover;
   border-radius: 1rem;

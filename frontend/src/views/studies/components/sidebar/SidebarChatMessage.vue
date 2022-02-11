@@ -189,10 +189,10 @@ img {
   line-break: anywhere;
 } */
 .other-content{
-  margin: 0.8vh 0.3vw 0 0.3vw;
+  margin: 0.8vh 0.3vw 0 2vw;
   border-radius: 0px 20px 20px 20px;
   background-color: #f3f3f3;
-  max-width: 11vw;
+  max-width: 10vw;
   color: #414141;
   padding: 1vh 1vw 1vh;
   font-size: 1.6vh;
@@ -237,7 +237,7 @@ img {
   flex-basis: 100%;
   align-items: center;
   color: rgba(255, 255, 255, 0.7);
-  font-size: 2vh;
+  font-size: 1.5vh;
   /* font-weight: 500; */
   margin-top: 1vh;
   /* margin-bottom: 0.7vh; */

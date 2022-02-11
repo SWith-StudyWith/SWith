@@ -6,13 +6,13 @@
       <div class="card">
         <div v-if="state.fileList" >
                   <div class="card-body" v-for="file in state.fileList" :key="file.memberId">
-                    <div class="card-body-data">
+                    <div class="card-body-data col-9">
                       <!-- <p class="card-body-data-name" text-truncate>{{ file.originName }}</p> -->
                       <p class="card-body-data-name" text-truncate><b>{{ file.originName }}</b></p>
                       <p class="card-body-data-size" text-truncate>size | {{ convertFileSize(file.fileSize) }}</p>
                       <p class="card-body-data-createdAt" text-truncate>createdAt | {{ file.createdAt }}</p>
                     </div>
-                    <div class="card-body-buttons">
+                    <div class="card-body-buttons col-3">
                       <img
                         src="@/assets/img/icon_sidebar/file/download_1E304F.svg"
                         @click="onClickDownloadFile(file.fileId, file.originName)">
@@ -292,12 +292,10 @@ export default {
   width: 100%;
   text-align: left;
 }
-
 .title{
   font-size: 3vh;
   font-weight:500;
-  margin-top: 6vh;
-  margin-bottom: 2vh;
+  margin: 5.5vh 0 1vh 1vw;
 }
 /* .home h1 {
   font-size: 40px;
@@ -312,6 +310,7 @@ export default {
   overflow-y: scroll;
   scroll-behavior: smooth;
   width: 100%;
+  padding-left: 0.5vw;
 }
 /* .file-body::-webkit-scrollbar {
   display: none;
@@ -366,9 +365,8 @@ export default {
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
-  font-size: 13px;
   cursor: pointer;
-  padding: 10px;
+  padding: 0.5rem;
 }
 
 .file-submit-icon {
@@ -376,8 +374,7 @@ export default {
 }
 
 .file-submit-name {
-  margin-right: 3px;
-  font-size: 18px;
+  font-size: 2.4vh;
   font-family: 'Mulish';
 }
 
@@ -430,30 +427,28 @@ export default {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
+  justify-content: end;
   align-items: center;
   cursor: pointer;
 }
 
 .card-body-data {
-  display: flex;
+  display: inline-flex;
   flex-direction: column;
   flex-wrap: nowrap;
   align-items: flex-start;
   /* margin-bottom: 0px; */
   /* width: 222px; */
 }
-
 .card-body-data-name {
-  font-size: 14px;
-  margin: 0;
-  width: 222px;
-  height: 42px;
+  font-size: 1.6vh;
+  margin-bottom: 0.6vh;
   overflow: hidden;
   /* white-space: nowrap; */
   display: -webkit-box;
   text-overflow: ellipsis;
   -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
+  -webkit-box-orient: vertical;
 }
 .card-body-none-data {
   display: flex;
@@ -464,24 +459,25 @@ export default {
   margin-left: 10px;
 }
 
-.card-body-data-none-name {
-  font-size: 14px;
-
+.card-body-none-data-name {
+  font-size: 1.6vh;
 }
 
 .card-body-data-size {
   /* color: #9c9c9c; */
   margin: 0;
-  font-size: 12px;
+  font-size: 1.2vh;
 }
 
 .card-body-data-createdAt {
   /* color: #9c9c9c; */
   margin: 0;
-  font-size: 12px;
+  font-size: 1.2vh;
 }
 
 form{
-  padding-inline: 1vh;
+  padding: 0 1vw 0 0.5vw;
+  display: flex;
+  flex-direction: column;
 }
 </style>

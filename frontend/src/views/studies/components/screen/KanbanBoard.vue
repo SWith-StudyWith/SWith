@@ -316,4 +316,8 @@ h1 {
 .kanban-card {
   cursor: pointer;
 }
+.kanban-card:hover {
+  transition-duration: 0.1s;
+  background-color: rgba(238, 238, 238, 0.301);
+}
 </style>

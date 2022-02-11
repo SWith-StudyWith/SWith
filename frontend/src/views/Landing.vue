@@ -19,7 +19,7 @@
           <button type="button" class="btn btn-success" style="color:white">#study_with</button>
         </router-link>
       </div>
-      <div class="col-md-5">
+      <div class="col-md-6">
         <img src="@/assets/img/landing/Saly-1.png" alt=""
           class="animate__animated animate__shakeY">
       </div>
@@ -97,7 +97,7 @@
       <!-- justify-content-between -->
     <div class="row">
       <div class="col-md-6" >
-        <img src="@/assets/img/landing/Saly-19.png" alt=""
+        <img src="@/assets/img/landing/Saly-19.png" alt="" style="width:100%"
           class="animate__animated animate__shakeY">
       </div>
       <div class="col text-end align-self-center">

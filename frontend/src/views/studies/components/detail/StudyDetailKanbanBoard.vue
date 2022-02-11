@@ -92,7 +92,4 @@ export default {
 ::-webkit-scrollbar{
   width: 6px;
 }
-.kanban-card {
-  cursor: pointer;
-}
 </style>
