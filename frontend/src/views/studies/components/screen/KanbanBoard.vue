@@ -163,7 +163,7 @@ export default {
       checkKanban(
         store.state.study.studyInfo.studyId,
         (res) => {
-          console.log(res.data);
+          // console.log(res.data);
           if (res.data.code === 200) {
             console.log('수정 가능');
             emit('isEditPermit', true);
