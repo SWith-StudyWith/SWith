@@ -21,8 +21,6 @@ const actions = {
     getMemoList(
       studyId,
       (res) => {
-        console.log(res.data)
-        // res.data.data.forEach((memo) => memo.isEditting = false)
         commit('SET_MEMO_LIST', res.data.data)
       },
       (err) => {
@@ -50,7 +48,6 @@ const actions = {
         getMemoList(
           studyId,
           (res) => {
-            console.log(res.data)
             commit('SET_MEMO_LIST', res.data.data)
           },
           (err) => {
@@ -75,7 +72,6 @@ const mutations = {
     state.selectedIdx = index;
     state.zIndexCount++;
     state.memoList[index].zIndex = state.zIndexCount;
-    // state.memoList[index].isEditting = true;
   },
   SET_MEMO_BY_INDEX(state, { index, memo }) {
     state.memoList[index] = memo;
