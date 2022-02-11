@@ -14,16 +14,16 @@ export default {
     checkUser() {
       const { idData } = this.getConnectionData();
       this.memberlist.forEach(mem => {
-        console.log("id체크");
-        console.log(mem.user_id);
-        console.log(idData);
+        // console.log("id체크");
+        // console.log(mem.user_id);
+        // console.log(idData);
         if (mem.user_id == idData) {
-          console.log("id가 똑같네");
+          // console.log("id가 똑같네");
           this.color = true;
           return this.color;
         }
       });
-      console.log("왜나와..");
+      // console.log("왜나와..");
       return this.color;
     },
     clientData() {
