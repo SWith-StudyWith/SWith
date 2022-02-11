@@ -11,7 +11,7 @@ export default {
   },
   created() {
     this.LOGIN_GOOGLE(this.$route.query.code)
-    console.log(this.$route.query.code)
+    // console.log(this.$route.query.code)
   },
   mounted() {},
   unmounted() {},
