@@ -2,23 +2,7 @@ import { setMemoList, getMemoList } from "../../api/memo";
 
 
 const state = () => ({
-  memoList: [
-    {
-      content: 'A',
-      color: 'red',
-      transform: 'matrix(1, 0, 0, 1, 0, 0) translate(162px, 0px)',
-    },
-    {
-      content: 'B',
-      color: 'blue',
-      transform: 'matrix(1, 0, 0, 1, 0, 0) translate(162px, 80px)',
-    },
-    {
-      content: 'C',
-      color: 'green',
-      transform: 'matrix(1, 0, 0, 1, 0, 0) translate(162px, 160px)',
-    }
-  ],
+  memoList: [],
   selectedIdx: -1,
   zIndexCount: 0,
 });
@@ -56,16 +40,16 @@ const actions = {
       payload,
       (res) => {
         console.log(res.data)
-        // getMemoList(
-        //   studyId,
-        //   (res) => {
-        //     console.log(res)
-        //     commit('SET_MEMO_LIST', res.data.data)
-        //   },
-        //   (err) => {
-        //     console.log(err)
-        //   }
-        // )
+        getMemoList(
+          studyId,
+          (res) => {
+            console.log(res.data)
+            commit('SET_MEMO_LIST', res.data.data)
+          },
+          (err) => {
+            console.log(err)
+          }
+        )
       },
       (err) => {
         console.log(err)

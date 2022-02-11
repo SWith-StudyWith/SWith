@@ -7,7 +7,7 @@
       <div
         v-for="(memo, idx) in memoList"
         :key="idx" class="postit position-absolute m-0"
-        :class="['target'+ idx, memo.color]"
+        :class="['target'+ idx, colorList[memo.color]]"
         :style="{ 'z-index': idx, transform : memo.transform }"
         data-bs-toggle="modal" data-bs-target="#memoModal"
       >
@@ -51,6 +51,7 @@ export default {
   },
   data() {
     return {
+      colorList: ['red', 'blue', 'green', 'yellow'],
       imgSrc: require('@/assets/img/landing/icon_download.png'),
       isEditting: true,
       memoContainer: null,
@@ -83,7 +84,9 @@ export default {
     }
   },
   setup() {},
-  created() {},
+  created() {
+    this.$store.dispatch('GET_MEMO_LIST', this.$route.params.studyId)
+  },
   mounted() {
     this.memoContainer = document.getElementById('memoContainer')
     this.resizeObserver.observe(this.memoContainer)
@@ -114,7 +117,7 @@ export default {
         'ADD_MEMO',
         {
           content: '',
-          color: 'yellow',
+          color: 3,
           zIndex: ++this.zIndexCount,
         }
       )
