@@ -1,12 +1,25 @@
 <template>
   <!-- <div class="back"> -->
-    <button @click="isEditting = !isEditting"> 버튼</button>
-    <button class="btn btn-primary" @click="onClickCreateBtn">새 메모</button>
-    <button class="btn btn-primary" @click="onClickSaveBtn">저장하기</button>
     <div v-dragscroll:nochilddrag class="container position-relative back overflow-hidden mb-4" id="memoContainer">
+      <span v-if="isEditting" class="btn-container">
+        <button class="btn btn-primary ms-2 shadow" @click="onClickCreateBtn">
+          <font-awesome-icon :icon="['fas', 'plus']"></font-awesome-icon>
+        </button>
+        <button class="btn btn-primary ms-2 shadow" @click="onClickDelete">
+          <font-awesome-icon :icon="['fas', 'trash-alt']"></font-awesome-icon>
+        </button>
+        <button class="btn btn-primary ms-2 shadow" @click="onClickSaveBtn">
+          <font-awesome-icon :icon="['fas', 'save']"></font-awesome-icon>
+        </button>
+      </span>
+      <span v-else class="btn-container">
+        <button class="btn btn-primary" @click="isEditting = true">
+          <font-awesome-icon :icon="['fas', 'edit']"></font-awesome-icon>
+        </button>
+      </span>
       <div
         v-for="(memo, idx) in memoList"
-        :key="idx" class="postit position-absolute m-0 py-4"
+        :key="idx" class="postit user-select-none position-absolute m-0 py-4 px-2"
         :class="['target'+ idx, colorList[memo.color]]"
         :style="{ 'z-index': memo.zIndex, transform : memo.transform }"
         @dblclick="onDblClick"
@@ -15,7 +28,7 @@
         {{ memo.content }}
       </div>
       <Moveable
-        v-if="selectedIdx !== -1"
+        v-if="selectedIdx !== -1 && isEditting"
         className="moveable"
         v-bind:draggable="true"
         :target="['.target'+selectedIdx]"
@@ -31,8 +44,7 @@
       />
       </div>
   <!-- </div> -->
-  <!-- <MemoModal v-ifisEditting=""/> -->
-  <MemoModal />
+  <MemoModal v-if="isEditting" />
 </template>
 <script>
 import Moveable from "vue3-moveable";
@@ -50,7 +62,7 @@ export default {
     return {
       colorList: ['red', 'blue', 'yellow'],
       imgSrc: require('@/assets/img/landing/icon_download.png'),
-      // isEditting: true,
+      isEditting: false,
       memoContainer: null,
       initZIndex: 0,
       resizeObserver: new ResizeObserver(
@@ -93,6 +105,9 @@ export default {
     onClick(idx) {
       this.$store.commit('SET_SELECTED_MEMO_INDEX', idx)
     },
+    onClickDelete() {
+      this.$store.commit('DELETE_SELECTED_MEMO', this.selectedIdx)
+    },
     handleRenderEnd(idx, event) {
       console.log(event.target.style.transform)
       this.memoList[idx].transform = event.target.style.transform;
@@ -104,7 +119,6 @@ export default {
         {
           content: '',
           color: 0,
-          // isEditting: true,
           zIndex: this.zIndexCount++,
         }
       )
@@ -118,6 +132,7 @@ export default {
           memoList: this.memoList
         }
       )
+      this.isEditting = false;
     }
   },
   computed: {
@@ -140,10 +155,11 @@ export default {
   border-radius: 0.8rem;
 }
 .postit {
-  width: 10rem;
-  height: 10rem;
+  width: 13rem;
+  height: 13rem;
   background-color: burlywood;
   box-shadow: 0 5px 5px 0 rgb(0 0 0 / 0.1), 0 5px 5px -1px rgb(0 0 0 / 0.1);
+  font-size: 0.8rem;
 }
 .red {
   background-color: #F1D4D4;
@@ -153,5 +169,14 @@ export default {
 }
 .yellow {
   background-color: #FFF9BE;
+}
+.btn-container {
+  z-index: 4000;
+  position: absolute;
+  right: 12px;
+  top: 12px;
+}
+.shadow {
+  box-shadow: 0 3px 3px 0 rgb(0 0 0 / 0.8), 0 5px 5px -1px rgb(0 0 0 / 0.1);
 }
 </style>
