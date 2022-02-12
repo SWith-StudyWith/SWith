@@ -427,7 +427,7 @@ export default {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  justify-content: end;
+  justify-content: flex-end;
   align-items: center;
   cursor: pointer;
 }
