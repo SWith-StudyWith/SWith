@@ -29,7 +29,9 @@
   </div>
 </template>
 <script>
+import notifications from '@/composables/notifications'
 
+const { notifyDanger } = notifications();
 export default {
   name: 'StudyDetailCamera',
   components: {},
@@ -122,6 +124,7 @@ export default {
         }
       } catch(err) {
         console.log(err)
+        notifyDanger('장치를 가져오는데 실패했어요😳')
       }
     },
     onClickMuteBtn: function () {
@@ -153,9 +156,13 @@ export default {
     },
     // 미디어 장치 종료
     closeMedia: function () {
-      this.myStream.getTracks().forEach(track => {
-        track.stop();
-      })
+      try {
+        this.myStream.getTracks().forEach(track => {
+          track.stop();
+        })
+      } catch(err) {
+        console.log(err)
+      }
     }
   },
   computed: {

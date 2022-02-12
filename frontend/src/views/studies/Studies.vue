@@ -346,8 +346,8 @@ export default {
 					.then(() => {
 						// --- Get your own camera stream with the desired properties ---
 						let publisher = this.OV.initPublisher(undefined, {
-							audioSource: this.initAudioId, // The source of audio. If undefined default microphone
-							videoSource: this.initVideoId, // The source of video. If undefined default webcam
+							audioSource: this.initAudioId ? this.initAudioId : undefined, // The source of audio. If undefined default microphone
+							videoSource: this.initVideoId ? this.initVideoId : undefined, // The source of video. If undefined default webcam
 							publishAudio: parsing(initAudioOn),  	// Whether you want to start publishing with your audio unmuted or not
 							publishVideo: parsing(initVideoOn),  	// Whether you want to start publishing with your video enabled or not
 							resolution: '640x480',  // The resolution of your video
