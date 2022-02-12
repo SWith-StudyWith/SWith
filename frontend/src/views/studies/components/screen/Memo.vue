@@ -85,7 +85,9 @@ export default {
     this.resizeObserver.observe(this.memoContainer)
   },
   beforeUnmount() {
-    this.onClickSaveBtn()
+    if (this.isEditting) {
+      this.onClickSaveBtn()
+    }
   },
   methods: {
     handleSelectedMemo(idx) {
@@ -112,7 +114,6 @@ export default {
       this.$store.commit('DELETE_SELECTED_MEMO', this.selectedIdx)
     },
     handleRenderEnd(idx, event) {
-      console.log(event.target.style.transform)
       this.memoList[idx].transform = event.target.style.transform;
     },
     onClickCreateBtn() {

@@ -27,7 +27,7 @@ import StudyDetailHeader from '@/views/studies/components/detail/StudyDetailHead
 import StudyDetailCamera from '@/views/studies/components/detail/StudyDetailCamera';
 import StudyDetailExitModal from '@/views/studies/components/detail/StudyDetailExitModal';
 import StudyDetailKanbanBoard from '@/views/studies/components/detail/StudyDetailKanbanBoard';
-import { reactive, computed } from 'vue'
+import { reactive, computed, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex'
 
@@ -77,6 +77,9 @@ export default {
         }
       )
     }
+    onBeforeUnmount(() => {
+      store.commit('SET_STUDY_INFO', {})
+    })
     return { state, route, setDevice, onClickEnterBtn };
   },
 }
