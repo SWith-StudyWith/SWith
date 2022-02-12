@@ -138,11 +138,10 @@ export default {
     Memo,
   },
   beforeRouteLeave(to, from, next) {
-    console.log(to.fullPath);
-    if (!this.canLeave) {
-      this.$refs.kanbanBoard.onClickSaveBtn()
-      return next();
-    }
+    // if (!this.canLeave) {
+    //   this.$refs.kanbanBoard.onClickSaveBtn()
+    // }
+    this.$store.commit('SET_STUDY_INFO', {})
     if (to.fullPath == `/studies/${this.$route.params.studyId}`) {
       if (this.session) {
         this.session.disconnect();
@@ -249,20 +248,12 @@ export default {
       e.returnValue = '';
     },
     isEditPermit (permit) {
-      console.log(permit)
       this.editPermit = permit;
       this.canLeave = !permit;
     },
     showScreenMode ( mode ) {
       // switch (screen)
-      console.log(mode)
-      if(mode === 0){
-        console.log('0 칸반보드 true 보여조라~');
-      } else if(mode === 1){
-        console.log('1 화면공유 true 보여조라~');
-      } else if(mode === 2) {
-        console.log('2 화이트보드 true니깐 보여주라~');
-      }
+
       this.screenMode = mode;
     },
     toggleVideoSub(sub) {
@@ -319,12 +310,8 @@ export default {
 
       // Speech Start Detection
       this.session.on("publisherStartSpeaking", (event) => {
-        console.log(event);
-        console.log("User " + event.connection.data + " start speaking");
         this.isSpeakList.push(event.connection.connectionId);
         this.isSpeak = !this.isSpeak;
-        console.log(event.connection.connectionId);
-        console.log("isSpeak 상태 : " + this.isSpeak);
         // alert("발언자 리스트 : " + this.isSpeakList);
         // this.$store.dispatch('startSpeaking')
         // this.$store.dispatch(
