@@ -9,7 +9,7 @@
     <!-- 내가 보낸 메세지 -->
     <div class="chat-my-message" v-if="chat?.memberId==this.getUserInfo.memberId">
       <p class="chat-my-message-time" >{{ hhmm }}</p>
-      <p class="my-content">{{ chat?.content }}</p>
+      <p class="my-content" v-html="checkUrlContent(chat?.content)"></p>
     </div>
 
     <!-- 상대가 보낸 메세지  -->
@@ -25,7 +25,7 @@
       </div>
       <div class="chat-other-content2">
         <!-- <div class="chat-other-content1"> -->
-          <p class="other-content">{{ chat?.content }}</p>
+          <p class="other-content" v-html="checkUrlContent(chat?.content)"></p>
           <p class="chat-other-message-time">{{ hhmm }}</p>
         <!-- </div> -->
         <!-- <div class="chat-other-content2">
@@ -129,6 +129,11 @@ export default {
       else if(preValue != chatValue){
         return false
       }else return true
+    },
+    checkUrlContent(content) {
+      const expUrl = /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/gi;
+      let changedContent = content.replace(expUrl, `<a href="$&" target="_blank">$&</a>`);
+      return changedContent;
     }
   },
   created() {
