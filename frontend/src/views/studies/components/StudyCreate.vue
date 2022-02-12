@@ -96,7 +96,7 @@ export default {
 
     const onClickUploadFile = (e) => {
       const file = e.target.files[0]
-      if (file.size > 209715) {
+      if (file.size > 2097152) {
         e.preventDefault();
         notifyDangerDescription('파일 사이즈가 너무 큽니다.😯', '최대 2MB')
         return;
@@ -131,6 +131,7 @@ export default {
           switch (res.data.code) {
             case 200:
               notifySuccess('스터디룸 생성 완료!🔨')
+              router.push({ name: 'Main'})
               break;
             case 400:
               console.log('실패')
@@ -141,8 +142,7 @@ export default {
         (err) => {
           console.log(err)
           notifyDanger('서버에 문제가 발생했습니다.😰')
-          },
-          router.push({ name: 'Main'})
+        },
       )
     }
 
