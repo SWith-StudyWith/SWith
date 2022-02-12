@@ -43,7 +43,8 @@ $success: #F5CEC7;
 }
 .app {
   min-height: 100%;
-  position: relative;
+  // position: relative;
+  margin: 0;
   // padding-bottom: 170px;
 }
 </style>

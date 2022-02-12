@@ -1,4 +1,5 @@
 <template>
+<body>
   <div class="home">
     <Navbar />
     <header class="header">
@@ -7,8 +8,9 @@
     <section>
       <StudyList :studies="state.studyList" />
     </section>
-    <Footer />
   </div>
+    <Footer class="footer"/>
+</body>
 </template>
 
 <script>
@@ -44,5 +46,27 @@ export default {
 .spinner-border{
   margin-top: 200px;
   margin-bottom: 200px;
+}
+html, body {
+margin: 0;
+height: 100%;
+}
+.home {
+min-height: 100%;
+/* position: relative; */
+/* footer height
+padding-bottom: 200px;  */
+margin-bottom: -200px;
+}
+/* section {
+  min-height: 100vh;
+} */
+.footer {
+/* position: absolute;
+bottom: 0;
+left: 0;
+right: 0;
+color: white;
+background-color: #16806e; */
 }
 </style>
