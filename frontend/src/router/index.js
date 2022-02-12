@@ -120,7 +120,7 @@ const routes = [
 const router = createRouter({
   scrollBehavior() {
     return {
-      el: '#app',
+      el: 'html',
       top: 0
     }
   },
