@@ -10,7 +10,7 @@ import { ref, computed, reactive, onBeforeUnmount } from 'vue';
 export default {
   name: 'Timer',
   setup(props, { emit }) {
-    const time = ref(10);
+    const time = ref(300);
     const timer = reactive({
       timer: null,
     })
