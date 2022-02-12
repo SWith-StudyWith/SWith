@@ -1,6 +1,6 @@
 <template>
   <!-- <div class="back"> -->
-    <div v-dragscroll:nochilddrag class="container position-relative back overflow-hidden mb-4" id="memoContainer">
+    <div v-dragscroll:nochilddrag class="memo-board position-relative overflow-hidden" id="memoContainer">
       <span>타인에게 보이지 않는 개인 공간입니다.</span>
       <span v-if="isEditting" class="btn-container">
         <button class="btn btn-primary ms-2 shadow" @click="onClickCreateBtn">
@@ -149,14 +149,14 @@ export default {
 }
 </script>
 <style scoped>
-.back {
-  position: fixed;
+.memo-board {
+  /* position: fixed; */
   background-color: #aebed4;
-  height: 80vh;
-  width: 90%;
+  height: 72vh;
   background-image: url("../../../../assets/img/study_room/paper_texture.png");
   cursor: grab;
   border-radius: 0.8rem;
+  margin: 1vh 0.7vw 0 2vw ;
 }
 .postit {
   width: 13rem;

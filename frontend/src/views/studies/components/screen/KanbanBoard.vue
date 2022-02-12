@@ -246,8 +246,8 @@ export default {
 <style scoped>
 .kanbanboard {
   background-color: white;
-  margin: 1vh 2.1vw 0;
-  height: 70vh;
+  margin: 1vh 1vw 0 2vw ;
+  height: 72vh;
   border-radius: 0.8rem;
 }
 .kanban-wrapper {
