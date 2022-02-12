@@ -164,6 +164,7 @@ export default {
   background-color: burlywood;
   box-shadow: 0 5px 5px 0 rgb(0 0 0 / 0.1), 0 5px 5px -1px rgb(0 0 0 / 0.1);
   font-size: 0.8rem;
+  white-space: pre;
 }
 .red {
   background-color: #F1D4D4;
