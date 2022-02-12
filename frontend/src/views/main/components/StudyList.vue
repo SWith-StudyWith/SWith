@@ -5,14 +5,20 @@
       <div class="col-12 offset-lg-0 col-lg-7 join-study">
         <div class="row navbar">
           <div class="col-12 col-lg-6 mb-3">
-            <input type="text" class="form-control" v-model="studyCode" placeholder="스터디 URL">
+            <input type="text" class="form-control" v-model="studyCode" placeholder="참여코드">
           </div>
           <div class="col-12 col-md-5 offset-lg-0 col-lg-3 mb-3">
-            <button class="btn btn-primary" @click="onClickJoin">참여하기</button>
+            <button class="btn btn-primary" @click="onClickJoin">
+              참여하기
+              <font-awesome-icon class="icon" :icon="['fas', 'walking']"></font-awesome-icon>
+            </button>
           </div>
           <div class="col-12 col-md-5 offset-lg-0 col-lg-3 mb-3">
             <router-link :to="{ name: 'StudyCreate'}">
-              <button class="btn btn-success">만들기</button>
+              <button class="btn btn-success">
+                만들기
+                <font-awesome-icon class="hammer-icon" :icon="['fas', 'hammer']"></font-awesome-icon>
+              </button>
             </router-link>
           </div>
         </div>
@@ -33,7 +39,6 @@
 import StudyListItem from './StudyListItem.vue';
 import { ref } from 'vue';
 import { useStore } from 'vuex';
-import { useRouter } from 'vue-router'
 import { joinStudy } from '@/api/study';
 import notifications from '@/composables/notifications'
 
@@ -49,7 +54,6 @@ export default {
     let studyCode = ref('')
     const store = useStore();
     store.dispatch('GET_STUDY_LIST')
-    const router = useRouter();
     const { notifySuccess, notifyDanger } = notifications();
 
     const onClickJoin = function () {
@@ -107,6 +111,18 @@ export default {
   font-size: 14px;
   margin-top: 0;
 }
+.btn-success{
+  color: #334466;
+  font-weight: 500;
+}
+.icon {
+  font-size: 1.1rem;
+  margin-left: 0.2rem;
+}
+.hammer-icon {
+  font-size: 1.05rem;
+  margin-left: 0.2rem;
+}
 .flex-wrap{
   padding: 0px;
 }
@@ -133,4 +149,5 @@ export default {
   margin-right: 0px;
   padding: 0px;
 }
+
 </style>
