@@ -84,6 +84,10 @@ export default {
             isMouseDown: false,
             line: null,
             rect: null,
+            startCoord: {
+                x: null,
+                y: null
+            },
             current: {
                 width: 2,
                 color: 'black'
@@ -98,9 +102,8 @@ export default {
         // fabric canvas init
         this.canvas = new fabric.Canvas('canvas', { isDrawingMode: true });
         this.context = this.canvas.getContext('2d');
-        var whiteboard = document.getElementById('canvas').parentElement.parentElement;
-            this.canvas.setWidth(whiteboard.offsetWidth);
-            this.canvas.setHeight(whiteboard.offsetHeight);
+        window.addEventListener('resize', this.onResize, false);
+        this.onResize();
         this.canvas.selectionFullyContained = false;
         this.handleChangeWidth();
         this.handleChangeColor();
@@ -109,19 +112,28 @@ export default {
         // socket.io connection
         this.socket = io.connect(this.urlForSocket(), { secure: true });
 
-        this.socket.on('got-connected', () => {
+        this.socket.on('connect', () => {
+            // console.log("client(on) - connect, id: " + this.socket.id + ", connected: " + this.socket.connected);
+            // console.log(this.socket);
             // join study
             this.socket.emit('join',
                 this.studyId
             );
-            // canvas init
-            this.socket.on('send-data', (data) => {
-                this.receiveCanvas(data);
-            });
+        });
+
+        // canvas init
+        this.socket.on('send-data', (data) => {
+            // console.log("client(on) - send-data");
+            this.receiveCanvas(data);
         });
 
         // event init
         this.listenToCanvasEvents();
+    },
+
+    beforeUnmount() {
+        // console.log("client - disconnect, id: " + this.socket.id + ", connected: " + this.socket.connected);
+        this.socket.disconnect();
     },
 
     methods: {
@@ -171,21 +183,25 @@ export default {
             // console.log(protocol + hostName + `:${hostPort}`);
             // return protocol + hostName + `:${hostPort}`;
             return 'https://i6a501.p.ssafy.io';
+            // return 'http://localhost:3000';
         },
 
         // send canvas data to server
         sendCanvas() {
+            // console.log("send");
             const canvasAsJSON = this.canvas.toJSON();
             this.socket.emit('send-data', {
                 studyId: this.studyId,
                 canvas: canvasAsJSON
             });
+            // console.log("send-data - studyId: " + this.studyId);
         },
 
         // receive canvas data from server
         receiveCanvas(data) {
-            // console.log(data.studyId);
+            // console.log("recieveCanvas - studyId: " + data.studyId);
             this.canvas.loadFromJSON(data.canvas, this.canvas.renderAll.bind(this.canvas));
+            this.toggleObjectsSelectable(this.isPointer);
         },
 
         // listen to canvas events
@@ -216,6 +232,8 @@ export default {
                     this.canvas.add(this.line);
                 } else if (this.isRect) {
                     const pointer = this.canvas.getPointer(event.e);
+                    this.startCoord.x = pointer.x;
+                    this.startCoord.y = pointer.y;
                     this.rect = new fabric.Rect(
                         {
                             left: pointer.x,
@@ -247,8 +265,8 @@ export default {
                     this.line.setCoords();
                 } else if (this.isRect) {
                     const pointer = this.canvas.getPointer(event.e);
-                    const startPt = { x: this.rect.left, y: this.rect.top };
-                    this.rect.set({ height: pointer.y - startPt.y, width: pointer.x - startPt.x });
+                    this.rect.set({ left: Math.min(this.startCoord.x , pointer.x), top: Math.min(this.startCoord.y, pointer.y) });
+                    this.rect.set({ height: Math.abs(pointer.y - this.startCoord.y), width: Math.abs(pointer.x - this.startCoord.x) });
                     this.rect.setCoords();
                 }
                 this.canvas.renderAll();
@@ -314,6 +332,7 @@ export default {
                     JSON.parse(this.snapshotList[this.snapshotIndex]),
                     this.canvas.renderAll.bind(this.canvas)
                 );
+                this.toggleObjectsSelectable(this.isPointer);
             }
             this.sendCanvas();
         },
@@ -327,6 +346,7 @@ export default {
                     JSON.parse(this.snapshotList[this.snapshotIndex]),
                     this.canvas.renderAll.bind(this.canvas)
                 );
+                this.toggleObjectsSelectable(this.isPointer);
             }
             this.sendCanvas();
         },
@@ -349,20 +369,16 @@ export default {
 
 <style scoped>
 #whiteboard {
-    position: relative;
-    width: 95vw;
-    height: 70vh;
+    margin: 1vh 2.1vw 0;
+    width: 92vw;
+    height: 72vh;
 }
 
 .menu-label {
     text-align: center;
 }
 
-#canvas {
-    position: absolute;
-    display: block;
-    width: 100%;
-    height: auto;
+canvas {
     background-color: rgb(200, 214, 226);
 }
 

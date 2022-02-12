@@ -71,7 +71,7 @@ public class StudyServiceImpl implements StudyService {
             Tika tika = new Tika();
             String mimeType = tika.detect(multipartFile.getInputStream());
             // MIME type이 image인지 확인, file size가 2MB이내인지 확인
-            if (mimeType.startsWith("image") && multipartFile.getSize() < 2 * Math.pow(10, 6)) {
+            if (mimeType.startsWith("image") && multipartFile.getSize() < 2 * Math.pow(2, 20)) {
                 study.setImgUrl(fileService.upload(multipartFile, firebaseConfig.getStudy_storage_path(),
                         study.getImgUrl(), "media"));
             }else throw new IOException();
@@ -146,7 +146,7 @@ public class StudyServiceImpl implements StudyService {
                 Tika tika = new Tika();
                 String mimeType = tika.detect(multipartFile.getInputStream());
                 // MIME type이 image인지 확인, file size가 2MB이내인지 확인
-                if (mimeType.startsWith("image") && multipartFile.getSize() < 2 * Math.pow(10, 6)) {
+                if (mimeType.startsWith("image") && multipartFile.getSize() < 2 * Math.pow(2, 20)) {
                     study.setImgUrl(fileService.upload(multipartFile, firebaseConfig.getStudy_storage_path(),
                             study.getImgUrl(), "media"));
                 }else throw new IOException();
