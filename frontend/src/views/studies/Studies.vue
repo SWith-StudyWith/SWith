@@ -138,14 +138,10 @@ export default {
     Memo,
   },
   beforeRouteLeave(to, from, next) {
-    console.log(to.fullPath);
-    if (!this.canLeave) {
-      if (confirm('현재 칸반보드를 저장합니까?')) {
-        this.$refs.kanbanBoard.onClickSaveBtn()
-      } else {
-        return
-      }
-    }
+    // if (!this.canLeave) {
+    //   this.$refs.kanbanBoard.onClickSaveBtn()
+    // }
+    this.$store.commit('SET_STUDY_INFO', {})
     if (to.fullPath == `/studies/${this.$route.params.studyId}`) {
       if (this.session) {
         this.session.disconnect();
@@ -252,20 +248,12 @@ export default {
       e.returnValue = '';
     },
     isEditPermit (permit) {
-      console.log(permit)
       this.editPermit = permit;
       this.canLeave = !permit;
     },
     showScreenMode ( mode ) {
       // switch (screen)
-      console.log(mode)
-      if(mode === 0){
-        console.log('0 칸반보드 true 보여조라~');
-      } else if(mode === 1){
-        console.log('1 화면공유 true 보여조라~');
-      } else if(mode === 2) {
-        console.log('2 화이트보드 true니깐 보여주라~');
-      }
+
       this.screenMode = mode;
     },
     toggleVideoSub(sub) {
@@ -322,12 +310,8 @@ export default {
 
       // Speech Start Detection
       this.session.on("publisherStartSpeaking", (event) => {
-        console.log(event);
-        console.log("User " + event.connection.data + " start speaking");
         this.isSpeakList.push(event.connection.connectionId);
         this.isSpeak = !this.isSpeak;
-        console.log(event.connection.connectionId);
-        console.log("isSpeak 상태 : " + this.isSpeak);
         // alert("발언자 리스트 : " + this.isSpeakList);
         // this.$store.dispatch('startSpeaking')
         // this.$store.dispatch(
@@ -362,8 +346,8 @@ export default {
 					.then(() => {
 						// --- Get your own camera stream with the desired properties ---
 						let publisher = this.OV.initPublisher(undefined, {
-							audioSource: this.initAudioId, // The source of audio. If undefined default microphone
-							videoSource: this.initVideoId, // The source of video. If undefined default webcam
+							audioSource: this.initAudioId ? this.initAudioId : undefined, // The source of audio. If undefined default microphone
+							videoSource: this.initVideoId ? this.initVideoId : undefined, // The source of video. If undefined default webcam
 							publishAudio: parsing(initAudioOn),  	// Whether you want to start publishing with your audio unmuted or not
 							publishVideo: parsing(initVideoOn),  	// Whether you want to start publishing with your video enabled or not
 							resolution: '640x480',  // The resolution of your video

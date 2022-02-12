@@ -45,7 +45,7 @@
             <div
             :style="{ visibility: (state.isValidNewPassword || !state.wasInputed.newPassword)? 'hidden' : 'visible' }"
             class="invalid-feedback">
-              숫자, 영문 소/대문자, 특수문자를 모두 포함해주세요.
+              숫자, 영문, 특수문자를 모두 포함해 8 ~ 16 글자를 입력해주세요.
             </div>
           </div>
 
@@ -59,7 +59,7 @@
               class="invalid-feedback">
               비밀번호와 일치하지 않습니다.
             </div>
-            <div v-else-if="(state.passwordConfirm !== '') && state.isValidPasswordConfirm"         class="valid-feedback">일치합니다.</div>
+            <div v-else-if="(state.passwordConfirm !== '') && state.isValidPasswordConfirm" class="valid-feedback">일치합니다.</div>
             <div v-else style="height: 1.3rem;"></div>
           </div>
         </form>

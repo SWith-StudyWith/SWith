@@ -5,7 +5,7 @@
   </span>
 </template>
 <script>
-import { ref, computed, reactive } from 'vue';
+import { ref, computed, reactive, onBeforeUnmount } from 'vue';
 
 export default {
   name: 'Timer',
@@ -33,6 +33,7 @@ export default {
       emit('timeStopped')
       clearInterval(timer.timer)
     }
+    onBeforeUnmount(() => clearInterval(timer.timer))
     const parsingTime = computed(
       () => {
         const minute = parseInt(time.value / 60);

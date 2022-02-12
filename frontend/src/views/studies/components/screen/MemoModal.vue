@@ -85,8 +85,8 @@ export default {
   z-index: 5000;
 }
 label {
-  width: 1rem;
-  height: 1rem;
+  width: 2rem;
+  height: 2rem;
   cursor: pointer;
 }
 .red {

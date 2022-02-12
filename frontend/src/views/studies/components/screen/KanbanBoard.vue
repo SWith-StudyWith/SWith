@@ -97,13 +97,14 @@
 
 <script>
 // import Sidebar from '@/views/studies/components/sidebar/Sidebar.vue';
-import { useStore } from 'vuex';
 import KanbanBoardCard from '@/views/studies/components/screen/KanbanBoardCard.vue';
 import KanbanBoardModal from '@/views/studies/components/screen/KanbanBoardModal.vue';
 import KanbanBoardCreateModal from '@/views/studies/components/screen/KanbanBoardCreateModal.vue';
 import KanbanWarningModal from '@/views/studies/components/screen/KanbanWarningModal.vue';
 import Timer from '@/views/studies/components/screen/Timer.vue';
-import { ref, computed } from 'vue';
+import { useStore } from 'vuex';
+import { useRoute } from 'vue-router';
+import { ref, computed, onBeforeUnmount } from 'vue';
 import draggable from 'vuedraggable'
 import { checkKanban, putKanban } from '@/api/study'
 import { Modal } from 'bootstrap';
@@ -123,6 +124,7 @@ export default {
     KanbanWarningModal,
   },
   setup(props, { emit }) {
+    const route = useRoute();
     const store = useStore();
     const kanbanBoard = computed(() => {
       return store.state.study.studyInfo.kanbanBoard;
@@ -154,14 +156,15 @@ export default {
       console.log('수정할래!')
       const getStudyInfo = () => {
         return new Promise((resolve) => {
-          store.dispatch('GET_STUDY_INFO', store.state.study.studyInfo.studyId);
+          // store.dispatch('GET_STUDY_INFO', store.state.study.studyInfo.studyId);
+          store.dispatch('GET_STUDY_INFO', route.params.studyId);
           console.log('불러오기 완료!')
           resolve();
         })
       }
       await getStudyInfo();
       checkKanban(
-        store.state.study.studyInfo.studyId,
+        route.params.studyId,
         (res) => {
           console.log(res.data);
           if (res.data.code === 200) {
@@ -181,7 +184,8 @@ export default {
       );
     }
     const onClickSaveBtn = function() {
-      const studyId = store.state.study.studyInfo.studyId;
+      const studyId = route.params.studyId;
+      console.log(studyId)
       console.log('저장할래!')
       // request payload 형태 만들기
       const payload = []
@@ -193,11 +197,11 @@ export default {
       })
       putKanban(
         payload,
-        store.state.study.studyInfo.studyId,
+        studyId,
         (res) => {
           console.log(res.data)
           if (res.data.code === 200) {
-            store.dispatch('GET_STUDY_INFO',studyId)
+            store.dispatch('GET_STUDY_INFO', studyId)
           }
         },
         (err) => {
@@ -207,7 +211,7 @@ export default {
       emit('isEditPermit', false);
     };
     const onClickRefreshBtn = function () {
-      store.dispatch('GET_STUDY_INFO', store.state.study.studyInfo.studyId)
+      store.dispatch('GET_STUDY_INFO', route.params.studyId)
     };
     const createTask = function (task) {
       const taskId = task.taskId;
@@ -218,6 +222,11 @@ export default {
       emit('isEditPermit', false);
       onClickSaveBtn()
     };
+    onBeforeUnmount(() => {
+      if (props.editPermit) {
+        onClickSaveBtn()
+      }
+    })
     return {
       kanbanBoard,
       selectedTask,

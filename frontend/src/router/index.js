@@ -97,30 +97,6 @@ const routes = [
     meta: { authRequired: true },
     props: true,
   },
-  // {
-  //   path: '/studies/:studyCode/kanbanboard',
-  //   name: 'KanbanBoard',
-  //   component: () => import(/* webpackChunkName: "about" */ '@/views/studies/components/screen/KanbanBoard.vue'),
-  //   meta: { authRequired: true },
-  // },
-  // {
-  //   path: '/studies/:studyCode/screenshare',
-  //   name: 'ScreenShare',
-  //   component: () => import(/* webpackChunkName: "about" */ '@/views/studies/components/screen/ScreenShare.vue'),
-  //   meta: { authRequired: true },
-  // },
-  // {
-  //   path: '/studies/:studyCode/whiteboard',
-  //   name: 'WhiteBoard',
-  //   component: () => import(/* webpackChunkName: "about" */ '@/views/studies/components/screen/WhiteBoard.vue'),
-  //   meta: { authRequired: true },
-  // },
-  // {
-  //   path: '/studies/:studyCode/page',
-  //   name: 'StudyPage',
-  //   component: () => import(/* webpackChunkName: "about" */ '@/views/studies/StudyPage.vue'),
-  //   meta: { authRequired: true },
-  // },
   {
     path: '/members/kakao/callback',
     name: 'OAuthKakao',
@@ -142,6 +118,12 @@ const routes = [
   },
 ];
 const router = createRouter({
+  scrollBehavior() {
+    return {
+      el: '#app',
+      top: 0
+    }
+  },
   history: createWebHistory(),
   routes,
 });

@@ -117,10 +117,7 @@ const actions = {
 
 const mutations = {
   SET_STUDY_INFO(state, payload) {
-    state.studyInfo = {
-      ...state.studyInfo,
-      ...payload
-    }
+    state.studyInfo = payload;
   },
   SET_STUDY_LIST(state, payload) {
     state.studyList = payload;

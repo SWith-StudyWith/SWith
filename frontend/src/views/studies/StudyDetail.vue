@@ -5,16 +5,16 @@
       <div class="col-md-12 col-lg-4 px-5">
         <StudyDetailHeader :studyInfo="state.studyInfo"/>
         <StudyDetailCamera @setDevice="setDevice($event)"/>
-        <button class="btn btn-primary my-3 text-white" :disabled="!state.videoId" @click="onClickEnterBtn">입장하기</button>
+        <button class="btn btn-primary my-3 text-white" @click="onClickEnterBtn">입장하기</button>
       </div>
       <div class="col-md-12 col-lg-8 pt-5">
         <StudyDetailKanbanBoard :studyInfo="state.studyInfo"/>
       </div>
-    </div>
-    <div class="text-end">
-      <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exitModal">
-        탈퇴하기
-      </button>
+      <div class="text-end">
+        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exitModal">
+          탈퇴하기
+        </button>
+      </div>
     </div>
     <StudyDetailExitModal/>
   </div>
@@ -27,7 +27,7 @@ import StudyDetailHeader from '@/views/studies/components/detail/StudyDetailHead
 import StudyDetailCamera from '@/views/studies/components/detail/StudyDetailCamera';
 import StudyDetailExitModal from '@/views/studies/components/detail/StudyDetailExitModal';
 import StudyDetailKanbanBoard from '@/views/studies/components/detail/StudyDetailKanbanBoard';
-import { reactive, computed } from 'vue'
+import { reactive, computed, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex'
 
@@ -77,6 +77,9 @@ export default {
         }
       )
     }
+    onBeforeUnmount(() => {
+      store.commit('SET_STUDY_INFO', {})
+    })
     return { state, route, setDevice, onClickEnterBtn };
   },
 }
