@@ -56,6 +56,7 @@
 <script>
 import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
+import { useRoute } from 'vue-router';
 import Navbar from '@/views/common/Navbar.vue';
 import Footer from '@/views/common/Footer.vue';
 import notifications from '@/composables/notifications'
@@ -65,6 +66,7 @@ export default {
   components: { Navbar, Footer },
   setup() {
     const store = useStore();
+    const route = useRoute();
     const state = ref({
       // studyInfo : store.getters.getStudyInfo,
       studyInfo : computed(() => {
@@ -93,7 +95,7 @@ export default {
       }),
     });
     const { notifySuccess, notifyDangerDescription } = notifications();
-
+    store.dispatch('GET_STUDY_INFO', route.params.studyId)
     const onClickUploadFile = (e) => {
       const file = e.target.files[0]
       if (file.size > 2097152) {
