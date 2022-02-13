@@ -140,6 +140,7 @@ export default {
     if(this.prev == null){
       this.isFirst = false
     }
+
   },
 }
 </script>
