@@ -138,13 +138,14 @@ export default {
     background-color: #1E304F;
 }
 
-.row{
-  margin-bottom: 20px;
-}
 .title{
   font-size: 3vh;
   font-weight:500;
-  margin: 5.5vh 0 1vh 1vw;
+  margin: 5.5vh 0 2vh 1vw;
+}
+.row{
+  margin-top: 1vh;
+  margin-bottom: 20px;
 }
 .profile-img {
   width: 5.5vh;
@@ -153,16 +154,13 @@ export default {
   background-color: white;
 }
 .nickname{
-  font-size: 1.7vh;
+  font-size: 1.8vh;
   margin-bottom: 0.2vh;
 }
 .email{
   font-size: 1.5vh;
   color: rgb(199, 199, 199);
   margin-bottom: 0;
-}
-.row{
-  margin-top: 1vh;
 }
 .col-4 {
   display: flex;
