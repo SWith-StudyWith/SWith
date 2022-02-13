@@ -98,11 +98,11 @@ export default {
 
       // console.log(preValue + ", " + chatValue)
 
-      // 나는 하고싶었다 .... 시간 없애는 걸 ...
-      if(preValue == chatValue){
-        return chatValue
+      // 같은 회원이 같은 시간에 보냈을 경우 (mm처럼), 시간 출력 한 번 되도록
+      if(preValue == chatValue && this.prev[0]?.memberId == this.chat?.memberId){
+        return null
       }
-      return chatValue
+      else return chatValue
     }
   },
   methods: {
@@ -140,6 +140,7 @@ export default {
     if(this.prev == null){
       this.isFirst = false
     }
+
   },
 }
 </script>
