@@ -1,37 +1,75 @@
 <template>
   <div class= "memberDiv">
     <p class="title">👥 스터디 회원 목록</p>
-    <div class="member-body">
-      <div v-if="members.length" >
-        <div class="row" v-for="member in members" :key="member.memberId">
-          <div class="col-4">
-            <img :src="member.imgUrl?member.imgUrl:require(`@/assets/img/navbar/profile.png`)" :fit="fit" class="profile-img">
-          </div>
-          <div class="col-8">
-            <p class="nickname">{{ member.nickname }}</p>
-            <p class="email">{{ member.email }}</p>
+    <loading v-model:active="state.loading"
+      :can-cancel="false"
+      :is-full-page="false"
+      :height="height"
+      :width="width"
+      :color="color"
+      :loader="loader"
+      :background-color="bgColor"
+      class="vld-overlay"
+    ></loading>
+    <div>
+      <div class="member-body" :style="state.loading ? 'filter: blur(5px); -webkit-filter: blur(5px);' : ''">
+        <div v-if="members.length" >
+          <div class="row" v-for="member in members" :key="member.memberId">
+            <div class="col-4">
+              <img :src="member.imgUrl?member.imgUrl:require(`@/assets/img/navbar/profile.png`)" :fit="fit" class="profile-img">
+            </div>
+            <div class="col-8">
+              <p class="nickname">{{ member.nickname }}</p>
+              <p class="email">{{ member.email }}</p>
+            </div>
           </div>
         </div>
-      </div>
-      <div v-if="members.length === 0">
-        없는데용 ?
+        <div v-if="members.length === 0">
+          없는데용 ?
+        </div>
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
-// import { reactive } from '@vue/reactivity'
+import { reactive } from '@vue/reactivity'
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
 
 export default {
+  data(){
+    return{
+      loader: 'dots',
+      color: '#F5CEC7',
+      bgColor: '#1E304F',
+      height: 80,
+      width: 80,
+    }
+  },
+  components:{
+    Loading
+  },
   props:{
     members: Array,
   },
   setup() {
+    const state = reactive({
+      loading: false,
+    })
 
+    function loadingCall(){
+      state.loading = true
+      setTimeout(() => {
+        state.loading = false
+      }, 1500)
+    }
+
+    return { loadingCall, state}
   },
-  created() {},
+  created() {
+    this.loadingCall()
+  },
   mounted() {},
   unmounted() {},
   methods: {}
@@ -111,5 +149,8 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+.vld-overlay{
+  margin-left: 60px;
 }
 </style>
