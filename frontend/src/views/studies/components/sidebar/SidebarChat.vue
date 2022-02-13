@@ -23,6 +23,13 @@
       >
       </SidebarChatMessage>
 
+      <!-- 채팅 기록 없을 때 -->
+      <div v-if="state.isNull" style="font-size:12px; background-color: #9EABCB; border-radius: 10px;
+        padding: 10px 5px; text-align: center; opacity: 0.9; margin-top: 20px">
+        <p style="margin-bottom:5px; ">스터디의 채팅 기록이 없습니다 !</p>
+        <p style="margin-bottom:5px;">스터디원들과 자유롭게 대화해보세요 💙</p>
+      </div>
+
       <div class="init-btn" v-if="state.isScrollInit">
           <button class="btn-primary button" @click="scrollInit">↓</button>
       </div>
@@ -88,6 +95,9 @@ export default {
 
       // 채팅창 열었을 때, 스크롤 맨 밑에 있도록
       init: true,
+      // 채팅 기록이 없을 때
+      isNull: false,
+
       // 새로운 메세지를 받았을 때
       recv: false,
       loaded: false,
@@ -119,19 +129,26 @@ export default {
                 index: state.chatList.length
               })
               .then(function(){
+                console.log(res.data.data.length)
+                // 채팅 기록이 없을 때,
+                if(res.data.data.length == 0){
+                  state.isNull = true
+                }else state.isNull = false
 
-                var size = res.data.data.length
-                for(var i = 0; i < size; i++){
-                  state.recvList.push(res.data.data[i])
-                }
+                  var size = res.data.data.length
+                  for(var i = 0; i < size; i++){
+                    state.recvList.push(res.data.data[i])
+                  }
 
-                // size < 15 면, 더이상 API 호출되지 않도록
-                if(size < 15) {
-                  state.isNoScroll = true
-                }
+                  // size < 15 면, 더이상 API 호출되지 않도록
+                  if(size < 15) {
+                    state.isNoScroll = true
+                  }
 
-                state.chatList = [...state.recvList].reverse()
-                state.loaded = true
+                  state.chatList = [...state.recvList].reverse()
+                  state.loaded = true
+                  // state.isNull = false
+
               })
             },
           (err) => {
@@ -146,7 +163,7 @@ export default {
       setTimeout(() => {
         state.loading = false
         state.storeScrollHeight = state.element.scrollHeight
-      }, 2000)
+      }, 1500)
     }
 
     async function scrollMove(){
@@ -215,7 +232,7 @@ export default {
 
         stompClient.send("/receive", JSON.stringify(msg), {});
         // console.log(msg)
-
+        state.isNull = false
         setTimeout(() => {
           const element = document.getElementById('chat-body');
           element.scrollTop = element.scrollHeight;
