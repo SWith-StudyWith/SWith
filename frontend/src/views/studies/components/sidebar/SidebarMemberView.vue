@@ -11,22 +11,23 @@
       :background-color="bgColor"
       class="vld-overlay"
     ></loading>
-    <div>
-      <div class="member-body" :style="state.loading ? 'filter: blur(5px); -webkit-filter: blur(5px);' : ''">
-        <div v-if="members.length" >
-          <div class="row" v-for="member in members" :key="member.memberId">
-            <div class="col-4">
-              <img :src="member.imgUrl?member.imgUrl:require(`@/assets/img/navbar/profile.png`)" :fit="fit" class="profile-img">
-            </div>
-            <div class="col-8">
-              <p class="nickname">{{ member.nickname }}</p>
-              <p class="email">{{ member.email }}</p>
-            </div>
+    <div class="member-body" :style="state.loading ? 'filter: blur(5px); -webkit-filter: blur(5px);' : ''">
+      <div v-if="members.length" >
+        <div class="row" v-for="member in state.list" :key="member.memberId">
+          <div class="col-4">
+            <img :src="member.imgUrl?member.imgUrl:require(`@/assets/img/navbar/profile.png`)" :fit="fit" class="profile-img">
+          </div>
+          <div class="col-8">
+            <p class="nickname" :style="state.userInfo.memberId == member.memberId ? 'color:#F5CEC7' : ''">
+              <span>{{ member.nickname }}&nbsp</span>
+              <span v-if="state.userInfo.memberId == member.memberId">(나)</span>
+            </p>
+            <p class="email" :style="state.userInfo.memberId == member.memberId ? 'color:#F5CEC7' : ''">{{ member.email }}</p>
           </div>
         </div>
-        <div v-if="members.length === 0">
-          없는데용 ?
-        </div>
+      </div>
+      <div v-if="members.length === 0">
+          스터디 회원 목록을 불러오지 못했습니다.
       </div>
     </div>
   </div>
@@ -34,6 +35,7 @@
 
 <script>
 import { reactive } from '@vue/reactivity'
+import { useStore } from 'vuex';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 
@@ -53,9 +55,12 @@ export default {
   props:{
     members: Array,
   },
-  setup() {
+  setup(props) {
+    const store = useStore();
     const state = reactive({
       loading: false,
+      userInfo : store.getters.getUserInfo,
+      list: Array,
     })
 
     function loadingCall(){
@@ -65,10 +70,31 @@ export default {
       }, 1500)
     }
 
-    return { loadingCall, state}
+    function memberRange(){
+      state.list = props.members;
+
+      console.log(state.list)
+      for(var i = 0; i < state.list.length ;i++){
+        // console.log("i : "+ state.list[i].memberId + ", " + state.userInfo.memberId)
+        // 본인 아이디면 맨 앞으로
+        if(state.list[i].memberId == state.userInfo.memberId){
+          // let temp = props.members[i]
+          // state.list[i] = state.list[0]
+          // state.list[0] = temp
+          [state.list[0], state.list[i]] = [state.list[i], state.list[0]]
+          console.log(state.list)
+        }else{
+          state.list[i] = props.members[i]
+        }
+
+      }
+    }
+
+    return { loadingCall, state, memberRange }
   },
   created() {
     this.loadingCall()
+    this.memberRange()
   },
   mounted() {},
   unmounted() {},
