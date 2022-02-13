@@ -81,12 +81,15 @@ export default {
       message: '',
 
       userInfo : store.getters.getUserInfo,
+      // 채팅창에 보여줄 메세지 리스트 (아래에서 위로)
       chatList: [],
+      // 서버에서 받은 데이터 모아줄 리스트 (위에서 아래)
       recvList: [],
 
       // 채팅창 열었을 때, 스크롤 맨 밑에 있도록
       init: true,
-
+      // 새로운 메세지를 받았을 때
+      recv: false,
       loaded: false,
       loading: false,
 
@@ -105,10 +108,7 @@ export default {
     })
 
     // 이전 채팅방 리스트 가져오기
-    function messageList() {
-      console.log('더 가져오자~');
-
-      // return new Promise(function(resolve, reject){
+    async function messageList() {
         getChatList(
           route.params.studyId,
           state.chatList.length,
@@ -118,9 +118,7 @@ export default {
                 studyId: route.params.studyId,
                 index: state.chatList.length
               })
-              // .then(function(result){
-                console.log(res.data)
-
+              .then(function(){
 
                 var size = res.data.data.length
                 for(var i = 0; i < size; i++){
@@ -136,17 +134,12 @@ export default {
                 state.loaded = true
                 // state.isScrollInit = true
 
-                // resolve(res)
-              // })
-              // .catch(function(err){
-                // resolve(err)
-              // })
+              })
             },
           (err) => {
             console.log(err);
           },
         )
-      // })
     }
 
     function loadingCall(){
@@ -158,14 +151,12 @@ export default {
       }, 2000)
     }
 
-    function scrollMove(){
-      // console.log('store : ' + state.storeScrollHeight +', height : ' + state.element.scrollHeight + ', top : ' + state.element.scrollTop + ', prev : ' + state.prevScrollHeight )
-
+    async function scrollMove(){
       state.prevScrollHeight = state.element.scrollHeight - state.element.scrollTop
 
       // scrollTop == 0 (꼭대기), 다음 list 가져오기
       if(state.element.scrollTop == 0 && !state.isNoScroll){
-        messageList()
+        await messageList()
       }
 
       // 저장된 스크롤 높이 도달 시, 스크롤 내리는 버튼 활성화 되도록
@@ -183,8 +174,9 @@ export default {
 
     onUpdated(() => {
       // 채팅창 열었을 때, 스크롤 맨 밑에 가도록
-      if(state.init){
+      if(state.init || state.recv){
         state.init = false
+        state.recv = false
         state.element.scrollTop = state.element.scrollHeight
       }
 
@@ -192,7 +184,6 @@ export default {
       if(state.loaded){
         state.loaded = false
         if(state.element.scrollTop == 0){
-          // console.log('height : ' + state.element.scrollHeight + ', top : ' + state.element.scrollTop + ', prev : ' + state.prevScrollHeight )
           // 스크롤 있던 위치 받아오기 => 시작 위치
           state.element.scrollTop = state.element.scrollHeight - state.prevScrollHeight
         }
@@ -203,7 +194,6 @@ export default {
       if(state.storeScrollHeight < state.prevScrollHeight && state.storeScrollHeight != 0){
         state.isScrollInit = true
       }
-
     })
 
     function sendMessage(e) {
@@ -228,7 +218,8 @@ export default {
 
         stompClient.send("/receive", JSON.stringify(msg), {});
         console.log(msg)
-        state.recvList.unshift(msg);
+        // state.recvList.unshift(msg);
+        // state.chatList.push(msg);
 
         setTimeout(() => {
           const element = document.getElementById('chat-body');
@@ -238,8 +229,8 @@ export default {
     }
 
     // 웹 소켓 연결 성공 시, 콜백 함수
-    function onConnected(){
-      messageList()
+    async function onConnected(){
+      await messageList()
       // var load = messageList()
       fetchList()
     }
@@ -248,7 +239,7 @@ export default {
       // 배포
       const serverURL = `${process.env.VUE_APP_BASE_URL_DEV}/api/ws`
       // const serverURL = 'http://localhost:8080/api/ws/'
-      socket = new SockJS(serverURL);
+      socket = new SockJS(serverURL, { transports: ['websocket', 'xhr-streaming', 'xhr-polling']});
       stompClient = Stomp.over(socket);
       console.log(`소켓 연결을 시도합니다. 서버 주소: ${serverURL}`)
       stompClient.connect(
@@ -276,7 +267,9 @@ export default {
         console.log('구독으로 받은 메시지 입니다.', res.body);
 
         // 받은 데이터를 json으로 파싱하고 리스트에 넣어줍니다.
+        state.recvList.unshift(JSON.parse(res.body))
         state.chatList.push(JSON.parse(res.body))
+        state.recv = true
 
         setTimeout(() => {
           const element = document.getElementById('chat-body');
