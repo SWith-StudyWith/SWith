@@ -132,8 +132,6 @@ export default {
 
                 state.chatList = [...state.recvList].reverse()
                 state.loaded = true
-                // state.isScrollInit = true
-
               })
             },
           (err) => {
@@ -197,7 +195,6 @@ export default {
     })
 
     function sendMessage(e) {
-      // alert(state.message)
       if(e.keyCode === 13 && this.userName !== '' && state.message !== ''){
         send()
         state.message = ''
@@ -205,7 +202,7 @@ export default {
     }
 
     function send() {
-      console.log("Send message:" + state.message);
+      // console.log("Send message:" + state.message);
       if (stompClient && stompClient.connected) {
         const msg = {
           studyId: route.params.studyId,
@@ -217,9 +214,7 @@ export default {
         };
 
         stompClient.send("/receive", JSON.stringify(msg), {});
-        console.log(msg)
-        // state.recvList.unshift(msg);
-        // state.chatList.push(msg);
+        // console.log(msg)
 
         setTimeout(() => {
           const element = document.getElementById('chat-body');
@@ -231,7 +226,6 @@ export default {
     // 웹 소켓 연결 성공 시, 콜백 함수
     async function onConnected(){
       await messageList()
-      // var load = messageList()
       fetchList()
     }
 
@@ -241,7 +235,7 @@ export default {
       // const serverURL = 'http://localhost:8080/api/ws/'
       socket = new SockJS(serverURL, { transports: ['websocket', 'xhr-streaming', 'xhr-polling']});
       stompClient = Stomp.over(socket);
-      console.log(`소켓 연결을 시도합니다. 서버 주소: ${serverURL}`)
+      // console.log(`소켓 연결을 시도합니다. 서버 주소: ${serverURL}`)
       stompClient.connect(
         {},
         frame => {
@@ -250,7 +244,6 @@ export default {
           console.log('소켓 연결 성공', frame);
 
           onConnected()
-
         },
         error => {
           // 소켓 연결 실패
@@ -264,7 +257,7 @@ export default {
       // 서버의 메시지 전송 endpoint를 구독합니다.
       // 이런형태를 pub sub 구조라고 합니다.
       stompClient.subscribe("/send/" + route.params.studyId, res => {
-        console.log('구독으로 받은 메시지 입니다.', res.body);
+        // console.log('구독으로 받은 메시지 입니다.', res.body);
 
         // 받은 데이터를 json으로 파싱하고 리스트에 넣어줍니다.
         state.recvList.unshift(JSON.parse(res.body))
@@ -290,15 +283,10 @@ export default {
     }
   },
   created() {
-    console.log('사이드바 생성 ~')
+    // console.log('사이드바 생성 ~')
     this.init = true
 
     this.loadingCall()
-    // setTimeout(() => {
-    //   const element = document.getElementById('chat-body');
-    //   element.scrollTop = element.scrollHeight;
-    // }, 0);
-
   },
 }
 </script>
