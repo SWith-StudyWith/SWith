@@ -18,7 +18,9 @@
                         @click="onClickDownloadFile(file.fileId, file.originName)">
                       <img
                         src="@/assets/img/icon_sidebar/file/trash-1E304F.svg"
-                        @click="onClickDeleteFile(file.fileId)">
+                        data-bs-toggle="modal"
+                        data-bs-target="#fileDeleteModal">
+                        <SidebarFileDeleteModal :fileId="file.fileId"/>
                     </div>
                   </div>
         </div>
@@ -57,6 +59,7 @@ import { uploadFile, downloadFile, deleteFile } from '@/api/study';
 import { computed, reactive } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
+import SidebarFileDeleteModal from '@/views/studies/components/sidebar/SidebarFileDeleteModal';
 import notifications from '@/composables/notifications'
 import DropZone from '@/views/studies/components/sidebar/SidebarFileDropzone.vue';
 // import SidebarFileList from '@/views/studies/components/sidebar/SidebarFileList.vue';
@@ -65,6 +68,7 @@ export default {
   name: "SidebarFile",
   components: {
     DropZone,
+    SidebarFileDeleteModal
     // SidebarFileList,
   },
   setup() {
