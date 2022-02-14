@@ -46,8 +46,14 @@
               </div>
             </div>
             <div class="row">
-              <label for="goal" class="form-label">나의 목표</label>
-              <textarea class="form-control form-goal" id="goal" rows="3" v-model="state.userInfo.goal"></textarea>
+              <label for="goal" class="form-label">상태 메시지</label>
+              <input type="text" class="form-control form-goal" id="goal" rows="3" v-model="state.goal">
+              <div
+                :style="{ visibility: (state.isValidGoal)? 'hidden' : 'visible' }"
+                class="invalid-feedback"
+              >
+                16자 이내로 입력해주세요.
+              </div>
             </div>
             <div class="row">
               <button @click="onClickUpdateUserInfo" class="btn btn-primary btn-save">변경 사항 저장</button>
@@ -81,6 +87,7 @@ export default {
     const state = ref({
       userInfo : store.getters.getUserInfo,
       nickname : store.getters.getUserInfo.nickname,
+      goal : store.getters.getUserInfo.goal,
       profileImg: '',
       updated: false,
       profileImgSrc : computed(() => {
@@ -92,6 +99,7 @@ export default {
       }),
       wasInputed: {
         nickname: false,
+        goal: false,
       },
       isValidNickname: computed(() => {
         if (state.value.nickname !== '') {
@@ -102,6 +110,20 @@ export default {
         }
         return false;
       }),
+
+      isValidGoal: computed(() => {
+        if (state.value.goal == '') {
+          console.log('빈값일때')
+          return true;
+        }
+        else {
+          state.value.wasInputed.goal = true;
+          if (state.value.goal && validateGoal(state.value.goal)) {
+            console.log('빈값 아니고 유효성 검사 통과했을 때')
+          return true;
+          }
+        }
+      })
     });
     const { notifyDangerDescription, } = notifications();
 
@@ -129,12 +151,12 @@ export default {
         state.value.wasInputed.nickname = true;
         return;
       }
-      if (!state.value.isValidNickname ) {
+      if (!state.value.isValidNickname || !state.value.isValidGoal ) {
         return;
       }
       const updateUserData = new FormData();
       updateUserData.append("nickname", state.value.nickname)
-      updateUserData.append("goal", state.value.userInfo.goal)
+      updateUserData.append("goal", state.value.goal)
       updateUserData.append("profileImg", state.value.profileImg)
       updateUserData.append("updated", state.value.updated)
       store.dispatch('updateUserInfo', updateUserData)
@@ -145,6 +167,11 @@ export default {
         return true;
       } return false;
     };
+    const validateGoal = function (goal) {
+      if ( goal.length <= 16 ) {
+        return true;
+      } return false;
+    };
 
     return {
       state,
@@ -152,6 +179,7 @@ export default {
       onClickUploadFile,
       onClickDefaultImg,
       validateNickname,
+      validateGoal,
       notifyDangerDescription,
     }
   },
@@ -175,20 +203,13 @@ p{
   margin-right: 0px;
 }
 .btn-save{
-  margin-bottom: 50px;
-  margin-right: 0px;
-  margin-left: 0px;
+  margin: 20px 0 50px;
 }
 .uploadImage{
   margin-bottom: 20px;
 }
-.form-goal{
-  margin-bottom: 36px;
-}
+
 .img-form-label{
-  /* width: 150px;
-  height: 150px;
-  border-radius: 70%; */
   padding-bottom: 10px;
   cursor: pointer;
 }
