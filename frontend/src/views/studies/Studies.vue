@@ -138,9 +138,9 @@ export default {
     Memo,
   },
   beforeRouteLeave(to, from, next) {
-    // if (!this.canLeave) {
-    //   this.$refs.kanbanBoard.onClickSaveBtn()
-    // }
+    if (!this.canLeave) {
+      this.$refs.kanbanBoard.onClickSaveBtn()
+    }
     this.$store.commit('SET_STUDY_INFO', {})
     if (to.fullPath == `/studies/${this.$route.params.studyId}`) {
       if (this.session) {
