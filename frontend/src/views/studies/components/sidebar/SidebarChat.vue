@@ -10,10 +10,11 @@
           :loader="loader"
           :background-color="bgColor"
           class="vld-overlay"
+          :style="state.loading ? '-webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px);' : ''"
       ></loading>
     <div>
     <div class="chat-body" id="chat-body"
-      @scroll="scrollMove" :style="state.loading ? 'filter: blur(5px); -webkit-filter: blur(5px);' : ''">
+      @scroll="scrollMove">
 
       <SidebarChatMessage
         v-for="(chat, idx) in state.chatList"
