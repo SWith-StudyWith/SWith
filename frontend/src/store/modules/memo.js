@@ -1,5 +1,7 @@
 import { setMemoList, getMemoList } from "../../api/memo";
+import notifications from '@/composables/notifications'
 
+const { notifySuccess } = notifications();
 const state = () => ({
   memoList: [],
   memo: {},
@@ -49,6 +51,7 @@ const actions = {
           studyId,
           (res) => {
             commit('SET_MEMO_LIST', res.data.data)
+            notifySuccess('메모 저장 완료!')
           },
           (err) => {
             console.log(err)
