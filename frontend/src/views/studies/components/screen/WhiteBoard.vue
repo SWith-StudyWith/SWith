@@ -63,6 +63,11 @@
                 <i class="fas fa-trash-alt"></i>
             </button>
         </div>
+        <a id="download" @click="save">
+            <button type="button" class="btn btn-primary btn">
+                <i class="fas fa-download"></i>
+            </button>
+        </a>
         <canvas id="canvas">
         </canvas>
     </div>
@@ -134,6 +139,15 @@ export default {
             );
         });
 
+        this.socket.on('connect', () => {
+            // console.log("client(on) - connect, id: " + this.socket.id + ", connected: " + this.socket.connected);
+            // console.log(this.socket);
+            // join study
+            this.socket.emit('join',
+                this.studyId
+            );
+        });
+
         // canvas init
         this.receiveSocket.on('send-data', (data) => {
             console.log("client(receive:on) - send-data");
@@ -145,10 +159,8 @@ export default {
     },
 
     beforeUnmount() {
-        this.sendSocket.disconnect();
-        this.receiveSocket.disconnect();
-        console.log("client - disconnect, id: " + this.sendSocket.id + ", connected: " + this.sendSocket.connected);
-        console.log("client - disconnect, id: " + this.receiveSocket.id + ", connected: " + this.receiveSocket.connected);
+        this.socket.disconnect();
+        // console.log("client - disconnect, id: " + this.socket.id + ", connected: " + this.socket.connected);
     },
 
     methods: {
@@ -373,6 +385,13 @@ export default {
             this.canvas.clear();
             this.pushSnapshot();
             this.sendCanvas();
+        },
+
+        save() {
+            var image = document.getElementById('canvas').toDataURL("image/png", 1.0).replace("image/png", "image/octet-stream");
+            var el = document.getElementById('download');
+            el.download = "my_image.png";
+            el.href = image;
         },
 
         onResize() {
