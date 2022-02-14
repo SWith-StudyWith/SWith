@@ -102,6 +102,7 @@ import KanbanBoardModal from '@/views/studies/components/screen/KanbanBoardModal
 import KanbanBoardCreateModal from '@/views/studies/components/screen/KanbanBoardCreateModal.vue';
 import KanbanWarningModal from '@/views/studies/components/screen/KanbanWarningModal.vue';
 import Timer from '@/views/studies/components/screen/Timer.vue';
+import notifications from '@/composables/notifications'
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
 import { ref, computed, onBeforeUnmount } from 'vue';
@@ -153,12 +154,10 @@ export default {
       modal.show();
     }
     const onClickEditBtn = async function() {
-      console.log('수정할래!')
       const getStudyInfo = () => {
         return new Promise((resolve) => {
           // store.dispatch('GET_STUDY_INFO', store.state.study.studyInfo.studyId);
           store.dispatch('GET_STUDY_INFO', route.params.studyId);
-          console.log('불러오기 완료!')
           resolve();
         })
       }
@@ -168,7 +167,6 @@ export default {
         (res) => {
           console.log(res.data);
           if (res.data.code === 200) {
-            console.log('수정 가능');
             emit('isEditPermit', true);
           } else if (res.data.code === 400) {
             console.log(`${res.data.data.nickname} 님이 수정 중입니다.`);
@@ -183,12 +181,12 @@ export default {
         }
       );
     }
+    const { notifySuccess } = notifications();
     const onClickSaveBtn = function() {
       const studyId = route.params.studyId;
-      console.log(studyId)
-      console.log('저장할래!')
       // request payload 형태 만들기
       const payload = []
+      console.log(kanbanBoard.value)
       kanbanBoard.value.forEach((column) => {
         let taskId = column.taskId
         column.kanban.forEach((task) => {
@@ -199,9 +197,9 @@ export default {
         payload,
         studyId,
         (res) => {
-          console.log(res.data)
           if (res.data.code === 200) {
             store.dispatch('GET_STUDY_INFO', studyId)
+            notifySuccess('칸반 보드 저장 완료!')
           }
         },
         (err) => {
@@ -218,7 +216,6 @@ export default {
       kanbanBoard.value[taskId - 1].kanban.push({ content: task.content, kanbanId: task.kanbanId })
     };
     const timeOver = function () {
-      console.log('시간 다되서 저장해버리기~')
       emit('isEditPermit', false);
       onClickSaveBtn()
     };
