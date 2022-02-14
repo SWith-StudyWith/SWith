@@ -74,7 +74,8 @@ import io from "socket.io-client";
 export default {
     data() {
         return {
-            socket: null,
+            sendSocket: null,
+            receiveSocket: null,
             canvas: null,
             context: null,
             isPointer: false,
@@ -110,20 +111,30 @@ export default {
         this.pushSnapshot();
 
         // socket.io connection
-        this.socket = io.connect(this.urlForSocket(), { secure: true });
+        this.sendSocket = io.connect(this.urlForSocket(), { secure: true });
+        this.receiveSocket = io.connect(this.urlForSocket(), { secure: true });
 
-        this.socket.on('connect', () => {
-            // console.log("client(on) - connect, id: " + this.socket.id + ", connected: " + this.socket.connected);
-            // console.log(this.socket);
+        this.sendSocket.on('connect', () => {
+            console.log("client(send:on) - connect, id: " + this.sendSocket.id + ", connected: " + this.sendSocket.connected);
+            console.log(this.sendSocket);
             // join study
-            this.socket.emit('join',
+            this.sendSocket.emit('join',
+                this.studyId
+            );
+        });
+
+        this.receiveSocket.on('connect', () => {
+            console.log("client(receive:on) - connect, id: " + this.receiveSocket.id + ", connected: " + this.receiveSocket.connected);
+            console.log(this.receiveSocket);
+            // join study
+            this.receiveSocket.emit('join',
                 this.studyId
             );
         });
 
         // canvas init
-        this.socket.on('send-data', (data) => {
-            // console.log("client(on) - send-data");
+        this.receiveSocket.on('send-data', (data) => {
+            console.log("client(receive:on) - send-data");
             this.receiveCanvas(data);
         });
 
@@ -132,8 +143,10 @@ export default {
     },
 
     beforeUnmount() {
-        // console.log("client - disconnect, id: " + this.socket.id + ", connected: " + this.socket.connected);
-        this.socket.disconnect();
+        this.sendSocket.disconnect();
+        this.receiveSocket.disconnect();
+        console.log("client - disconnect, id: " + this.sendSocket.id + ", connected: " + this.sendSocket.connected);
+        console.log("client - disconnect, id: " + this.receiveSocket.id + ", connected: " + this.receiveSocket.connected);
     },
 
     methods: {
@@ -182,15 +195,15 @@ export default {
             // const hostPort = 3000;
             // console.log(protocol + hostName + `:${hostPort}`);
             // return protocol + hostName + `:${hostPort}`;
-            return 'https://i6a501.p.ssafy.io';
-            // return 'http://localhost:3000';
+            // return 'https://i6a501.p.ssafy.io';
+            return 'http://localhost:3000';
         },
 
         // send canvas data to server
         sendCanvas() {
             // console.log("send");
             const canvasAsJSON = this.canvas.toJSON();
-            this.socket.emit('send-data', {
+            this.sendSocket.emit('send-data', {
                 studyId: this.studyId,
                 canvas: canvasAsJSON
             });
@@ -200,8 +213,10 @@ export default {
         // receive canvas data from server
         receiveCanvas(data) {
             // console.log("recieveCanvas - studyId: " + data.studyId);
-            this.canvas.loadFromJSON(data.canvas, this.canvas.renderAll.bind(this.canvas));
-            this.toggleObjectsSelectable(this.isPointer);
+            if (!!data  && !!data.canvas) {
+                this.canvas.loadFromJSON(data.canvas, this.canvas.renderAll.bind(this.canvas));
+                this.toggleObjectsSelectable(this.isPointer);
+            }
         },
 
         // listen to canvas events
