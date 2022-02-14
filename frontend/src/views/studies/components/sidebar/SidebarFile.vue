@@ -30,7 +30,9 @@
           </div>
         </div>
       </div>
-
+    </div>
+    <div v-if="isVisiableFileUploadPercent" class="progress">
+      <div class="progress-bar" role="progressbar" :style="`width: ${state.uploadFilePercent}%`" :aria-valuenow=state.uploadFilePercent aria-valuemin="0" aria-valuemax="100"></div>
     </div>
     <form enctype="multipart/form-data">
       <!-- <span>fileList : {{ state.fileList.createdAt }}</span> -->
@@ -73,6 +75,10 @@ export default {
       fileList : computed(() => {
         return store.state.study.fileList;
       }),
+      uploadFilePercent : computed(() => {
+        return store.state.study.fileUploadPercent;
+      }),
+
       // isAttached : false, // 파일 첨부 여부
       // maxSize : 30 * 1024 * 1024, // 30MB = 31457280 byte
       // fileSize : null,  //
@@ -85,6 +91,18 @@ export default {
       //   v => !(v && v.length > 5) || '파일은 최대 5개까지만 첨부할 수 있습니다.'
       // ]
     });
+    store.watch((state) => {
+        return state.study.fileUploadPercent;
+      },
+      (newValue, oldValue) => {
+        if (newValue >= oldValue) {
+          isVisiableFileUploadPercent.value = true;
+        } else {
+          isVisiableFileUploadPercent.value = false;
+        }
+      }
+    )
+    const isVisiableFileUploadPercent = ref(false);
 
     // const multi_upload =  async () => {
     //   if(state.files == null) {
@@ -189,10 +207,11 @@ export default {
         }
 
           // 모두 충족할 경우, 30MB / 5개 => 아래 함수들 실행.
-          await uploadFile(
-              route.params.studyId,
-              uploadFileData,
-              (res) => {
+          store.commit('SET_FILE_UPLOAD_PERCENT_INIT');
+          const payload = {
+            studyId : route.params.studyId,
+            uploadFileData : uploadFileData,
+            success : (res) => {
                 console.log(res.data)
                 switch (res.data.code) {
                   case 200:
@@ -206,20 +225,43 @@ export default {
                 uploadFileData = '';
                 store.dispatch('GET_FILE_LIST', route.params.studyId);
               },
-              (err) => {
+            fail : (err) => {
                 console.log(err)
                 notifyDanger('서버에 문제가 발생했습니다.😥')
               },
-            )
-
+          }
+          await store.dispatch("UPLOAD_FILE", payload);
+          // await uploadFile(
+          //     route.params.studyId,
+          //     uploadFileData,
+          //     (res) => {
+          //       console.log(res.data)
+          //       switch (res.data.code) {
+          //         case 200:
+          //           notifySuccess('스터디 파일 업로드 성공')
+          //           break;
+          //         case 400:
+          //           notifyDanger('스터디 파일 업로드 실패')
+          //           break;
+          //       }
+          //       dropzoneFiles.value = [];
+          //       uploadFileData = '';
+          //       store.dispatch('GET_FILE_LIST', route.params.studyId);
+          //     },
+          //     (err) => {
+          //       console.log(err)
+          //       notifyDanger('서버에 문제가 발생했습니다.😥')
+          //     },
+          //   )
       }
     }
 
-    const onClickDownloadFile = (fileId, fileName) => {
-      downloadFile(
-        route.params.studyId,
-        fileId,
-        (res) => {
+    const onClickDownloadFile = async (fileId, fileName) => {
+      store.commit('SET_FILE_UPLOAD_PERCENT_INIT');
+      const payload = {
+        studyId : route.params.studyId,
+        fileId : fileId,
+        success : (res) => {
           console.log(res.data)
           const url = window.URL.createObjectURL(new Blob([res.data]));
           const link = document.createElement('a');
@@ -228,11 +270,30 @@ export default {
           document.body.appendChild(link);
           link.click();
         },
-        (err) => {
+        fail : (err) => {
           console.log(err)
           notifyDanger('서버에 문제가 발생했습니다.😰')
         },
-      )
+      }
+      store.dispatch("DOWNLOAD_FILE", payload);
+
+      // downloadFile(
+      //   route.params.studyId,
+      //   fileId,
+      //   (res) => {
+      //     console.log(res.data)
+      //     const url = window.URL.createObjectURL(new Blob([res.data]));
+      //     const link = document.createElement('a');
+      //     link.href = url;
+      //     link.setAttribute('download', fileName);
+      //     document.body.appendChild(link);
+      //     link.click();
+      //   },
+      //   (err) => {
+      //     console.log(err)
+      //     notifyDanger('서버에 문제가 발생했습니다.😰')
+      //   },
+      // )
     }
 
     const onClickDeleteFile = (fileId) => {
@@ -268,7 +329,7 @@ export default {
       onClickDownloadFile,
       onClickDeleteFile,
       convertFileSize,
-
+      isVisiableFileUploadPercent,
       filesArray,
       uploading,
       percentage
