@@ -419,7 +419,10 @@ export default {
     position: absolute;
     z-index: 1;
     left: 50%;
+    top: 1vh;
     transform: translate(-50%, 0%);
+    background-color: #1E304F;
+    border-radius: 0.2rem;
 }
 
 .color {
