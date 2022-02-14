@@ -22,7 +22,7 @@
               <span>{{ member.nickname }}&nbsp</span>
               <span v-if="state.userInfo.memberId == member.memberId">(나)</span>
             </p>
-            <p class="email" :style="state.userInfo.memberId == member.memberId ? 'color:#F5CEC7' : ''">{{ member.email }}</p>
+            <p class="goal" :style="state.userInfo.memberId == member.memberId ? 'color:#F5CEC7' : ''">{{ member.goal }}</p>
           </div>
         </div>
       </div>
@@ -157,7 +157,7 @@ export default {
   font-size: 1.8vh;
   margin-bottom: 0.2vh;
 }
-.email{
+.goal{
   font-size: 1.5vh;
   color: rgb(199, 199, 199);
   margin-bottom: 0;
