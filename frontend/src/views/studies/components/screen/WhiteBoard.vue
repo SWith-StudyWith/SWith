@@ -1,4 +1,5 @@
 <template>
+  <div class="whiteboard-wrapper">
     <div id="whiteboard">
         <div class="btn-group" role="group">
             <button type="button" class="btn btn-primary btn" :class="{ 'active': isPointer }" @click="activateTool('pointer')">
@@ -62,9 +63,15 @@
                 <i class="fas fa-trash-alt"></i>
             </button>
         </div>
+        <a id="download" @click="save">
+            <button type="button" class="btn btn-primary btn">
+                <i class="fas fa-download"></i>
+            </button>
+        </a>
         <canvas id="canvas">
         </canvas>
     </div>
+  </div>
 </template>
 
 <script>
@@ -121,6 +128,15 @@ export default {
             );
         });
 
+        this.socket.on('connect', () => {
+            // console.log("client(on) - connect, id: " + this.socket.id + ", connected: " + this.socket.connected);
+            // console.log(this.socket);
+            // join study
+            this.socket.emit('join',
+                this.studyId
+            );
+        });
+
         // canvas init
         this.socket.on('send-data', (data) => {
             // console.log("client(on) - send-data");
@@ -132,8 +148,8 @@ export default {
     },
 
     beforeUnmount() {
-        // console.log("client - disconnect, id: " + this.socket.id + ", connected: " + this.socket.connected);
         this.socket.disconnect();
+        console.log("client - disconnect, id: " + this.socket.id + ", connected: " + this.socket.connected);
     },
 
     methods: {
@@ -200,8 +216,10 @@ export default {
         // receive canvas data from server
         receiveCanvas(data) {
             // console.log("recieveCanvas - studyId: " + data.studyId);
-            this.canvas.loadFromJSON(data.canvas, this.canvas.renderAll.bind(this.canvas));
-            this.toggleObjectsSelectable(this.isPointer);
+            if (!!data  && !!data.canvas) {
+                this.canvas.loadFromJSON(data.canvas, this.canvas.renderAll.bind(this.canvas));
+                this.toggleObjectsSelectable(this.isPointer);
+            }
         },
 
         // listen to canvas events
@@ -358,6 +376,13 @@ export default {
             this.sendCanvas();
         },
 
+        save() {
+            var image = document.getElementById('canvas').toDataURL("image/png", 1.0).replace("image/png", "image/octet-stream");
+            var el = document.getElementById('download');
+            el.download = "my_image.png";
+            el.href = image;
+        },
+
         onResize() {
             var whiteboard = document.getElementById('canvas').parentElement.parentElement;
             this.canvas.setWidth(whiteboard.offsetWidth);
@@ -368,9 +393,14 @@ export default {
 </script>
 
 <style scoped>
+.whiteboard-wrapper {
+  display: flex;
+  justify-content: center;
+  height: 72vh;
+}
 #whiteboard {
-    margin: 1vh 2.1vw 0;
-    width: 92vw;
+    position: relative;
+    width: 76vw;
     height: 72vh;
 }
 
@@ -378,9 +408,16 @@ export default {
     text-align: center;
 }
 
-canvas {
+#canvas {
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: auto;
     background-color: rgb(200, 214, 226);
+    background-color: #ffffff;
+    border-radius: 0.8rem;
 }
+
 
 .btn-group .dropdown{
     display: inline-block;
