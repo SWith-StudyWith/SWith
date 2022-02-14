@@ -1,4 +1,17 @@
 <template>
+    <loading v-model:active="state.loading"
+          :can-cancel="false"
+          :is-full-page="true"
+          :height="height"
+          :width="width"
+          :color="color"
+          :loader="loader"
+          :background-color="bgColor"
+          :opacity="opacity"
+          :lock-scroll="false"
+          class="vld-overlay"
+          :style="state.loading ? '-webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px);' : ''"
+  ></loading>
   <!-- Modal -->
   <div class="modal fade" id="signOutModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm modal-dialog-centered">
@@ -21,21 +34,49 @@
 <script>
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
+import { ref } from 'vue';
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
 
 export default {
   name: 'SignOut',
+    data() {
+    return {
+      loader: 'dots',
+      color: '#334466',
+      bgColor: 'white',
+      height: 120,
+      width: 120,
+      opacity: 0.2,
+      lockScroll: true,
+    }
+  },
+  components: {
+    Loading,
+  },
   setup() {
     const store = useStore()
     const router = useRouter()
+    const state = ref({
+      loading: false,
+    })
     const onClickSignOut = function (e) {
       e.preventDefault();
       console.log(e)
       console.log('버튼 클릭')
-      store.dispatch('SIGNOUT')
 
+      loadingCall()
+      store.dispatch('SIGNOUT')
       router.push({ name: 'Login' })
     }
-    return { onClickSignOut }
+
+    function loadingCall(){
+      state.value.loading = true
+      setTimeout(() => {
+        state.value.loading = false
+      }, 1200)
+    }
+    return { state, onClickSignOut, loadingCall }
   }
 }
 
