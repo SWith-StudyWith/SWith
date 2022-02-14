@@ -406,6 +406,7 @@ export default {
     width: 100%;
     height: auto;
     background-color: rgb(200, 214, 226);
+    background-color: #ffffff;
     border-radius: 0.8rem;
 }
 
