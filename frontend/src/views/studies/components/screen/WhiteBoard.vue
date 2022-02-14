@@ -1,69 +1,76 @@
 <template>
-    <div id="whiteboard">
-        <div class="btn-group" role="group">
-            <button type="button" class="btn btn-primary btn" :class="{ 'active': isPointer }" @click="activateTool('pointer')">
-                <i class="fas fa-mouse-pointer"></i>
-            </button>
-            <button type="button" class="btn btn-primary btn" :class="{ 'active': isPen }" @click="activateTool('pen')">
-                <i class="fas fa-pen"></i>
-            </button>
-            <button type="button" class="btn btn-primary btn" :class="{ 'active': isLine }" @click="activateTool('line')">
-                <i class="fas fa-slash fa-rotate-90"></i>
-            </button>
-            <button type="button" class="btn btn-primary btn" :class="{ 'active': isRect }" @click="activateTool('rect')">
-                <i class="far fa-square"></i>
-            </button>
-
-            <div class="dropdown">
-                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fas fa-minus"></i>
+    <div class="whiteboard-wrapper">
+        <div id="whiteboard">
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-primary btn" :class="{ 'active': isPointer }" @click="activateTool('pointer')">
+                    <i class="fas fa-mouse-pointer"></i>
                 </button>
-                <div class="dropdown-menu">
-                    <div class="menu-label">Width (0 ~ 10)</div>
-                    <input type="range" class="form-range" min="0" max="10" step="1" v-model="current.width" @change="handleChangeWidth">
-                </div>
-            </div>
-
-            <div class="dropdown">
-                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fas fa-tint"></i>
+                <button type="button" class="btn btn-primary btn" :class="{ 'active': isPen }" @click="activateTool('pen')">
+                    <i class="fas fa-pen"></i>
                 </button>
-                <div class="dropdown-menu">
-                    <div class="menu-label">Color</div>
-                    <div class="form-check form-check-inline">
-                        <input id="black-radio" class="form-check-input" type="radio" value="black" v-model="current.color" @change="handleChangeColor">
-                        <div class="color" style="background-color: black"></div>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input id="red-radio" class="form-check-input" type="radio" value="red" v-model="current.color" @change="handleChangeColor">
-                        <div class="color" style="background-color: red"></div>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input id="blue-radio" class="form-check-input" type="radio" value="blue" v-model="current.color" @change="handleChangeColor">
-                        <div class="color" style="background-color: blue"></div>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input id="green-radio" class="form-check-input" type="radio" value="green" v-model="current.color" @change="handleChangeColor">
-                        <div class="color" style="background-color: green"></div>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input id="yellow-radio" class="form-check-input" type="radio" value="yellow" v-model="current.color" @change="handleChangeColor">
-                        <div class="color" style="background-color: yellow"></div>
+                <button type="button" class="btn btn-primary btn" :class="{ 'active': isLine }" @click="activateTool('line')">
+                    <i class="fas fa-slash fa-rotate-90"></i>
+                </button>
+                <button type="button" class="btn btn-primary btn" :class="{ 'active': isRect }" @click="activateTool('rect')">
+                    <i class="far fa-square"></i>
+                </button>
+
+                <div class="dropdown">
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <div class="dropdown-menu">
+                        <div class="menu-label">Width (0 ~ 10)</div>
+                        <input type="range" class="form-range" min="0" max="10" step="1" v-model="current.width" @change="handleChangeWidth">
                     </div>
                 </div>
+
+                <div class="dropdown">
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-tint"></i>
+                    </button>
+                    <div class="dropdown-menu">
+                        <div class="menu-label">Color</div>
+                        <div class="form-check form-check-inline">
+                            <input id="black-radio" class="form-check-input" type="radio" value="black" v-model="current.color" @change="handleChangeColor">
+                            <div class="color" style="background-color: black"></div>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input id="red-radio" class="form-check-input" type="radio" value="red" v-model="current.color" @change="handleChangeColor">
+                            <div class="color" style="background-color: red"></div>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input id="blue-radio" class="form-check-input" type="radio" value="blue" v-model="current.color" @change="handleChangeColor">
+                            <div class="color" style="background-color: blue"></div>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input id="green-radio" class="form-check-input" type="radio" value="green" v-model="current.color" @change="handleChangeColor">
+                            <div class="color" style="background-color: green"></div>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input id="yellow-radio" class="form-check-input" type="radio" value="yellow" v-model="current.color" @change="handleChangeColor">
+                            <div class="color" style="background-color: yellow"></div>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary btn" @click="undo">
+                    <i class="fas fa-undo"></i>
+                </button>
+                <button type="button" class="btn btn-primary btn" @click="redo">
+                    <i class="fas fa-redo"></i>
+                </button>
+                <button type="button" class="btn btn-primary btn" @click="clear">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+                <a id="download" @click="save">
+                    <button type="button" class="btn btn-primary btn">
+                        <i class="fas fa-download"></i>
+                    </button>
+                </a>
             </div>
-            <button type="button" class="btn btn-primary btn" @click="undo">
-                <i class="fas fa-undo"></i>
-            </button>
-            <button type="button" class="btn btn-primary btn" @click="redo">
-                <i class="fas fa-redo"></i>
-            </button>
-            <button type="button" class="btn btn-primary btn" @click="clear">
-                <i class="fas fa-trash-alt"></i>
-            </button>
+            <canvas id="canvas">
+            </canvas>
         </div>
-        <canvas id="canvas">
-        </canvas>
     </div>
 </template>
 
@@ -74,8 +81,7 @@ import io from "socket.io-client";
 export default {
     data() {
         return {
-            sendSocket: null,
-            receiveSocket: null,
+            socket: null,
             canvas: null,
             context: null,
             isPointer: false,
@@ -111,30 +117,20 @@ export default {
         this.pushSnapshot();
 
         // socket.io connection
-        this.sendSocket = io.connect(this.urlForSocket(), { secure: true });
-        this.receiveSocket = io.connect(this.urlForSocket(), { secure: true });
+        this.socket = io.connect(this.urlForSocket(), { secure: true });
 
-        this.sendSocket.on('connect', () => {
-            console.log("client(send:on) - connect, id: " + this.sendSocket.id + ", connected: " + this.sendSocket.connected);
-            console.log(this.sendSocket);
+        this.socket.on('connect', () => {
+            // console.log("client(on) - connect, id: " + this.socket.id + ", connected: " + this.socket.connected);
+            // console.log(this.socket);
             // join study
-            this.sendSocket.emit('join',
-                this.studyId
-            );
-        });
-
-        this.receiveSocket.on('connect', () => {
-            console.log("client(receive:on) - connect, id: " + this.receiveSocket.id + ", connected: " + this.receiveSocket.connected);
-            console.log(this.receiveSocket);
-            // join study
-            this.receiveSocket.emit('join',
+            this.socket.emit('join',
                 this.studyId
             );
         });
 
         // canvas init
-        this.receiveSocket.on('send-data', (data) => {
-            console.log("client(receive:on) - send-data");
+        this.socket.on('send-data', (data) => {
+            // console.log("client(on) - send-data");
             this.receiveCanvas(data);
         });
 
@@ -143,10 +139,8 @@ export default {
     },
 
     beforeUnmount() {
-        this.sendSocket.disconnect();
-        this.receiveSocket.disconnect();
-        console.log("client - disconnect, id: " + this.sendSocket.id + ", connected: " + this.sendSocket.connected);
-        console.log("client - disconnect, id: " + this.receiveSocket.id + ", connected: " + this.receiveSocket.connected);
+        // console.log("client - disconnect, id: " + this.socket.id + ", connected: " + this.socket.connected);
+        this.socket.disconnect();
     },
 
     methods: {
@@ -203,7 +197,11 @@ export default {
         sendCanvas() {
             // console.log("send");
             const canvasAsJSON = this.canvas.toJSON();
-            this.sendSocket.emit('send-data', {
+            this.socket.emit('send-data', {
+                studyId: this.studyId,
+                canvas: canvasAsJSON
+            });
+            console.log({
                 studyId: this.studyId,
                 canvas: canvasAsJSON
             });
@@ -212,8 +210,9 @@ export default {
 
         // receive canvas data from server
         receiveCanvas(data) {
+            console.log(data);
             // console.log("recieveCanvas - studyId: " + data.studyId);
-            if (!!data  && !!data.canvas) {
+            if (!!data && !!data.canvas) {
                 this.canvas.loadFromJSON(data.canvas, this.canvas.renderAll.bind(this.canvas));
                 this.toggleObjectsSelectable(this.isPointer);
             }
@@ -373,6 +372,13 @@ export default {
             this.sendCanvas();
         },
 
+        save() {
+            var image = document.getElementById('canvas').toDataURL("image/png", 1.0).replace("image/png", "image/octet-stream");
+            var el = document.getElementById('download');
+            el.download = "my_image.png";
+            el.href = image;
+        },
+
         onResize() {
             var whiteboard = document.getElementById('canvas').parentElement.parentElement;
             this.canvas.setWidth(whiteboard.offsetWidth);
@@ -383,9 +389,15 @@ export default {
 </script>
 
 <style scoped>
+.whiteboard-wrapper {
+  display: flex;
+  justify-content: center;
+  height: 72vh;
+}
+
 #whiteboard {
-    margin: 1vh 2.1vw 0;
-    width: 92vw;
+    position: relative;
+    width: 76vw;
     height: 72vh;
 }
 
@@ -393,8 +405,14 @@ export default {
     text-align: center;
 }
 
-canvas {
+#canvas {
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: auto;
     background-color: rgb(200, 214, 226);
+    background-color: #ffffff;
+    border-radius: 0.8rem;
 }
 
 .btn-group .dropdown{
