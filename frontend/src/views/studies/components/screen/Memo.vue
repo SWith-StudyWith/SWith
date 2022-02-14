@@ -20,7 +20,7 @@
       </span>
       <div
         v-for="(memo, idx) in memoList"
-        :key="idx" class="postit user-select-none position-absolute m-0 py-4 px-2"
+        :key="idx" class="postit user-select-none position-absolute m-0 py-3 px-3 text-start"
         :class="['target'+ idx, colorList[memo.color]]"
         :style="{ 'z-index': memo.zIndex, transform : memo.transform }"
         @dblclick="onDblClick"
@@ -164,7 +164,6 @@ export default {
   background-color: burlywood;
   box-shadow: 0 5px 5px 0 rgb(0 0 0 / 0.1), 0 5px 5px -1px rgb(0 0 0 / 0.1);
   font-size: 0.8rem;
-  white-space: pre;
 }
 .red {
   background-color: #F1D4D4;
