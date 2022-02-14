@@ -62,12 +62,12 @@
             <button type="button" class="btn btn-primary btn" @click="clear">
                 <i class="fas fa-trash-alt"></i>
             </button>
+            <a id="download" @click="save">
+                <button type="button" class="btn btn-primary btn">
+                    <i class="fas fa-download"></i>
+                </button>
+            </a>
         </div>
-        <a id="download" @click="save">
-            <button type="button" class="btn btn-primary btn">
-                <i class="fas fa-download"></i>
-            </button>
-        </a>
         <canvas id="canvas">
         </canvas>
     </div>
@@ -81,8 +81,7 @@ import io from "socket.io-client";
 export default {
     data() {
         return {
-            sendSocket: null,
-            receiveSocket: null,
+            socket: null,
             canvas: null,
             context: null,
             isPointer: false,
@@ -118,26 +117,7 @@ export default {
         this.pushSnapshot();
 
         // socket.io connection
-        this.sendSocket = io.connect(this.urlForSocket(), { secure: true });
-        this.receiveSocket = io.connect(this.urlForSocket(), { secure: true });
-
-        this.sendSocket.on('connect', () => {
-            console.log("client(send:on) - connect, id: " + this.sendSocket.id + ", connected: " + this.sendSocket.connected);
-            console.log(this.sendSocket);
-            // join study
-            this.sendSocket.emit('join',
-                this.studyId
-            );
-        });
-
-        this.receiveSocket.on('connect', () => {
-            console.log("client(receive:on) - connect, id: " + this.receiveSocket.id + ", connected: " + this.receiveSocket.connected);
-            console.log(this.receiveSocket);
-            // join study
-            this.receiveSocket.emit('join',
-                this.studyId
-            );
-        });
+        this.socket = io.connect(this.urlForSocket(), { secure: true });
 
         this.socket.on('connect', () => {
             // console.log("client(on) - connect, id: " + this.socket.id + ", connected: " + this.socket.connected);
@@ -149,8 +129,8 @@ export default {
         });
 
         // canvas init
-        this.receiveSocket.on('send-data', (data) => {
-            console.log("client(receive:on) - send-data");
+        this.socket.on('send-data', (data) => {
+            // console.log("client(on) - send-data");
             this.receiveCanvas(data);
         });
 
@@ -217,7 +197,7 @@ export default {
         sendCanvas() {
             // console.log("send");
             const canvasAsJSON = this.canvas.toJSON();
-            this.sendSocket.emit('send-data', {
+            this.socket.emit('send-data', {
                 studyId: this.studyId,
                 canvas: canvasAsJSON
             });
@@ -409,6 +389,7 @@ export default {
   justify-content: center;
   height: 72vh;
 }
+
 #whiteboard {
     position: relative;
     width: 76vw;
