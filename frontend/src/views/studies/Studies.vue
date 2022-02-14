@@ -30,7 +30,7 @@
                   <button class="btn btn-primary mx-1 stream-onoff-btn" @click="videoOnOff(publisher)">
                     <font-awesome-icon
                       :icon="['fas', publisher&&publisher.stream.videoActive ? 'video' : 'video-slash' ]"
-                      :class="{'font-red' : !(publisher&&publisher.stream.videoActive)}"
+                      :class="{'font-red' : !(publisher&&publisher.stream.videoActive)}" class="icon"
                     />
                   </button>
                   <button class="btn btn-primary mx-1 stream-onoff-btn" @click="audioOnOff(sub)">
@@ -600,10 +600,12 @@ export default {
   border-radius: 1rem;
 }
 .stream-onoff-btn {
-  width: 2.5vw;
-  font-size: 2vh;
-  border-radius: 70%;
-  margin-top: 15vh;
+  width: 2vw;
+  height: 4vh;
+  font-size: 1.4vh;
+  border-radius: 50%;
+  margin-top: 13vh;
+  padding: 0
 }
 .video-box {
   margin: 1.5vh;
@@ -628,10 +630,14 @@ export default {
 ::-webkit-scrollbar {
   height: 12px;
 }
+::-webkit-scrollbar-thumb{
+    background-color: #999;
+    border-radius: 10px;
+}
 ::-webkit-scrollbar-thumb:hover {
   background-color: #777;
 }
-::-webkit-scrollbar-track{
-  /* background-color: #aebed4; */
+::-webkit-scrollbar-track {
+    background-color: #aebed4;
 }
 </style>

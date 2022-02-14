@@ -203,6 +203,7 @@ img {
   padding: 1vh 1vw 1vh;
   font-size: 1.6vh;
   font-weight: 500;
+  white-space: pre-line;
 }
 
 .chat-other-message-time {
@@ -230,6 +231,7 @@ img {
   font-size: 1.6vh;
   font-weight: 500;
   margin-left: 0.3vw;
+  white-space: pre-line;
 }
 .chat-my-message-time{
   margin: 0;
