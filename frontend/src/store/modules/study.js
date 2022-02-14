@@ -78,7 +78,6 @@ const actions = {
       payload,
       (res) => {
         commit('UPDATE_STUDY_INFO', res.data.data);
-        router.push({ name: 'StudyDetail' })
       },
       () => {
       }
