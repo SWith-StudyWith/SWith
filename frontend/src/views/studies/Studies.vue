@@ -8,7 +8,7 @@
       :screenMode="screenMode"
       :isScreenShared="isScreenShared"
     />
-    <div :style="{ 'margin-left': sidebarWidth }">
+    <div class="contents" :style="{ 'margin-left': sidebarWidth }">
       <!-- main container start -->
       <div id="main-container" class="mx-4" >
         <!-- session start -->
@@ -89,7 +89,7 @@
       </div>
       <!-- main container end -->
       <!-- 화면 모드 -->
-      <KanbanBoard v-if="screenMode === 0" @isEditPermit="isEditPermit($event)" :editPermit="editPermit" ref="kanbanBoard"/>
+      <KanbanBoard v-if="screenMode === 4" @isEditPermit="isEditPermit($event)" :editPermit="editPermit" ref="kanbanBoard"/>
       <MainScreen
         v-else-if="screenMode === 1"
         :streamManager="mainStreamManager"
@@ -97,6 +97,19 @@
       />
       <WhiteBoard v-else-if="screenMode === 2"/>
       <Memo v-else-if="screenMode === 3"/>
+
+      <div class="control-buttons-container">
+        <ControlButtons
+          class="control-buttons"
+          @show-screenmode="showScreenMode($event)"
+          @startScreenSharing="startScreenSharing"
+          @stopScreenSharing="stopScreenSharing"
+          @toggleSidebar="toggleSidebar"
+          :screenMode="screenMode"
+          :isScreenShared="isScreenShared"
+        />
+      </div>
+
     </div>
     <!-- sidebar end -->
   </div>
@@ -113,6 +126,8 @@ import { useRoute } from 'vue-router';
 import { OpenVidu } from "openvidu-browser";
 import { ref } from 'vue';
 import axios from "axios";
+import ControlButtons from '@/views/studies/components/control/ControlButtons.vue';
+
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 const OPENVIDU_SERVER_URL = "https://i6a501.p.ssafy.io:4443";
@@ -136,6 +151,7 @@ export default {
     WhiteBoard,
     UserVideo,
     Memo,
+    ControlButtons,
   },
   beforeRouteLeave(to, from, next) {
     // if (!this.canLeave) {
@@ -198,7 +214,7 @@ export default {
       mainOnOff: false,
       myUserId: "",
       tg: false,
-      screenMode: 0,
+      screenMode: 4,
       editPermit: false,
       canLeave: true,
 
@@ -633,5 +649,44 @@ export default {
 }
 ::-webkit-scrollbar-track{
   /* background-color: #aebed4; */
+}
+.control-buttons {
+  /* align-self: center; */
+  /* position: sticky; */
+  /* position:absolute; */
+  position: fixed;
+  /* left:0;
+  bottom:0 */
+  /* position: sticky; */
+/* margin-top: -100px; */
+/* padding-bottom: 100px; */
+  /* top: 30px; */
+  bottom: 0.2vh;
+  /* float: right; */
+  /* left: 25vw; */
+  /* right: 25vw; */
+  /* justify-content: center; */
+  /* align-content: center; */
+  /* align-items: center; */
+  /* justify-items:center; */
+  /* top: 50%; */
+left: 50vw;
+-webkit-transform: translate(-50%, -50%);
+-moz-transform: translate(-50%, -50%);
+-ms-transform: translate(-50%, -50%);
+-o-transform: translate(-50%, -50%);
+transform: translate(-50%, -50%);
+}
+.contents {
+      /* display: flex; */
+    /* flex-direction: column; */
+    height: 100%;
+    /* width: 100%; */
+        align-items: center;
+    justify-content: space-evenly;
+    /* position: sticky; */
+}
+.control-buttons-container {
+  /* width: 100%; */
 }
 </style>
