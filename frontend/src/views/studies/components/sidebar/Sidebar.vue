@@ -218,10 +218,11 @@ export default {
   top: 0;
   left: 0;
   bottom: 0;
-  padding: 0.5rem;
+  padding: 0.5vw;
   transition: 0.3s ease;
   display: flex;
   flex-direction: column-reverse;
+  min-width: 4vh;
 }
 .control-bottons {
   /* text-align: center; */

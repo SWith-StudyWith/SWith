@@ -32,6 +32,7 @@
 import notifications from '@/composables/notifications'
 
 const { notifyDanger } = notifications();
+
 export default {
   name: 'StudyDetailCamera',
   components: {},
@@ -53,12 +54,14 @@ export default {
     }
   },
   mounted() {
+    window.addEventListener('beforeunload', this.unloadEvent)
     this.myVideo = document.querySelector('.myVideo')
     this.getMedia()
     this.getDevices()
   },
   unmounted() {
-    this.closeMedia()
+    this.unloadEvent()
+    window.removeEventListener('beforeunload', this.unloadEvent)
   },
   watch: {
     deviceSetting: {
@@ -77,6 +80,11 @@ export default {
     }
   },
   methods: {
+    unloadEvent() {
+      this.closeMedia()
+      this.myStream = null;
+      this.myVideo = null;
+    },
     // 장치 가져오기
     getDevices: async function () {
       try {
@@ -124,6 +132,7 @@ export default {
         }
       } catch(err) {
         console.log(err)
+        this.closeMedia()
         notifyDanger('장치를 가져오는데 실패했어요😳')
       }
     },
@@ -133,11 +142,15 @@ export default {
         track.enabled = !track.enabled;
       })
     },
-    onClickCameraBtn: function () {
+    onClickCameraBtn: async function () {
       this.deviceSetting.isCameraOn = !this.deviceSetting.isCameraOn;
-      this.myStream.getVideoTracks().forEach(track => {
-        track.enabled = !track.enabled;
-      });
+      const videoTrack = this.myStream.getVideoTracks()[0];
+      videoTrack.enabled = !videoTrack.enabled;
+      if (!videoTrack.enabled) {
+        videoTrack.stop();
+      } else {
+        await this.getMedia(this.deviceSetting.currentVideoId, this.deviceSetting.currentAudioId)
+      }
     },
     onChangeCamera: async function (e) {
       // 현재 카메라 끄고, 타겟 카메라와 현재 마이크 불러옴.
@@ -160,6 +173,7 @@ export default {
         this.myStream.getTracks().forEach(track => {
           track.stop();
         })
+        this.myStream.srcObject = null;
       } catch(err) {
         console.log(err)
       }
