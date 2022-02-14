@@ -156,7 +156,7 @@ export default {
   background-image: url("../../../../assets/img/study_room/paper_texture.png");
   cursor: grab;
   border-radius: 0.8rem;
-  margin: 1vh 0.7vw 0 2vw ;
+  margin: 1vh 1vw 0 1vw ;
 }
 .postit {
   width: 13rem;
