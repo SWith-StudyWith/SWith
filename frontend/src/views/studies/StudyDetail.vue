@@ -1,4 +1,17 @@
 <template>
+  <loading v-model:active="state.loading"
+      :can-cancel="false"
+      :is-full-page="true"
+      :height="height"
+      :width="width"
+      :color="color"
+      :loader="loader"
+      :background-color="bgColor"
+      :opacity="opacity"
+      :lock-scroll="false"
+      class="vld-overlay"
+      :style="state.loading ? '-webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px);' : ''"
+  ></loading>
   <Navbar/>
   <div class="container mt-5">
     <div class="row">
@@ -30,9 +43,22 @@ import StudyDetailKanbanBoard from '@/views/studies/components/detail/StudyDetai
 import { reactive, computed, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex'
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
 
 export default {
   name: 'StudyDetail',
+  data() {
+    return {
+      loader: 'dots',
+      color: '#334466',
+      bgColor: 'white',
+      height: 120,
+      width: 120,
+      opacity: 0.2,
+      lockScroll: true,
+    }
+  },
   components: {
     Navbar,
     StudyDetailHeader,
@@ -40,6 +66,7 @@ export default {
     StudyDetailExitModal,
     StudyDetailKanbanBoard,
     Footer,
+    Loading
   },
   setup() {
     const router = useRouter();
@@ -55,6 +82,7 @@ export default {
       audioId: '',
       videoOn: false,
       audioOn: false,
+      loading: false,
     });
     const setDevice = function (deviceSettings) {
       state.videoId = deviceSettings.videoId
@@ -80,8 +108,18 @@ export default {
     onBeforeUnmount(() => {
       store.commit('SET_STUDY_INFO', {})
     })
-    return { state, route, setDevice, onClickEnterBtn };
+    function loadingCall(){
+      state.loading = true
+      setTimeout(() => {
+        state.loading = false
+      }, 1200)
+    }
+
+    return { state, route, setDevice, onClickEnterBtn, loadingCall};
   },
+  created(){
+    this.loadingCall()
+  }
 }
 </script>
 <style scoped>
