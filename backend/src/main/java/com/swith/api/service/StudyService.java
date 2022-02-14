@@ -21,4 +21,5 @@ public interface StudyService {
     void deleteMemberStudy(Member member, Study study);
     void updateStudyIsUsed(Study study, String isUsed, Member member);
     void deleteStudy(Long studyId);
+    void updateKanbanRight(Study study, Member member);
 }

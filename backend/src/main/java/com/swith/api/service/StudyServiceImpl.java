@@ -169,7 +169,6 @@ public class StudyServiceImpl implements StudyService {
         study.setIsUsed(isUsed);
         if (member != null) {
             study.setLockUseMember(member);
-            study.setLockCreatedAt(LocalDateTime.now());
         }
     }
 
@@ -184,5 +183,10 @@ public class StudyServiceImpl implements StudyService {
             }
         }
         studyRepository.deleteById(studyId);
+    }
+
+    @Override
+    public void updateKanbanRight(Study study, Member member) {
+        study.setLockUseMember(member);
     }
 }
