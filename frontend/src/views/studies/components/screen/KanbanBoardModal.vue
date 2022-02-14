@@ -2,7 +2,7 @@
   <div class="modal fade" id="kanbanCardUpdateModal" tabindex="-1" aria-labelledby="kanbanCardUpdateModalLabel" aria-hidden="true" @click.self="closeInput">
     <div class="modal-dialog modal-dialog-centered modal-md">
       <div class="modal-content">
-        <div v-if="!state.isEdit" class="modal-body text-start" @click="openInput">
+        <div v-if="!state.isEdit" class="modal-body text-break text-start" @click="openInput">
           {{ selectedTask.value ? selectedTask.value.content : '' }}
         </div>
         <div v-else class="modal-body">

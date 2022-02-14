@@ -1,9 +1,9 @@
 <template>
   <div @click="onClickCard"
-    class="StudyDetailKanbanBoardCard user-select-none"
+    class="StudyDetailKanbanBoardCard user-select-none "
     data-bs-toggle="modal" data-bs-target="#kanbanCardModal"
   >
-    <span class="card-body-data-content font-small" text-truncate>{{ task.content }}</span>
+    <p class="card-body-data-content font-small mb-0">{{ task.content }}</p>
   </div>
 </template>
 <script>
@@ -33,23 +33,25 @@ export default {
   border: solid 1.5px #DDDDDD;
   border-radius: 0.4rem;
   box-shadow: 1px 1px .4em #DDDDDD;
+  overflow : hidden;
+  /* white-space: nowrap; */
   /* cursor: pointer; */
 }
 .StudyDetailKanbanBoardCard:hover {
   transition-duration: 0.1s;
   background-color: rgba(238, 238, 238, 0.301);
-  display: flex;
-  flex-wrap: nowrap;
+
 }
 
 .card-body-data-content {
   overflow : hidden;
-  text-overflow : ellipsis;
-  word-wrap : brek-word;
-  display : -webkit-box;
-  -webkit-line-clamp : 2;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
-  min-height: 2vh;
+  /* min-height: 2vh; */
+  word-break: break-all;
+  line-height: 1.3rem;
+  max-height: 3.9rem;
 }
 
 .font-small {

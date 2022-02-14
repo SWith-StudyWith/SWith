@@ -1,6 +1,6 @@
 <template>
   <div class="videoInput">
-    <video class="myVideo" autoplay style="width: 100%"></video>
+    <video class="myVideo" autoplay :poster="posterImgSrc"></video>
   </div>
   <div class="text-center mt-3">
     <button class="btn btn-secondary" @click="this.onClickCameraBtn">
@@ -13,13 +13,13 @@
       <font-awesome-icon :icon="['fas', 'cog']" />
     </button>
     <div v-if="this.selectsOn" class="select-container my-2">
-      <select name="cameras" id="cameraSelect" class="form-select text-truncate" @change="onChangeCamera" v-model="this.deviceSetting.currentVideoId">
+      <select name="cameras" id="cameraSelect" class="form-select form-select-sm text-truncate" @change="onChangeCamera" v-model="this.deviceSetting.currentVideoId">
         <option value="0" disabled>카메라 선택</option>
         <option :value="camera.deviceId" :key="camera.deviceId" v-for="camera in this.cameraDevices">
           {{ camera.label }}
         </option>
       </select>
-      <select name="mics" id="micSelect" class="form-select text-truncate" @change="onChangeCamera" v-model="this.deviceSetting.currentAudioId">
+      <select name="mics" id="micSelect" class="form-select form-select-sm text-truncate" @change="onChangeCamera" v-model="this.deviceSetting.currentAudioId">
         <option value="0" disabled>마이크 선택</option>
         <option :value="mic.deviceId" :key="mic.deviceId" v-for="mic in this.micDevices">
           {{ mic.label }}
@@ -50,7 +50,8 @@ export default {
         currentAudioId: '',
         isCameraOn: false,
         isMuted: true,
-      }
+      },
+      posterImgSrc: ''
     }
   },
   mounted() {
@@ -132,8 +133,12 @@ export default {
         }
       } catch(err) {
         console.log(err)
+        if (err.message === 'Permission denied') {
+          notifyDanger('카메라/오디오 접근 권한이 필요합니다.😳')
+          this.posterImgSrc = require('@/assets/img/navbar/profile.png')
+        }
+        console.log(err.message)
         this.closeMedia()
-        notifyDanger('장치를 가져오는데 실패했어요😳')
       }
     },
     onClickMuteBtn: function () {
@@ -191,7 +196,12 @@ export default {
 </script>
 <style scoped>
 video {
-  margin-top: 1rem;
+  /* margin-top: 1rem;
+  border-radius: 1rem; */
+  width: 100%;
+  aspect-ratio: 29 / 18;
+  overflow: hidden;
+  object-fit: cover;
   border-radius: 1rem;
 }
 button {

@@ -2,14 +2,13 @@
   <div class="modal fade" id="memoModal" tabindex="-1" aria-labelledby="memoModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-sm">
       <div class="modal-content">
-        <div class="modal-header">
+        <div class="modal-header justify-content-start border-0 pb-0">
           <input id="red-radio" class="form-check-input d-none" name="color" type="radio" v-model="memoColor" value="0">
           <label for="red-radio" class="red"></label>
           <input id="blue-radio" class="form-check-input d-none" name="color" type="radio" v-model="memoColor" value="1">
           <label for="blue-radio" class="blue"></label>
           <input id="yellow-radio" class="form-check-input d-none" name="color" type="radio" v-model="memoColor" value="2">
           <label for="yellow-radio" class="yellow"></label>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body px-3">
           <textarea
@@ -24,8 +23,8 @@
           </textarea>
           <p class="text-limit text-end text-muted mb-0">{{ memoLength }} / 140</p>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <div class="modal-footer border-0 pt-0">
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">저장</button>
         </div>
       </div>
     </div>

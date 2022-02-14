@@ -4,12 +4,12 @@
     <h1>Todo List</h1>
     <p>A board to keep track of your study progress.</p>
   </div>
-  <div style="height: 28rem;">
-    <div class="p-3 d-flex bg-light-grey tasks justify-content-center h-100">
+  <div class="container" style="height: 28rem;">
+    <div class="p-3 bg-light-grey tasks h-100 row">
       <div
         v-for="tasks in state.kanbanBoard"
         :key="tasks.taskId"
-        class="w-100 p-2"
+        class="p-2 col-4"
       >
         <p class="text-start">
           <span class="taskname px-2 py-1"
@@ -22,12 +22,17 @@
             v-for="(task) in tasks.kanban"
             :key="task.kanbanId"
             :task="task"
-            class="align-items-center kanban-card"
+            class="d-flex align-items-center kanban-card"
             @onClickCard="selectedTask.value=$event"
           />
         </div>
       </div>
     </div>
+  </div>
+  <div class="text-end mt-3 me-3">
+    <button type="button" class="btn btn-secondary text-light" data-bs-toggle="modal" data-bs-target="#exitModal">
+      탈퇴하기
+    </button>
   </div>
   <StudyDetailKanbanBoardModal :selectedTask="selectedTask"/>
 </div>
