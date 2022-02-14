@@ -47,7 +47,7 @@
             </div>
             <div class="row">
               <label for="goal" class="form-label">상태 메시지</label>
-              <input type="text" class="form-control form-goal" id="goal" rows="3" v-model="state.goal">
+              <input type="text" class="form-control form-goal" id="goal" rows="3" v-model="state.goal" placeholder="상태 메세지를 입력해주세요.">
               <div
                 :style="{ visibility: (state.isValidGoal)? 'hidden' : 'visible' }"
                 class="invalid-feedback"
@@ -86,8 +86,14 @@ export default {
     const store = useStore();
     const state = ref({
       userInfo : store.getters.getUserInfo,
-      nickname : store.getters.getUserInfo.nickname,
-      goal : store.getters.getUserInfo.goal,
+      nickname : computed(() => {
+        if(store.getters.getUserInfo.nickname == 'null'){
+          return ''
+        }else {
+          return store.getters.getUserInfo.nickname
+        }
+      }),
+      goal: store.getters.getUserInfo.goal,
       profileImg: '',
       updated: false,
       profileImgSrc : computed(() => {
@@ -149,6 +155,7 @@ export default {
       e.preventDefault();
       if (state.value.nickname === '') {
         state.value.wasInputed.nickname = true;
+        state.value.wasInputed.goal = true;
         return;
       }
       if (!state.value.isValidNickname || !state.value.isValidGoal ) {
@@ -267,6 +274,11 @@ button{
   text-align: center;
 }
 input::placeholder {
+  font-size: 12px;
+  padding: auto;
+  vertical-align: middle;
+}
+textarea::placeholder {
   font-size: 12px;
   padding: auto;
   vertical-align: middle;

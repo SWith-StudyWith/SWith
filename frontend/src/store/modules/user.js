@@ -108,9 +108,11 @@ const actions = {
     signOut(
       (res) => {
         if (res.data.code === 200) {
-          dispatch('LOGOUT')
-          router.push({ name: 'Login' })
-          notifySuccess('떠나신다니 아쉽습니다.🥺')
+          setTimeout(() => {
+            dispatch('LOGOUT')
+            router.push({ name: 'Login' })
+            notifySuccess('떠나신다니 아쉽습니다.🥺')
+          }, 1200);
         }  else if ( res.data.code === 404) {
         notifyDanger('회원 탈퇴 실패.😰')
         }
