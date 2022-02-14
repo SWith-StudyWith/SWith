@@ -12,12 +12,14 @@ public class StudyMemberRes {
     private String imgUrl;
     private String nickname;
     private String email;
+    private String goal;
 
     @QueryProjection
-    public StudyMemberRes(Long memberId, String imgUrl, String nickname, String email) {
+    public StudyMemberRes(Long memberId, String imgUrl, String nickname, String email, String goal) {
         this.memberId = memberId;
         this.imgUrl = imgUrl;
         this.nickname = nickname;
         this.email = email;
+        this.goal = goal;
     }
 }
