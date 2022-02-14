@@ -1,30 +1,32 @@
 <template>
-  <div class="videoInput">
-    <video class="myVideo" autoplay :poster="posterImgSrc"></video>
-  </div>
-  <div class="text-center mt-3">
-    <button class="btn btn-secondary" @click="this.onClickCameraBtn">
-      <font-awesome-icon :icon="['fas', this.cameraIcon]" />
-    </button>
-    <button class="btn btn-secondary"  @click="this.onClickMuteBtn">
-      <font-awesome-icon :icon="['fas', this.mutedIcon]" />
-    </button>
-    <button class="btn btn-secondary" @click="this.selectsOn = !this.selectsOn">
-      <font-awesome-icon :icon="['fas', 'cog']" />
-    </button>
-    <div v-if="this.selectsOn" class="select-container my-2">
-      <select name="cameras" id="cameraSelect" class="form-select form-select-sm text-truncate" @change="onChangeCamera" v-model="this.deviceSetting.currentVideoId">
-        <option value="0" disabled>카메라 선택</option>
-        <option :value="camera.deviceId" :key="camera.deviceId" v-for="camera in this.cameraDevices">
-          {{ camera.label }}
-        </option>
-      </select>
-      <select name="mics" id="micSelect" class="form-select form-select-sm text-truncate" @change="onChangeCamera" v-model="this.deviceSetting.currentAudioId">
-        <option value="0" disabled>마이크 선택</option>
-        <option :value="mic.deviceId" :key="mic.deviceId" v-for="mic in this.micDevices">
-          {{ mic.label }}
-        </option>
-      </select>
+  <div>
+    <div class="videoInput">
+      <video class="myVideo" autoplay :poster="posterImgSrc"></video>
+    </div>
+    <div class="text-center mt-3">
+      <button class="btn btn-secondary" @click="this.onClickCameraBtn">
+        <font-awesome-icon :icon="['fas', this.cameraIcon]" />
+      </button>
+      <button class="btn btn-secondary"  @click="this.onClickMuteBtn">
+        <font-awesome-icon :icon="['fas', this.mutedIcon]" />
+      </button>
+      <button class="btn btn-secondary" @click="this.selectsOn = !this.selectsOn">
+        <font-awesome-icon :icon="['fas', 'cog']" />
+      </button>
+      <div v-if="this.selectsOn" class="select-container my-2">
+        <select name="cameras" id="cameraSelect" class="form-select form-select-sm text-truncate" @change="onChangeCamera" v-model="this.deviceSetting.currentVideoId">
+          <option value="0" disabled>카메라 선택</option>
+          <option :value="camera.deviceId" :key="camera.deviceId" v-for="camera in this.cameraDevices">
+            {{ camera.label }}
+          </option>
+        </select>
+        <select name="mics" id="micSelect" class="form-select form-select-sm text-truncate" @change="onChangeCamera" v-model="this.deviceSetting.currentAudioId">
+          <option value="0" disabled>마이크 선택</option>
+          <option :value="mic.deviceId" :key="mic.deviceId" v-for="mic in this.micDevices">
+            {{ mic.label }}
+          </option>
+        </select>
+      </div>
     </div>
   </div>
 </template>

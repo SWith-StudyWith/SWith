@@ -1,100 +1,102 @@
 <template>
-  <div class="kanbanboard">
-    <div class="kanbanboard-header text-end mx-3">
-      <div class="kanbanboard-title">
-        <h1>Todo List</h1>
+  <div>
+    <div class="kanbanboard">
+      <div class="kanbanboard-header text-end mx-3">
+        <div class="kanbanboard-title">
+          <h1>Todo List</h1>
+        </div>
+        <div v-if="!editPermit" class="kanban-button">
+          <button class="btn btn-primary" @click="onClickEditBtn">
+            수정하기
+            <font-awesome-icon class="icon" :icon="['fas', 'edit']"></font-awesome-icon>
+          </button>
+          <button  class="btn btn-primary" @click="onClickRefreshBtn">
+            불러오기
+            <font-awesome-icon class="icon" :icon="['fas', 'sync-alt']"></font-awesome-icon>
+          </button>
+        </div>
+        <div v-else class="d-flex flex-row-reverse align-items-center kanban-button">
+          <button class="btn btn-primary" @click="onClickSaveBtn">
+            저장하기
+            <font-awesome-icon class="icon" :icon="['fas', 'save']"></font-awesome-icon>
+          </button>
+          <Timer @timeStopped="timeOver"/>
+        </div>
       </div>
-      <div v-if="!editPermit" class="kanban-button">
-        <button class="btn btn-primary" @click="onClickEditBtn">
-          수정하기
-          <font-awesome-icon class="icon" :icon="['fas', 'edit']"></font-awesome-icon>
-        </button>
-        <button  class="btn btn-primary" @click="onClickRefreshBtn">
-          불러오기
-          <font-awesome-icon class="icon" :icon="['fas', 'sync-alt']"></font-awesome-icon>
-        </button>
-      </div>
-      <div v-else class="d-flex flex-row-reverse align-items-center kanban-button">
-        <button class="btn btn-primary" @click="onClickSaveBtn">
-          저장하기
-          <font-awesome-icon class="icon" :icon="['fas', 'save']"></font-awesome-icon>
-        </button>
-        <Timer @timeStopped="timeOver"/>
-      </div>
-    </div>
-    <div class="container-fluid">
-      <div class="row">
-        <div
-          v-for="column in kanbanBoard"
-          :key="column.taskId"
-          class="col-4"
-        >
-          <div class="task-column ">
-            <p class="text-start mb-1">
-                <span
-                  class="taskname px-2 py-1 user-select-none"
-                  :class="{ 'bg-grey' : column.taskId === 1, 'bg-pink' : column.taskId === 2, 'bg-purple' : column.taskId === 3 }"
-                >
-                  {{ column.taskName }}
-                </span>
-            </p>
-            <div class="overflow-auto my-2" style="height: 40vh">
-              <div v-if="editPermit">
-                <draggable
-                  class="list-group"
-                  :list="column.kanban"
-                  item-key="kanbanId"
-                  group="task"
-                  ghost-class="ghost"
-                >
-                  <template #item="{ element }">
-                    <div class="list-group-item rounded mt-1 p-0 kanban-card">
-                      <KanbanBoardCard
-                        :task="element"
-                        :taskId="column.taskId"
-                        class="d-flex align-items-center text-start"
-                        @onClickCard="selectedTask.value=$event"
-                      />
-                    </div>
-                  </template>
-                </draggable>
-              </div>
-              <div v-else>
-                <div v-for="task in column.kanban" :key="task.kanbanId" class="list-group-item rounded mt-1 p-0 kanban-card">
-                  <KanbanBoardCard
-                    :task="task"
-                    :taskId="column.taskId"
-                    class="d-flex align-items-center text-start"
-                    @onClickCard="selectedTask.value=$event"
-                  />
+      <div class="container-fluid">
+        <div class="row">
+          <div
+            v-for="column in kanbanBoard"
+            :key="column.taskId"
+            class="col-4"
+          >
+            <div class="task-column ">
+              <p class="text-start mb-1">
+                  <span
+                    class="taskname px-2 py-1 user-select-none"
+                    :class="{ 'bg-grey' : column.taskId === 1, 'bg-pink' : column.taskId === 2, 'bg-purple' : column.taskId === 3 }"
+                  >
+                    {{ column.taskName }}
+                  </span>
+              </p>
+              <div class="overflow-auto my-2" style="height: 40vh">
+                <div v-if="editPermit">
+                  <draggable
+                    class="list-group"
+                    :list="column.kanban"
+                    item-key="kanbanId"
+                    group="task"
+                    ghost-class="ghost"
+                  >
+                    <template #item="{ element }">
+                      <div class="list-group-item rounded mt-1 p-0 kanban-card">
+                        <KanbanBoardCard
+                          :task="element"
+                          :taskId="column.taskId"
+                          class="d-flex align-items-center text-start"
+                          @onClickCard="selectedTask.value=$event"
+                        />
+                      </div>
+                    </template>
+                  </draggable>
+                </div>
+                <div v-else>
+                  <div v-for="task in column.kanban" :key="task.kanbanId" class="list-group-item rounded mt-1 p-0 kanban-card">
+                    <KanbanBoardCard
+                      :task="task"
+                      :taskId="column.taskId"
+                      class="d-flex align-items-center text-start"
+                      @onClickCard="selectedTask.value=$event"
+                    />
+                  </div>
                 </div>
               </div>
+              <button
+                class="mt-auto btn"
+                :class="{ 'bg-grey' : column.taskId === 1, 'bg-pink' : column.taskId === 2, 'bg-purple' : column.taskId === 3 }"
+                data-bs-toggle="modal" data-bs-target="#kanbanCardCreateModal"
+                @click="statusId=column.taskId"
+                :disabled="!editPermit"
+              >
+                추가하기
+              </button>
             </div>
-            <button
-              class="mt-auto btn"
-              :class="{ 'bg-grey' : column.taskId === 1, 'bg-pink' : column.taskId === 2, 'bg-purple' : column.taskId === 3 }"
-              data-bs-toggle="modal" data-bs-target="#kanbanCardCreateModal"
-              @click="statusId=column.taskId"
-              :disabled="!editPermit"
-            >
-              추가하기
-            </button>
           </div>
         </div>
       </div>
     </div>
+    <KanbanBoardModal
+      :selectedTask="selectedTask"
+      :editPermit="editPermit"
+      @updateTask="updateTask($event)"
+      @deleteTask="deleteTask($event)"
+    />
+    <KanbanBoardCreateModal
+      :taskId="statusId"
+      @createTask="createTask($event)"
+    />
+    <KanbanWarningModal :edittingUser="edittingUser"/>
   </div>
-  <KanbanBoardModal
-    :selectedTask="selectedTask"
-    :editPermit="editPermit"
-    @updateTask="updateTask($event)"
-    @deleteTask="deleteTask($event)"
-  />
-  <KanbanBoardCreateModal
-    :taskId="statusId"
-    @createTask="createTask($event)"
-  />
-  <KanbanWarningModal :edittingUser="edittingUser"/>
 </template>
 
 <script>

@@ -1,15 +1,17 @@
 <template>
-  <div class="screenshare">
-    <div id="main-video">
-      <user-video
-        :stream-manager="streamManager"
-        :mainStream="true"
-        @dblclick="$emit('deleteMainVideoStreamManager')"
-      />
+  <div>
+    <div class="screenshare">
+      <div id="main-video">
+        <user-video
+          :stream-manager="streamManager"
+          :mainStream="true"
+          @dblclick="$emit('deleteMainVideoStreamManager')"
+        />
+      </div>
     </div>
-  </div>
-  <!-- 빈 공간 채우기 -->
-  <div v-if="!streamManager" class="background">
+    <!-- 빈 공간 채우기 -->
+    <div v-if="!streamManager" class="background">
+    </div>
   </div>
 </template>
 

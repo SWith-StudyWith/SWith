@@ -287,6 +287,7 @@ export default {
     joinSession (initVideoOn, initAudioOn) {
       // --- Get an OpenVidu object ---
       this.OV = new OpenVidu();
+      this.OV.enableProdMode();
 
       // --- Init a session ---
       this.session = this.OV.initSession();
@@ -338,7 +339,6 @@ export default {
 
       // Speech Stop Detection
       this.session.on("publisherStopSpeaking", (event) => {
-        console.log("User " + event.connection.connectionId + " stop speaking");
         let temp = this.isSpeakList;
         let index = temp.indexOf(event.connection.connectionId, 0);
         if (index >= 0) {
@@ -346,7 +346,6 @@ export default {
           this.isSpeakList = temp;
         }
         this.isSpeak = !this.isSpeak;
-        console.log("isSpeak 상태 : " + this.isSpeak);
         // this.$store.dispatch('stopSpeaking')
         // this.$store.dispatch(
         //   "removeSpeaker",
@@ -431,9 +430,6 @@ export default {
         width: 960,
         height: 600
       };
-      console.log("바뀐 메인스트림정보");
-      console.log(this.mainStreamManager);
-      console.log(this.mainStreamManager.stream.videoDimensions);
       // this.mainOnOff = true;
 		},
     deleteMainVideoStreamManager() {
@@ -516,10 +512,8 @@ export default {
             insertMode: 'APPEND',
             mirror: false
 					});
-					console.log("publisher",publisher);
 					publisher.once('accessAllowed', () => {
 						try {
-							console.log("subscriber >>>>> ", this.subscribers);
 							this.isScreenShared=true;
 							this.session.signal({
 								data: JSON.stringify(status),  // Any string (optional)
@@ -527,7 +521,6 @@ export default {
 								type: 'startScreenSharing'             // The type of message (optional)
 							})
 							publisher.stream.getMediaStream().getVideoTracks()[0].addEventListener('ended', () => {
-								console.log('User pressed the "Stop sharing" button');
 								this.session.signal({
 									data: JSON.stringify(status),  // Any string (optional)
 									to: [],
