@@ -9,7 +9,7 @@
     <!-- 내가 보낸 메세지 -->
     <div class="chat-my-message" v-if="chat?.memberId==this.getUserInfo.memberId">
       <p class="chat-my-message-time" >{{ hhmm }}</p>
-      <p class="my-content">{{ chat?.content }}</p>
+      <p class="my-content" v-html="checkUrlContent(chat?.content)"></p>
     </div>
 
     <!-- 상대가 보낸 메세지  -->
@@ -25,7 +25,7 @@
       </div>
       <div class="chat-other-content2">
         <!-- <div class="chat-other-content1"> -->
-          <p class="other-content">{{ chat?.content }}</p>
+          <p class="other-content" v-html="checkUrlContent(chat?.content)"></p>
           <p class="chat-other-message-time">{{ hhmm }}</p>
         <!-- </div> -->
         <!-- <div class="chat-other-content2">
@@ -98,11 +98,11 @@ export default {
 
       // console.log(preValue + ", " + chatValue)
 
-      // 나는 하고싶었다 .... 시간 없애는 걸 ...
-      if(preValue == chatValue){
-        return chatValue
+      // 같은 회원이 같은 시간에 보냈을 경우 (mm처럼), 시간 출력 한 번 되도록
+      if(preValue == chatValue && this.prev[0]?.memberId == this.chat?.memberId){
+        return null
       }
-      return chatValue
+      else return chatValue
     }
   },
   methods: {
@@ -129,12 +129,18 @@ export default {
       else if(preValue != chatValue){
         return false
       }else return true
+    },
+    checkUrlContent(content) {
+      const expUrl = /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/gi;
+      let changedContent = content.replace(expUrl, `<a href="$&" target="_blank">$&</a>`);
+      return changedContent;
     }
   },
   created() {
     if(this.prev == null){
       this.isFirst = false
     }
+
   },
 }
 </script>

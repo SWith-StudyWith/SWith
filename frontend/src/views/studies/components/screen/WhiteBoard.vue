@@ -72,6 +72,7 @@
             </canvas>
         </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -394,7 +395,6 @@ export default {
   justify-content: center;
   height: 72vh;
 }
-
 #whiteboard {
     position: relative;
     width: 76vw;
@@ -414,6 +414,7 @@ export default {
     background-color: #ffffff;
     border-radius: 0.8rem;
 }
+
 
 .btn-group .dropdown{
     display: inline-block;

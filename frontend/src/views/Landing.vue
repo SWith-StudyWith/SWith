@@ -16,7 +16,7 @@
           </span>
         </p>
         <router-link to="/members/login">
-          <button type="button" class="btn btn-success" style="color:white">#study_with</button>
+          <button type="button" class="btn btn-success" style="color:white">SWith 시작하기</button>
         </router-link>
       </div>
       <div class="col-md-6">
@@ -183,6 +183,12 @@ section{
 .btn{
   padding: 10px 20px;
   margin-top: 30px;
+}
+.btn-success{
+  font-size: 1.3rem;
+}
+.btn-success:hover{
+  background-color: #f0bdb4;
 }
 
 .animate__animated.animate__shakeY{

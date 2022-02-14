@@ -177,7 +177,7 @@ export default {
     const route = useRoute();
     store.dispatch('GET_STUDY_INFO', route.params.studyId);
     // const screenMode = ref(0);
-    const sidebarWidth = ref('54px');
+    const sidebarWidth = ref('4vw');
     const toggleSidebar = function (width) {
       sidebarWidth.value = width;
     };
