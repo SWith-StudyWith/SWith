@@ -29,6 +29,11 @@
       </div>
     </div>
   </div>
+  <div class="text-end mt-3 me-3">
+    <button type="button" class="btn btn-secondary text-light" data-bs-toggle="modal" data-bs-target="#exitModal">
+      탈퇴하기
+    </button>
+  </div>
   <StudyDetailKanbanBoardModal :selectedTask="selectedTask"/>
 </div>
 </template>

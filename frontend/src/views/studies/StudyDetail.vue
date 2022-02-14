@@ -5,15 +5,10 @@
       <div class="col-md-12 col-lg-4 px-5">
         <StudyDetailHeader :studyInfo="state.studyInfo"/>
         <StudyDetailCamera @setDevice="setDevice($event)"/>
-        <button class="btn btn-primary my-3 text-white" @click="onClickEnterBtn">입장하기</button>
+        <button class="btn btn-primary mt-2 text-white" @click="onClickEnterBtn">입장하기</button>
       </div>
       <div class="col-md-12 col-lg-8 pt-5">
         <StudyDetailKanbanBoard :studyInfo="state.studyInfo"/>
-      </div>
-      <div class="text-end">
-        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exitModal">
-          탈퇴하기
-        </button>
       </div>
     </div>
     <StudyDetailExitModal/>
@@ -85,8 +80,5 @@ export default {
 }
 </script>
 <style scoped>
-.btn-secondary {
-  color: white;
-  margin-top: 1rem;
-}
+
 </style>
