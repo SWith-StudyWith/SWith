@@ -47,7 +47,7 @@
             </div>
             <div class="row">
               <label for="goal" class="form-label">나의 목표</label>
-              <textarea class="form-control form-goal" id="goal" rows="3" v-model="state.userInfo.goal"></textarea>
+              <textarea class="form-control form-goal" id="goal" rows="3" v-model="state.goal" placeholder="회원님의 목표를 써주세요! 💙"></textarea>
             </div>
             <div class="row">
               <button @click="onClickUpdateUserInfo" class="btn btn-primary btn-save">변경 사항 저장</button>
@@ -82,7 +82,14 @@ export default {
     const store = useStore();
     const state = ref({
       userInfo : store.getters.getUserInfo,
-      nickname : store.getters.getUserInfo.nickname,
+      nickname : computed(() => {
+        if(store.getters.getUserInfo.nickname == 'null'){
+          return ''
+        }else {
+          return store.getters.getUserInfo.nickname
+        }
+      }),
+      goal: store.getters.getUserInfo.goal,
       profileImg: '',
       updated: false,
       profileImgSrc : computed(() => {
@@ -94,6 +101,7 @@ export default {
       }),
       wasInputed: {
         nickname: false,
+        goal: false,
       },
       isValidNickname: computed(() => {
         if (state.value.nickname !== '') {
@@ -129,6 +137,7 @@ export default {
       e.preventDefault();
       if (state.value.nickname === '') {
         state.value.wasInputed.nickname = true;
+        state.value.wasInputed.goal = true;
         return;
       }
       if (!state.value.isValidNickname ) {
@@ -136,7 +145,7 @@ export default {
       }
       const updateUserData = new FormData();
       updateUserData.append("nickname", state.value.nickname)
-      updateUserData.append("goal", state.value.userInfo.goal)
+      updateUserData.append("goal", state.value.goal)
       updateUserData.append("profileImg", state.value.profileImg)
       updateUserData.append("updated", state.value.updated)
       store.dispatch('updateUserInfo', updateUserData)
@@ -248,6 +257,11 @@ button{
   text-align: center;
 }
 input::placeholder {
+  font-size: 12px;
+  padding: auto;
+  vertical-align: middle;
+}
+textarea::placeholder {
   font-size: 12px;
   padding: auto;
   vertical-align: middle;
