@@ -80,8 +80,12 @@ export default {
   setup(props) {
     console.log(props.studies);
     let studyCode = ref('')
+
     const store = useStore();
-    store.dispatch('GET_STUDY_LIST')
+    setTimeout(() => {
+      store.dispatch('GET_STUDY_LIST')
+    },1700)
+    // store.dispatch('GET_STUDY_LIST')
     const { notifySuccess, notifyDanger } = notifications();
 
     const state = reactive({
@@ -104,19 +108,19 @@ export default {
               store.dispatch('GET_STUDY_LIST')
               studyCode.value =''
               notifySuccess('스터디 참여 완료!😎')
-            },1701)
+            },1501)
           } else if (res.data.code === 400) {
             setTimeout(() => {
               store.dispatch('GET_STUDY_LIST')
               studyCode.value =''
               notifyDanger('해당 스터디가 존재하지 않습니다.😯')
-            },1701)
+            },1501)
           } else if (res.data.code === 409) {
             setTimeout(() => {
               store.dispatch('GET_STUDY_LIST')
               studyCode.value =''
               notifyDanger('이미 참여중인 스터디입니다.😓')
-            },1701)
+            },1501)
           }
         },
         (err) => {
@@ -130,7 +134,7 @@ export default {
       state.loading = true
       setTimeout(() => {
         state.loading = false
-      }, 1700)
+      }, 1500)
     }
     return { state, studyCode, onClickJoin , loadingCall}
   },
