@@ -62,7 +62,6 @@
     </div>
     <ChangePasswordModal />
     <SignOutModal />
-    <Footer />
   </div>
 </template>
 
@@ -70,14 +69,13 @@
 import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
 import Navbar from '@/views/common/Navbar.vue';
-import Footer from '@/views/common/Footer.vue';
 import SignOutModal from '@/views/members/components/SignOutModal.vue';
 import ChangePasswordModal from './components/ChangePasswordModal.vue';
 import notifications from '@/composables/notifications'
 
 export default {
   name: '',
-  components: { Navbar, Footer, SignOutModal, ChangePasswordModal },
+  components: { Navbar, SignOutModal, ChangePasswordModal },
   setup() {
     const store = useStore();
     const state = ref({

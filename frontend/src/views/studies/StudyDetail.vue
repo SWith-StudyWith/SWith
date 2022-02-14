@@ -1,4 +1,5 @@
 <template>
+<div>
   <Navbar/>
   <div class="container mt-5">
     <div class="row">
@@ -18,11 +19,10 @@
     </div>
     <StudyDetailExitModal/>
   </div>
-  <Footer/>
+</div>
 </template>
 <script>
 import Navbar from '@/views/common/Navbar.vue';
-import Footer from '@/views/common/Footer.vue';
 import StudyDetailHeader from '@/views/studies/components/detail/StudyDetailHeader';
 import StudyDetailCamera from '@/views/studies/components/detail/StudyDetailCamera';
 import StudyDetailExitModal from '@/views/studies/components/detail/StudyDetailExitModal';
@@ -39,7 +39,6 @@ export default {
     StudyDetailCamera,
     StudyDetailExitModal,
     StudyDetailKanbanBoard,
-    Footer,
   },
   setup() {
     const router = useRouter();

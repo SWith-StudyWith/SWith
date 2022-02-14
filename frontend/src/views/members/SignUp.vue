@@ -137,8 +137,6 @@
     </div>
   </div>
   <SignUpTerm/>
-
-  <Footer/>
 </template>
 <script>
 /* eslint-disable */
@@ -148,7 +146,6 @@ import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import SignUpTerm from './components/SignUpTerm.vue';
 import Navbar from '../common/Navbar.vue';
-import Footer from '../common/Footer.vue';
 import KakaoLoginBtn from '@/views/members/components/KakaoLoginBtn.vue';
 import notifications from '@/composables/notifications'
 import GoogleLoginBtn from './components/GoogleLoginBtn.vue';
@@ -158,8 +155,6 @@ export default {
   components: {
     SignUpTerm,
     Navbar,
-    Footer,
-    // Test,
     KakaoLoginBtn,
     GoogleLoginBtn,
   },
