@@ -149,7 +149,7 @@ export default {
 
     beforeUnmount() {
         this.socket.disconnect();
-        console.log("client - disconnect, id: " + this.socket.id + ", connected: " + this.socket.connected);
+        // console.log("client - disconnect, id: " + this.socket.id + ", connected: " + this.socket.connected);
     },
 
     methods: {
