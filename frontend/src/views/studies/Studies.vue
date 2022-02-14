@@ -99,7 +99,7 @@
       <Memo v-else-if="screenMode === 3"/>
 
       <div class="control-buttons-container">
-        <ControlButtons
+        <!-- <ControlButtons
           class="control-buttons"
           @show-screenmode="showScreenMode($event)"
           @startScreenSharing="startScreenSharing"
@@ -107,7 +107,7 @@
           @toggleSidebar="toggleSidebar"
           :screenMode="screenMode"
           :isScreenShared="isScreenShared"
-        />
+        /> -->
       </div>
 
     </div>
@@ -126,7 +126,7 @@ import { useRoute } from 'vue-router';
 import { OpenVidu } from "openvidu-browser";
 import { ref } from 'vue';
 import axios from "axios";
-import ControlButtons from '@/views/studies/components/control/ControlButtons.vue';
+// import ControlButtons from '@/views/studies/components/control/ControlButtons.vue';
 
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
@@ -151,7 +151,7 @@ export default {
     WhiteBoard,
     UserVideo,
     Memo,
-    ControlButtons,
+    // ControlButtons,
   },
   beforeRouteLeave(to, from, next) {
     // if (!this.canLeave) {
