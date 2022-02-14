@@ -1,4 +1,5 @@
 <template>
+  <div class="whiteboard-wrapper">
     <div id="whiteboard">
         <div class="btn-group" role="group">
             <button type="button" class="btn btn-primary btn" :class="{ 'active': isPointer }" @click="activateTool('pointer')">
@@ -65,6 +66,7 @@
         <canvas id="canvas">
         </canvas>
     </div>
+  </div>
 </template>
 
 <script>
@@ -383,9 +385,14 @@ export default {
 </script>
 
 <style scoped>
+.whiteboard-wrapper {
+  display: flex;
+  justify-content: center;
+  height: 72vh;
+}
 #whiteboard {
-    margin: 1vh 2.1vw 0;
-    width: 92vw;
+    position: relative;
+    width: 76vw;
     height: 72vh;
 }
 
@@ -393,9 +400,16 @@ export default {
     text-align: center;
 }
 
-canvas {
+#canvas {
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: auto;
     background-color: rgb(200, 214, 226);
+    background-color: #ffffff;
+    border-radius: 0.8rem;
 }
+
 
 .btn-group .dropdown{
     display: inline-block;
