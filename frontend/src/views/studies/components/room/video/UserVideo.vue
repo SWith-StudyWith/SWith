@@ -36,8 +36,6 @@ export default {
   methods: {
     getConnectionData() {
       const { connection } = this.streamManager.stream;
-      console.log("메인 비디오로 변경!!");
-      console.log(connection);
       return JSON.parse(connection.data);
     }
   }
