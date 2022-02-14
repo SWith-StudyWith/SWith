@@ -137,6 +137,12 @@ public class StudyInnerController {
     public ResponseEntity<BaseResponse> updateKanban(@PathVariable long studyId, @RequestBody List<KanbanUpdateReq> kanbanUpdateReqList) {
 
         Study study = studyService.getStudyById(studyId);
+        
+        //칸반보드 수정 권한 있는지 확인
+        Member member = memberService.getMemberByAuthentication();
+        if (study.getLockUseMember() != member) {
+            return ResponseEntity.status(200).body(new BaseResponse(true, 401, "칸반보드 수정 권한 없음"));
+        }
 
         //칸반보드 모두 삭제
         kanbanService.deleteKanban(study);
