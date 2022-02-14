@@ -81,7 +81,8 @@ import io from "socket.io-client";
 export default {
     data() {
         return {
-            socket: null,
+            sendSocket: null,
+            receiveSocket: null,
             canvas: null,
             context: null,
             isPointer: false,
@@ -117,13 +118,23 @@ export default {
         this.pushSnapshot();
 
         // socket.io connection
-        this.socket = io.connect(this.urlForSocket(), { secure: true });
+        this.sendSocket = io.connect(this.urlForSocket(), { secure: true });
+        this.receiveSocket = io.connect(this.urlForSocket(), { secure: true });
 
-        this.socket.on('connect', () => {
-            // console.log("client(on) - connect, id: " + this.socket.id + ", connected: " + this.socket.connected);
-            // console.log(this.socket);
+        this.sendSocket.on('connect', () => {
+            console.log("client(send:on) - connect, id: " + this.sendSocket.id + ", connected: " + this.sendSocket.connected);
+            console.log(this.sendSocket);
             // join study
-            this.socket.emit('join',
+            this.sendSocket.emit('join',
+                this.studyId
+            );
+        });
+
+        this.receiveSocket.on('connect', () => {
+            console.log("client(receive:on) - connect, id: " + this.receiveSocket.id + ", connected: " + this.receiveSocket.connected);
+            console.log(this.receiveSocket);
+            // join study
+            this.receiveSocket.emit('join',
                 this.studyId
             );
         });
@@ -138,8 +149,8 @@ export default {
         });
 
         // canvas init
-        this.socket.on('send-data', (data) => {
-            // console.log("client(on) - send-data");
+        this.receiveSocket.on('send-data', (data) => {
+            console.log("client(receive:on) - send-data");
             this.receiveCanvas(data);
         });
 
@@ -206,7 +217,7 @@ export default {
         sendCanvas() {
             // console.log("send");
             const canvasAsJSON = this.canvas.toJSON();
-            this.socket.emit('send-data', {
+            this.sendSocket.emit('send-data', {
                 studyId: this.studyId,
                 canvas: canvasAsJSON
             });
@@ -427,7 +438,10 @@ export default {
     position: absolute;
     z-index: 1;
     left: 50%;
+    top: 1vh;
     transform: translate(-50%, 0%);
+    background-color: #1E304F;
+    border-radius: 0.2rem;
 }
 
 .color {

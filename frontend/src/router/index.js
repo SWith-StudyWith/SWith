@@ -86,11 +86,6 @@ const routes = [
     meta: { authRequired: true },
   },
   {
-    path: '/studies/:studyId/page',
-    name: 'StudyPage',
-    component: () => import(/* webpackChunkName: "about" */ '@/views/studies/StudyPage.vue'),
-  },
-  {
     path: '/studies/:studyId/room',
     name: 'Studies',
     component: () => import(/* webpackChunkName: "about" */ '@/views/studies/Studies.vue'),
@@ -120,7 +115,7 @@ const routes = [
 const router = createRouter({
   scrollBehavior() {
     return {
-      el: '#app',
+      el: 'html',
       top: 0
     }
   },
