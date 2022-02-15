@@ -1,6 +1,6 @@
 <template>
   <div class= "memberDiv">
-    <p class="title">👥 스터디 회원 목록</p>
+    <p class="title">👥 회원 목록</p>
     <loading v-model:active="state.loading"
       :can-cancel="false"
       :is-full-page="false"
@@ -18,11 +18,11 @@
             <img :src="member.imgUrl?member.imgUrl:require(`@/assets/img/navbar/profile.png`)" :fit="fit" class="profile-img">
           </div>
           <div class="col-9">
-            <p class="nickname" :style="state.userInfo.memberId == member.memberId ? 'color:#F5CEC7' : ''">
+            <p class="nickname" :style="state.userInfo.memberId == member.memberId ? 'color:#aebed4' : ''">
               <span>{{ member.nickname }}&nbsp</span>
               <span v-if="state.userInfo.memberId == member.memberId">(나)</span>
             </p>
-            <p class="goal" :style="state.userInfo.memberId == member.memberId ? 'color:#F5CEC7' : ''">{{ member.goal }}</p>
+            <p class="goal" :style="state.userInfo.memberId == member.memberId ? 'color:#aebed4' : ''">{{ member.goal }}</p>
           </div>
         </div>
       </div>
@@ -154,12 +154,13 @@ export default {
   background-color: white;
 }
 .nickname{
-  font-size: 1.8vh;
+  font-size: 1.6vh;
   margin-bottom: 0.2vh;
+  color : #aebed4;
 }
 .goal{
-  font-size: 1.5vh;
-  color: rgb(199, 199, 199);
+  font-size: 1.2vh;
+  color: #aebed4;
   margin-bottom: 0;
 }
 .col-3 {

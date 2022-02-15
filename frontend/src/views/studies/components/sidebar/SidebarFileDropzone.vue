@@ -69,7 +69,7 @@ label {
   display: flex;
 }
 .dropzone #title {
-  font-size: 3.5vh;
+  font-size: 3vh;
 }
 
 img {

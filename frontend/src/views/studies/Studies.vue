@@ -35,6 +35,7 @@
                   </button>
                   <button class="btn btn-primary mx-1 stream-onoff-btn" @click="audioOnOff(sub)">
                     <font-awesome-icon
+                      class="icon"
                       :icon="['fas', publisher&&publisher.stream.audioActive ? 'microphone' : 'microphone-slash']"
                       :class="{'font-red' : !(publisher&&publisher.stream.audioActive)}"
                     />
@@ -614,7 +615,7 @@ export default {
   font-size: 1.4vh;
   border-radius: 50%;
   margin-top: 13vh;
-  padding: 0
+  padding: 0;
 }
 .video-box {
   margin: 1.5vh;
@@ -633,8 +634,11 @@ export default {
   top: 0;
   font-size: 0.8rem;
 }
+.icon {
+  font-size: 12px;
+}
 .font-red {
-  color: red;
+  color: rgb(228, 66, 66);
 }
 ::-webkit-scrollbar {
   height: 12px;
