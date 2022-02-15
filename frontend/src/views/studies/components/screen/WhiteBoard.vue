@@ -1,77 +1,77 @@
 <template>
-  <div class="whiteboard-wrapper">
-    <div id="whiteboard">
-        <div class="btn-group" role="group">
-            <button type="button" class="btn btn-primary btn" :class="{ 'active': isPointer }" @click="activateTool('pointer')">
-                <i class="fas fa-mouse-pointer"></i>
-            </button>
-            <button type="button" class="btn btn-primary btn" :class="{ 'active': isPen }" @click="activateTool('pen')">
-                <i class="fas fa-pen"></i>
-            </button>
-            <button type="button" class="btn btn-primary btn" :class="{ 'active': isLine }" @click="activateTool('line')">
-                <i class="fas fa-slash fa-rotate-90"></i>
-            </button>
-            <button type="button" class="btn btn-primary btn" :class="{ 'active': isRect }" @click="activateTool('rect')">
-                <i class="far fa-square"></i>
-            </button>
-
-            <div class="dropdown">
-                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fas fa-minus"></i>
+    <div class="whiteboard-wrapper">
+        <div id="whiteboard">
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-primary btn" :class="{ 'active': isPointer }" @click="activateTool('pointer')">
+                    <i class="fas fa-mouse-pointer"></i>
                 </button>
-                <div class="dropdown-menu">
-                    <div class="menu-label">Width (0 ~ 10)</div>
-                    <input type="range" class="form-range" min="0" max="10" step="1" v-model="current.width" @change="handleChangeWidth">
-                </div>
-            </div>
-
-            <div class="dropdown">
-                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fas fa-tint"></i>
+                <button type="button" class="btn btn-primary btn" :class="{ 'active': isPen }" @click="activateTool('pen')">
+                    <i class="fas fa-pen"></i>
                 </button>
-                <div class="dropdown-menu">
-                    <div class="menu-label">Color</div>
-                    <div class="form-check form-check-inline">
-                        <input id="black-radio" class="form-check-input" type="radio" value="black" v-model="current.color" @change="handleChangeColor">
-                        <div class="color" style="background-color: black"></div>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input id="red-radio" class="form-check-input" type="radio" value="red" v-model="current.color" @change="handleChangeColor">
-                        <div class="color" style="background-color: red"></div>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input id="blue-radio" class="form-check-input" type="radio" value="blue" v-model="current.color" @change="handleChangeColor">
-                        <div class="color" style="background-color: blue"></div>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input id="green-radio" class="form-check-input" type="radio" value="green" v-model="current.color" @change="handleChangeColor">
-                        <div class="color" style="background-color: green"></div>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input id="yellow-radio" class="form-check-input" type="radio" value="yellow" v-model="current.color" @change="handleChangeColor">
-                        <div class="color" style="background-color: yellow"></div>
+                <button type="button" class="btn btn-primary btn" :class="{ 'active': isLine }" @click="activateTool('line')">
+                    <i class="fas fa-slash fa-rotate-90"></i>
+                </button>
+                <button type="button" class="btn btn-primary btn" :class="{ 'active': isRect }" @click="activateTool('rect')">
+                    <i class="far fa-square"></i>
+                </button>
+
+                <div class="dropdown">
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <div class="dropdown-menu">
+                        <div class="menu-label">Width (0 ~ 10)</div>
+                        <input type="range" class="form-range" min="0" max="10" step="1" v-model="current.width" @change="handleChangeWidth">
                     </div>
                 </div>
-            </div>
-            <button type="button" class="btn btn-primary btn" @click="undo">
-                <i class="fas fa-undo"></i>
-            </button>
-            <button type="button" class="btn btn-primary btn" @click="redo">
-                <i class="fas fa-redo"></i>
-            </button>
-            <button type="button" class="btn btn-primary btn" @click="clear">
-                <i class="fas fa-trash-alt"></i>
-            </button>
-            <a id="download" @click="save">
-                <button type="button" class="btn btn-primary btn">
-                    <i class="fas fa-download"></i>
+
+                <div class="dropdown">
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-tint"></i>
+                    </button>
+                    <div class="dropdown-menu">
+                        <div class="menu-label">Color</div>
+                        <div class="form-check form-check-inline">
+                            <input id="black-radio" class="form-check-input" type="radio" value="black" v-model="current.color" @change="handleChangeColor">
+                            <div class="color" style="background-color: black"></div>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input id="red-radio" class="form-check-input" type="radio" value="red" v-model="current.color" @change="handleChangeColor">
+                            <div class="color" style="background-color: red"></div>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input id="blue-radio" class="form-check-input" type="radio" value="blue" v-model="current.color" @change="handleChangeColor">
+                            <div class="color" style="background-color: blue"></div>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input id="green-radio" class="form-check-input" type="radio" value="green" v-model="current.color" @change="handleChangeColor">
+                            <div class="color" style="background-color: green"></div>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input id="yellow-radio" class="form-check-input" type="radio" value="yellow" v-model="current.color" @change="handleChangeColor">
+                            <div class="color" style="background-color: yellow"></div>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary btn" @click="undo">
+                    <i class="fas fa-undo"></i>
                 </button>
-            </a>
+                <button type="button" class="btn btn-primary btn" @click="redo">
+                    <i class="fas fa-redo"></i>
+                </button>
+                <button type="button" class="btn btn-primary btn" @click="clear">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+                <a id="download" @click="save">
+                    <button type="button" class="btn btn-primary btn">
+                        <i class="fas fa-download"></i>
+                    </button>
+                </a>
+            </div>
+            <canvas id="canvas">
+            </canvas>
         </div>
-        <canvas id="canvas">
-        </canvas>
     </div>
-  </div>
 </template>
 
 <script>
@@ -81,8 +81,8 @@ import io from "socket.io-client";
 export default {
     data() {
         return {
+            // canvas: null,
             socket: null,
-            canvas: null,
             context: null,
             isPointer: false,
             isPen: true,
@@ -287,6 +287,7 @@ export default {
                 this.isMouseDown = false;
 
                 if (this.isPointer) { return; }
+                this.canvas.renderAll();
                 this.pushSnapshot();
                 this.sendCanvas();
             });
