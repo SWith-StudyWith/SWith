@@ -658,6 +658,7 @@ export default {
   /* position: sticky; */
   /* position:absolute; */
   position: fixed;
+  z-index: 500;
   /* left:0;
   bottom:0 */
   /* position: sticky; */
