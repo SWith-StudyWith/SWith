@@ -1,17 +1,19 @@
 <template>
+    <loading v-model:active="state.loading"
+      :can-cancel="false"
+      :is-full-page="false"
+      :height="height"
+      :width="width"
+      :color="color"
+      :loader="loader"
+      :background-color="bgColor"
+      :opacity="opacity"
+      :lock-scroll="false"
+      class="vld-overlay"
+      :style="state.loading ? '-webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px);' : ''"
+    ></loading>
   <div class= "chatDiv">
       <p class="title">💬 채팅 </p>
-    <loading v-model:active="state.loading"
-          :can-cancel="false"
-          :is-full-page="false"
-          :height="height"
-          :width="width"
-          :color="color"
-          :loader="loader"
-          :background-color="bgColor"
-          class="vld-overlay"
-          :style="state.loading ? '-webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px);' : ''"
-      ></loading>
     <div>
     <div class="chat-body" id="chat-body"
       @scroll="scrollMove">
@@ -66,12 +68,14 @@ import 'vue-loading-overlay/dist/vue-loading.css';
 export default {
   name: 'App',
   data() {
-    return {
+    return{
       loader: 'dots',
       color: '#F5CEC7',
       bgColor: '#1E304F',
       height: 80,
       width: 80,
+      opacity: 0.2,
+      lockScroll: true,
     }
   },
   components:{
@@ -159,12 +163,11 @@ export default {
     }
 
     function loadingCall(){
-      // 처음 scrollHeight 받아오고, 이상이 될 때마다 scrollInit 호출되도록 ?
       state.loading = true
       setTimeout(() => {
         state.loading = false
-        state.storeScrollHeight = state.element.scrollHeight
       }, 1500)
+      // state.storeScrollHeight = state.element.scrollHeight
     }
 
     async function scrollMove(){
@@ -302,9 +305,9 @@ export default {
   },
   created() {
     // console.log('사이드바 생성 ~')
+    this.loadingCall()
     this.init = true
 
-    this.loadingCall()
   },
 }
 </script>
@@ -418,6 +421,6 @@ hr {
 }
 
 .vld-overlay{
-  margin-left: 60px;
+  margin-left: 4vw;
 }
 </style>
