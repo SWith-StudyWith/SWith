@@ -86,13 +86,7 @@ export default {
     const store = useStore();
     const state = ref({
       userInfo : store.getters.getUserInfo,
-      nickname : computed(() => {
-        if(store.getters.getUserInfo.nickname == 'null'){
-          return ''
-        }else {
-          return store.getters.getUserInfo.nickname
-        }
-      }),
+      nickname : store.getters.getUserInfo.nickname,
       goal: store.getters.getUserInfo.goal,
       profileImg: '',
       updated: false,
@@ -118,17 +112,15 @@ export default {
       }),
 
       isValidGoal: computed(() => {
-        if (state.value.goal == '') {
-          console.log('빈값일때')
+        if (state.value.goal =='') {
           return true;
         }
         else {
           state.value.wasInputed.goal = true;
           if (state.value.goal && validateGoal(state.value.goal)) {
-            console.log('빈값 아니고 유효성 검사 통과했을 때')
-          return true;
+            return true;
           }
-        }
+        } return false;
       })
     });
     const { notifyDangerDescription, } = notifications();
