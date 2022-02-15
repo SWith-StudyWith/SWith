@@ -9,11 +9,11 @@
     </h1> -->
     <div class="row">
       <div class="home-buttons">
-        <div class="icon-container icon" @click="onClickExitIcon">
-          <font-awesome-icon class="exit-btn" :icon="['fas', 'home']" />
+        <div class="icon-container" @click="onClickExitIcon">
+          <font-awesome-icon class="icon" :icon="['fas', 'home']" />
         </div>
       </div>
-      <div class="control-bottons">
+      <div class="control-buttons">
         <!-- <div class="icon-container" @click="onClickKanbanBoardIcon" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="칸반보드">
           <font-awesome-icon class="icon" :class="{ 'font-active': screenMode === 0 }" :icon="['fas', 'tasks']" />
         </div>
@@ -229,12 +229,13 @@ export default {
   width: 3vw;
   top: 1vh;
   position: fixed;
-  /* left: 0.5rem; */
+  left: 0.5rem;
   /* text-align: left; */
+  font-size: 22px;
   z-index: 500;
   padding: 0;
 }
-.control-bottons {
+.control-buttons {
   /* text-align: center; */
   color: rgba(255, 255, 255, 0.7);
   position: fixed;
@@ -281,22 +282,22 @@ export default {
   height: 3vh;
   margin: 1vh;
 }
-.exit-btn {
-  height: 3vh;
-  margin: 1vh;
-  position: fixed;
+/* .exit-btn { */
+  /* height: 3vh; */
+  /* margin: 1vh; */
+  /* position: fixed; */
   /* top: 8px; */
   /* left: 8px; */
   /* transform: rotate(180deg); */
-  font-size: 22px;
-  display: flex;
+  /* font-size: 22px; */
+  /* display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 0.5rem;
-  cursor: pointer;
+  cursor: pointer; */
   /* margin: 1vh 0 0 1vh; */
-  color: rgba(255, 255, 255, 0.7);
-}
+  /* color: rgba(255, 255, 255, 0.7); */
+/* } */
 .sidebar-main{
   margin-left: 4vw;
   margin-bottom: 2.8vh;
