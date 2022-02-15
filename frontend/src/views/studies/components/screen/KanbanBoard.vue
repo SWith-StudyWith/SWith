@@ -8,7 +8,7 @@
         <div v-if="!editPermit" class="kanban-button">
           <button class="btn btn-primary" @click="onClickEditBtn">
             수정하기
-            <font-awesome-icon class="icon" :icon="['fas', 'edit']"></font-awesome-icon>
+            <font-awesome-icon class="icon" :icon="['fas', 'pen']"></font-awesome-icon>
           </button>
           <button  class="btn btn-primary" @click="onClickRefreshBtn">
             불러오기
@@ -20,7 +20,10 @@
             저장하기
             <font-awesome-icon class="icon" :icon="['fas', 'save']"></font-awesome-icon>
           </button>
-          <Timer @timeStopped="timeOver"/>
+          <button class="btn btn-outline-primary btn-primary" disabled>
+            수정중
+            <font-awesome-icon class="icon" :icon="['fas', 'pen']"></font-awesome-icon>
+          </button>
         </div>
       </div>
       <div class="container-fluid">
@@ -108,7 +111,6 @@ import KanbanBoardCard from '@/views/studies/components/screen/KanbanBoardCard.v
 import KanbanBoardModal from '@/views/studies/components/screen/KanbanBoardModal.vue';
 import KanbanBoardCreateModal from '@/views/studies/components/screen/KanbanBoardCreateModal.vue';
 import KanbanWarningModal from '@/views/studies/components/screen/KanbanWarningModal.vue';
-import Timer from '@/views/studies/components/screen/Timer.vue';
 import notifications from '@/composables/notifications'
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
@@ -128,7 +130,6 @@ export default {
     KanbanBoardModal,
     KanbanBoardCreateModal,
     draggable,
-    Timer,
     KanbanWarningModal,
   },
   setup(props, { emit }) {
@@ -225,10 +226,6 @@ export default {
       const taskId = task.taskId;
       kanbanBoard.value[taskId - 1].kanban.push({ content: task.content, kanbanId: task.kanbanId })
     };
-    const timeOver = function () {
-      emit('isEditPermit', false);
-      onClickSaveBtn()
-    };
     const isEditPermit = function (permit) {
       emit('isEditPermit', permit);
     }
@@ -247,7 +244,6 @@ export default {
       deleteTask,
       statusId,
       createTask,
-      timeOver,
       edittingUser,
       isEditPermit,
     }
