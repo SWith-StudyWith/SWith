@@ -14,9 +14,11 @@
                     </div>
                     <div class="card-body-buttons col-3">
                       <img
+                        class="file-item-icon"
                         src="@/assets/img/icon_sidebar/file/download_1E304F.svg"
                         @click="onClickDownloadFile(file.fileId, file.originName)">
                       <img
+                        class="file-item-icon"
                         src="@/assets/img/icon_sidebar/file/trash-1E304F.svg"
                         data-bs-toggle="modal"
                         data-bs-target="#fileDeleteModal">
@@ -416,7 +418,7 @@ export default {
 }
 
 .file-submit-name {
-  font-size: 2.4vh;
+  font-size: 2vh;
   font-family: 'Mulish';
 }
 
@@ -511,5 +513,9 @@ form{
   padding: 0 1vw 0 0.5vw;
   display: flex;
   flex-direction: column;
+}
+
+.file-item-icon:hover {
+  color:aliceblue;
 }
 </style>
