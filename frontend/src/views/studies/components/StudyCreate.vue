@@ -63,7 +63,6 @@
         </div>
       </div>
     </div>
-    <Footer />
   </div>
 </template>
 
@@ -72,7 +71,6 @@ import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { createStudy } from '@/api/study';
 import Navbar from '@/views/common/Navbar.vue';
-import Footer from '@/views/common/Footer.vue';
 import notifications from '@/composables/notifications'
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
@@ -90,7 +88,7 @@ export default {
       lockScroll: true,
     }
   },
-  components: { Navbar, Footer, Loading },
+  components: { Navbar, Loading },
   setup() {
     const router = useRouter();
     const state = ref({
