@@ -156,11 +156,11 @@ export default {
 .nickname{
   font-size: 1.6vh;
   margin-bottom: 0.2vh;
-  color : antiquewhite;
+  color : #aebed4;
 }
 .goal{
   font-size: 1.2vh;
-  color: rgb(199, 199, 199);
+  color: #aebed4;
   margin-bottom: 0;
 }
 .col-3 {
