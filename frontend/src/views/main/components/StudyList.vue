@@ -30,7 +30,7 @@
             <router-link :to="{ name: 'StudyCreate'}">
               <button class="btn btn-success">
                 만들기
-                <font-awesome-icon class="hammer-icon" :icon="['fas', 'hammer']"></font-awesome-icon>
+                <font-awesome-icon class="icon" :icon="['fas', 'hammer']"></font-awesome-icon>
               </button>
             </router-link>
           </div>
@@ -175,7 +175,7 @@ export default {
 }
 .icon {
   font-size: 1.1rem;
-  margin-left: 0.2rem;
+  margin: 0;
 }
 .hammer-icon {
   font-size: 1.05rem;
