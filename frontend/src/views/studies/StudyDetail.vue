@@ -19,7 +19,7 @@
       <div class="col-md-12 col-lg-4 px-5">
         <StudyDetailHeader :studyInfo="state.studyInfo"/>
         <StudyDetailCamera @setDevice="setDevice($event)"/>
-        <button class="btn btn-primary mt-2 text-white" @click="onClickEnterBtn">입장하기</button>
+        <button class="btn btn-primary text-white" @click="onClickEnterBtn">입장하기</button>
       </div>
       <div class="col-md-12 col-lg-8 pt-5">
         <StudyDetailKanbanBoard :studyInfo="state.studyInfo"/>
@@ -117,5 +117,7 @@ export default {
 }
 </script>
 <style scoped>
-
+.btn-primary {
+  margin-top: 1rem;
+}
 </style>
