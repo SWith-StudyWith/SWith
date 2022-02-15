@@ -474,12 +474,13 @@ export default {
   align-items: flex-start;
 }
 .card-body-data-name {
-  font-size: 1.6vh;
+  font-size: 1.4vh;
   margin-bottom: 0.6vh;
   overflow: hidden;
   /* white-space: nowrap; */
   display: -webkit-box;
   text-overflow: ellipsis;
+  width: 10vw;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
