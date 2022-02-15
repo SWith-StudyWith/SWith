@@ -40,7 +40,7 @@
       <!-- <span>fileList : {{ state.fileList.createdAt }}</span> -->
       <!-- <span>dropzoneFiles : {{ dropzoneFiles }}</span> -->
       <div v-for="(dropzoneFile, index) in dropzoneFiles" v-bind:key="dropzoneFile.id" class="file-item" >
-        <span class="file-info"><img class="file-type" src="@/assets/img/icon_sidebar/file/clip_dark.svg" alt=""> {{dropzoneFile.name}} </span>
+        <span class="file-info" text-truncate><img class="file-type" src="@/assets/img/icon_sidebar/file/clip_dark.svg" alt=""> {{dropzoneFile.name}} </span>
         <img class="file-type" @click="onClickCancelFile(index)" src="@/assets/img/icon_sidebar/file/trash-1E304F.svg" alt="" >
       </div>
       <div class="file-submit">
@@ -59,7 +59,7 @@ import { deleteFile } from '@/api/study';
 import { computed, reactive } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
-import SidebarFileDeleteModal from '@/views/studies/components/sidebar/SidebarFileDeleteModal';
+// import SidebarFileDeleteModal from '@/views/studies/components/sidebar/SidebarFileDeleteModal';
 import notifications from '@/composables/notifications'
 import DropZone from '@/views/studies/components/sidebar/SidebarFileDropzone.vue';
 // import SidebarFileList from '@/views/studies/components/sidebar/SidebarFileList.vue';
@@ -478,6 +478,14 @@ export default {
   overflow: hidden;
   /* white-space: nowrap; */
   display: -webkit-box;
+  text-overflow: ellipsis;
+  width: 10vw;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.file-info {
+  font-size: 1.4vh;
+  overflow: hidden;
   text-overflow: ellipsis;
   width: 10vw;
   -webkit-line-clamp: 2;
