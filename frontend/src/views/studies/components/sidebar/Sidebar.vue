@@ -8,7 +8,7 @@
       <span v-else>Swith Sidebar</span>
     </h1> -->
     <div class="row">
-      <div>
+      <div class="home-buttons">
         <div class="icon-container icon" @click="onClickExitIcon">
           <font-awesome-icon class="exit-btn" :icon="['fas', 'home']" />
         </div>
@@ -224,15 +224,25 @@ export default {
   flex-direction: column-reverse;
   min-width: 4vh;
 }
+.home-buttons {
+  color: rgba(255, 255, 255, 0.7);
+  width: 3vw;
+  top: 1vh;
+  position: fixed;
+  /* left: 0.5rem; */
+  /* text-align: left; */
+  z-index: 500;
+  padding: 0;
+}
 .control-bottons {
   /* text-align: center; */
   color: rgba(255, 255, 255, 0.7);
   position: fixed;
   left: 0.5rem;
-  bottom: 0px;
+  bottom: 2vh;
   width: 3vw;
   text-align: left;
-  font-size: 23px;
+  font-size: 22px;
   z-index: 500;
   padding: 0;
 }
@@ -261,6 +271,7 @@ export default {
   margin: 0;
   border-radius: 0.5rem;
   cursor: pointer;
+  /* top: 2vh; */
 }
 .icon-container:hover {
   background-color: #334564;
@@ -271,17 +282,19 @@ export default {
   margin: 1vh;
 }
 .exit-btn {
+  height: 3vh;
+  margin: 1vh;
   position: fixed;
-  top: 8px;
-  left: 8px;
+  /* top: 8px; */
+  /* left: 8px; */
   /* transform: rotate(180deg); */
-  font-size: 3vh;
+  font-size: 22px;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 0.5rem;
   cursor: pointer;
-  margin: 1vh 0 0 1vh;
+  /* margin: 1vh 0 0 1vh; */
   color: rgba(255, 255, 255, 0.7);
 }
 .sidebar-main{
