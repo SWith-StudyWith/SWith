@@ -14,10 +14,10 @@
     <div class="member-body" :style="state.loading ? 'filter: blur(5px); -webkit-filter: blur(5px);' : ''">
       <div v-if="members.length" >
         <div class="row" v-for="member in state.list" :key="member.memberId">
-          <div class="col-4">
+          <div class="col-3">
             <img :src="member.imgUrl?member.imgUrl:require(`@/assets/img/navbar/profile.png`)" :fit="fit" class="profile-img">
           </div>
-          <div class="col-8">
+          <div class="col-9">
             <p class="nickname" :style="state.userInfo.memberId == member.memberId ? 'color:#F5CEC7' : ''">
               <span>{{ member.nickname }}&nbsp</span>
               <span v-if="state.userInfo.memberId == member.memberId">(나)</span>
@@ -162,13 +162,14 @@ export default {
   color: rgb(199, 199, 199);
   margin-bottom: 0;
 }
-.col-4 {
+.col-3 {
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
+  padding-inline: 0;
 }
-.col-8 {
+.col-9 {
   padding-left: 0;
   display: flex;
   flex-direction: column;
