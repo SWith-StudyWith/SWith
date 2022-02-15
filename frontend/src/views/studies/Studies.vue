@@ -30,7 +30,7 @@
                   <button class="btn btn-primary mx-1 stream-onoff-btn" @click="videoOnOff(publisher)">
                     <font-awesome-icon
                       :icon="['fas', publisher&&publisher.stream.videoActive ? 'video' : 'video-slash' ]"
-                      :class="{'font-red' : !(publisher&&publisher.stream.videoActive)}" class="icon"
+                      :class="{'font-red' : !(publisher&&publisher.stream.videoActive)}"
                     />
                   </button>
                   <button class="btn btn-primary mx-1 stream-onoff-btn" @click="audioOnOff(sub)">
