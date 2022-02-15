@@ -99,7 +99,7 @@ export default {
         return state.study.fileUploadPercent;
       },
       (newValue, oldValue) => {
-        if (newValue >= oldValue) {
+        if (state.uploadFilePercent == 0 || newValue >= oldValue) {
           isVisiableFileUploadPercent.value = true;
         } else {
           isVisiableFileUploadPercent.value = false;
