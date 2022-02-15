@@ -8,11 +8,11 @@
         <div v-if="!editPermit" class="kanban-button">
           <button class="btn btn-primary" @click="onClickEditBtn">
             수정하기
-            <font-awesome-icon class="icon" :icon="['fas', 'pen']"></font-awesome-icon>
+            <font-awesome-icon class="icon ms-2" :icon="['fas', 'pen']"></font-awesome-icon>
           </button>
           <button  class="btn btn-primary" @click="onClickRefreshBtn">
             불러오기
-            <font-awesome-icon class="icon" :icon="['fas', 'sync-alt']"></font-awesome-icon>
+            <font-awesome-icon class="icon ms-2" :icon="['fas', 'sync-alt']"></font-awesome-icon>
           </button>
         </div>
         <div v-else class="d-flex flex-row-reverse align-items-center kanban-button">
