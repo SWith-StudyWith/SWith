@@ -43,6 +43,12 @@ function checkKanban(studyId, success, fail) {
     .then(success)
     .catch(fail)
 }
+async function patchKanbanRight(studyId, success, fail) {
+  await basicInstance
+    .patch(`api//studies/${studyId}/kanbans/right`)
+    .then(success)
+    .catch(fail)
+}
 function putKanban(payload, studyId, success, fail) {
   basicInstance
     .put(`api/studies/${studyId}/kanbans`, payload)
@@ -94,6 +100,7 @@ export {
   joinStudy,
   exitStudy,
   putKanban,
+  patchKanbanRight,
   checkKanban,
   getMemberList,
   getChatList,

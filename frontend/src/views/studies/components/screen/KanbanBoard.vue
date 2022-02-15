@@ -95,7 +95,10 @@
       :taskId="statusId"
       @createTask="createTask($event)"
     />
-    <KanbanWarningModal :edittingUser="edittingUser"/>
+    <KanbanWarningModal
+      :edittingUser="edittingUser"
+      @isEditPermit="isEditPermit($event)"
+    />
   </div>
 </template>
 
@@ -185,7 +188,7 @@ export default {
         }
       );
     }
-    const { notifySuccess } = notifications();
+    const { notifySuccess, notifyDanger } = notifications();
     const onClickSaveBtn = function() {
       const studyId = route.params.studyId;
       // request payload 형태 만들기
@@ -204,6 +207,9 @@ export default {
           if (res.data.code === 200) {
             store.dispatch('GET_STUDY_INFO', studyId)
             notifySuccess('칸반 보드 저장 완료!')
+          } else if (res.data.code === 401) {
+            console.log('수정 권한 없음!')
+            notifyDanger('수정 권한 없음!')
           }
         },
         (err) => {
@@ -223,6 +229,9 @@ export default {
       emit('isEditPermit', false);
       onClickSaveBtn()
     };
+    const isEditPermit = function (permit) {
+      emit('isEditPermit', permit);
+    }
     onBeforeUnmount(() => {
       if (props.editPermit) {
         onClickSaveBtn()
@@ -240,6 +249,7 @@ export default {
       createTask,
       timeOver,
       edittingUser,
+      isEditPermit,
     }
   },
 }
