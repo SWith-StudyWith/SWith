@@ -9,6 +9,8 @@
           <div class="footer-policy-content">
             <a href="mailto:sales@example.com" class="contact-link">이용약관</a> <span> | </span>
             <a href="mailto:support@example.com" class="contact-link">개인정보처리방침</a>
+            <br>
+            <p>© SWith. All rights reserved.</p>
             <!-- <a href="tel:0121234" class="contact-link">(123) 456-789</a>
             <img src="@/assets/img/footer/contact/call.svg" alt="">
             <img src="@/assets/img/footer/contact/mail.svg" alt="">
@@ -83,12 +85,17 @@
         <div class="footer-weare-content">
           <div class="images-gellary">
             <ul>
-              <li><a href="#"><img src="http://placehold.it/85x85" alt="Instagram 01"></a></li>
-              <li><a href="#"><img src="http://placehold.it/85x85" alt="Instagram 02"></a></li>
+              <li><a href="#"><img src="@/assets/img/footer/member/member1.png" alt="Instagram 01"></a></li>
+              <li><a href="#"><img src="@/assets/img/footer/member/member5.png" alt="Instagram 01"></a></li>
+              <li><a href="#"><img src="@/assets/img/footer/member/member4.png" alt="Instagram 01"></a></li>
+              <li><a href="#"><img src="@/assets/img/footer/member/member3.png" alt="Instagram 01"></a></li>
+              <li><a href="#"><img src="@/assets/img/footer/member/member6.png" alt="Instagram 01"></a></li>
+              <li><a href="#"><img src="@/assets/img/footer/member/member2.png" alt="Instagram 01"></a></li>
+              <!-- <li><a href="#"><img src="http://placehold.it/85x85" alt="Instagram 02"></a></li>
               <li><a href="#"><img src="http://placehold.it/85x85" alt="Instagram 03"></a></li>
               <li><a href="#"><img src="http://placehold.it/85x85" alt="Instagram 04"></a></li>
               <li><a href="#"><img src="http://placehold.it/85x85" alt="Instagram 05"></a></li>
-              <li><a href="#"><img src="http://placehold.it/85x85" alt="Instagram 06"></a></li>
+              <li><a href="#"><img src="http://placehold.it/85x85" alt="Instagram 06"></a></li> -->
             </ul>
           </div>
         </div>
@@ -113,11 +120,12 @@ p{
 h3 {
   color: #C3CBCD;
   margin-bottom: 30px;
+  text-align: left;
 }
 
 .footer-logo {
-  max-height: 10vh;
-  min-height: 6vh;
+  height: 10vh;
+  // height: 6vh;
   box-shadow: #C3CBCD;
 }
 
@@ -126,6 +134,8 @@ h3 {
 }
 
 footer{
+  height: 50vh;
+  margin-top: 40px;
   // background-color: #f5f5f5;
   background-color: #373F41;
   padding: 80px 0;
@@ -254,4 +264,6 @@ footer{
   margin-right: 5px;
   height: 2vh;
 }
+
+
 </style>
