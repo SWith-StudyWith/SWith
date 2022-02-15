@@ -1,6 +1,3 @@
-<template>
-  <div>Login...</div>
-</template>
 <script>
 import { mapActions } from 'vuex';
 
