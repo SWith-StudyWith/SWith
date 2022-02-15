@@ -1,7 +1,5 @@
 <template>
-  <div class= "memberDiv">
-    <p class="title">👥 회원 목록</p>
-    <loading v-model:active="state.loading"
+  <loading v-model:active="state.loading"
       :can-cancel="false"
       :is-full-page="false"
       :height="height"
@@ -9,20 +7,25 @@
       :color="color"
       :loader="loader"
       :background-color="bgColor"
+      :opacity="opacity"
+      :lock-scroll="false"
       class="vld-overlay"
+      :style="state.loading ? '-webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px);' : ''"
     ></loading>
-    <div class="member-body" :style="state.loading ? 'filter: blur(5px); -webkit-filter: blur(5px);' : ''">
+  <div class= "memberDiv">
+    <p class="title">👥 회원 목록</p>
+    <div class="member-body">
       <div v-if="members.length" >
         <div class="row" v-for="member in state.list" :key="member.memberId">
           <div class="col-3">
             <img :src="member.imgUrl?member.imgUrl:require(`@/assets/img/navbar/profile.png`)" :fit="fit" class="profile-img">
           </div>
-          <div class="col-9">
-            <p class="nickname" :style="state.userInfo.memberId == member.memberId ? 'color:#aebed4' : ''">
+          <div class="col-7">
+            <p class="nickname" :style="state.userInfo.memberId == member.memberId ? 'color:#ffe8e8' : ''">
               <span>{{ member.nickname }}&nbsp</span>
               <span v-if="state.userInfo.memberId == member.memberId">(나)</span>
             </p>
-            <p class="goal" :style="state.userInfo.memberId == member.memberId ? 'color:#aebed4' : ''">{{ member.goal }}</p>
+            <p class="goal" :style="state.userInfo.memberId == member.memberId ? 'color:#ffe8e8' : ''">{{ member.goal }}</p>
           </div>
         </div>
       </div>
@@ -47,6 +50,8 @@ export default {
       bgColor: '#1E304F',
       height: 80,
       width: 80,
+      opacity: 0.2,
+      lockScroll: true,
     }
   },
   components:{
@@ -121,11 +126,12 @@ export default {
   overflow-y: scroll;
   scroll-behavior: smooth;
   width: 100%;
+  margin-left: 1vw;
   /* overflow: auto; */
 }
 /* scroll 안보이게 */
 .member-body::-webkit-scrollbar {
-  /* display: none; */
+  display: none;
 }
 ::-webkit-scrollbar{
     width: 12px;
@@ -151,7 +157,7 @@ export default {
   width: 5.5vh;
   height: 5.5vh;
   border-radius: 50%;
-  background-color: white;
+  background-color: #5a5a5a;
 }
 .nickname{
   font-size: 1.6vh;
@@ -170,13 +176,14 @@ export default {
   text-align: center;
   padding-inline: 0;
 }
-.col-9 {
+.col-7 {
   padding-left: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 .vld-overlay{
-  margin-left: 60px;
+  /* margin-left: 60px; */
+  margin-left: 4vw;
 }
 </style>

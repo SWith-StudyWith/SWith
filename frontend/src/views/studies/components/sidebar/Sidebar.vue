@@ -84,10 +84,10 @@ export default {
     isScreenShared: Boolean,
   },
   setup( props, { emit } ) {
-    // 스터디 회원 목록 조회
     const store = useStore();
     const route = useRoute();
     const router = useRouter();
+    store.dispatch('GET_MEMBER_LIST', route.params.studyId);
     const state = reactive({
       memberList : computed(() => {
         return store.state.study.memberList;
