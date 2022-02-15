@@ -19,7 +19,7 @@ public class MemberStudyRepositorySupport {
     QMember qMember = QMember.member;
 
     public Optional<List<StudyMemberRes>> getStudyMemberList(Study study) {
-        List<StudyMemberRes> list = jpaQueryFactory.select(new QStudyMemberRes(qMember.memberId, qMember.imgUrl, qMember.nickname, qMember.email))
+        List<StudyMemberRes> list = jpaQueryFactory.select(new QStudyMemberRes(qMember.memberId, qMember.imgUrl, qMember.nickname, qMember.email, qMember.goal))
                 .from(qMemberStudy)
                 .leftJoin(qMember).on(qMemberStudy.member.eq(qMember))
                 .where(qMemberStudy.study.eq(study).and(qMember.isDeleted.eq("N")))

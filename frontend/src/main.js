@@ -16,3 +16,5 @@ app.use(router)
 app.mount('#app');
 app.directive('dragscroll', dragscrollNext);
 app.component('font-awesome-icon', FontAwesomeIcon);
+
+app.config.globalProperties.canvas = null;

@@ -20,7 +20,6 @@ public class Study {
     private String goal;
     private String imgUrl;
     private String isUsed;
-    private LocalDateTime lockCreatedAt;
 
     @ManyToOne(targetEntity = Member.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")

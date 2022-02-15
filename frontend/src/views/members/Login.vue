@@ -1,4 +1,6 @@
 <template>
+<div>
+
   <Navbar />
   <div class="container">
     <h1 class="form-title">로그인</h1>
@@ -43,7 +45,7 @@
       </div>
     </div>
   </div>
-  <Footer />
+</div>
 </template>
 <script>
 /* eslint-disable */
@@ -51,7 +53,6 @@ import { reactive, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import Navbar from '../common/Navbar.vue';
-import Footer from '../common/Footer.vue';
 import KakaoLoginBtn from '@/views/members/components/KakaoLoginBtn.vue'
 import GoogleLoginBtn from './components/GoogleLoginBtn.vue';
 
@@ -59,7 +60,6 @@ export default {
   name: '',
   components: {
     Navbar,
-    Footer,
     KakaoLoginBtn,
     GoogleLoginBtn,
   },

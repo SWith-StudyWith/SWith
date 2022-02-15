@@ -14,7 +14,7 @@
         </div>
       </div>
       <div class="control-bottons">
-        <div class="icon-container" @click="onClickKanbanBoardIcon" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="칸반보드">
+        <!-- <div class="icon-container" @click="onClickKanbanBoardIcon" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="칸반보드">
           <font-awesome-icon class="icon" :class="{ 'font-active': screenMode === 0 }" :icon="['fas', 'tasks']" />
         </div>
         <div class="icon-container" @click="onClickScreenShareIcon" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="화면공유">
@@ -25,7 +25,7 @@
         </div>
         <div class="icon-container" @click="onClickPostItIcon" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="포스트잇">
           <font-awesome-icon class="icon" :class="{ 'font-active': screenMode === 3 }" :icon="['fas', 'sticky-note']"/>
-        </div>
+        </div> -->
         <div class="icon-container" @click="onClickFileIcon" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="파일공유">
           <font-awesome-icon class="icon" :class="{ 'font-active': state.isFile }"  :icon="['fas', 'paperclip']" />
         </div>
@@ -218,10 +218,11 @@ export default {
   top: 0;
   left: 0;
   bottom: 0;
-  padding: 0.5rem;
+  padding: 0.5vw;
   transition: 0.3s ease;
   display: flex;
   flex-direction: column-reverse;
+  min-width: 4vh;
 }
 .control-bottons {
   /* text-align: center; */

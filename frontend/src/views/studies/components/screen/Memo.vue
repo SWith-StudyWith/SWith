@@ -1,5 +1,6 @@
 <template>
   <!-- <div class="back"> -->
+  <div class="memo-board-wrapper">
     <div v-dragscroll:nochilddrag class="memo-board position-relative overflow-hidden" id="memoContainer">
       <span>타인에게 보이지 않는 개인 공간입니다.</span>
       <span v-if="isEditting" class="btn-container">
@@ -20,7 +21,7 @@
       </span>
       <div
         v-for="(memo, idx) in memoList"
-        :key="idx" class="postit user-select-none position-absolute m-0 py-4 px-2"
+        :key="idx" class="postit user-select-none position-absolute m-0 py-3 px-3 text-start"
         :class="['target'+ idx, colorList[memo.color]]"
         :style="{ 'z-index': memo.zIndex, transform : memo.transform }"
         @dblclick="onDblClick"
@@ -44,6 +45,7 @@
         @renderEnd="handleRenderEnd(selectedIdx, $event)"
       />
       </div>
+    </div>
   <!-- </div> -->
   <MemoModal v-if="isEditting" />
 </template>
@@ -149,14 +151,19 @@ export default {
 }
 </script>
 <style scoped>
+.memo-board-wrapper {
+  display: flex;
+  justify-content: center;
+}
 .memo-board {
-  /* position: fixed; */
+  position: fixed;
   background-color: #aebed4;
   height: 72vh;
+  width: 76vw;
   background-image: url("../../../../assets/img/study_room/paper_texture.png");
   cursor: grab;
   border-radius: 0.8rem;
-  margin: 1vh 0.7vw 0 2vw ;
+  margin: 0 1vw 0 1vw ;
 }
 .postit {
   width: 13rem;
@@ -177,8 +184,8 @@ export default {
 .btn-container {
   z-index: 4000;
   position: absolute;
-  right: 12px;
-  top: 12px;
+  right: 0.7vw;
+  top: 1vh;
 }
 .shadow {
   box-shadow: 0 3px 3px 0 rgb(0 0 0 / 0.8), 0 5px 5px -1px rgb(0 0 0 / 0.1);

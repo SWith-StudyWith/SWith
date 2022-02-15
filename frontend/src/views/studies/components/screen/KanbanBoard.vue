@@ -1,98 +1,102 @@
 <template>
-  <div class="kanbanboard">
-    <div class="kanbanboard-header text-end mx-3">
-      <div class="kanbanboard-title">
-        <h1>Todo List</h1>
+  <div>
+    <div class="kanbanboard">
+      <div class="kanbanboard-header text-end mx-3">
+        <div class="kanbanboard-title">
+          <h1>Todo List</h1>
+        </div>
+        <div v-if="!editPermit" class="kanban-button">
+          <button class="btn btn-primary" @click="onClickEditBtn">
+            수정하기
+            <font-awesome-icon class="icon" :icon="['fas', 'edit']"></font-awesome-icon>
+          </button>
+          <button  class="btn btn-primary" @click="onClickRefreshBtn">
+            불러오기
+            <font-awesome-icon class="icon" :icon="['fas', 'sync-alt']"></font-awesome-icon>
+          </button>
+        </div>
+        <div v-else class="d-flex flex-row-reverse align-items-center kanban-button">
+          <button class="btn btn-primary" @click="onClickSaveBtn">
+            저장하기
+            <font-awesome-icon class="icon" :icon="['fas', 'save']"></font-awesome-icon>
+          </button>
+          <Timer @timeStopped="timeOver"/>
+        </div>
       </div>
-      <div v-if="!editPermit" class="kanban-button">
-        <button class="btn btn-primary" @click="onClickEditBtn">
-          수정하기
-          <font-awesome-icon class="icon" :icon="['fas', 'edit']"></font-awesome-icon>
-        </button>
-        <button  class="btn btn-primary" @click="onClickRefreshBtn">
-          불러오기
-          <font-awesome-icon class="icon" :icon="['fas', 'sync-alt']"></font-awesome-icon>
-        </button>
-      </div>
-      <div v-else class="d-flex flex-row-reverse align-items-center kanban-button">
-        <button class="btn btn-primary" @click="onClickSaveBtn">
-          저장하기
-          <font-awesome-icon class="icon" :icon="['fas', 'save']"></font-awesome-icon>
-        </button>
-        <Timer @timeStopped="timeOver"/>
-      </div>
-    </div>
-    <div>
-      <div class="kanban-wrapper d-flex justify-content-center">
-        <div
-          v-for="column in kanbanBoard"
-          :key="column.taskId"
-          class="task-column"
-        >
-          <p class="text-start mb-1">
-              <span
-                class="taskname px-2 py-1 user-select-none"
-                :class="{ 'bg-grey' : column.taskId === 1, 'bg-pink' : column.taskId === 2, 'bg-purple' : column.taskId === 3 }"
-              >
-                {{ column.taskName }}
-              </span>
-          </p>
-          <div class="overflow-auto my-2" style="height: 40vh">
-            <div v-if="editPermit">
-              <draggable
-                class="list-group"
-                :list="column.kanban"
-                item-key="kanbanId"
-                group="task"
-                ghost-class="ghost"
-              >
-                <template #item="{ element }">
-                  <div class="list-group-item rounded mt-1 p-3 kanban-card">
+      <div class="container-fluid">
+        <div class="row">
+          <div
+            v-for="column in kanbanBoard"
+            :key="column.taskId"
+            class="col-4"
+          >
+            <div class="task-column ">
+              <p class="text-start mb-1">
+                  <span
+                    class="taskname px-2 py-1 user-select-none"
+                    :class="{ 'bg-grey' : column.taskId === 1, 'bg-pink' : column.taskId === 2, 'bg-purple' : column.taskId === 3 }"
+                  >
+                    {{ column.taskName }}
+                  </span>
+              </p>
+              <div class="overflow-auto my-2" style="height: 40vh">
+                <div v-if="editPermit">
+                  <draggable
+                    class="list-group"
+                    :list="column.kanban"
+                    item-key="kanbanId"
+                    group="task"
+                    ghost-class="ghost"
+                  >
+                    <template #item="{ element }">
+                      <div class="list-group-item rounded mt-1 p-0 kanban-card">
+                        <KanbanBoardCard
+                          :task="element"
+                          :taskId="column.taskId"
+                          class="d-flex align-items-center text-start"
+                          @onClickCard="selectedTask.value=$event"
+                        />
+                      </div>
+                    </template>
+                  </draggable>
+                </div>
+                <div v-else>
+                  <div v-for="task in column.kanban" :key="task.kanbanId" class="list-group-item rounded mt-1 p-0 kanban-card">
                     <KanbanBoardCard
-                      :task="element"
+                      :task="task"
                       :taskId="column.taskId"
-                      class="align-items-center text-start"
+                      class="d-flex align-items-center text-start"
                       @onClickCard="selectedTask.value=$event"
                     />
                   </div>
-                </template>
-              </draggable>
-            </div>
-            <div v-else>
-              <div v-for="task in column.kanban" :key="task.kanbanId" class="list-group-item rounded mt-1 p-3 kanban-card">
-                <KanbanBoardCard
-                  :task="task"
-                  :taskId="column.taskId"
-                  class="align-items-center text-start"
-                  @onClickCard="selectedTask.value=$event"
-                />
+                </div>
               </div>
+              <button
+                class="mt-auto btn"
+                :class="{ 'bg-grey' : column.taskId === 1, 'bg-pink' : column.taskId === 2, 'bg-purple' : column.taskId === 3 }"
+                data-bs-toggle="modal" data-bs-target="#kanbanCardCreateModal"
+                @click="statusId=column.taskId"
+                :disabled="!editPermit"
+              >
+                추가하기
+              </button>
             </div>
           </div>
-          <button
-            class="mt-auto btn"
-            :class="{ 'bg-grey' : column.taskId === 1, 'bg-pink' : column.taskId === 2, 'bg-purple' : column.taskId === 3 }"
-            data-bs-toggle="modal" data-bs-target="#kanbanCardCreateModal"
-            @click="statusId=column.taskId"
-            :disabled="!editPermit"
-          >
-            추가하기
-          </button>
         </div>
       </div>
     </div>
+    <KanbanBoardModal
+      :selectedTask="selectedTask"
+      :editPermit="editPermit"
+      @updateTask="updateTask($event)"
+      @deleteTask="deleteTask($event)"
+    />
+    <KanbanBoardCreateModal
+      :taskId="statusId"
+      @createTask="createTask($event)"
+    />
+    <KanbanWarningModal :edittingUser="edittingUser"/>
   </div>
-  <KanbanBoardModal
-    :selectedTask="selectedTask"
-    :editPermit="editPermit"
-    @updateTask="updateTask($event)"
-    @deleteTask="deleteTask($event)"
-  />
-  <KanbanBoardCreateModal
-    :taskId="statusId"
-    @createTask="createTask($event)"
-  />
-  <KanbanWarningModal :edittingUser="edittingUser"/>
 </template>
 
 <script>
@@ -102,6 +106,7 @@ import KanbanBoardModal from '@/views/studies/components/screen/KanbanBoardModal
 import KanbanBoardCreateModal from '@/views/studies/components/screen/KanbanBoardCreateModal.vue';
 import KanbanWarningModal from '@/views/studies/components/screen/KanbanWarningModal.vue';
 import Timer from '@/views/studies/components/screen/Timer.vue';
+import notifications from '@/composables/notifications'
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
 import { ref, computed, onBeforeUnmount } from 'vue';
@@ -153,12 +158,10 @@ export default {
       modal.show();
     }
     const onClickEditBtn = async function() {
-      console.log('수정할래!')
       const getStudyInfo = () => {
         return new Promise((resolve) => {
           // store.dispatch('GET_STUDY_INFO', store.state.study.studyInfo.studyId);
           store.dispatch('GET_STUDY_INFO', route.params.studyId);
-          console.log('불러오기 완료!')
           resolve();
         })
       }
@@ -168,7 +171,6 @@ export default {
         (res) => {
           console.log(res.data);
           if (res.data.code === 200) {
-            console.log('수정 가능');
             emit('isEditPermit', true);
           } else if (res.data.code === 400) {
             console.log(`${res.data.data.nickname} 님이 수정 중입니다.`);
@@ -183,12 +185,12 @@ export default {
         }
       );
     }
+    const { notifySuccess } = notifications();
     const onClickSaveBtn = function() {
       const studyId = route.params.studyId;
-      console.log(studyId)
-      console.log('저장할래!')
       // request payload 형태 만들기
       const payload = []
+      console.log(kanbanBoard.value)
       kanbanBoard.value.forEach((column) => {
         let taskId = column.taskId
         column.kanban.forEach((task) => {
@@ -199,9 +201,9 @@ export default {
         payload,
         studyId,
         (res) => {
-          console.log(res.data)
           if (res.data.code === 200) {
             store.dispatch('GET_STUDY_INFO', studyId)
+            notifySuccess('칸반 보드 저장 완료!')
           }
         },
         (err) => {
@@ -218,7 +220,6 @@ export default {
       kanbanBoard.value[taskId - 1].kanban.push({ content: task.content, kanbanId: task.kanbanId })
     };
     const timeOver = function () {
-      console.log('시간 다되서 저장해버리기~')
       emit('isEditPermit', false);
       onClickSaveBtn()
     };
@@ -246,7 +247,7 @@ export default {
 <style scoped>
 .kanbanboard {
   background-color: white;
-  margin: 1vh 1vw 0 2vw ;
+  margin: 1vh 1vw 0 1vw ;
   height: 72vh;
   border-radius: 0.8rem;
 }
@@ -297,11 +298,9 @@ h1 {
   /* mx-2 w-100 bg-light-grey p-2 rounded-3 d-flex flex-column */
   display: flex;
   flex-direction: column;
-  width: 100%;
   border-radius: 0.5rem;
+  padding: 0.5rem;
   background-color: #F8F8F8;
-  padding: 1vh;
-  margin-inline: 0.5vw;
 }
 .bg-grey {
   background-color: #E1E4E8;

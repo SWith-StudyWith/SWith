@@ -39,6 +39,8 @@ io.on('connection', (socket) => {
     socket.on('send-data', (data) => {
         console.log("sever(on) - send-data, id: " + socket.id + ", room: ");
         console.log(socket.rooms);
+        console.log(data);
+        console.log(data.canvas);
         socket.broadcast.to(data.studyId).emit('send-data', data);
         dataMap[data.studyId] = data;
         console.log("server(emit) - send-data");

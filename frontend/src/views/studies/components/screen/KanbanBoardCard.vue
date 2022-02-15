@@ -1,9 +1,9 @@
 <template>
     <!-- class="bg-white card-shadow rounded p-2 text-start align-top border border-white" -->
-  <div @click="onClickCard" class="user-select-none"
+  <div @click="onClickCard" class="user-select-none p-3 overflow-hidden"
     data-bs-toggle="modal" data-bs-target="#kanbanCardUpdateModal"
   >
-    <span class="d-inline-block">{{ task.content }}</span>
+    <p class="mb-0">{{ task.content }}</p>
   </div>
 </template>
 
@@ -27,14 +27,15 @@ export default {
 </script>
 
 <style scoped>
-span {
+p {
+  overflow : hidden;
   display: -webkit-box;
-  text-overflow: ellipsis;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
-  overflow: hidden;
-  line-height: 1.2rem;
-  max-height: 2.4rem;
+  /* min-height: 2vh; */
+  word-break: break-all;
+  line-height: 1.3rem;
+  max-height: 3.9rem;
 }
 .card-shadow {
   box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);

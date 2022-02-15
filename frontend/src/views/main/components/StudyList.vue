@@ -1,4 +1,17 @@
 <template>
+    <loading v-model:active="state.loading"
+          :can-cancel="false"
+          :is-full-page="true"
+          :height="height"
+          :width="width"
+          :color="color"
+          :loader="loader"
+          :background-color="bgColor"
+          :opacity="opacity"
+          :lock-scroll="false"
+          class="vld-overlay"
+          :style="state.loading ? '-webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px);' : ''"
+      ></loading>
   <div class="container">
     <div class="row">
       <p class="study-list-header col-sm-12 col-lg-5">스터디 목록</p>
@@ -39,22 +52,45 @@
 import StudyListItem from './StudyListItem.vue';
 import { ref } from 'vue';
 import { useStore } from 'vuex';
+import { reactive } from 'vue';
 import { joinStudy } from '@/api/study';
 import notifications from '@/composables/notifications'
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
 
 export default {
+  data() {
+    return {
+      loader: 'dots',
+      color: '#334466',
+      bgColor: 'white',
+      height: 120,
+      width: 120,
+      opacity: 0.2,
+      lockScroll: true,
+    }
+  },
   props: {
     studies: Array,
   },
   components: {
-    StudyListItem
+    StudyListItem,
+    Loading,
   },
   setup(props) {
     console.log(props.studies);
     let studyCode = ref('')
+
     const store = useStore();
-    store.dispatch('GET_STUDY_LIST')
+    setTimeout(() => {
+      store.dispatch('GET_STUDY_LIST')
+    },1700)
+    // store.dispatch('GET_STUDY_LIST')
     const { notifySuccess, notifyDanger } = notifications();
+
+    const state = reactive({
+      loading: false,
+    });
 
     const onClickJoin = function () {
       if (!studyCode.value) {
@@ -65,14 +101,26 @@ export default {
         payload,
         (res) => {
           console.log(res.data)
+          // state.loading = true
+          loadingCall()
           if (res.data.code === 200) {
-            store.dispatch('GET_STUDY_LIST')
-            studyCode.value =''
-            notifySuccess('스터디 참여 완료!😎')
+            setTimeout(() => {
+              store.dispatch('GET_STUDY_LIST')
+              studyCode.value =''
+              notifySuccess('스터디 참여 완료!😎')
+            },1501)
           } else if (res.data.code === 400) {
-            notifyDanger('해당 스터디가 존재하지 않습니다.😯')
+            setTimeout(() => {
+              store.dispatch('GET_STUDY_LIST')
+              studyCode.value =''
+              notifyDanger('해당 스터디가 존재하지 않습니다.😯')
+            },1501)
           } else if (res.data.code === 409) {
-            notifyDanger('이미 참여중인 스터디입니다.😓')
+            setTimeout(() => {
+              store.dispatch('GET_STUDY_LIST')
+              studyCode.value =''
+              notifyDanger('이미 참여중인 스터디입니다.😓')
+            },1501)
           }
         },
         (err) => {
@@ -81,15 +129,25 @@ export default {
         }
       )
     }
-    return { studyCode, onClickJoin }
+
+    function loadingCall(){
+      state.loading = true
+      setTimeout(() => {
+        state.loading = false
+      }, 1500)
+    }
+    return { state, studyCode, onClickJoin , loadingCall}
   },
+  created(){
+    this.loadingCall()
+  }
 };
 </script>
 
 <style scoped>
 .container {
   margin-top: 90px;
-  margin-bottom: 90px;
+  /* margin-bottom: 90px; */
   padding-inline: 200px;
 }
 .study-list-header {

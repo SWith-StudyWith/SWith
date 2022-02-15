@@ -1,6 +1,6 @@
 <template>
-  <video v-if="mainStream" class="main" autoplay />
-  <video v-else class="sub" :class="{'video-isSpeak': isSpeak}" autoplay />
+  <video v-if="mainStream" class="main" autoplay :poster="defaultPosterSrc"/>
+  <video v-else class="sub" :class="{'video-isSpeak': isSpeak}" autoplay :poster="defaultPosterSrc"/>
 </template>
 
 <script>
@@ -12,7 +12,14 @@ export default {
     mainStream: Boolean,
     isSpeak: Boolean,
 	},
-
+  computed: {
+    defaultPosterSrc() {
+      if (this.streamManager.stream.typeOfVideo === 'SCREEN') {
+        return ''
+      }
+      return this.streamManager.accessAllow ? '' : require('@/assets/img/navbar/profile.png')
+    }
+  },
 	mounted () {
 		this.streamManager.addVideoElement(this.$el);
 	},

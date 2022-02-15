@@ -1,6 +1,19 @@
 <template>
   <div>
     <Navbar />
+    <loading v-model:active="state.loading"
+      :can-cancel="false"
+      :is-full-page="true"
+      :height="height"
+      :width="width"
+      :color="color"
+      :loader="loader"
+      :background-color="bgColor"
+      :opacity="opacity"
+      :lock-scroll="false"
+      class="vld-overlay"
+      :style="state.loading ? '-webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px);' : ''"
+    ></loading>
     <div class="container">
       <h1 class="form-title">스터디룸 만들기</h1>
       <div class="row d-flex justify-content-center">
@@ -61,10 +74,23 @@ import { createStudy } from '@/api/study';
 import Navbar from '@/views/common/Navbar.vue';
 import Footer from '@/views/common/Footer.vue';
 import notifications from '@/composables/notifications'
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
 
 export default {
   name: '',
-  components: { Navbar, Footer },
+  data() {
+    return {
+      loader: 'dots',
+      color: '#334466',
+      bgColor: 'white',
+      height: 120,
+      width: 120,
+      opacity: 0.2,
+      lockScroll: true,
+    }
+  },
+  components: { Navbar, Footer, Loading },
   setup() {
     const router = useRouter();
     const state = ref({
@@ -91,6 +117,7 @@ export default {
         }
         return false;
       }),
+      loading: false,
     });
     const { notifyDanger, notifySuccess, notifyDangerDescription } = notifications();
 
@@ -128,13 +155,15 @@ export default {
         createStudyData,
         (res) => {
           console.log(res.data)
+          loadingCall()
           switch (res.data.code) {
             case 200:
-              notifySuccess('스터디룸 생성 완료!🔨')
-              router.push({ name: 'Main'})
+              setTimeout(() => {
+                notifySuccess('스터디룸 생성 완료!🔨')
+                router.push({ name: 'Main'})
+              },1001)
               break;
             case 400:
-              console.log('실패')
               notifyDanger('스터디룸 생성 실패😥')
               break;
           }
@@ -153,11 +182,19 @@ export default {
       return false;
     };
 
+    function loadingCall(){
+      state.value.loading = true
+      setTimeout(() => {
+        state.value.loading = false
+      }, 1000)
+    }
+
     return {
       state,
       onClickUploadFile,
       onClickDefaultImg,
       onClickCreateStudy,
+      loadingCall
     }
   },
 

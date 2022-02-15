@@ -1,6 +1,7 @@
 import { getStudyInfo, getStudyList, getMemberList, getChatList, updateStudy, getFileList } from "../../api/study";
 import router from '@/router';
 import notifications from '@/composables/notifications'
+import { basicInstance } from '@/api/index.js';
 
 const { notifyDanger } = notifications();
 
@@ -10,6 +11,7 @@ const state = () => ({
   memberList: [],
   fileList: [],
   chatList: [],
+  fileUploadPercent: 100,
 });
 
 const getters = {
@@ -78,7 +80,6 @@ const actions = {
       payload,
       (res) => {
         commit('UPDATE_STUDY_INFO', res.data.data);
-        router.push({ name: 'Main' })
       },
       () => {
       }
@@ -102,6 +103,31 @@ const actions = {
       }
     )
   },
+  UPLOAD_FILE({ commit }, { studyId, uploadFileData, success, fail }) {
+    basicInstance
+    .post(`api/studies/${studyId}/files`, uploadFileData, {
+      onUploadProgress: (progressEvent) => {
+        let percentage = (progressEvent.loaded * 100) / progressEvent.total;
+        let percentCompleted = Math.round(percentage);
+        commit('SET_FILE_UPLOAD_PERCENT', percentCompleted);
+      }
+    })
+    .then(success)
+    .catch(fail)
+  },
+  DOWNLOAD_FILE({ commit }, { studyId, fileId, success, fail }) {
+    basicInstance
+    .get(`api/studies/${studyId}/files/${fileId}`, {
+      onDownloadProgress: (progressEvent) => {
+        let percentage = (progressEvent.loaded * 100) / progressEvent.total;
+        let percentCompleted = Math.round(percentage);
+        commit('SET_FILE_UPLOAD_PERCENT', percentCompleted);
+      },
+      responseType: 'blob',
+    })
+    .then(success)
+    .catch(fail)
+  }
   // uploadMultiFile({ commit }, params) {
   //   return new Promise( async (resolve, reject) => {
   //     try {
@@ -141,6 +167,12 @@ const mutations = {
   SET_FILE_LIST(state, payload) {
     state.fileList = payload;
   },
+  SET_FILE_UPLOAD_PERCENT(state, payload) {
+    state.fileUploadPercent = payload;
+  },
+  SET_FILE_UPLOAD_PERCENT_INIT(state) {
+    state.fileUploadPercent = 0;
+  }
 };
 
 export default {

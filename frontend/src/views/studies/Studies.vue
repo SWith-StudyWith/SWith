@@ -8,7 +8,7 @@
       :screenMode="screenMode"
       :isScreenShared="isScreenShared"
     />
-    <div :style="{ 'margin-left': sidebarWidth }">
+    <div class="contents" :style="{ 'margin-left': sidebarWidth }">
       <!-- main container start -->
       <div id="main-container" class="mx-4" >
         <!-- session start -->
@@ -30,7 +30,7 @@
                   <button class="btn btn-primary mx-1 stream-onoff-btn" @click="videoOnOff(publisher)">
                     <font-awesome-icon
                       :icon="['fas', publisher&&publisher.stream.videoActive ? 'video' : 'video-slash' ]"
-                      :class="{'font-red' : !(publisher&&publisher.stream.videoActive)}"
+                      :class="{'font-red' : !(publisher&&publisher.stream.videoActive)}" class="icon"
                     />
                   </button>
                   <button class="btn btn-primary mx-1 stream-onoff-btn" @click="audioOnOff(sub)">
@@ -89,7 +89,7 @@
       </div>
       <!-- main container end -->
       <!-- 화면 모드 -->
-      <KanbanBoard v-if="screenMode === 0" @isEditPermit="isEditPermit($event)" :editPermit="editPermit" ref="kanbanBoard"/>
+      <KanbanBoard v-if="screenMode === 4" @isEditPermit="isEditPermit($event)" :editPermit="editPermit" ref="kanbanBoard"/>
       <MainScreen
         v-else-if="screenMode === 1"
         :streamManager="mainStreamManager"
@@ -97,6 +97,19 @@
       />
       <WhiteBoard v-else-if="screenMode === 2"/>
       <Memo v-else-if="screenMode === 3"/>
+
+      <div class="control-buttons-container">
+        <!-- <ControlButtons
+          class="control-buttons"
+          @show-screenmode="showScreenMode($event)"
+          @startScreenSharing="startScreenSharing"
+          @stopScreenSharing="stopScreenSharing"
+          @toggleSidebar="toggleSidebar"
+          :screenMode="screenMode"
+          :isScreenShared="isScreenShared"
+        /> -->
+      </div>
+
     </div>
     <!-- sidebar end -->
   </div>
@@ -113,6 +126,8 @@ import { useRoute } from 'vue-router';
 import { OpenVidu } from "openvidu-browser";
 import { ref } from 'vue';
 import axios from "axios";
+// import ControlButtons from '@/views/studies/components/control/ControlButtons.vue';
+
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 const OPENVIDU_SERVER_URL = "https://i6a501.p.ssafy.io:4443";
@@ -136,11 +151,12 @@ export default {
     WhiteBoard,
     UserVideo,
     Memo,
+    // ControlButtons,
   },
   beforeRouteLeave(to, from, next) {
-    // if (!this.canLeave) {
-    //   this.$refs.kanbanBoard.onClickSaveBtn()
-    // }
+    if (!this.canLeave) {
+      this.$refs.kanbanBoard.onClickSaveBtn()
+    }
     this.$store.commit('SET_STUDY_INFO', {})
     if (to.fullPath == `/studies/${this.$route.params.studyId}`) {
       if (this.session) {
@@ -177,7 +193,7 @@ export default {
     const route = useRoute();
     store.dispatch('GET_STUDY_INFO', route.params.studyId);
     // const screenMode = ref(0);
-    const sidebarWidth = ref('54px');
+    const sidebarWidth = ref('4vw');
     const toggleSidebar = function (width) {
       sidebarWidth.value = width;
     };
@@ -198,7 +214,7 @@ export default {
       mainOnOff: false,
       myUserId: "",
       tg: false,
-      screenMode: 0,
+      screenMode: 4,
       editPermit: false,
       canLeave: true,
 
@@ -271,6 +287,7 @@ export default {
     joinSession (initVideoOn, initAudioOn) {
       // --- Get an OpenVidu object ---
       this.OV = new OpenVidu();
+      this.OV.enableProdMode();
 
       // --- Init a session ---
       this.session = this.OV.initSession();
@@ -322,7 +339,6 @@ export default {
 
       // Speech Stop Detection
       this.session.on("publisherStopSpeaking", (event) => {
-        console.log("User " + event.connection.connectionId + " stop speaking");
         let temp = this.isSpeakList;
         let index = temp.indexOf(event.connection.connectionId, 0);
         if (index >= 0) {
@@ -330,7 +346,6 @@ export default {
           this.isSpeakList = temp;
         }
         this.isSpeak = !this.isSpeak;
-        console.log("isSpeak 상태 : " + this.isSpeak);
         // this.$store.dispatch('stopSpeaking')
         // this.$store.dispatch(
         //   "removeSpeaker",
@@ -415,9 +430,6 @@ export default {
         width: 960,
         height: 600
       };
-      console.log("바뀐 메인스트림정보");
-      console.log(this.mainStreamManager);
-      console.log(this.mainStreamManager.stream.videoDimensions);
       // this.mainOnOff = true;
 		},
     deleteMainVideoStreamManager() {
@@ -500,10 +512,8 @@ export default {
             insertMode: 'APPEND',
             mirror: false
 					});
-					console.log("publisher",publisher);
 					publisher.once('accessAllowed', () => {
 						try {
-							console.log("subscriber >>>>> ", this.subscribers);
 							this.isScreenShared=true;
 							this.session.signal({
 								data: JSON.stringify(status),  // Any string (optional)
@@ -511,7 +521,6 @@ export default {
 								type: 'startScreenSharing'             // The type of message (optional)
 							})
 							publisher.stream.getMediaStream().getVideoTracks()[0].addEventListener('ended', () => {
-								console.log('User pressed the "Stop sharing" button');
 								this.session.signal({
 									data: JSON.stringify(status),  // Any string (optional)
 									to: [],
@@ -600,10 +609,12 @@ export default {
   border-radius: 1rem;
 }
 .stream-onoff-btn {
-  width: 2.5vw;
-  font-size: 2vh;
-  border-radius: 70%;
-  margin-top: 15vh;
+  width: 2vw;
+  height: 4vh;
+  font-size: 1.4vh;
+  border-radius: 50%;
+  margin-top: 13vh;
+  padding: 0
 }
 .video-box {
   margin: 1.5vh;
@@ -628,10 +639,53 @@ export default {
 ::-webkit-scrollbar {
   height: 12px;
 }
+::-webkit-scrollbar-thumb{
+    background-color: #999;
+    border-radius: 10px;
+}
 ::-webkit-scrollbar-thumb:hover {
   background-color: #777;
 }
-::-webkit-scrollbar-track{
-  /* background-color: #aebed4; */
+::-webkit-scrollbar-track {
+    background-color: #aebed4;
+}
+.control-buttons {
+  /* align-self: center; */
+  /* position: sticky; */
+  /* position:absolute; */
+  position: fixed;
+  /* left:0;
+  bottom:0 */
+  /* position: sticky; */
+/* margin-top: -100px; */
+/* padding-bottom: 100px; */
+  /* top: 30px; */
+  bottom: 0.2vh;
+  /* float: right; */
+  /* left: 25vw; */
+  /* right: 25vw; */
+  /* justify-content: center; */
+  /* align-content: center; */
+  /* align-items: center; */
+  /* justify-items:center; */
+  /* top: 50%; */
+left: 50vw;
+-webkit-transform: translate(-50%, -50%);
+-moz-transform: translate(-50%, -50%);
+-ms-transform: translate(-50%, -50%);
+-o-transform: translate(-50%, -50%);
+transform: translate(-50%, -50%);
+}
+.contents {
+      /* display: flex; */
+    /* flex-direction: column; */
+    height: 100%;
+    /* width: 100%; */
+        align-items: center;
+    justify-content: space-evenly;
+    /* position: sticky; */
+}
+.control-buttons-container {
+  /* width: 100%; */
 }
 </style>

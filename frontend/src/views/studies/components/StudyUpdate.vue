@@ -1,4 +1,17 @@
 <template>
+  <loading v-model:active="state.loading"
+      :can-cancel="false"
+      :is-full-page="true"
+      :height="height"
+      :width="width"
+      :color="color"
+      :loader="loader"
+      :background-color="bgColor"
+      :opacity="opacity"
+      :lock-scroll="false"
+      class="vld-overlay"
+      :style="state.loading ? '-webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px);' : ''"
+    ></loading>
   <div>
     <Navbar />
     <div class="container">
@@ -57,16 +70,31 @@
 import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
 import Navbar from '@/views/common/Navbar.vue';
 import Footer from '@/views/common/Footer.vue';
 import notifications from '@/composables/notifications'
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
 
 export default {
   name: '',
-  components: { Navbar, Footer },
+    data() {
+    return {
+      loader: 'dots',
+      color: '#334466',
+      bgColor: 'white',
+      height: 120,
+      width: 120,
+      opacity: 0.2,
+      lockScroll: true,
+    }
+  },
+  components: { Navbar, Footer, Loading },
   setup() {
     const store = useStore();
     const route = useRoute();
+    const router = useRouter();
     const state = ref({
       // studyInfo : store.getters.getStudyInfo,
       studyInfo : computed(() => {
@@ -93,9 +121,12 @@ export default {
         }
         return false;
       }),
+      loading: false,
     });
+
     const { notifySuccess, notifyDangerDescription } = notifications();
     store.dispatch('GET_STUDY_INFO', route.params.studyId)
+
     const onClickUploadFile = (e) => {
       const file = e.target.files[0]
       if (file.size > 2097152) {
@@ -106,15 +137,9 @@ export default {
         state.value.studyInfo.studyImgUrl = URL.createObjectURL(file);
         state.value.studyImage = file;
         state.value.updated = true;
-        notifySuccess('스터디 이미지 변경 완료!😙')
       }
     };
-    const onClickDefaultImg = () => {
-      state.value.studyInfo.studyImgURL = '';
-      state.value.studyInfo.studyImgUrl = '';
-      state.value.updated = true;
-      notifySuccess('스터디 이미지 변경 완료!😙')
-    };
+
     const onClickUpdateStudy = (e) => {
       e.preventDefault();
       const updateStudyData = new FormData();
@@ -122,16 +147,31 @@ export default {
       updateStudyData.append("studyGoal", state.value.studyInfo.studyGoal)
       updateStudyData.append("studyImage", state.value.studyImage)
       updateStudyData.append("updated", state.value.updated)
+
+      loadingCall()
       store.dispatch('updateStudyInfo', { studyId: state.value.studyInfo.studyId, payload:updateStudyData})
+      setTimeout(() => {
+        notifySuccess('스터디 정보 수정 완료!😙')
+        router.push({ name: 'StudyDetail' })
+      },1000)
     }
+
     const validateStudyName = function (studyName) {
       if (studyName.length >= 2 && studyName.length <= 20) {
         return true;
       }
       return false;
     };
+
+    function loadingCall(){
+      state.value.loading = true
+      setTimeout(() => {
+        state.value.loading = false
+      }, 1000)
+    }
+
     return {
-      state, onClickUploadFile, onClickDefaultImg, onClickUpdateStudy,
+      state, onClickUploadFile,  onClickUpdateStudy, loadingCall
     }
   },
 
