@@ -35,7 +35,7 @@ const notifications = () => {
         type: 'danger',
         transition: 'bounce',
         hideProgressBar: 'true',
-        toastBackgroundColor: "#F5CEC7",
+        toastBackgroundColor: "#FF9A9F",
       })
     };
     const notifyDangerDescription = (title, description) => {
@@ -49,7 +49,7 @@ const notifications = () => {
         type: 'danger',
         transition: 'bounce',
         hideProgressBar: 'true',
-        toastBackgroundColor: "#F5CEC7",
+        toastBackgroundColor: "#FF9A9F",
       })
   };
 
