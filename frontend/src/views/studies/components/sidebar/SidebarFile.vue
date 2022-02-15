@@ -20,9 +20,7 @@
                       <img
                         class="file-item-icon"
                         src="@/assets/img/icon_sidebar/file/trash-1E304F.svg"
-                        data-bs-toggle="modal"
-                        data-bs-target="#fileDeleteModal">
-                        <SidebarFileDeleteModal :fileId="file.fileId"/>
+                        @click="onClickDeleteFile(file.fileId)">
                     </div>
                   </div>
         </div>
@@ -70,7 +68,6 @@ export default {
   name: "SidebarFile",
   components: {
     DropZone,
-    SidebarFileDeleteModal
     // SidebarFileList,
   },
   setup() {
@@ -101,7 +98,7 @@ export default {
         return state.study.fileUploadPercent;
       },
       (newValue, oldValue) => {
-        if (newValue >= oldValue) {
+        if (state.uploadFilePercent == 0 || newValue >= oldValue) {
           isVisiableFileUploadPercent.value = true;
         } else {
           isVisiableFileUploadPercent.value = false;
