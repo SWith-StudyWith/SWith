@@ -63,11 +63,11 @@ const actions = {
     )
   },
   LOGIN_GOOGLE({ dispatch, commit }, payload) {
-    console.log(payload)
+    // console.log(payload)
     loginGoogle(
       payload,
       (res) => {
-        console.log(res.data)
+        // console.log(res.data)
         sessionStorage.setItem('accessToken', res.data.data.accessToken)
         commit('SET_USER_ACCESS_INFO', res.data.data)
         dispatch('GET_USER_INFO')
