@@ -62,8 +62,7 @@ public class Member {
     }
 
     @OneToMany(
-            mappedBy = "member",
-            cascade = CascadeType.ALL
+            mappedBy = "member"
     )
     List<MemberStudy> memberStudyList = new ArrayList<>();
 }
