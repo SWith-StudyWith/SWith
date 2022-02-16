@@ -82,7 +82,7 @@ export default {
       userInfo : store.getters.getUserInfo,
       nickname : store.getters.getUserInfo.nickname,
       goal: store.getters.getUserInfo.goal,
-      profileImg: '',
+      profileImg: store.getters.getUserInfo.profileImg,
       profileImgFile: '',
       updated: false,
       profileImgSrc : computed(() => {
@@ -132,7 +132,7 @@ export default {
     };
 
     const onClickDefaultImg = () => {
-      state.value.userInfo.profileImg = '';
+      state.value.profileImg = '';
       state.value.updated = true;
     }
 
