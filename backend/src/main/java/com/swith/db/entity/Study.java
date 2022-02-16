@@ -34,33 +34,33 @@ public class Study {
         this.isUsed = isUsed;
     }
 
-//    @OneToMany(
-//            mappedBy = "study",
-//            cascade = CascadeType.ALL
-//    )
-//    List<MemberStudy> memberStudyList = new ArrayList<>();
-//
-//    @OneToMany(
-//            mappedBy = "study",
-//            cascade = CascadeType.ALL
-//    )
-//    List<File> fileList = new ArrayList<>();
-//
-//    @OneToMany(
-//            mappedBy = "study",
-//            cascade = CascadeType.ALL
-//    )
-//    List<Chat> chatList = new ArrayList<>();
-//
+    @OneToMany(
+            mappedBy = "study",
+            cascade = CascadeType.ALL
+    )
+    List<MemberStudy> memberStudyList = new ArrayList<>();
+
+    @OneToMany(
+            mappedBy = "study",
+            cascade = CascadeType.ALL
+    )
+    List<File> fileList = new ArrayList<>();
+
+    @OneToMany(
+            mappedBy = "study",
+            cascade = CascadeType.ALL
+    )
+    List<Chat> chatList = new ArrayList<>();
+
 //    @OneToMany(
 //            mappedBy = "study",
 //            cascade = CascadeType.ALL
 //    )
 //    List<Schedule> scheduleList = new ArrayList<>();
-//
-//    @OneToMany(
-//            mappedBy = "study",
-//            cascade = CascadeType.ALL
-//    )
-//    List<Kanban> kanbanList = new ArrayList<>();
+
+    @OneToMany(
+            mappedBy = "study",
+            cascade = CascadeType.ALL
+    )
+    List<Kanban> kanbanList = new ArrayList<>();
 }
