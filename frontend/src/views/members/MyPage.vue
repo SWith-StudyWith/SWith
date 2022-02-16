@@ -48,12 +48,6 @@
             <div class="row">
               <label for="goal" class="form-label">상태 메시지</label>
               <input type="text" class="form-control form-goal" id="goal" rows="3" v-model="state.goal" placeholder="상태 메세지를 입력해주세요." maxlength="16">
-              <div
-                :style="{ visibility: (state.isValidGoal)? 'hidden' : 'visible' }"
-                class="invalid-feedback"
-              >
-                16자 이내로 입력해주세요.
-              </div>
             </div>
             <div class="row">
               <button @click="onClickUpdateUserInfo" class="btn btn-primary btn-save">변경 사항 저장</button>
@@ -160,7 +154,7 @@ export default {
     }
 
     const validateNickname = function (nickname) {
-      if (nickname.length >= 2 && nickname.length <= 16) {
+      if (nickname.length >= 1 && nickname.length <= 16) {
         return true;
       } return false;
     };
@@ -200,7 +194,7 @@ p{
   margin-right: 0px;
 }
 .btn-save{
-  margin: 20px 0 50px;
+  margin: 50px 0 50px;
 }
 .uploadImage{
   margin-bottom: 20px;
