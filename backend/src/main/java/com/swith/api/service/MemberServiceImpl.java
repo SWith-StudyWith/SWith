@@ -176,7 +176,9 @@ public class MemberServiceImpl implements MemberService {
         for (MemberStudyRes study: studyList) {
             Long count = memberStudyRepositorySupport.getCountByStudyId(study.getStudyId());
             log.debug("deleteMember - {}: {}", study.getStudyId(), count);
-            if (count != null && count == 0) studyService.deleteStudy(study.getStudyId());
+            if (count != null && count == 0) {
+                studyService.deleteStudy(study.getStudyId());
+            }
         }
 
         member.setIsDeleted("Y");

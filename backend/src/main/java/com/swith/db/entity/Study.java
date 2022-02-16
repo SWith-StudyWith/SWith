@@ -25,6 +25,16 @@ public class Study {
     @JoinColumn(name = "member_id")
     private Member lockUseMember;
 
+    @OneToMany(mappedBy = "study", cascade = CascadeType.REMOVE)
+    private List<Chat> chatList;
+
+    @OneToMany(mappedBy = "study", cascade = CascadeType.REMOVE)
+    private List<File> fileList;
+
+    @OneToMany(mappedBy = "study", cascade = CascadeType.REMOVE)
+    private List<Memo> memoList;
+
+
     @Builder
     public Study(String name, String code, String goal, String imgUrl, String isUsed) {
         this.name = name;
