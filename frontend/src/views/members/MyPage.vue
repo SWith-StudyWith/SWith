@@ -83,10 +83,11 @@ export default {
       nickname : store.getters.getUserInfo.nickname,
       goal: store.getters.getUserInfo.goal,
       profileImg: '',
+      profileImgFile: '',
       updated: false,
       profileImgSrc : computed(() => {
-        if (state.value.userInfo.profileImg) {
-          return state.value.userInfo.profileImg
+        if (state.value.profileImg) {
+          return state.value.profileImg
         } else {
           return require(`@/assets/img/navbar/profile.png`)
         }
@@ -124,8 +125,8 @@ export default {
         notifyDangerDescription('파일 사이즈가 너무 큽니다.😯', '최대 2MB');
         return;
       } else {
-        state.value.userInfo.profileImg = URL.createObjectURL(file);
-        state.value.profileImg = file;
+        state.value.profileImg = URL.createObjectURL(file);
+        state.value.profileImgFile = file;
         state.value.updated = true;
       }
     };
@@ -148,7 +149,7 @@ export default {
       const updateUserData = new FormData();
       updateUserData.append("nickname", state.value.nickname)
       updateUserData.append("goal", state.value.goal)
-      updateUserData.append("profileImg", state.value.profileImg)
+      updateUserData.append("profileImg", state.value.profileImgFile)
       updateUserData.append("updated", state.value.updated)
       store.dispatch('updateUserInfo', updateUserData)
     }
