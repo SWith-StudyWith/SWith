@@ -26,13 +26,13 @@ public class Study {
     private Member lockUseMember;
 
     @OneToMany(mappedBy = "study", cascade = CascadeType.REMOVE)
-    private List<Chat> chatList;
+    private List<Chat> chats = new ArrayList<>();
 
     @OneToMany(mappedBy = "study", cascade = CascadeType.REMOVE)
-    private List<File> fileList;
+    private List<File> files = new ArrayList<>();
 
     @OneToMany(mappedBy = "study", cascade = CascadeType.REMOVE)
-    private List<Memo> memoList;
+    private List<Memo> memos = new ArrayList<>();
 
 
     @Builder
