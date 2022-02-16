@@ -175,7 +175,9 @@ section{
   display: flex;
   height: 400px;
   margin-top: 200px;
-  margin-bottom: 100px;
+  /* margin-bottom: 100px; */
+  margin-bottom: 36vh;
+
   flex-direction: column;
   align-items: flex-end;
 }

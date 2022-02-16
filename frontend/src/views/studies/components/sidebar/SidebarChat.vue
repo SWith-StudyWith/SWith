@@ -1,17 +1,19 @@
 <template>
+    <loading v-model:active="state.loading"
+      :can-cancel="false"
+      :is-full-page="false"
+      :height="height"
+      :width="width"
+      :color="color"
+      :loader="loader"
+      :background-color="bgColor"
+      :opacity="opacity"
+      :lock-scroll="false"
+      class="vld-overlay"
+      :style="state.loading ? '-webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px);' : ''"
+    ></loading>
   <div class= "chatDiv">
       <p class="title">💬 채팅 </p>
-    <loading v-model:active="state.loading"
-          :can-cancel="false"
-          :is-full-page="false"
-          :height="height"
-          :width="width"
-          :color="color"
-          :loader="loader"
-          :background-color="bgColor"
-          class="vld-overlay"
-          :style="state.loading ? '-webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px);' : ''"
-      ></loading>
     <div>
     <div class="chat-body" id="chat-body"
       @scroll="scrollMove">
@@ -66,12 +68,14 @@ import 'vue-loading-overlay/dist/vue-loading.css';
 export default {
   name: 'App',
   data() {
-    return {
+    return{
       loader: 'dots',
       color: '#F5CEC7',
       bgColor: '#1E304F',
       height: 80,
       width: 80,
+      opacity: 0.2,
+      lockScroll: true,
     }
   },
   components:{
@@ -122,34 +126,33 @@ export default {
     async function messageList() {
         getChatList(
           route.params.studyId,
-          state.chatList.length,
+          state.recvList.length,
             (res) => {
             store
               .dispatch("GET_CHAT_LIST", {
                 studyId: route.params.studyId,
-                index: state.chatList.length
+                index: state.recvList.length
               })
               .then(function(){
-                console.log(res.data.data.length)
+                console.log(state.recvList.length)
                 // 채팅 기록이 없을 때,
-                if(res.data.data.length == 0){
+
+                var size = res.data.data.length
+                for(var i = 0; i < size; i++){
+                  state.recvList.push(res.data.data[i])
+                }
+
+                // size < 15 면, 더이상 API 호출되지 않도록
+                if(size < 15) {
+                  state.isNoScroll = true
+                }
+
+                state.chatList = [...state.recvList].reverse()
+                state.loaded = true
+
+                if(state.chatList.length == 0){
                   state.isNull = true
                 }else state.isNull = false
-
-                  var size = res.data.data.length
-                  for(var i = 0; i < size; i++){
-                    state.recvList.push(res.data.data[i])
-                  }
-
-                  // size < 15 면, 더이상 API 호출되지 않도록
-                  if(size < 15) {
-                    state.isNoScroll = true
-                  }
-
-                  state.chatList = [...state.recvList].reverse()
-                  state.loaded = true
-                  // state.isNull = false
-
               })
             },
           (err) => {
@@ -159,11 +162,9 @@ export default {
     }
 
     function loadingCall(){
-      // 처음 scrollHeight 받아오고, 이상이 될 때마다 scrollInit 호출되도록 ?
       state.loading = true
       setTimeout(() => {
         state.loading = false
-        state.storeScrollHeight = state.element.scrollHeight
       }, 1500)
     }
 
@@ -194,6 +195,7 @@ export default {
         state.init = false
         state.recv = false
         state.element.scrollTop = state.element.scrollHeight
+        // console.log("top " + state.element.scrollTop + ", height " + state.element.scrollHeight )
       }
 
       // 이전 리스트 추가로 호출했을 때
@@ -202,7 +204,7 @@ export default {
         if(state.element.scrollTop == 0){
           // 스크롤 있던 위치 받아오기 => 시작 위치
           state.element.scrollTop = state.element.scrollHeight - state.prevScrollHeight
-        }
+        }else state.element.scrollTop = state.element.scrollHeight
         state.prevScrollHeight = state.element.scrollHeight
       }
 
@@ -275,12 +277,13 @@ export default {
       // 서버의 메시지 전송 endpoint를 구독합니다.
       // 이런형태를 pub sub 구조라고 합니다.
       stompClient.subscribe("/send/" + route.params.studyId, res => {
-        // console.log('구독으로 받은 메시지 입니다.', res.body);
+        console.log('구독으로 받은 메시지 입니다.', res.body);
 
         // 받은 데이터를 json으로 파싱하고 리스트에 넣어줍니다.
         state.recvList.unshift(JSON.parse(res.body))
         state.chatList.push(JSON.parse(res.body))
         state.recv = true
+        state.isNull = false
 
         setTimeout(() => {
           const element = document.getElementById('chat-body');
@@ -303,8 +306,8 @@ export default {
   created() {
     // console.log('사이드바 생성 ~')
     this.init = true
-
     this.loadingCall()
+
   },
 }
 </script>
@@ -418,6 +421,6 @@ hr {
 }
 
 .vld-overlay{
-  margin-left: 60px;
+  margin-left: 4vw;
 }
 </style>

@@ -2,7 +2,8 @@
 <div class="StudyDetailKanbanBoard">
   <div class="kanban-title">
     <h1>Todo List</h1>
-    <p>A board to keep track of your study progress.</p>
+    <!-- <p>A board to keep track of your study progress.</p> -->
+    <p class="kanban-detail ms-3 text-muted">Todo List는 스터디룸 내부에서 수정할 수 있습니다.</p>
   </div>
   <div class="container" style="height: 28rem;">
     <div class="p-3 bg-light-grey tasks h-100 row">

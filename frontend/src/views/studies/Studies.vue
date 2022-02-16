@@ -30,11 +30,12 @@
                   <button class="btn btn-primary mx-1 stream-onoff-btn" @click="videoOnOff(publisher)">
                     <font-awesome-icon
                       :icon="['fas', publisher&&publisher.stream.videoActive ? 'video' : 'video-slash' ]"
-                      :class="{'font-red' : !(publisher&&publisher.stream.videoActive)}" class="icon"
+                      :class="{'font-red' : !(publisher&&publisher.stream.videoActive)}"
                     />
                   </button>
                   <button class="btn btn-primary mx-1 stream-onoff-btn" @click="audioOnOff(sub)">
                     <font-awesome-icon
+                      class="icon"
                       :icon="['fas', publisher&&publisher.stream.audioActive ? 'microphone' : 'microphone-slash']"
                       :class="{'font-red' : !(publisher&&publisher.stream.audioActive)}"
                     />
@@ -99,7 +100,7 @@
       <Memo v-else-if="screenMode === 3"/>
 
       <div class="control-buttons-container">
-        <!-- <ControlButtons
+        <ControlButtons
           class="control-buttons"
           @show-screenmode="showScreenMode($event)"
           @startScreenSharing="startScreenSharing"
@@ -107,7 +108,7 @@
           @toggleSidebar="toggleSidebar"
           :screenMode="screenMode"
           :isScreenShared="isScreenShared"
-        /> -->
+        />
       </div>
 
     </div>
@@ -126,7 +127,7 @@ import { useRoute } from 'vue-router';
 import { OpenVidu } from "openvidu-browser";
 import { ref } from 'vue';
 import axios from "axios";
-// import ControlButtons from '@/views/studies/components/control/ControlButtons.vue';
+import ControlButtons from '@/views/studies/components/control/ControlButtons.vue';
 
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
@@ -151,7 +152,7 @@ export default {
     WhiteBoard,
     UserVideo,
     Memo,
-    // ControlButtons,
+    ControlButtons,
   },
   beforeRouteLeave(to, from, next) {
     if (!this.canLeave) {
@@ -614,7 +615,7 @@ export default {
   font-size: 1.4vh;
   border-radius: 50%;
   margin-top: 13vh;
-  padding: 0
+  padding: 0;
 }
 .video-box {
   margin: 1.5vh;
@@ -633,8 +634,11 @@ export default {
   top: 0;
   font-size: 0.8rem;
 }
+.icon {
+  font-size: 12px;
+}
 .font-red {
-  color: red;
+  color: rgb(228, 66, 66);
 }
 ::-webkit-scrollbar {
   height: 12px;
@@ -654,6 +658,7 @@ export default {
   /* position: sticky; */
   /* position:absolute; */
   position: fixed;
+  z-index: 500;
   /* left:0;
   bottom:0 */
   /* position: sticky; */

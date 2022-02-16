@@ -37,7 +37,7 @@
             </div>
             <div class="row">
               <label for="nickname" class="form-label">닉네임</label>
-              <input type="text" class="form-control" id="nickname" v-model="state.nickname" required placeholder="사용할 닉네임을 입력해주세요.">
+              <input type="text" class="form-control" id="nickname" v-model="state.nickname" required placeholder="사용할 닉네임을 입력해주세요." maxlength="16">
               <div
                 :style="{ visibility: (state.isValidNickname || !state.wasInputed.nickname)? 'hidden' : 'visible' }"
                 class="invalid-feedback"
@@ -47,7 +47,7 @@
             </div>
             <div class="row">
               <label for="goal" class="form-label">상태 메시지</label>
-              <input type="text" class="form-control form-goal" id="goal" rows="3" v-model="state.goal" placeholder="상태 메세지를 입력해주세요.">
+              <input type="text" class="form-control form-goal" id="goal" rows="3" v-model="state.goal" placeholder="상태 메세지를 입력해주세요." maxlength="16">
               <div
                 :style="{ visibility: (state.isValidGoal)? 'hidden' : 'visible' }"
                 class="invalid-feedback"
@@ -86,13 +86,7 @@ export default {
     const store = useStore();
     const state = ref({
       userInfo : store.getters.getUserInfo,
-      nickname : computed(() => {
-        if(store.getters.getUserInfo.nickname == 'null'){
-          return ''
-        }else {
-          return store.getters.getUserInfo.nickname
-        }
-      }),
+      nickname : store.getters.getUserInfo.nickname,
       goal: store.getters.getUserInfo.goal,
       profileImg: '',
       updated: false,
@@ -105,7 +99,6 @@ export default {
       }),
       wasInputed: {
         nickname: false,
-        goal: false,
       },
       isValidNickname: computed(() => {
         if (state.value.nickname !== '') {
@@ -118,17 +111,14 @@ export default {
       }),
 
       isValidGoal: computed(() => {
-        if (state.value.goal == '') {
-          console.log('빈값일때')
+        if (state.value.goal =='') {
           return true;
         }
         else {
-          state.value.wasInputed.goal = true;
           if (state.value.goal && validateGoal(state.value.goal)) {
-            console.log('빈값 아니고 유효성 검사 통과했을 때')
-          return true;
+            return true;
           }
-        }
+        } return false;
       })
     });
     const { notifyDangerDescription, } = notifications();

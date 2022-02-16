@@ -89,7 +89,7 @@ export default {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  opacity: 0.7;
+  opacity: 0.9;
   /* background-color: #F5CEC7; */
   /* background-color: #27355e; */
   background-color: #1E304F;
@@ -136,6 +136,6 @@ export default {
 }
 .font-active {
   /* color: #F5CEC7; */
-  color: #ffa595;
+  color: #ffd5cd;
 }
 </style>

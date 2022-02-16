@@ -23,14 +23,14 @@
           <div class="col-12 col-md-5 offset-lg-0 col-lg-3 mb-3">
             <button class="btn btn-primary" @click="onClickJoin">
               참여하기
-              <font-awesome-icon class="icon" :icon="['fas', 'walking']"></font-awesome-icon>
+              <font-awesome-icon class="icon ms-1" :icon="['fas', 'walking']"></font-awesome-icon>
             </button>
           </div>
           <div class="col-12 col-md-5 offset-lg-0 col-lg-3 mb-3">
             <router-link :to="{ name: 'StudyCreate'}">
               <button class="btn btn-success">
                 만들기
-                <font-awesome-icon class="hammer-icon" :icon="['fas', 'hammer']"></font-awesome-icon>
+                <font-awesome-icon class="icon ms-1" :icon="['fas', 'hammer']"></font-awesome-icon>
               </button>
             </router-link>
           </div>
@@ -175,7 +175,7 @@ export default {
 }
 .icon {
   font-size: 1.1rem;
-  margin-left: 0.2rem;
+  margin: 0;
 }
 .hammer-icon {
   font-size: 1.05rem;

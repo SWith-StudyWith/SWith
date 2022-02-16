@@ -14,13 +14,13 @@
                     </div>
                     <div class="card-body-buttons col-3">
                       <img
+                        class="file-item-icon"
                         src="@/assets/img/icon_sidebar/file/download_1E304F.svg"
                         @click="onClickDownloadFile(file.fileId, file.originName)">
                       <img
+                        class="file-item-icon"
                         src="@/assets/img/icon_sidebar/file/trash-1E304F.svg"
-                        data-bs-toggle="modal"
-                        data-bs-target="#fileDeleteModal">
-                        <SidebarFileDeleteModal :fileId="file.fileId"/>
+                        @click="onClickDeleteFile(file.fileId)">
                     </div>
                   </div>
         </div>
@@ -40,7 +40,7 @@
       <!-- <span>fileList : {{ state.fileList.createdAt }}</span> -->
       <!-- <span>dropzoneFiles : {{ dropzoneFiles }}</span> -->
       <div v-for="(dropzoneFile, index) in dropzoneFiles" v-bind:key="dropzoneFile.id" class="file-item" >
-        <span class="file-info"><img class="file-type" src="@/assets/img/icon_sidebar/file/clip_dark.svg" alt=""> {{dropzoneFile.name}} </span>
+        <span class="file-info" text-truncate><img class="file-type" src="@/assets/img/icon_sidebar/file/clip_dark.svg" alt=""> {{dropzoneFile.name}} </span>
         <img class="file-type" @click="onClickCancelFile(index)" src="@/assets/img/icon_sidebar/file/trash-1E304F.svg" alt="" >
       </div>
       <div class="file-submit">
@@ -55,11 +55,11 @@
 
 <script>
 import { ref } from "vue";
-import { uploadFile, downloadFile, deleteFile } from '@/api/study';
+import { deleteFile } from '@/api/study';
 import { computed, reactive } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
-import SidebarFileDeleteModal from '@/views/studies/components/sidebar/SidebarFileDeleteModal';
+// import SidebarFileDeleteModal from '@/views/studies/components/sidebar/SidebarFileDeleteModal';
 import notifications from '@/composables/notifications'
 import DropZone from '@/views/studies/components/sidebar/SidebarFileDropzone.vue';
 // import SidebarFileList from '@/views/studies/components/sidebar/SidebarFileList.vue';
@@ -68,7 +68,6 @@ export default {
   name: "SidebarFile",
   components: {
     DropZone,
-    SidebarFileDeleteModal
     // SidebarFileList,
   },
   setup() {
@@ -99,7 +98,7 @@ export default {
         return state.study.fileUploadPercent;
       },
       (newValue, oldValue) => {
-        if (newValue >= oldValue) {
+        if (state.uploadFilePercent == 0 || newValue >= oldValue) {
           isVisiableFileUploadPercent.value = true;
         } else {
           isVisiableFileUploadPercent.value = false;
@@ -350,9 +349,6 @@ export default {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
-  /* align-items: center; */
-  /* background-color: #f1f1f1; */
   font-family:  'Noto Sans KR', 'Mulish';
   width: 100%;
   text-align: left;
@@ -362,26 +358,16 @@ export default {
   font-weight:500;
   margin: 5.5vh 0 1vh 1vw;
 }
-/* .home h1 {
-  font-size: 40px;
-  margin-bottom: 32px;
-} */
 
 .file-body {
   flex-grow: 1;
-  /* overflow: auto; */
-  /* padding: 1rem; */
   overflow-x: hidden;
   overflow-y: scroll;
   scroll-behavior: smooth;
   width: 100%;
   padding-left: 0.5vw;
 }
-/* .file-body::-webkit-scrollbar {
-  display: none;
-} */
 ::-webkit-scrollbar{
-  /* opacity: 0.7; */
   width: 12px;
 }
 ::-webkit-scrollbar-thumb{
@@ -398,20 +384,10 @@ export default {
   align-items: center;
   opacity: 0.5;
   background-color: #F5CEC7;
-  /* background-color: antiquewhite; */
-  /* padding: 5px; */
-
-  /* display: flex; */
-  /* flex-direction: row; */
-  /* align-items: center; */
-  /* justify-content: space-between; */
   padding: 10px;
-  /* margin-bottom: 5px; */
-  /* background-color: #F5CEC7; */
   border: solid 4px #ffffff;
   margin-top: 5px;
   border-radius: 15px;
-  /* opacity: 0.5; */
 
   font-family: 'Mulish', 'Alef', 'Noto Sans KR';
   color: #1E304F;
@@ -439,18 +415,15 @@ export default {
 }
 
 .file-submit-name {
-  font-size: 2.4vh;
+  font-size: 2vh;
   font-family: 'Mulish';
 }
 
 .card {
   display: flex;
-  /* align-items: row; */
   color: black;
-  /* background-color: antiquewhite; */
   background-color: #1E304F;
   margin-top: 2px;
-  /* opacity: 0.7; */
 }
 
 .card-body {
@@ -458,8 +431,6 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  /* padding: 10px; */
-  /* margin-bottom: 5px; */
   background-color: #F5CEC7;
   border: solid 4px #ffffff;
   margin-top: 5px;
@@ -475,8 +446,6 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  /* padding: 10px; */
-  /* margin-bottom: 5px; */
   background-color: #F5CEC7;
   border: solid 4px #ffffff;
   margin-top: 5px;
@@ -502,16 +471,23 @@ export default {
   flex-direction: column;
   flex-wrap: nowrap;
   align-items: flex-start;
-  /* margin-bottom: 0px; */
-  /* width: 222px; */
 }
 .card-body-data-name {
-  font-size: 1.6vh;
+  font-size: 1.4vh;
   margin-bottom: 0.6vh;
   overflow: hidden;
   /* white-space: nowrap; */
   display: -webkit-box;
   text-overflow: ellipsis;
+  width: 10vw;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.file-info {
+  font-size: 1.4vh;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 10vw;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
@@ -529,13 +505,11 @@ export default {
 }
 
 .card-body-data-size {
-  /* color: #9c9c9c; */
   margin: 0;
   font-size: 1.2vh;
 }
 
 .card-body-data-createdAt {
-  /* color: #9c9c9c; */
   margin: 0;
   font-size: 1.2vh;
 }
@@ -544,5 +518,9 @@ form{
   padding: 0 1vw 0 0.5vw;
   display: flex;
   flex-direction: column;
+}
+
+.file-item-icon:hover {
+  color:aliceblue;
 }
 </style>
