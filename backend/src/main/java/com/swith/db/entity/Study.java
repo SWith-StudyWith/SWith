@@ -34,6 +34,8 @@ public class Study {
     @OneToMany(mappedBy = "study", cascade = CascadeType.REMOVE)
     private List<Memo> memos = new ArrayList<>();
 
+    @OneToMany(mappedBy = "study", cascade = CascadeType.REMOVE)
+    private List<Kanban> kanbans = new ArrayList<>();
 
     @Builder
     public Study(String name, String code, String goal, String imgUrl, String isUsed) {
