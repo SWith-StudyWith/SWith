@@ -102,7 +102,7 @@
             :style="{ visibility: (state.isValidNickname || !state.wasInputed.nickname)? 'hidden' : 'visible' }"
             class="invalid-feedback"
           >
-            2 ~ 16자 사이의 닉네임을 입력해주세요.
+            1 ~ 16자 사이의 닉네임을 입력해주세요.
           </div>
         </form>
 
@@ -353,7 +353,7 @@ export default {
       } return false;
     };
     const validateNickname = function (nickname) {
-      if (nickname.length >= 2 && nickname.length <= 16) {
+      if (nickname.length >= 1 && nickname.length <= 16) {
         return true;
       } return false;
     };
