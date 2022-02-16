@@ -137,6 +137,11 @@ export default {
         state.value.updated = true;
       }
     };
+    const onClickDefaultImg = () => {
+      state.value.studyInfo.studyImgURL = '';
+      state.value.studyInfo.studyImgUrl = '';
+      state.value.updated = true;
+    };
 
     const onClickUpdateStudy = (e) => {
       e.preventDefault();
@@ -169,7 +174,7 @@ export default {
     }
 
     return {
-      state, onClickUploadFile,  onClickUpdateStudy, loadingCall
+      state, onClickUploadFile, onClickDefaultImg, onClickUpdateStudy, loadingCall
     }
   },
 
