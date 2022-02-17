@@ -131,8 +131,8 @@ import ControlButtons from '@/views/studies/components/control/ControlButtons.vu
 
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
-const OPENVIDU_SERVER_URL = "https://i6a501.p.ssafy.io:4443";
-const OPENVIDU_SERVER_SECRET = "MY_SECRET";
+const OPENVIDU_SERVER_URL = process.env.VUE_APP_OPENVIDU_SERVER_URL;
+const OPENVIDU_SERVER_SECRET = process.env.VUE_APP_OPENVIDU_SERVER_SECRET;
 // const OPENVIDU_SERVER_URL = "https://" + location.hostname + ":4443";
 // const OPENVIDU_SERVER_URL = "https://" + location.hostname + ":4443";
 const parsing = (string) => !(string === 'false')

@@ -189,8 +189,7 @@ export default {
             // const hostPort = 3000;
             // console.log(protocol + hostName + `:${hostPort}`);
             // return protocol + hostName + `:${hostPort}`;
-            return 'https://i6a501.p.ssafy.io';
-            // return 'http://localhost:3000';
+            return process.env.VUE_APP_EXPRESS_SERVER_URL;
         },
 
         // send canvas data to server
