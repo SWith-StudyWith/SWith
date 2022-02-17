@@ -1,6 +1,6 @@
 # 스윗(SWith)
 
-<img src="README.assets/Logo.png" alt="Logo" style="zoom:67%;" />
+<img src="README.assets/Logo.png" alt="Logo" width="500" />
 
 ------
 
@@ -27,7 +27,7 @@
    - 이성재 : Front-end
    - 한지희 : Front-end
 
-<img src="README.assets/DalSSang.png" alt="DalSSang" style="zoom:67%;" />
+<img src="README.assets/DalSSang.png" alt="DalSSang" width="500" />
 
 ### 기술 스택
 
@@ -85,15 +85,15 @@
 
 - Main color
 
-<img src="README.assets/MainColor.png" alt="MainColor" style="zoom:67%;" />
+<img src="README.assets/MainColor.png" alt="MainColor" width="500" />
 
 - Sub color
 
-<img src="README.assets/SubColor.png" alt="SubColor" style="zoom:67%;" />
+<img src="README.assets/SubColor.png" alt="SubColor" width="500" />
 
 - Extra color
 
-<img src="README.assets/ExtraColor.png" alt="ExtraColor" style="zoom:67%;" />
+<img src="README.assets/ExtraColor.png" alt="ExtraColor" width="500" />
 
 - **Meaning of Color**
 
@@ -103,7 +103,7 @@
 
 - **Logo**
 
-<img src="README.assets/Logo.png" alt="Logo" style="zoom:67%;" />
+<img src="README.assets/Logo.png" alt="Logo" width="500" />
 
 - Font
   - 한글 : Noto Sans KR
@@ -253,11 +253,11 @@
 
 ### 와이어 프레임
 
-<img src="README.assets/figma fullscreen.png" alt="figma fullscreen" style="zoom:67%;" />
+<img src="README.assets/figma fullscreen.png" alt="figma fullscreen" width="500" />
 
 ### ERD
 
-<img src="README.assets/SWithERD.png" alt="SWithERD" style="zoom:67%;" />
+<img src="README.assets/SWithERD.png" alt="SWithERD" width="500" />
 
 ### API Docs
 
@@ -265,7 +265,7 @@ https://docs.google.com/spreadsheets/d/1qUr4OxT4DYXSJidCgBx_LSVlqT9DMXETPDHYqOv9
 
 ### 서비스 아키텍처
 
-<img src="README.assets/Architecture.png" alt="Architecture" style="zoom:67%;" />
+<img src="README.assets/Architecture.png" alt="Architecture" width="500" />
 
 ### 트러블 슈팅
 
