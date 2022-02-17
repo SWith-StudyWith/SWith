@@ -13,12 +13,14 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.annotation.PostConstruct;
 
+@Component
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)  // method security 설정
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -32,7 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @PostConstruct
     public void init() {
-        HOST_NAME = hostname;
+        this.HOST_NAME = hostname;
     }
 
     public SecurityConfig(
