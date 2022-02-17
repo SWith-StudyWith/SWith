@@ -560,20 +560,20 @@ export default {
       this.OVForScreenShare = undefined;
       // window.removeEventListener('beforeunload', this.leaveSessionForScreenSharing);
 		},
-		checkScreenShared () {
-			var buf = 0;
-			this.subscribers.forEach((sub)=>{
-				if(sub.stream.typeOfVideo==="SCREEN") {
-					buf+=1;
-				}
-			});
-			// if (buf) {
-			if (buf===0) {
-				this.isScreenShared=true;
-			} else {
-				this.isScreenShared = false;
-			}
-		},
+		// checkScreenShared () {
+		// 	var buf = 0;
+		// 	this.subscribers.forEach((sub)=>{
+		// 		if(sub.stream.typeOfVideo==="SCREEN") {
+		// 			buf+=1;
+		// 		}
+		// 	});
+		// 	// if (buf) {
+		// 	if (buf===0) {
+		// 		this.isScreenShared=true;
+		// 	} else {
+		// 		this.isScreenShared = false;
+		// 	}
+		// },
   },  //methods end
 }
 </script>
