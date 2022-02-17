@@ -104,17 +104,6 @@ export default {
         }
         return false;
       }),
-
-      isValidGoal: computed(() => {
-        if (state.value.goal =='') {
-          return true;
-        }
-        else {
-          if (state.value.goal && validateGoal(state.value.goal)) {
-            return true;
-          }
-        } return false;
-      })
     });
     const { notifyDangerDescription, } = notifications();
 
@@ -143,7 +132,7 @@ export default {
         state.value.wasInputed.goal = true;
         return;
       }
-      if (!state.value.isValidNickname || !state.value.isValidGoal ) {
+      if (!state.value.isValidNickname ) {
         return;
       }
       const updateUserData = new FormData();
