@@ -136,7 +136,6 @@ export default {
       confirmpassword(
         { password: state.nowPassword },
         (res) => {
-          console.log(res.data)
           switch (res.data.code) {
             case 200:
               state.isValidNowPassword = true;
@@ -175,7 +174,6 @@ export default {
       updatePassword(
         { password: state.passwordConfirm },
         (res) => {
-          console.log(res.data)
           switch (res.data.code) {
             case 200:
               router.go({ name: 'MyPage' })

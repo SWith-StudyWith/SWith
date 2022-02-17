@@ -9,18 +9,12 @@
       :isScreenShared="isScreenShared"
     />
     <div class="contents" :style="{ 'margin-left': sidebarWidth }">
-      <!-- main container start -->
       <div id="main-container" class="mx-4" >
-        <!-- session start -->
         <div id="session" v-if="session">
-          <!-- session header -->
           <div id="session-header">
-            <!-- leave session button -->
           </div>
-          <!-- video-container start -->
           <div id="video-container">
             <div class="user-video-wrapper d-flex overflow-auto">
-              <!-- publisher -->
               <div class="video-box position-relative">
                 <div v-if="publisher">
                   <user-video id="my-video" :stream-manager="publisher"

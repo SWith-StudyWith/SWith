@@ -77,17 +77,10 @@ export default {
 
     function memberRange(){
       state.list = props.members;
-
-      console.log(state.list)
       for(var i = 0; i < state.list.length ;i++){
-        // console.log("i : "+ state.list[i].memberId + ", " + state.userInfo.memberId)
         // 본인 아이디면 맨 앞으로
         if(state.list[i].memberId == state.userInfo.memberId){
-          // let temp = props.members[i]
-          // state.list[i] = state.list[0]
-          // state.list[0] = temp
           [state.list[0], state.list[i]] = [state.list[i], state.list[0]]
-          console.log(state.list)
         }else{
           state.list[i] = props.members[i]
         }
@@ -109,25 +102,18 @@ export default {
 
 <style scoped>
 .memberDiv{
-  /* float: right; */
-  /* width: 90%; */
   text-align: left;
-
   height: 100vh;
-
   display: flex;
-  /* scroll */
   flex-direction: column;
 }
 .member-body{
   flex-grow: 1;
-  /* scroll */
   overflow-x: hidden;
   overflow-y: scroll;
   scroll-behavior: smooth;
   width: 100%;
   margin-left: 1vw;
-  /* overflow: auto; */
 }
 /* scroll 안보이게 */
 .member-body::-webkit-scrollbar {
@@ -183,7 +169,6 @@ export default {
   justify-content: center;
 }
 .vld-overlay{
-  /* margin-left: 60px; */
   margin-left: 4vw;
 }
 </style>

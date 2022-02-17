@@ -119,7 +119,6 @@ export default {
       this.memoList[idx].transform = event.target.style.transform;
     },
     onClickCreateBtn() {
-      console.log('새 메모 만들기')
       this.$store.commit(
         'ADD_MEMO',
         {
@@ -130,7 +129,6 @@ export default {
       )
     },
     onClickSaveBtn() {
-      console.log('저장하기')
       this.$store.dispatch(
         'UPDATE_MEMO_LIST',
         {

@@ -215,7 +215,6 @@ export default {
             studyId : route.params.studyId,
             uploadFileData : uploadFileData,
             success : (res) => {
-                console.log(res.data)
                 switch (res.data.code) {
                   case 200:
                     notifySuccess('스터디 파일 업로드 성공')
@@ -234,28 +233,6 @@ export default {
               },
           }
           await store.dispatch("UPLOAD_FILE", payload);
-          // await uploadFile(
-          //     route.params.studyId,
-          //     uploadFileData,
-          //     (res) => {
-          //       console.log(res.data)
-          //       switch (res.data.code) {
-          //         case 200:
-          //           notifySuccess('스터디 파일 업로드 성공')
-          //           break;
-          //         case 400:
-          //           notifyDanger('스터디 파일 업로드 실패')
-          //           break;
-          //       }
-          //       dropzoneFiles.value = [];
-          //       uploadFileData = '';
-          //       store.dispatch('GET_FILE_LIST', route.params.studyId);
-          //     },
-          //     (err) => {
-          //       console.log(err)
-          //       notifyDanger('서버에 문제가 발생했습니다.😥')
-          //     },
-          //   )
       }
     }
 
@@ -265,7 +242,6 @@ export default {
         studyId : route.params.studyId,
         fileId : fileId,
         success : (res) => {
-          console.log(res.data)
           const url = window.URL.createObjectURL(new Blob([res.data]));
           const link = document.createElement('a');
           link.href = url;
@@ -279,32 +255,12 @@ export default {
         },
       }
       store.dispatch("DOWNLOAD_FILE", payload);
-
-      // downloadFile(
-      //   route.params.studyId,
-      //   fileId,
-      //   (res) => {
-      //     console.log(res.data)
-      //     const url = window.URL.createObjectURL(new Blob([res.data]));
-      //     const link = document.createElement('a');
-      //     link.href = url;
-      //     link.setAttribute('download', fileName);
-      //     document.body.appendChild(link);
-      //     link.click();
-      //   },
-      //   (err) => {
-      //     console.log(err)
-      //     notifyDanger('서버에 문제가 발생했습니다.😰')
-      //   },
-      // )
     }
-
     const onClickDeleteFile = (fileId) => {
       deleteFile(
         route.params.studyId,
         fileId,
         (res) => {
-          console.log(res.data);
           switch (res.data.code) {
             case 200:
               notifySuccess('스터디 파일 삭제 성공')

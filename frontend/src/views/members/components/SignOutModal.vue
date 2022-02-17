@@ -62,9 +62,6 @@ export default {
     })
     const onClickSignOut = function (e) {
       e.preventDefault();
-      console.log(e)
-      console.log('버튼 클릭')
-
       loadingCall()
       store.dispatch('SIGNOUT')
       router.push({ name: 'Login' })

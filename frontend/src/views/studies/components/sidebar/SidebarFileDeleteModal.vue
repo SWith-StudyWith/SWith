@@ -33,7 +33,6 @@ export default {
   },
   setup() {
     const store = useStore();
-    const router = useRouter();
     const state = reactive({
       studyId: computed(() => {
         return store.state.study.studyInfo.studyId
@@ -46,7 +45,6 @@ export default {
         state.studyId,
         this.fileId,
         (res) => {
-          console.log(res.data);
           switch (res.data.code) {
             case 200:
               notifySuccess('스터디 파일 삭제 성공')

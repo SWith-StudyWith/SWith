@@ -120,8 +120,6 @@ export default {
         this.socket = io.connect(this.urlForSocket(), { secure: true });
 
         this.socket.on('connect', () => {
-            // console.log("client(on) - connect, id: " + this.socket.id + ", connected: " + this.socket.connected);
-            // console.log(this.socket);
             // join study
             this.socket.emit('join',
                 this.studyId
@@ -130,7 +128,6 @@ export default {
 
         // canvas init
         this.socket.on('send-data', (data) => {
-            // console.log("client(on) - send-data");
             this.receiveCanvas(data);
         });
 
@@ -140,7 +137,6 @@ export default {
 
     beforeUnmount() {
         this.socket.disconnect();
-        // console.log("client - disconnect, id: " + this.socket.id + ", connected: " + this.socket.connected);
     },
 
     methods: {
@@ -171,11 +167,8 @@ export default {
         },
 
         toggleObjectsSelectable(selectable) {
-            // console.log(this.canvas);
             this.canvas.discardActiveObject();
             this.canvas.forEachObject((obj) => {
-                // console.log(obj);
-                // console.log(selectable);
                 obj.selectable = selectable;
                 obj.evented = selectable;
             });
@@ -184,28 +177,20 @@ export default {
 
         // return server URL
         urlForSocket() {
-            // const protocol = 'http://';
-            // const hostName = window.location.hostname;
-            // const hostPort = 3000;
-            // console.log(protocol + hostName + `:${hostPort}`);
-            // return protocol + hostName + `:${hostPort}`;
             return process.env.VUE_APP_EXPRESS_SERVER_URL;
         },
 
         // send canvas data to server
         sendCanvas() {
-            // console.log("send");
             const canvasAsJSON = this.canvas.toJSON();
             this.socket.emit('send-data', {
                 studyId: this.studyId,
                 canvas: canvasAsJSON
             });
-            // console.log("send-data - studyId: " + this.studyId);
         },
 
         // receive canvas data from server
         receiveCanvas(data) {
-            // console.log("recieveCanvas - studyId: " + data.studyId);
             if (!!data  && !!data.canvas) {
                 this.canvas.loadFromJSON(data.canvas, this.canvas.renderAll.bind(this.canvas));
                 this.toggleObjectsSelectable(this.isPointer);
@@ -223,7 +208,6 @@ export default {
 
         listenToMouseDown() {
             this.canvas.on('mouse:down', (event) => {
-                // console.log("mouse down");
                 this.isMouseDown = true;
                 if (this.isPen) { return }
 
@@ -299,18 +283,6 @@ export default {
             });
         },
 
-        // listenToObjectScaling() {
-        //     this.canvas.on('object:scaling', (e) => {
-        //         var o = e.target;
-        //         if (!o.strokeWidthUnscaled && o.strokeWidth) {
-        //             o.strokeWidthUnscaled = o.strokeWidth;
-        //         }
-        //         if (o.strokeWidthUnscaled) {
-        //             o.strokeWidth = o.strokeWidthUnscaled / o.scaleX;
-        //         }
-        //     });
-        // },
-
         handleChangeWidth() {
             this.canvas.freeDrawingBrush.width = Number(this.current.width);
         },
@@ -328,14 +300,11 @@ export default {
             if (this.snapshotList.length !== this.snapshotIndex) {
                 this.snapshotList = this.snapshotList.splice(0, this.snapshotIndex);
             }
-            // console.log('pushSnapshot');
             this.snapshotList.push(JSON.stringify(this.canvas.toJSON()));
         },
 
         undo() {
             if (this.snapshotIndex !== 0) {
-                // console.log("undo");
-                // console.log(this.snapshotList);
                 this.snapshotIndex--;
                 this.canvas.loadFromJSON(
                     JSON.parse(this.snapshotList[this.snapshotIndex]),
@@ -348,8 +317,6 @@ export default {
 
         redo() {
             if (this.snapshotIndex < this.snapshotList.length - 1) {
-                // console.log("redo");
-                // console.log(this.snapshotList);
                 this.snapshotIndex++;
                 this.canvas.loadFromJSON(
                     JSON.parse(this.snapshotList[this.snapshotIndex]),
@@ -361,7 +328,6 @@ export default {
         },
 
         clear() {
-            // console.log("clear");
             this.canvas.clear();
             this.pushSnapshot();
             this.sendCanvas();

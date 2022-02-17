@@ -112,7 +112,6 @@ export default {
 
   const onSuccess = (googleUser) => {
       // eslint-disable-next-line
-      console.log(googleUser);
       state.googleUser = googleUser.getBasicProfile();
   };
   const onFailure = (error) => {
@@ -123,7 +122,6 @@ export default {
     const authInst = window.gapi.auth2.getAuthInstance();
     authInst.signOut().then(() => {
       // eslint-disable-next-line
-      console.log('User Signed Out!!!');
     });
   };
 

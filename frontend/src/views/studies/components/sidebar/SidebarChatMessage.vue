@@ -96,8 +96,6 @@ export default {
       chatValue += chatTime[1] + " "
       chatValue += chatTime[2]
 
-      // console.log(preValue + ", " + chatValue)
-
       // 같은 회원이 같은 시간에 보냈을 경우 (mm처럼), 시간 출력 한 번 되도록
       if(preValue == chatValue && this.prev[0]?.memberId == this.chat?.memberId){
         return null

@@ -143,8 +143,6 @@ router.beforeEach(function (to, from, next) {
       next()
     }
   } else {
-    // console.log('routing success : ' + to.path );
-
     // next()로 to로 이동하지 않으면 라우팅이 되지 않음
     next();
   }
