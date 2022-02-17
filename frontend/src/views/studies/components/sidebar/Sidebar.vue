@@ -1,12 +1,5 @@
 <template>
   <div class="sidebar" :style="{ width: sidebarWidth }">
-    <!-- <h1>
-      <span v-if="collapsed">
-        <div>S</div>
-        <div>S</div>
-      </span>
-      <span v-else>Swith Sidebar</span>
-    </h1> -->
     <div class="row">
       <div class="home-buttons">
         <div class="icon-container" @click="onClickExitIcon">
@@ -14,18 +7,6 @@
         </div>
       </div>
       <div class="control-buttons">
-        <!-- <div class="icon-container" @click="onClickKanbanBoardIcon" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="칸반보드">
-          <font-awesome-icon class="icon" :class="{ 'font-active': screenMode === 0 }" :icon="['fas', 'tasks']" />
-        </div>
-        <div class="icon-container" @click="onClickScreenShareIcon" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="화면공유">
-          <font-awesome-icon class="icon" :class="{ 'font-active': isScreenShared }"  :icon="['fas', 'chalkboard-teacher']" />
-        </div>
-        <div class="icon-container" @click="onClickWhiteBoardIcon" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="화이트보드">
-          <font-awesome-icon class="icon" :class="{ 'font-active': screenMode === 2 }"  :icon="['fas', 'highlighter']" />
-        </div>
-        <div class="icon-container" @click="onClickPostItIcon" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="포스트잇">
-          <font-awesome-icon class="icon" :class="{ 'font-active': screenMode === 3 }" :icon="['fas', 'sticky-note']"/>
-        </div> -->
         <div class="icon-container" @click="onClickFileIcon" tabindex="0" data-bs-container="body" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="파일공유">
           <font-awesome-icon class="icon" :class="{ 'font-active': state.isFile }"  :icon="['fas', 'paperclip']" />
         </div>
@@ -50,7 +31,6 @@
         <div >
           <SidebarFile v-if="state.isFile"/>
           <SidebarChat v-if="state.isChat"/>
-          <!-- <SidebarChat v-if="state.isChat" :chatLog="state.chatLog"/> -->
           <SidebarMemberView :members="state.memberList" v-if="state.isMemberList"/>
         </div>
       </div>
@@ -59,8 +39,6 @@
 </template>
 
 <script>
-// import SidebarLink from '@/views/studies/components/sidebar/SidebarLink.vue';
-// import { collapsed, toggleSidebar, sidebarWidth } from '@/views/studies/components/sidebar/state.js';
 import SidebarChat from '@/views/studies/components/sidebar/SidebarChat.vue';
 import SidebarFile from '@/views/studies/components/sidebar/SidebarFile.vue';
 import SidebarMemberView from '@/views/studies/components/sidebar/SidebarMemberView.vue'
@@ -74,14 +52,9 @@ import { getMemberList } from '@/api/study'
 export default {
   name: 'Sidebar',
   components: {
-    // SidebarLink,
     SidebarChat,
     SidebarFile,
     SidebarMemberView,
-  },
-  props: {
-    screenMode: Number,
-    isScreenShared: Boolean,
   },
   setup( props, { emit } ) {
     const store = useStore();
@@ -105,22 +78,6 @@ export default {
     const sidebarWidth = computed(
       () => `${state.collapsed ? SIDEBAR_WIDTH_COLLAPSED : SIDEBAR_WIDTH}vw`
     );
-    const onClickKanbanBoardIcon = () => {
-      emit('show-screenmode', 0)
-    };
-    const onClickScreenShareIcon = () => {
-      if (props.isScreenShared) {
-        emit('stopScreenSharing')
-      } else {
-        emit('startScreenSharing')
-      }
-    };
-    const onClickWhiteBoardIcon = () => {
-      emit('show-screenmode', 2)
-    };
-    const onClickPostItIcon = () => {
-      emit('show-screenmode', 3)
-    };
     const toggleSidebar = () => {
       state.collapsed = !state.collapsed;
       if (!state.collapsed) {
@@ -175,13 +132,10 @@ export default {
       state.isMemberList = !state.isMemberList;
       emit('toggleSidebar', sidebarWidth.value)
       // test
-      console.log('스터디 회원 목록 조회 테스트!');
       getMemberList(
         route.params.studyId,
         (res) => {
-          console.log(res.data);
           if (res.data.code === 200) {
-            // console.log('회원 목록 조회 성공!');
             store.dispatch('GET_MEMBER_LIST', route.params.studyId);
           }
         },
@@ -195,9 +149,8 @@ export default {
     }
 
     return {
-      state, toggleSidebar, sidebarWidth,
-      onClickScreenShareIcon, onClickWhiteBoardIcon, onClickKanbanBoardIcon,
-      onClickChatIcon, onClickMemberIcon, onClickFileIcon, onClickExitIcon, onClickPostItIcon,
+      state, toggleSidebar, sidebarWidth, onClickChatIcon,
+      onClickMemberIcon, onClickFileIcon, onClickExitIcon,
     };
   },
   mounted() {

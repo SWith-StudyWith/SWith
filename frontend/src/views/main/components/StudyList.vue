@@ -77,8 +77,7 @@ export default {
     StudyListItem,
     Loading,
   },
-  setup(props) {
-    console.log(props.studies);
+  setup() {
     let studyCode = ref('')
 
     const store = useStore();
@@ -100,7 +99,6 @@ export default {
       joinStudy(
         payload,
         (res) => {
-          console.log(res.data)
           // state.loading = true
           loadingCall()
           if (res.data.code === 200) {

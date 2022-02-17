@@ -8,7 +8,6 @@ export default {
   },
   created() {
     this.LOGIN_KAKAO(this.$route.query.code)
-    console.log(this.$route.query.code)
   },
   mounted() {},
   unmounted() {},

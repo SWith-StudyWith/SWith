@@ -40,7 +40,6 @@ export default {
       await patchKanbanRight(
         route.params.studyId,
         (res) => {
-          console.log(res.data)
           if (res.data.code === 200) {
             emit('isEditPermit', true);
           } else {

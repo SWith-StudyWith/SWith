@@ -79,7 +79,6 @@ export default {
       sendTemporaryPassword(
         { email: state.email },
         (res) => {
-          console.log(res.data)
           switch (res.data.code) {
             case 400:
               notifyDanger('가입된 이메일 내역이 없습니다.😅')

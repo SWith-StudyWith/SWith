@@ -152,7 +152,6 @@ export default {
       createStudy(
         createStudyData,
         (res) => {
-          console.log(res.data)
           loadingCall()
           switch (res.data.code) {
             case 200:

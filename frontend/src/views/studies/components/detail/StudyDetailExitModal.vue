@@ -42,7 +42,6 @@ export default {
       exitStudy(
         state.studyId,
         (res) => {
-          console.log(res.data)
           if (res.data.code === 200) {
             notifySuccess('스터디를 탈퇴했습니다.🤤')
             router.push({ name: 'Main' })

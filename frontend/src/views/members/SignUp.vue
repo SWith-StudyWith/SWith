@@ -257,7 +257,6 @@ export default {
       sendEmail(
         { email: state.email },
         (res) => {
-          console.log(res.data)
           switch (res.data.code) {
             case 400:
               notifyDanger('이미 가입된 이메일입니다.😳')
@@ -279,7 +278,6 @@ export default {
       checkEmail(
         { email: state.email, authNum: state.authNum },
         (res) => {
-          console.log(res.data)
           switch (res.data.code) {
             case 200:
               state.isAuthNumChecked = true;
@@ -316,7 +314,6 @@ export default {
       signup(
         { email: state.email, password: state.password, nickname: state.nickname },
         (res) => {
-          console.log(res.data)
           switch (res.data.code) {
             case 200:
               notifySuccess('회원가입 성공!🎉');

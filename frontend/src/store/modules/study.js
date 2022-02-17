@@ -155,14 +155,11 @@ const mutations = {
     state.chatList = payload;
   },
   UPDATE_STUDY_INFO(state, payload) {
-    console.log(payload)
     console.log('update_study_info')
     state.studyInfo = {
       ...state.studyInfo,
       ...payload
-      };
-    console.log(state.studyInfo)
-    console.log('state.studyInfo')
+    };
   },
   SET_FILE_LIST(state, payload) {
     state.fileList = payload;

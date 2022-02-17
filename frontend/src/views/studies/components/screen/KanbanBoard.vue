@@ -160,12 +160,10 @@ export default {
       modal.show();
     }
     const onClickEditBtn = async function() {
-      console.log('수정할래!')
       const getStudyInfo = () => {
         return new Promise((resolve) => {
           // store.dispatch('GET_STUDY_INFO', store.state.study.studyInfo.studyId);
           store.dispatch('GET_STUDY_INFO', route.params.studyId);
-          console.log('불러오기 완료!')
           resolve();
         })
       }
@@ -173,11 +171,9 @@ export default {
       checkKanban(
         route.params.studyId,
         (res) => {
-          console.log(res.data);
           if (res.data.code === 200) {
             emit('isEditPermit', true);
           } else if (res.data.code === 400) {
-            console.log(`${res.data.data.nickname} 님이 수정 중입니다.`);
             edittingUser.value = res.data.data.nickname;
             // alert(`${res.data.data.nickname} 님이 수정 중입니다.`)
             showWarningModal();
@@ -194,7 +190,6 @@ export default {
       const studyId = route.params.studyId;
       // request payload 형태 만들기
       const payload = []
-      console.log(kanbanBoard.value)
       kanbanBoard.value.forEach((column) => {
         let taskId = column.taskId
         column.kanban.forEach((task) => {
@@ -209,7 +204,6 @@ export default {
             store.dispatch('GET_STUDY_INFO', studyId)
             notifySuccess('칸반 보드 저장 완료!')
           } else if (res.data.code === 401) {
-            console.log('수정 권한 없음!')
             notifyDanger('수정 권한 없음!')
           }
         },

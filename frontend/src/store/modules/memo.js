@@ -31,7 +31,6 @@ const actions = {
     )
   },
   UPDATE_MEMO_LIST({ commit }, { studyId, memoList }) {
-    console.log(studyId, memoList)
     const payload = [];
     memoList.forEach((memo) => {
       const { content, color, transform } = memo;
@@ -41,7 +40,6 @@ const actions = {
         transform,
       })
     })
-    console.log(payload)
     setMemoList(
       studyId,
       payload,

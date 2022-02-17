@@ -37,7 +37,6 @@ const actions = {
           router.push({ name: 'Main' })
         } else if (res.data.code === 404) {
           notifyDanger('존재하지 않는 이메일입니다.😦')
-          console.log(res.data)
         }
       },
       () => {
@@ -46,11 +45,9 @@ const actions = {
     )
   },
   LOGIN_KAKAO({ dispatch, commit }, payload) {
-    console.log(payload)
     loginKakao(
       payload,
       (res) => {
-        console.log(res.data)
         sessionStorage.setItem('accessToken', res.data.data.accessToken)
         commit('SET_USER_ACCESS_INFO', res.data.data)
         dispatch('GET_USER_INFO')
@@ -63,11 +60,9 @@ const actions = {
     )
   },
   LOGIN_GOOGLE({ dispatch, commit }, payload) {
-    // console.log(payload)
     loginGoogle(
       payload,
       (res) => {
-        // console.log(res.data)
         sessionStorage.setItem('accessToken', res.data.data.accessToken)
         commit('SET_USER_ACCESS_INFO', res.data.data)
         dispatch('GET_USER_INFO')
