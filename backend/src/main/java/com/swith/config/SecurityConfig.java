@@ -17,14 +17,23 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import javax.annotation.PostConstruct;
+
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)  // method security 설정
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${hostname}")
     private String hostname;
+    private String HOST_NAME;
+
     private final TokenProvider tokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+
+    @PostConstruct
+    public void init() {
+        HOST_NAME = hostname;
+    }
 
     public SecurityConfig(
             TokenProvider tokenProvider,
@@ -84,7 +93,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.addAllowedOrigin("http://localhost:8081");
-        configuration.addAllowedOrigin(hostname);
+        configuration.addAllowedOrigin(HOST_NAME);
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
         configuration.setAllowCredentials(true);
