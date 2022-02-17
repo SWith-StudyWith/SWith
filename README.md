@@ -31,23 +31,23 @@
 
 ### 기술 스택
 
-- 이슈 관리
+- **이슈 관리**
   - Jira
-- 형상 관리
+- **형상 관리**
   - Gitlab
-- 와이어 프레임 관리
+- **와이어 프레임 관리**
   - Figma
-- ERD 관리
+- **ERD 관리**
   - ERD Cloud
-- 커뮤니케이션 관리
+- **커뮤니케이션 관리**
   - Mattermost
   - Notion
   - Google 스프레드시트
   - Google 프레젠테이션
-- IDE
+- **IDE**
   - Visual Studio Code
   - IntelliJ IDEA Community
-- Front-end
+- **Front-end**
   - Vue.js
   - Vue Router
   - Vuex
@@ -59,39 +59,39 @@
   - animate.css ( CSS 애니메이션 )
   - mosha-vue-toastify ( 토스트 알림 )
   - font awesome ( 아이콘 )
-- Back-end
+- **Back-end**
   - Spring Boot
   - Spring Security
   - Spring Data JPA
   - QueryDSL
   - lombok
   - JWT
-- WebRTC
+- **WebRTC**
   - OpenVidu
-- Chatting
+- **Chatting**
   - STOMP
-- Whiteboard
-  - [Socket.io](http://Socket.io)
-- Database
+- **Whiteboard**
+  - Socket.io
+- **Database**
   - MySQL
   - Firebase
-- Server
+- **Server**
   - AWS EC2
-- DevOps
+- **DevOps**
   - Docker
   - Jenkins
 
 ### 디자인
 
-- Main color
+- **Main color**
 
 <img src="README.assets/MainColor.png" alt="MainColor" width="500" />
 
-- Sub color
+- **Sub color**
 
 <img src="README.assets/SubColor.png" alt="SubColor" width="500" />
 
-- Extra color
+- **Extra color**
 
 <img src="README.assets/ExtraColor.png" alt="ExtraColor" width="500" />
 
@@ -105,7 +105,7 @@
 
 <img src="README.assets/Logo.png" alt="Logo" width="500" />
 
-- Font
+- **Font**
   - 한글 : Noto Sans KR
   - 영어 : Mulish
 
@@ -269,10 +269,10 @@ https://docs.google.com/spreadsheets/d/1qUr4OxT4DYXSJidCgBx_LSVlqT9DMXETPDHYqOv9
 
 ### 트러블 슈팅
 
-- Firebase 파일 업로드/다운로드 기능 구현
+- **Firebase 파일 업로드/다운로드 기능 구현**
   - Firebase SDK 사용을 위한 key와 환경 변수 값이 포함된 JSON 파일을 서버에서 읽어야 하나 배포를 위한 프로젝트 빌드 시 디렉토리 구조가 달라져 파일을 못 읽어오는 문제 → JSON 파일의 값들을 application.properties에 저장하고 configuration class를 생성, Firebase 서비스를 사용하기 위해 storage 객체를 반환하는 메소드를 갖는 util class를 생성
   - 파일 업로드 시 위변조된 파일의 MIME-Type을 식별하는 문제 → Apache Tika 라이브러리를 사용하여 파일의 실제 MIME-Type을 확인
-- Socket.io를 이용한 화이트보드 기능 구현
+- **Socket.io를 이용한 화이트보드 기능 구현**
   - 화이트보드 컴포넌트의 mount 훅에서 socket이 연결되어 하나의 사용자에게 여러 socket이 연결되고 브라우저의 동작이 느려지는 문제 → 컴포넌트의 unmount 훅에서 socket의 연결을 해제하여 화이트보드 사용 시에만 socket이 연결되도록 구현
-- 칸반 보드 구현 클라이언트-서버 간 주고받을 데이터 형식에 대한 고민
+- **칸반 보드 구현 클라이언트-서버 간 주고받을 데이터 형식에 대한 고민**
   - 클라이언트에서 사용해야 하는 데이터 형식과 서버에서 DB에 저장해야 하는 데이터 형식에 큰 차이가 있었기 때문에 커뮤니케이션을 통해 원활한 통신이 이루어질 수 있도록 데이터 형식을 구조화 함
